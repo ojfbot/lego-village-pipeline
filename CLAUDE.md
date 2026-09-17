@@ -1,0 +1,51 @@
+# CLAUDE.md — lego-village-pipeline
+
+Digital twin + build harness for a multi-year LEGO Christmas village (play-well cluster).
+The software turns designs into validated components, aggregates parts, subtracts inventory,
+produces purchasing artifacts, and reconciles what was built. James (`@ojfbot`) is operator and
+sole decision authority; sole user until the 2026-12-25 demo. Hard gate: **2026-10-21 ORDER-BY**
+(BOM trusted enough to spend money against). BOM correctness outranks procurement optimisation;
+the record outranks the automation — a retroactively-entered order with honest provenance is a
+supported case, never a workaround.
+
+## The correspondence system governs this repo
+
+`docs/correspondence/REGISTER.md` is the index and authority. Read it first. Rules: **attach,
+never paste** · filename is not identity · numbers never move once cited · collisions are
+recorded, not repaired · numbers are allocated by the operator. Every memo passes
+`tools/preflight.py <memo> docs/correspondence/REGISTER.md` before it can act as a work order.
+**Every commit that touches `docs/correspondence/` bumps the register version line.**
+
+Current work order: `HANDOFF-LEGO-PIPE-019` (founding) executing `LEGO-PIPE-011-R2` (build
+harness, Parts B–D; ADR amendments at the end of Parts C/D win over earlier text) and the design
+package `docs/design/H-01-R1/` (build Tier 1 from it; defects D-1…D-6 are known first-day facts).
+Nothing beyond the authorised scope in 019 §6 — no production package boundaries before S1/S2/S7
+report, no workflow UI before the schema gate, no Frame topology by scaffolding.
+
+## Standing rules (019 §8, condensed — the memo is canonical)
+
+- **Every UI is a frictionless teacher.** Plain words first; controls explain consequences; AI
+  questions arrive as conversation. Where rigor conflicts with this on a family-facing surface,
+  the teacher wins and the rigor moves operator-side.
+- **Evidence axes stay separate** — origin · method · verification · authority · workflow. AI
+  origin is permanently visible; the AI restates what it changed before save, announced via live
+  region.
+- **The accessibility tree is the agent-facing contract.** One `<h1>`, landmarks, `lang`,
+  `<title>`, accessible names, live regions on derived/async changes, keyboard operation. A11y
+  snapshot regression fails the build — treat it as a broken API.
+- **Requests are first-class and never deleted.** Basis on every part row. Prices are ranges.
+  Gates are stamps for the record, quiet modals for the act. Purchase stays outside the app.
+- **People.** James is a friend of the family — never "Dad", never a parental role. The boys are
+  EH, HH, LH. Kid-facing copy says "James" sparingly and never talks down.
+- **All numbers in prototypes are MOCK MATH.** Design-package prototype code is a behaviour
+  reference, never copied. `docs/design/H-01-R1/standalone/` is committed verbatim — never edit.
+- **Vocabulary is under review** (RESEARCH-01): neutral `Item`/`Unit`/`Section` with TODO tags.
+- Design direction: "Drafting Table" (paper/blueprint dual theme); tokens from the design
+  package's `dt/tokens.css` are the single source of truth. Organic design system was scrapped.
+
+## Fleet conventions
+
+pnpm only, never npm. Vertical slices. Grill before non-trivial work. Log plan deviations to
+`implementation-notes.md` `## Deviations`. Sibling content repo: `ojfbot/play-well-library`
+(canonical content; branch flow `play/<user>` → `staging` → `main`). Northstar:
+`.claude/northstar.md` (l1-lego-village-pipeline → l2-ojfbot).
