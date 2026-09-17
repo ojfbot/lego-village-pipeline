@@ -1,0 +1,846 @@
+{
+  "handoff": "LEGO-PIPE-007-R2 / H-01 · revised under HANDOFF-LEGO-PIPE-014 (WP0–WP4 applied) · R1 review bundle",
+  "date": "2026-09-17",
+  "operator": "@jfo",
+  "path_base": "archive root (the folder containing dt/, handoff/, brief/, prototypes/) — every path below resolves from here; run handoff/check-manifest.mjs",
+  "tokens": "handoff/tokens/tokens.css",
+  "tokens_note": "copy of dt/tokens.css; future repo path packages/tokens/tokens.css is a forward reference",
+  "brief": [
+    "brief/LEGO-PIPE-007-R2.md",
+    "brief/RESEARCH-01-nomenclature.md"
+  ],
+  "brief_status": {
+    "brief/LEGO-PIPE-007-R2.md": "historical input — superseded where later decisions differ; its P/F/H status lines are stale"
+  },
+  "change_request": "HANDOFF-LEGO-PIPE-014 (R0, accepted 2026-09-17)",
+  "ledgers": {
+    "decisions": "handoff/decisions.md",
+    "schema_requests": "handoff/schema-requests.md",
+    "seam": "handoff/seam.md",
+    "open_questions": "handoff/open-questions.md",
+    "responsive": "handoff/responsive.md",
+    "repo_structure": "handoff/repo-structure.md",
+    "readme": "handoff/README.md",
+    "contrast_check": "dt/check-contrast.mjs",
+    "landing": "dt/landing.js",
+    "overlay": "dt/overlay.js",
+    "announcements": "handoff/specs/ANNOUNCEMENTS.md",
+    "a11y_trees": "handoff/a11y/README.md",
+    "dt_runtime": "handoff/dt/overlay.js",
+    "addendum_a1": "handoff/ADDENDUM-A1-right-now.md"
+  },
+  "sheets": [
+    {
+      "id": "Hub",
+      "title": "The Drafting Table — sheet index & decision log",
+      "file": "Hub.dc.html",
+      "kind": "index",
+      "status": "built",
+      "journeys": [
+        "J12"
+      ],
+      "spec": "handoff/specs/Hub-J-01-D-01.md",
+      "standalone": "handoff/standalone/Hub.html",
+      "screenshots": [
+        "handoff/screenshots/hub-paper.jpg"
+      ]
+    },
+    {
+      "id": "D-00",
+      "title": "Drafting Table specimen (direction)",
+      "file": "candidates/Drafting Table.dc.html",
+      "kind": "direction",
+      "status": "chosen",
+      "journeys": [],
+      "spec": null,
+      "standalone": null,
+      "screenshots": []
+    },
+    {
+      "id": "D-01",
+      "title": "Design library & token grammar",
+      "file": "library/Design Library.dc.html",
+      "kind": "library",
+      "status": "living · re-cut as ladder A primitives → B patterns → C components → D sheets (2026-09-17)",
+      "journeys": [],
+      "spec": "handoff/specs/Hub-J-01-D-01.md",
+      "standalone": "handoff/standalone/D-01 Design Library.html",
+      "screenshots": [
+        "handoff/screenshots/d01-paper.jpg"
+      ]
+    },
+    {
+      "id": "A-01",
+      "title": "Layout Canvas",
+      "file": "prototypes/Prototype A - Layout Canvas.dc.html",
+      "kind": "prototype",
+      "status": "built · 3D verification viewer landed (WP1, DEC-018) · split deferred (Q3)",
+      "journeys": [
+        "J3",
+        "J4",
+        "J13"
+      ],
+      "spec": "handoff/specs/A-01-layout-canvas.md",
+      "standalone": "handoff/standalone/A-01 Layout Canvas.html",
+      "screenshots": [
+        "handoff/screenshots/a01-paper.jpg",
+        "handoff/screenshots/a01-blueprint.jpg"
+      ]
+    },
+    {
+      "id": "B-01",
+      "title": "When the AI isn’t sure",
+      "file": "prototypes/Prototype B - When the AI Isnt Sure.dc.html",
+      "kind": "prototype",
+      "status": "built",
+      "journeys": [
+        "J1",
+        "J2",
+        "J12"
+      ],
+      "spec": "handoff/specs/B-01-when-the-ai-isnt-sure.md",
+      "standalone": "handoff/standalone/B-01 When the AI Isnt Sure.html",
+      "screenshots": [
+        "handoff/screenshots/b01-paper.jpg"
+      ]
+    },
+    {
+      "id": "C-01",
+      "title": "Railbed: what the train brings, what to buy",
+      "file": "prototypes/Prototype C - Measurement to Procurement.dc.html",
+      "kind": "prototype",
+      "status": "built · landed · axis split (§7.2) · GapCloser · release gate at the end (DEC-034)",
+      "journeys": [
+        "J5",
+        "J6",
+        "J7",
+        "J8",
+        "J11"
+      ],
+      "spec": "handoff/specs/C-01-railbed.md",
+      "standalone": "handoff/standalone/C-01 Railbed.html",
+      "screenshots": [
+        "handoff/screenshots/c01-paper.jpg",
+        "handoff/screenshots/c01-blueprint.jpg"
+      ]
+    },
+    {
+      "id": "P-01",
+      "title": "Buying the gap: which shops, in what order",
+      "file": "prototypes/Prototype P - Procurement.dc.html",
+      "kind": "prototype",
+      "status": "built · reads release status from C-01 (DEC-034) · revalidate-before-buy · manual-order capture",
+      "journeys": [
+        "J7"
+      ],
+      "spec": "handoff/specs/P-01-procurement.md",
+      "standalone": "handoff/standalone/P-01 Procurement.html",
+      "screenshots": [
+        "handoff/screenshots/p01-paper.jpg",
+        "handoff/screenshots/p01-blueprint.jpg"
+      ]
+    },
+    {
+      "id": "F-01",
+      "title": "Family Workbench",
+      "file": "F-01 Workbench Junior.dc.html",
+      "kind": "study",
+      "status": "built · tablet fidelity · responsive not designed (Tier 3, K-8)",
+      "journeys": [
+        "J11",
+        "O4"
+      ],
+      "spec": "handoff/specs/F-01-family-workbench.md",
+      "standalone": "handoff/standalone/F-01 Family Workbench.html",
+      "screenshots": [
+        "handoff/screenshots/f01-paper.jpg",
+        "handoff/screenshots/f01-blueprint.jpg",
+        "handoff/screenshots/f01-side-view.jpg",
+        "handoff/screenshots/f01-selected.jpg"
+      ]
+    },
+    {
+      "id": "J-01",
+      "title": "The thirteen journeys",
+      "file": "J-01 Journey Map.dc.html",
+      "kind": "map",
+      "status": "built · being re-cut to L0/L1/L2 hierarchy (014 §3)",
+      "journeys": [
+        "J1",
+        "J2",
+        "J3",
+        "J4",
+        "J5",
+        "J6",
+        "J7",
+        "J8",
+        "J9",
+        "J10",
+        "J11",
+        "J12",
+        "J13"
+      ],
+      "spec": "handoff/specs/Hub-J-01-D-01.md",
+      "standalone": "handoff/standalone/J-01 Journey Map.html",
+      "screenshots": [
+        "handoff/screenshots/j01-paper.jpg"
+      ]
+    },
+    {
+      "id": "H-01",
+      "title": "Handoff — seam · schema · decisions · package",
+      "file": "H-01 Handoff.dc.html",
+      "kind": "record",
+      "status": "built",
+      "journeys": [
+        "J12"
+      ],
+      "spec": "handoff/README.md",
+      "standalone": "handoff/standalone/H-01 Handoff.html",
+      "screenshots": []
+    },
+    {
+      "id": "M-01",
+      "title": "Measure and check",
+      "file": "prototypes/Prototype M - Measure and Check.dc.html",
+      "kind": "prototype",
+      "status": "built (WP2 · DEC-026) · linked from A-01 and C-01",
+      "journeys": [
+        "J9",
+        "L2 capture-measurement",
+        "L2 verify-claim"
+      ],
+      "spec": "handoff/specs/M-01-measure-and-check.md",
+      "standalone": "handoff/standalone/M-01 Measure and Check.html",
+      "screenshots": [
+        "handoff/screenshots/m01-paper.jpg",
+        "handoff/screenshots/m01-blueprint.jpg"
+      ]
+    }
+  ],
+  "journeys": [
+    {
+      "id": "J1",
+      "name": "Reference intake & triage",
+      "status": "built",
+      "sheets": [
+        "B-01",
+        "J-01"
+      ]
+    },
+    {
+      "id": "J2",
+      "name": "Source acquisition",
+      "status": "built",
+      "sheets": [
+        "B-01",
+        "J-01"
+      ]
+    },
+    {
+      "id": "J3",
+      "name": "Component extraction",
+      "status": "partial",
+      "sheets": [
+        "A-01",
+        "J-01"
+      ]
+    },
+    {
+      "id": "J4",
+      "name": "Layout composition",
+      "status": "built",
+      "sheets": [
+        "A-01",
+        "J-01"
+      ]
+    },
+    {
+      "id": "J5",
+      "name": "Theme / snow policy",
+      "status": "partial",
+      "sheets": [
+        "C-01",
+        "J-01"
+      ]
+    },
+    {
+      "id": "J6",
+      "name": "BOM, inventory, shortage",
+      "status": "partial",
+      "sheets": [
+        "C-01",
+        "J-01"
+      ]
+    },
+    {
+      "id": "J7",
+      "name": "Procurement release",
+      "status": "built",
+      "sheets": [
+        "C-01",
+        "P-01",
+        "J-01"
+      ]
+    },
+    {
+      "id": "J8",
+      "name": "Render review",
+      "status": "partial",
+      "sheets": [
+        "C-01",
+        "J-01"
+      ]
+    },
+    {
+      "id": "J9",
+      "name": "Measurement capture",
+      "status": "built",
+      "sheets": [
+        "M-01",
+        "J-01"
+      ]
+    },
+    {
+      "id": "J10",
+      "name": "As-built reconciliation",
+      "status": "planned",
+      "sheets": [
+        "J-01"
+      ]
+    },
+    {
+      "id": "J11",
+      "name": "Story graph",
+      "status": "partial",
+      "sheets": [
+        "C-01",
+        "F-01",
+        "J-01"
+      ]
+    },
+    {
+      "id": "J12",
+      "name": "Agent handoff review",
+      "status": "partial",
+      "sheets": [
+        "Hub",
+        "B-01",
+        "J-01",
+        "H-01"
+      ]
+    },
+    {
+      "id": "J13",
+      "name": "Year-over-year",
+      "status": "planned",
+      "sheets": [
+        "A-01",
+        "J-01"
+      ]
+    },
+    {
+      "id": "O4",
+      "name": "Dream it (family)",
+      "status": "built",
+      "sheets": [
+        "F-01"
+      ]
+    }
+  ],
+  "journey_model_note": "J1–J13 and O2–O4 are preserved as traceable aliases; the L0/L1/L2 hierarchy from 014 §3 lands in journeys.l1 / journeys.l2 as J-01 is re-cut.",
+  "components": [
+    {
+      "name": "RequestCard",
+      "defined_in": "D-01",
+      "used_by": [
+        "C-01",
+        "F-01"
+      ]
+    },
+    {
+      "name": "StanceChip",
+      "defined_in": "D-01",
+      "used_by": [
+        "C-01"
+      ]
+    },
+    {
+      "name": "OptionStateRow",
+      "defined_in": "D-01",
+      "used_by": [
+        "C-01"
+      ]
+    },
+    {
+      "name": "PartPopover",
+      "defined_in": "D-01",
+      "used_by": [
+        "C-01"
+      ]
+    },
+    {
+      "name": "BasisChip",
+      "defined_in": "D-01",
+      "used_by": [
+        "A-01",
+        "C-01",
+        "P-01"
+      ]
+    },
+    {
+      "name": "PlantingRow",
+      "defined_in": "D-01",
+      "used_by": [
+        "A-01"
+      ]
+    },
+    {
+      "name": "ChangePulse",
+      "defined_in": "D-01",
+      "used_by": [
+        "C-01",
+        "P-01",
+        "F-01"
+      ]
+    },
+    {
+      "name": "DecisionLogEntry",
+      "defined_in": "D-01",
+      "used_by": [
+        "Hub"
+      ]
+    },
+    {
+      "name": "ApprovalGate",
+      "defined_in": "D-01",
+      "used_by": [
+        "C-01",
+        "P-01"
+      ]
+    },
+    {
+      "name": "EvidenceChips",
+      "defined_in": "D-01",
+      "used_by": [
+        "B-01",
+        "C-01",
+        "F-01"
+      ]
+    },
+    {
+      "name": "EnvelopeBadge",
+      "defined_in": "D-01",
+      "used_by": [
+        "F-01"
+      ]
+    },
+    {
+      "name": "StickerTile",
+      "defined_in": "D-01",
+      "used_by": [
+        "F-01"
+      ]
+    },
+    {
+      "name": "SegmentedLine",
+      "defined_in": "D-01",
+      "used_by": [
+        "F-01"
+      ]
+    },
+    {
+      "name": "StatusLine",
+      "defined_in": "D-01",
+      "used_by": [
+        "F-01"
+      ]
+    },
+    {
+      "name": "ActionLog",
+      "defined_in": "D-01",
+      "used_by": [
+        "F-01"
+      ]
+    },
+    {
+      "name": "GapCloser",
+      "defined_in": "D-01 §C2 · prototypes/GapCloser.dc.html",
+      "used_by": [
+        "C-01"
+      ],
+      "planned_for": [
+        "A-01",
+        "P-01",
+        "F-01",
+        "M-01"
+      ]
+    },
+    {
+      "name": "SetRef",
+      "defined_in": "D-01 §C3 · prototypes/SetRef.dc.html",
+      "used_by": [
+        "M-01",
+        "C-01"
+      ],
+      "planned_for": [
+        "A-01",
+        "P-01",
+        "F-01"
+      ]
+    },
+    {
+      "name": "CrossRef",
+      "defined_in": "D-01 §C4 · prototypes/CrossRef.dc.html + dt/landing.js",
+      "used_by": [
+        "M-01",
+        "P-01"
+      ],
+      "planned_for": [
+        "A-01",
+        "C-01",
+        "Hub"
+      ]
+    },
+    {
+      "name": "ReleaseGate",
+      "defined_in": "D-01 §C5 · prototypes/ReleaseGate.dc.html",
+      "used_by": [
+        "C-01"
+      ],
+      "planned_for": [
+        "baseline release",
+        "rights pass"
+      ]
+    },
+    {
+      "name": "Blocker",
+      "defined_in": "D-01 §C6 · prototypes/Blocker.dc.html",
+      "used_by": [
+        "C-01"
+      ],
+      "planned_for": [
+        "ReleaseGate findings",
+        "A-01 fit",
+        "P-01"
+      ]
+    },
+    {
+      "name": "PriorityStrip",
+      "defined_in": "Hub.dc.html #now (instance) · ADDENDUM-A1 · D-01 §C7 pending",
+      "used_by": [
+        "Hub"
+      ],
+      "planned_for": [
+        "every hub-like surface"
+      ]
+    }
+  ],
+  "component_count": 21,
+  "decisions": {
+    "ledger": "handoff/decisions.md",
+    "ids": "DEC-001 … DEC-028 (oldest first)",
+    "new_this_revision": [
+      "DEC-016",
+      "DEC-017",
+      "DEC-018",
+      "DEC-019",
+      "DEC-020",
+      "DEC-021",
+      "DEC-022",
+      "DEC-023",
+      "DEC-024",
+      "DEC-025",
+      "DEC-026",
+      "DEC-027",
+      "DEC-028"
+    ]
+  },
+  "schema_requests": {
+    "file": "handoff/schema-requests.md",
+    "carried_from_014": [
+      "7.1 canonical integer LDU for X/Y/Z; display units only; rotation in its own unit",
+      "7.2 basis split into acquisition · transformation · epistemic_state · disposition (+ derived need_origin, design_origin)",
+      "7.3 inventory dimensions separated; InventoryLot.lifecycle withdrawn",
+      "7.4 envelope geometry",
+      "7.5 build-order dependency graph",
+      "7.6 work-item envelope",
+      "7.7 request outcomes + archive",
+      "7.8 versioning",
+      "7.9 commercial observations",
+      "7.10 rights as permissions",
+      "7.11 action history semantics"
+    ]
+  },
+  "open_questions": [
+    "Q1 RESEARCH-01 vocabulary",
+    "Q2 tree measurements — CLOSED by DEC-016",
+    "Q3 A-01 split — deferred by decision (DEC-018); viewer expansion proceeds inside A-01",
+    "Q4 card reflow",
+    "Q5 wand backend",
+    "Q6 procurement data",
+    "Q7 responsive iPhone/iPad",
+    "Q8 Frame seam",
+    "Q9 rights review flow",
+    "Q10 build order view"
+  ],
+  "mock_math": true,
+  "state_screenshots": [
+    {
+      "file": "handoff/screenshots/states/01-a01.jpg",
+      "sheet": "A-01",
+      "state": "A-01 · Separation tab, depth 5 — strata removed top-down, 3D follows"
+    },
+    {
+      "file": "handoff/screenshots/states/02-a01.jpg",
+      "sheet": "A-01",
+      "state": "A-01 · Scene tab with Quadrant module 2 unticked from the rig (stays whole, dimmed)"
+    },
+    {
+      "file": "handoff/screenshots/states/03-a01.jpg",
+      "sheet": "A-01",
+      "state": "A-01 · Fraction mode, Z in bricks, module rotated +22.5°"
+    },
+    {
+      "file": "handoff/screenshots/states/04-a01.jpg",
+      "sheet": "A-01",
+      "state": "A-01 · Planting proposal ASK: \"move 6 studs toward the center\" applied and echoed"
+    },
+    {
+      "file": "handoff/screenshots/states/01-b01.jpg",
+      "sheet": "B-01",
+      "state": "B-01 · Option tapped (\"4 pieces, one track\") → field CONFIRMED, trail updated"
+    },
+    {
+      "file": "handoff/screenshots/states/02-b01.jpg",
+      "sheet": "B-01",
+      "state": "B-01 · Simulated file drop (hash, immutable) + family visibility toggled"
+    },
+    {
+      "file": "handoff/screenshots/states/03-b01.jpg",
+      "sheet": "B-01",
+      "state": "B-01 · Blueprint theme, mid-page"
+    },
+    {
+      "file": "handoff/screenshots/states/01-c01.jpg",
+      "sheet": "C-01",
+      "state": "C-01 · Schematic NEW ONLY + double ballast chosen"
+    },
+    {
+      "file": "handoff/screenshots/states/02-c01.jpg",
+      "sheet": "C-01",
+      "state": "C-01 · Derived parts + fit check run"
+    },
+    {
+      "file": "handoff/screenshots/states/03-c01.jpg",
+      "sheet": "C-01",
+      "state": "C-01 · Choices with worked-out state; request parked"
+    },
+    {
+      "file": "handoff/screenshots/states/04-c01.jpg",
+      "sheet": "C-01",
+      "state": "C-01 · Part popover open from the parts list"
+    },
+    {
+      "file": "handoff/screenshots/states/05-c01.jpg",
+      "sheet": "C-01",
+      "state": "C-01 · Approval trail with review steps ticked / initials"
+    },
+    {
+      "file": "handoff/screenshots/states/01-p01.jpg",
+      "sheet": "P-01",
+      "state": "P-01 · Priority \"fewest parcels\" — plan re-priced"
+    },
+    {
+      "file": "handoff/screenshots/states/02-p01.jpg",
+      "sheet": "P-01",
+      "state": "P-01 · Ask box: \"skip Nordic Bricks\" → AI restates the change, schedule re-sorted"
+    },
+    {
+      "file": "handoff/screenshots/states/03-p01.jpg",
+      "sheet": "P-01",
+      "state": "P-01 · Shop schedule page 2 of 2"
+    },
+    {
+      "file": "handoff/screenshots/states/04-p01.jpg",
+      "sheet": "P-01",
+      "state": "P-01 · Order recorded (stamp) → plan locked in 01"
+    },
+    {
+      "file": "handoff/screenshots/states/05-p01.jpg",
+      "sheet": "P-01",
+      "state": "P-01 · Top of sheet after lock"
+    },
+    {
+      "file": "handoff/screenshots/states/01-f01.jpg",
+      "sheet": "F-01",
+      "state": "F-01 · Building armed: ghost footprint under the cursor, cursor = copy"
+    },
+    {
+      "file": "handoff/screenshots/states/02-f01.jpg",
+      "sheet": "F-01",
+      "state": "F-01 · Two stickers placed; minifig named \"Mads\" with story; custom sizer open"
+    },
+    {
+      "file": "handoff/screenshots/states/03-f01.jpg",
+      "sheet": "F-01",
+      "state": "F-01 · Side view (south): 6×6 tree flagged too tall under the branches; ring overlaps flagged"
+    },
+    {
+      "file": "handoff/screenshots/states/04-f01.jpg",
+      "sheet": "F-01",
+      "state": "F-01 · Plan at \"Studs\" zoom, panned to the minifig"
+    },
+    {
+      "file": "handoff/screenshots/states/05-f01.jpg",
+      "sheet": "F-01",
+      "state": "F-01 · \"Something else\": describing a reindeer pulling a sled (glyph + size inferred)"
+    },
+    {
+      "file": "handoff/screenshots/states/06-f01.jpg",
+      "sheet": "F-01",
+      "state": "F-01 · Story filled; magic wand run — precedents + proposal"
+    },
+    {
+      "file": "handoff/screenshots/states/07-f01.jpg",
+      "sheet": "F-01",
+      "state": "F-01 · Sent — needs list with names, flags and request card"
+    },
+    {
+      "file": "handoff/screenshots/states/08-f01.jpg",
+      "sheet": "F-01",
+      "state": "F-01 · Action log (\"WHAT HAPPENED\") opened"
+    },
+    {
+      "file": "handoff/screenshots/states/01-hub.jpg",
+      "sheet": "Hub",
+      "state": "Hub · Decision entry open; trace chip dims untouched sheets"
+    },
+    {
+      "file": "handoff/screenshots/states/02-hub.jpg",
+      "sheet": "Hub",
+      "state": "Hub · Inline preview of handoff/README.md"
+    },
+    {
+      "file": "handoff/screenshots/states/01-j01.jpg",
+      "sheet": "J-01",
+      "state": "J-01 · Filtered by family"
+    },
+    {
+      "file": "handoff/screenshots/states/02-j01.jpg",
+      "sheet": "J-01",
+      "state": "J-01 · Stepping through journeys"
+    },
+    {
+      "file": "handoff/screenshots/states/09-f01.jpg",
+      "sheet": "F-01",
+      "state": "F-01 · Later capture (listed for parity; see STATES.md)"
+    },
+    {
+      "file": "handoff/screenshots/states/10-a01-3d-fit.jpg",
+      "sheet": "A-01",
+      "state": "A-01 · 3D · CHECK IT tab: massing over the measured tree, right-of-way rings; \"Does it fit?\" blocking honestly (Q13 overlap)"
+    },
+    {
+      "file": "handoff/screenshots/states/11-c01-release-gate.jpg",
+      "sheet": "C-01",
+      "state": "C-01 · After Approve with initials: ReleaseGate open at the end of the sheet — evidence, findings, initials"
+    },
+    {
+      "file": "handoff/screenshots/states/12-p01-manual-order.jpg",
+      "sheet": "P-01",
+      "state": "P-01 · Released (demo) · \"Record an order I placed\" form open"
+    },
+    {
+      "file": "handoff/screenshots/states/13-m01-claim-draft.jpg",
+      "sheet": "M-01",
+      "state": "M-01 · Claim \"Holds\" draft: method, words, proof required before the restatement"
+    },
+    {
+      "file": "handoff/screenshots/states/14-hub-right-now-paper.jpg",
+      "sheet": "Hub",
+      "state": "Hub · \"Right now\" — three priority pill-cards above the sheet index, paper (ADDENDUM-A1)"
+    },
+    {
+      "file": "handoff/screenshots/states/14-hub-right-now-blueprint.jpg",
+      "sheet": "Hub",
+      "state": "Hub · same, blueprint"
+    },
+    {
+      "file": "handoff/screenshots/states/15-hub-right-now-closing.jpg",
+      "sheet": "Hub",
+      "state": "Hub · one done (closed the loop), one parked (no guilt), lede thanks without nagging"
+    }
+  ],
+  "known_defects_open": [
+    "screenshots are viewport crops (design-tool limit); initial captures refreshed after WP4 in both themes; WebGL canvas reads blank in A-01 captures — open the standalone for the 3D view",
+    "standalone/ must travel with handoff/dt/ (embedded components load ../dt/* relatively); D-01 carries copies of the five component DCs (library/SYNC.md)"
+  ],
+  "fixed_in_wp0": [
+    "K-1 applied: F-01 tree fixed at 16×16 · 40 br · 8 br base · r28 · 10 br clear; tree Tweaks removed",
+    "F-01 free-stud readout computed (no negative values); \"ring\" → \"rail\" everywhere",
+    "A-01: 48×48 label → Section of 2×2 MILS 32×32; Three.js loaded once; header no longer collides",
+    "C-01: header, toggle clipping, schematic label collision fixed",
+    "P-01: six-shop seed — lowest total / fewest parcels / soonest now diverge; manual-order case noted",
+    "All nine sheets: <title>, lang=\"en\", one <h1> on A-01/B-01/C-01/P-01",
+    "tokens: contrast contract + check-contrast.mjs; accent/prov/unres darkened in paper, unres lightened in blueprint",
+    "ledger: DEC-001…028 with supersedes/status/effective_revision; K-1…K-9 and today’s operator calls recorded",
+    "J-01: O4 and F-01 read as built; brief 007-R2 marked historical; repo-structure marked unadjudicated (K-4); component inventory reconciled at 15; 09-f01 listed",
+    "WP0f: initial captures both themes refreshed for A/C/P/M/D-01 after WP4; four new state captures (10–13)",
+    "WP0 close: standalone/ regenerated for every sheet incl. M-01; pre-WP1 A-01 copy removed"
+  ],
+  "fixed_in_wp1": [
+    "A-01: tabbed PLAN / 3D · CHECK IT; viewer fills the canvas area; tree, right-of-way and sections drawn from one state in both views",
+    "A-01: \"Does it fit?\" — six deterministic checks against the measured tree; honest BLOCK on the 8×8 inner-corner overlap (Q13)",
+    "A-01: \"Try a move\" — proposals with pending restatement, Yes/No; nothing persists without confirmation",
+    "A-01 spec R1 appended with announcement spec",
+    "D-01 re-cut as a ladder; GapCloser component designed in §C2 and mounted on C-01 double ballast",
+    "A-01: switchable section selection (NE anchor read-only); every scene sub-layer accordions to composition",
+    "C-01/A-01: @boys → EH/HH/LH (DEC-027)",
+    "GapCloser: onStatus callback; C-01 re-derives DOUBLE strikes/stances/asks/blockers as jobs close; popover box-sizing + focus fallback fixed"
+  ],
+  "open_work": [
+    {
+      "id": "OW-01",
+      "what": "Lift the 8 components that live only on sheets (RequestCard, StanceChip, OptionStateRow, PartPopover, PlantingRow, ChangePulse, DecisionLogEntry, EvidenceChips, EnvelopeBadge, StickerTile, SegmentedLine, StatusLine, ActionLog — whichever are not yet drawn in D-01 §C1) and the B-pattern rungs (restate-before-save, proposal vs placed, gate ladder, request lifecycle, return-to-where-you-were) into D-01 with states + announcements",
+      "rule": "fold in as each sheet is touched; do not batch",
+      "owner": "design session",
+      "status": "open",
+      "filed": "2026-09-17",
+      "to_ledger": "design-audit open-work ledger (operator to create)"
+    }
+  ],
+  "fixed_in_wp2": [
+    "C-01: basis split into four stored + two derived axes (§7.2); composed plain-language sentence per row; filters read axes; \"the six axes\" disclosure",
+    "M-01 Measure and check: capture-measurement + verify-claim loops, pending restatement, kept history, blast-radius list, return-to-caller bar",
+    "A-01 / C-01 link into M-01 with ?from= &what=",
+    "SetRef component: hover/focus reference card for any set / MOC / part number, BrickLink-sourced; mounted on M-01 and C-01, documented in D-01 §C3",
+    "CrossRef + landing: cross-sheet links preview the target card on hover, navigate to sheet#card, and the card flashes (dtLand) with a polite announcement on arrival; landing.js loaded on every sheet",
+    "dt/overlay.js: one shared hover-card lifecycle (page-wide single instance across SetRef + CrossRef, body layer, correct createRoot teardown, timed fade); both components rebuilt on it"
+  ],
+  "fixed_in_wp3": [
+    "P-01 00: procurement-release gate — subject, evidence with CrossRefs, findings (fix / waive with reason / defer with owner+trigger), initials + Release / Send back, §8 record disclosure, RELEASED stamp; 01–04 read-only until passed",
+    "P-01 04: revalidate stock/prices before BrickLink links unlock; drift shown and re-priced",
+    "P-01: ordered→owned shortcut removed from copy; manual/retroactive order capture with restatement and honest provenance",
+    "M-01: claim verification now drafts (method · words · proof / owner+trigger) before the restatement",
+    "Gate relocated to the end of C-01 as the reusable ReleaseGate component; P-01 reduced to a release-status reader with ?released= handoff",
+    "Blocker chips: every \"BLOCKED BY\" on C-01 previews the owning card and clears the blocker from inside the popover where an action exists (park request · derive rows · run fitment)"
+  ],
+  "fixed_in_wp4": [
+    "A-01/C-01/P-01: role=main, every card title an <h2>, id’d cards are <section>s",
+    "A-01: expand buttons and rig selection buttons named in full sentences",
+    "C-01: ⤢ buttons labelled + aria-expanded; source/part/chain summaries and ballast choices carry full-sentence aria-labels",
+    "P-01: 01–04 titles are h2; skip / open / mark controls carry the shop name and the lock reason; split toggle reads as a sentence",
+    "handoff/specs/ANNOUNCEMENTS.md — per-sheet trigger → region → sentence tables",
+    "handoff/a11y/*.tree.json — accessibility-tree baselines + dt/a11y-tree.js walker"
+  ],
+  "review_round": {
+    "id": "R1",
+    "for": [
+      "Claude chat",
+      "ChatGPT"
+    ],
+    "brief": "handoff/REVIEW-R1.md",
+    "then": "Claude Code"
+  }
+}
