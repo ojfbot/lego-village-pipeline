@@ -13,7 +13,9 @@ supported case, never a workaround.
 `docs/correspondence/REGISTER.md` is the index and authority. Read it first. Rules: **attach,
 never paste** · filename is not identity · numbers never move once cited · collisions are
 recorded, not repaired · numbers are allocated by the operator. Every memo passes
-`tools/preflight.py <memo> docs/correspondence/REGISTER.md` before it can act as a work order.
+`tools/memo_preflight.py <memo> docs/correspondence/REGISTER.md` (version-dispatching; run
+`tools/setup-preflight.sh` once per clone) before it can act as a work order. The v1
+reference `tools/preflight.py` is frozen — cited by register rows, never edited.
 **Every commit that touches `docs/correspondence/` bumps the register version line.**
 
 Current work order: `HANDOFF-LEGO-PIPE-019` (founding) executing `LEGO-PIPE-011-R2` (build

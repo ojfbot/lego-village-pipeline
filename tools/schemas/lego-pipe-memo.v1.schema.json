@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "lego-pipe-memo/v1",
+  "title": "lego-pipe-memo/v1 frontmatter",
+  "description": "Operative schema for frozen legacy and .13-transition memos. Mirrors the v1 reference preflight.py checks; the register's wording wins where prose and schema disagree.",
+  "type": "object",
+  "required": [
+    "correspondence_schema", "memo", "revision", "status", "memo_type",
+    "title", "date", "from", "to", "thread", "cluster", "repos", "tags",
+    "argument", "parts", "provenance"
+  ],
+  "properties": {
+    "correspondence_schema": { "const": "lego-pipe-memo/v1" },
+    "memo": { "type": "string" },
+    "revision": { "type": "string", "pattern": "^R\\d+$" },
+    "status": { "enum": ["draft", "for_review", "for_reconciliation", "accepted", "accepted_work_order", "superseded"] },
+    "memo_type": { "enum": ["handoff", "review_response", "decision", "work_order", "findings", "review"] },
+    "title": { "type": "string" },
+    "date": {},
+    "from": { "type": ["string", "object"] },
+    "to": { "type": ["array", "object"] },
+    "thread": { "type": "string" },
+    "cluster": { "type": "string" },
+    "repos": { "type": "array" },
+    "tags": { "type": "array" },
+    "argument": { "type": "string" },
+    "parts": { "type": "object" },
+    "provenance": { "type": "object" },
+    "findings": { "type": "array" }
+  },
+  "x-body-rules": {
+    "finding_id_pattern": "\\b([RNC]-\\d{1,2})\\b",
+    "used_ids_must_be_declared": "only when a findings: key is present (reference parity)",
+    "argument_prefix": { "value": "In which", "severity": "warning" }
+  }
+}
