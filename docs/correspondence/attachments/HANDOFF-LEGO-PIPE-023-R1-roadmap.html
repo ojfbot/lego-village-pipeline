@@ -335,7 +335,7 @@ footer{margin-top:48px;font-size:12px;color:var(--dt-muted);border-top:1px solid
       <tr><td>Claude Design</td><td>Design · its session and project</td><td>Package cuts H-01 R&lt;n&gt;, journeys, D-01, change-request answers</td><td>Repo code, fixtures, the register directly</td></tr>
       <tr><td>Claude Code</td><td>Build · repo, CI, dive/&lt;n&gt; branches</td><td>Code, fixtures, schema, criteria proposals, debriefs, drift reports, board.json</td><td>docs/design/H-01-R&lt;n&gt;/ (verbatim); others' memos</td></tr>
       <tr><td>Claude (Cowork)</td><td>Program · Cowork sessions, correspondence/ branches</td><td>Briefings, roadmaps, reconciliations, PROGRAM.md narrative</td><td>Code, design package, others' memos</td></tr>
-      <tr><td>ChatGPT</td><td>Review · its project, PRs only</td><td>REVIEW- and CORR- memos, schema review, P0–P2 findings</td><td>Anything else; no direct commits</td></tr>
+      <tr><td>ChatGPT</td><td>Review + design + architecture · its project, PRs only</td><td>REVIEW-/CORR- memos; design proposals (journeys, sheets, states); architecture proposals (schema, packages, patterns); code PRs at its granted rung</td><td>Direct commits; the verbatim package; code above its rung</td></tr>
       <tr><td>GitHub</td><td>Record</td><td>main, PR-flow, CI gates, issues, milestones, board</td><td>—</td></tr>
       <tr><td>Local (Mac)</td><td>Physical</td><td>The only pushes and merges; the running app; Studio, Blender, dev storage</td><td>—</td></tr>
     </tbody>
@@ -344,6 +344,7 @@ footer{margin-top:48px;font-size:12px;color:var(--dt-muted);border-top:1px solid
     <div class="rule"><b>WIP · one dive in build</b>Sheet work is serial even where elapsed windows overlap.</div>
     <div class="rule"><b>WIP · one cut in flight</b>Called, imported, triaged before the next is called.</div>
     <div class="rule"><b>WIP · one PR per lane waiting on James</b>Build, program, review each hold one open PR; merge Friday takes minutes.</div>
+    <div class="rule" style="border-left-color:var(--dt-prov)"><b style="color:var(--dt-prov)">ChatGPT confidence ladder</b>L0 memos &amp; proposals → L1 fixtures &amp; tests → L2 packages → L3 ui &amp; app. James moves it by register ruling; PR-only and CI gates at every rung; proposals become real only through a cut or the pin.</div>
     <div class="rule"><b>Pre-dive check</b>Briefing accepted · pin on main · drift triaged · criteria signed · fixtures + contrast + a11y green · register reconciled · questions answered or parked.</div>
   </div>
 </section>
@@ -533,7 +534,7 @@ footer{margin-top:48px;font-size:12px;color:var(--dt-muted);border-top:1px solid
 
 <!-- 5 · QUESTIONS -->
 <section>
-  <h2><span class="n">6</span> Nine questions nothing here may answer by building</h2>
+  <h2><span class="n">6</span> Ten questions nothing here may answer by building</h2>
   <table class="t">
     <thead><tr><th>#</th><th>Question</th><th>Lean</th></tr></thead>
     <tbody>
@@ -546,6 +547,7 @@ footer{margin-top:48px;font-size:12px;color:var(--dt-muted);border-top:1px solid
       <tr><td>7</td><td>Board of record: GitHub Projects (visual, cockpit-readable, board.json derived) or board.json alone?</td><td>Projects if you look at GitHub daily</td></tr>
       <tr><td>8</td><td>Re-seed Claude Design's prototypes from the F4 fixture JSON at cut R2, so design and build share one village?</td><td>yes</td></tr>
       <tr><td>9</td><td>Cuts: two scheduled (R2 3 Oct, R3 17 Oct) + ad hoc, or a fixed weekly Friday cut?</td><td>scheduled — weekly puts a triage in every debrief</td></tr>
+      <tr><td>10</td><td>ChatGPT's starting rung — L0 or straight to L1? Promotion your call alone, or on Claude Code's debrief recommendation?</td><td>L1 from Dive 1; your call on recommendation</td></tr>
     </tbody>
   </table>
 </section>
