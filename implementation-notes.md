@@ -31,3 +31,12 @@
   third — `Claude outputs/CORR-LEGO-PIPE-021….md` at repo root, a byte-identical duplicate of
   the committed 021 (transfer artifact from the drop location). Verified sha256 equal, removed,
   recorded in the version note. Not committed.
+- 2026-09-18 (governance, register `.14`): the founding acts assumed direct commits to `main`
+  were the mandated form ("first commit lands…"); the fleet norm the operator expected was
+  PR-flow. All direct pushes through `a7ce78c` stand (hashes are cited in the register — the
+  record is never rewritten); PR-flow + branch protection in force from `.14`. Discovered
+  en route: the account is GitHub Free, not Pro — play-well-library (private) cannot get
+  server-side protection until upgrade or visibility change; hook + CI only there.
+- 2026-09-18 (publish sweep): pre-publish PII sweep flagged `v004-play-eli` (branch-name
+  example, 9 occurrences in registered documents, unredactable — hash is identity). Operator
+  human review ruled: not a name, not PII. Repo flipped public on that ruling.

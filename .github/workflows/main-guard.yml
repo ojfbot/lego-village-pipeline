@@ -1,0 +1,24 @@
+name: main-guard
+# Detective control (register v2026-09-18.14): any commit reaching main without
+# a merged PR turns this red. Recorded, not repaired.
+on:
+  push:
+    branches: [main]
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Verify pushed commit arrived via a merged PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          merged=$(gh api "repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" \
+            --jq '[.[] | select(.merged_at != null)] | length')
+          if [ "$merged" -eq 0 ]; then
+            echo "::error::Commit ${{ github.sha }} reached main without a merged PR (PR-flow violation, register v.14)."
+            exit 1
+          fi
+          echo "OK: commit associated with $merged merged PR(s)."

@@ -1,0 +1,16 @@
+#!/bin/sh
+# PR-flow guard (register v2026-09-18.14): no direct pushes to main.
+# Activate per-clone: git config core.hooksPath .githooks
+while read local_ref local_sha remote_ref remote_sha; do
+  if [ "$remote_ref" = "refs/heads/main" ]; then
+    if [ "$ALLOW_MAIN_PUSH" = "1" ]; then
+      echo "WARNING: ALLOW_MAIN_PUSH=1 — bypassing the PR-flow guard for main." >&2
+      echo "This push will turn main-guard red; record it in the register." >&2
+    else
+      echo "BLOCKED: direct push to main (PR-flow, register v2026-09-18.14)." >&2
+      echo "Branch, open a PR, merge. Emergency override: ALLOW_MAIN_PUSH=1 git push" >&2
+      exit 1
+    fi
+  fi
+done
+exit 0
