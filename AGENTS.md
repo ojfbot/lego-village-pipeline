@@ -13,7 +13,8 @@ supported case, never a workaround.
 `docs/correspondence/REGISTER.md` is the index and authority. Read it first. Rules: **attach,
 never paste** · filename is not identity · numbers never move once cited · collisions are
 recorded, not repaired · numbers are allocated by the operator. Every memo passes
-`tools/preflight.py <memo> docs/correspondence/REGISTER.md` before it can act as a work order.
+`tools/memo_preflight.py <memo> docs/correspondence/REGISTER.md` (version-dispatching; run
+`tools/setup-preflight.sh` once per clone) before it can act as a work order.
 **Every commit that touches `docs/correspondence/` bumps the register version line.**
 
 Current work order: `HANDOFF-LEGO-PIPE-019` (founding) executing `LEGO-PIPE-011-R2` (build
@@ -48,13 +49,13 @@ report, no workflow UI before the schema gate, no Frame topology by scaffolding.
 **Never push to `main` — PR-flow is in force (register v2026-09-18.14).** Every change,
 correspondence landings included, lands branch → PR → merge. Branch names:
 `corr/<memo-or-register-version>` for correspondence landings, `feat/…`/`fix/…` otherwise.
-Merge authority: James merges; Codex may self-merge **only** PRs whose content James
-authorized by relay (file landings, instructed register bumps) — never code, schema, or
-policy. Operator relays authorize *content*; the PR is where the *commit* gets its review.
+Merge authority: James merges; Claude Code and Codex (ChatGPT desktop agent) may self-merge
+**only** PRs whose content James authorized by relay (file landings, instructed register
+bumps) — never code, schema, or policy (Codex lane granted by register v2026-09-18.21). Operator relays authorize *content*; the PR is where the *commit* gets its review.
 Enforcement: server-side branch protection on `main` + `main-guard.yml` (red X on bypass) +
 per-clone hook — run `git config core.hooksPath .githooks` after cloning.
 
 pnpm only, never npm. Vertical slices. Grill before non-trivial work. Log plan deviations to
 `implementation-notes.md` `## Deviations`. Sibling content repo: `ojfbot/play-well-library`
 (canonical content; branch flow `play/<user>` → `staging` → `main`). Northstar:
-`.Codex/northstar.md` (l1-lego-village-pipeline → l2-ojfbot).
+`.claude/northstar.md` (l1-lego-village-pipeline → l2-ojfbot).
