@@ -26,7 +26,7 @@ to:
     role: designer
     provider: Anthropic
   - actor: ChatGPT
-    role: independent_reviewer
+    role: independent_reviewer_and_design_architecture_contributor
     provider: OpenAI
 in_reply_to:
   memo: HANDOFF-LEGO-PIPE-019
@@ -58,6 +58,7 @@ tags:
   - multi-agent
   - design-build-parallel
   - sdlc
+  - confidence-ladder
 attachments:
   - {name: "attachments/HANDOFF-LEGO-PIPE-023-R1-roadmap.html", role: "the chart — ladder, lanes over the calendar, the design↔build loop, package map, dives, sheet ownership; open in any browser, no server"}
 argument: >-
@@ -70,7 +71,10 @@ argument: >-
   a merge or a Studio file happens — is never the bottleneck by accident; a pre-dive
   check is written down PADI-style so no dive starts on a stale package, an invalid
   fixture, or an unreconciled register; the calendar gains a design lane with two
-  cuts; and the questions to the operator grow from six to nine.
+  cuts; the questions to the operator grow from six to ten; and, repaired in place
+  before issue, ChatGPT is given full authority to propose design, journeys, schema
+  and code architecture, with code-write privileges granted progressively on a
+  ladder the operator climbs it up.
 parts:
   "0": "Orientation — what R1 adds, what it leaves alone"
   "0a": "Change log R0 → R1"
@@ -112,7 +116,7 @@ R0 planned one lane: build. You pointed out that four other lanes exist and R0 s
 
 **What this memo is not.** It is not a new governance memo — the register, PR-flow and the protocol memo (021, as amended by 022) already govern *how correspondence moves*. §4–6 sit on top of those: they govern *how work is scheduled and kept from colliding*. Where this memo and 021/022 seem to disagree, 021/022 win and I have made a mistake; say so.
 
-**How to read this.** §1 is still the idea; if you reject it, stop. §4–6 are the new layer and the reason for R1. §10 has nine questions; three are new and two of them gate Dive 1.
+**How to read this.** §1 is still the idea; if you reject it, stop. §4–6 are the new layer and the reason for R1. §10 has ten questions; four are new and three of them gate Dive 1.
 
 ## 0a. Change log R0 → R1
 
@@ -124,7 +128,8 @@ R0 planned one lane: build. You pointed out that four other lanes exist and R0 s
 | 7 | Was §4. Fleet hooks now derive from the board (§6.4), not the reverse |
 | 8 | Was §5. Calendar gains the design lane with cuts R2 and R3, and the review lane |
 | 9 | Was §6. Unchanged |
-| 10 | Was §7. Questions 7–9 added |
+| 10 | Was §7. Questions 7–10 added |
+| — | **In-place repair, 2026-09-18, before issue (016 §3.8):** ChatGPT's lane widened from review to review + design + architecture proposals; code access by confidence ladder (§4.1); §5.2, §6.1 and the chart updated to match |
 | 11 | Was §8. Sequence extended to the design and review lanes |
 
 ---
@@ -193,9 +198,24 @@ Six parties. Each has a **lane** (what it produces), a **venue** (where it works
 | **Claude Design** | Design | Claude Design session, the H-01 project | Design package cuts `H-01 R<n>` (sheets, specs, `decisions.md`, `schema-requests.md`, `open-questions.md`, `STATES.md`, a11y trees, D-01), journey hierarchy (G-1), change-request responses | Its own package; `decisions.md` (append) | Repo code, fixtures, the register directly (its cuts are imported by Claude Code, §5.2) |
 | **Claude Code** | Build | The repo, CI, `dive/<n>` branches, Claude Code sessions | Code, fixtures, schema, acceptance-criteria proposals, debrief memos, drift reports, issues, PRs | Everything under the repo except the two verbatim trees | `docs/design/H-01-R<n>/` (verbatim, never edited), correspondence authored by others |
 | **Claude (Cowork)** | Program | Cowork sessions on the LEGO Village project, `correspondence/` branches | Briefings, roadmaps, reconciliations, register bumps for its own memos, the program board's narrative | `docs/correspondence/`, `docs/program/` | Code, design package, other authors' memos |
-| **ChatGPT** | Review | Its own project; contributes by PR only (022) | `REVIEW-` memos, reconciliation `CORR-` memos, schema review (Q11), P0/P1/P2 findings | Its own memos via PR | Anything else; no direct commits |
+| **ChatGPT** | Review + design + architecture | Its own project; contributes by PR only (022) | `REVIEW-` and `CORR-` memos; **design proposals** (journeys, sheet specs, states, copy) into the design thread; **architecture proposals** (application, schema, code patterns, implementation approach) as ADR-shaped memos; P0/P1/P2 findings; code PRs **at the level currently granted (§4.1)** | Its own memos and proposals via PR; code paths at its granted level | Direct commits; `docs/design/H-01-R<n>/` (verbatim); code above its granted level |
 | **GitHub** | Record | `ojfbot/lego-village-pipeline`, `play-well-library` | `main` (canonical), PR-flow, CI gates (preflight · contrast · a11y snapshot · main-guard · drift), issues, milestones, the project board | — | — |
 | **Local (Mac)** | Physical | James's machine | Pushes and merges (the only credentialed place), the running app, Studio, Blender, dev storage, real measurements | — | — |
+
+### 4.1 ChatGPT's authority, and the confidence ladder
+
+**Design and architecture: full authority to propose, now.** ChatGPT may put forward anything Claude Design or Claude Code may — journeys, sheets, states, copy, schema shape, package boundaries, implementation patterns, ADRs. Proposals arrive as memos or as PRs to `docs/design/proposals/` and `docs/architecture/proposals/`, graded and cited like any other. Two things stay fixed: **there is one design package**, so a design proposal becomes real only when Claude Design carries it into a cut (or James rules it in directly, recorded as a DEC entry); and **there is one schema package**, so an architecture proposal becomes real only when Claude Code lands it against the pin, or James rules. ChatGPT can propose everything and decide nothing — the same as every other agent here.
+
+**Code: progressive, by ladder.** PADI grants privileges by certification, each level earned on logged, supervised dives. Same here. James moves ChatGPT up (or down) a level by register ruling, recorded in `PROGRAM.md`; PR-only and the CI gates apply at every level; the pre-dive check and debrief record which level each contribution was made under.
+
+| Level | May open PRs touching | Typical first task | Promotion evidence James looks at |
+|---|---|---|---|
+| **L0 · Memos** (today) | `docs/correspondence/`, `docs/design/proposals/`, `docs/architecture/proposals/` | The 023 review; the Q11 `need_origin` ruling | Findings accepted without rework; proposals that survived a cut |
+| **L1 · Fixtures & tests** | `packages/schema/fixtures/`, `*.test.*`, golden cases, property tests, `tools/` | Golden cases for the six fit checks; adversarial fixtures for the four-axis PartRow | Tests that caught something; fixtures that validate first time |
+| **L2 · Packages** | `packages/*` except `ui` | The procurement search invariants; a geometry helper | PRs merged with ≤ 1 round of review; no a11y or contrast regressions |
+| **L3 · UI and app** | `packages/ui`, `apps/drafting-table` | A component against its a11y baseline | Same, on the accessibility-tree contract specifically |
+
+No level is skipped; a demotion is recorded like a promotion, without ceremony. Claude Code remains the implementer of record for every dive; ChatGPT's code PRs are contributions to a dive, triaged by Claude Code in the debrief like drift.
 
 Three things fall out of the table:
 
@@ -222,6 +242,8 @@ Claude Design is not frozen. It works two queues:
 
 A **cut** is a zip of the whole package with a sha256, imported exactly as 019 §1.4 did R1: committed verbatim to `docs/design/H-01-R<n>/`, register row with hash, `decisions.md` diffed to confirm it is append-only. **Two cuts are scheduled** (§8): **R2 on 3 Oct** (absorbs Dive 1's schema answers, the Q-item rulings, and Dive 2/3 debrief findings) and **R3 on 17 Oct** (Tier 2 receive → inspect → discrepancy → allocate, which must exist by 25 Nov). A cut can also be called ad hoc by James.
 
+ChatGPT's design proposals (§4.1) enter here: Claude Design reads them from the proposals folder and either carries them into the next cut, contests them in the cut's `decisions.md`, or leaves them for James. A proposal not carried and not contested within one cut is put to James by the program lane.
+
 What flows *back* to Claude Design with each briefing, so the next cut is grounded: the schema package's answers to `schema-requests.md` (what was accepted, renamed, split, refused), the fixture scenario (F4) so the prototypes can be re-seeded with the same village — optionally consuming the fixture JSON directly (Question 8) — and the debrief's findings against the pinned sheets.
 
 ### 5.3 Drift — every cut is diffed, and the diff is a work item
@@ -247,9 +269,9 @@ Dives are not weeks — Dive 4 is eleven days, Dive 3 is four — but the *progr
 
 | Day | Program (Cowork) | Build (Claude Code) | Design (Claude Design) | Review (ChatGPT) | Operator (James) |
 |---|---|---|---|---|---|
-| **Mon** | Issue the briefing for any dive starting this week; reconcile last Friday's register | Read the briefing; run the pre-dive check; open `dive/<n>` | Read the schema answers and drift triage from Friday | — | Refine the briefing the same day; sign acceptance criteria |
-| **Tue–Thu** | Answer questions; draft the next briefing | Build; open issues; keep the board current | Design-ahead queue; DEC entries for design-behind | Review the briefing or the previous debrief; findings by PR | Operate the sheet as it lands; measure; rule on Q-items |
-| **Fri** | Register reconciled; board narrative updated; fleet status pushed | Debrief memo (if a dive ends) + drift triage + PRs ready for merge | Cut, if one is scheduled or called | Reconciliation memo if findings were contested | **Merge day.** Merge PRs; allocate numbers; call or decline a cut |
+| **Mon** | Issue the briefing for any dive starting this week; reconcile last Friday's register | Read the briefing; run the pre-dive check; open `dive/<n>` | Read the schema answers and drift triage from Friday | Read the briefing; pick what to propose or review this week | Refine the briefing the same day; sign acceptance criteria |
+| **Tue–Thu** | Answer questions; draft the next briefing | Build; open issues; keep the board current | Design-ahead queue; DEC entries for design-behind | Review, design and architecture proposals, code PRs at granted level — all by PR | Operate the sheet as it lands; measure; rule on Q-items |
+| **Fri** | Register reconciled; board narrative updated; fleet status pushed | Debrief memo (if a dive ends) + drift triage + PRs ready for merge | Cut, if one is scheduled or called; carries or contests ChatGPT proposals | Reconciliation memo if findings were contested | **Merge day.** Merge PRs; allocate numbers; call or decline a cut; rule on ladder moves |
 
 If a dive ends mid-week, its debrief is issued that day and Friday still happens. If nothing ends, Friday is reconciliation only and is short.
 
@@ -344,6 +366,7 @@ Nothing below may be answered by building.
 7. **The board of record.** GitHub Projects (visual, API-readable by the cockpit, `board.json` derived from it) or `board.json` alone (repo-native, no second tool)? Lean Projects if you already look at GitHub daily; `board.json` alone if you don't.
 8. **Design on fixtures.** Should Claude Design's prototypes be re-seeded from the F4 fixture JSON at cut R2, so design and build share one village? It costs Claude Design a data-loading step; it buys drift reports that compare like with like. Lean yes.
 9. **Cut cadence.** Two scheduled cuts (R2 3 Oct, R3 17 Oct) plus ad hoc by your call — or a fixed Friday cut every week? Lean scheduled: weekly cuts would put a drift triage in every debrief.
+10. **ChatGPT's starting rung.** L0 today, as written — or straight to L1 (fixtures and tests), given it has already reviewed 011/012/017 and holds the Q11 ruling? And is promotion your call alone, or your call on Claude Code's recommendation in a debrief? Lean L1 from Dive 1, promotion your call on recommendation.
 
 ---
 
@@ -352,7 +375,7 @@ Nothing below may be answered by building.
 1. James confirms 023 and answers §10 in a reply memo (or in chat, relayed into a memo — the fixture rule, the pin rule and the fleet contract are decisions and live in the register).
 2. Claude (Cowork) issues **Dive 1's briefing** as a `CORR-` memo with its chart: workspace diagram, schema entity map from `schema-requests.md`, the F4 scenario, `design_pin: H-01 R1`, and Dive 1's acceptance criteria.
 3. Claude Code runs the pre-dive check, starts Dive 1 on `dive/1-foundations`, creates `docs/program/`, and reports by debrief.
-4. Claude Design receives, with the briefing, the design-ahead queue for 22 Sep – 3 Oct and the cut R2 target; ChatGPT receives 023 for review by PR.
+4. Claude Design receives, with the briefing, the design-ahead queue for 22 Sep – 3 Oct and the cut R2 target; ChatGPT receives 023 for review by PR, its starting rung, and the two proposal folders.
 5. This memo's row moves to *accepted* when James says so; 019 §6 is amended by a dated entry appended to `docs/design/H-01-R1/decisions.md` pointing here; `docs/program/PROGRAM.md` is seeded from §4–6.
 
 — Claude (Cowork), coordinating reviewer and handoff author
