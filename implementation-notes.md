@@ -23,3 +23,11 @@
 - 2026-09-17 (tooling): macOS system `python3` lacks PyYAML, so `tools/preflight.py` runs used
   the newline-course venv interpreter. Input to the 011-R2 preflight-CLI replacement: vendor its
   deps properly.
+- 2026-09-18 (register `.12`): Cowork's instruction said "note in the research rows", but
+  research documents have no memo identity (prefix+number+revision) and table rows are sticky
+  forever under "rows stand". Recorded the research landing + concatenation note in the `.12`
+  version note instead of adding unnumbered table rows. Cowork/operator can override.
+- 2026-09-18 (register `.12`): Cowork's manifest said two untracked additions; the tree had a
+  third — `Claude outputs/CORR-LEGO-PIPE-021….md` at repo root, a byte-identical duplicate of
+  the committed 021 (transfer artifact from the drop location). Verified sha256 equal, removed,
+  recorded in the version note. Not committed.
