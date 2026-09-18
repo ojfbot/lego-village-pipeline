@@ -50,9 +50,9 @@ report, no workflow UI before the schema gate, no Frame topology by scaffolding.
 **Never push to `main` — PR-flow is in force (register v2026-09-18.14).** Every change,
 correspondence landings included, lands branch → PR → merge. Branch names:
 `corr/<memo-or-register-version>` for correspondence landings, `feat/…`/`fix/…` otherwise.
-Merge authority: James merges; Claude Code may self-merge **only** PRs whose content James
-authorized by relay (file landings, instructed register bumps) — never code, schema, or
-policy. Operator relays authorize *content*; the PR is where the *commit* gets its review.
+Merge authority: James merges; Claude Code and Codex (ChatGPT desktop agent) may self-merge
+**only** PRs whose content James authorized by relay (file landings, instructed register
+bumps) — never code, schema, or policy (Codex lane granted by register v2026-09-18.21). Operator relays authorize *content*; the PR is where the *commit* gets its review.
 Enforcement: server-side branch protection on `main` + `main-guard.yml` (red X on bypass) +
 per-clone hook — run `git config core.hooksPath .githooks` after cloning.
 
