@@ -201,7 +201,7 @@ From 021 §C, amended by 022. Six steps; none optional; this is the part of the 
 |---|---|---|
 | Register | live, `.17` | `docs/correspondence/REGISTER.md` |
 | v1 reference validator | live; checks: frontmatter present, no tabs, no duplicate top-level keys, required keys and types, schema id pinned, status and memo_type enums, "In which" (warn), finding IDs used ⊆ declared, `in_reply_to` and `supersedes` targets present in register, "already listed" warning. **Crashes** on pre-v1 files (009, 009-R1) — input to its replacement | `tools/preflight.py` (needs PyYAML; system python on the Mac lacks it) |
-| v2-aware validator: versioned JSON Schema + CLI dispatching on `correspondence_schema`, reserved finding namespace, v2 enums | **planned** — 011-R2 authorised scope item 2; the gate on 018 and on every v2 memo acting | `tools/` |
+| v2-aware validator: versioned JSON Schema + CLI dispatching on `correspondence_schema`, reserved finding namespace, v2 enums | **live at `.20`** — `memo_preflight.py` + `schemas/lego-pipe-memo.{v1,v2}.schema.json`; 018's validator gate met (register row wins on operative status) | `tools/` |
 | PR-flow enforcement | live: branch protection on `main`; `main-guard.yml`; `.githooks/pre-push` (activate per clone: `git config core.hooksPath .githooks`) | `.github/workflows/`, `.githooks/` |
 | Commit convention | memo-shaped commit messages ending in the session's attribution lines; every correspondence commit names the register version it produces | `CLAUDE.md` |
 | Attachments folder | new at `.15`: charts and files that travel with a memo, named `<memo-id>-<slug>.<ext>`, declared in the memo's `attachments:` | `docs/correspondence/attachments/` |

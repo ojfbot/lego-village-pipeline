@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "lego-pipe-memo/v2",
+  "title": "lego-pipe-memo/v2 frontmatter",
+  "description": "Ratified 2026-09-18 (register .13, CORR-022 amendments over the CORR-017-R2 merged draft). Governs new memos after .13. 017 §2 says 'fifteen required keys' but lists fourteen; this schema implements the fourteen listed — the count discrepancy is recorded as an open question in the register.",
+  "type": "object",
+  "required": [
+    "correspondence_schema", "memo", "revision", "status", "memo_type",
+    "title", "date", "thread", "from", "to", "argument", "provenance",
+    "authority", "register"
+  ],
+  "properties": {
+    "correspondence_schema": { "const": "lego-pipe-memo/v2" },
+    "memo": { "type": "string", "pattern": "^(HANDOFF|CORR|REVIEW)-LEGO-PIPE-\\d{3}$" },
+    "revision": { "type": "string", "pattern": "^R\\d+$" },
+    "status": { "enum": ["draft", "reserved", "for_review", "for_reconciliation", "issued", "accepted", "accepted_work_order", "superseded", "closed", "withdrawn"] },
+    "memo_type": { "enum": ["handoff", "correspondence", "review", "review_response", "decision", "work_order", "findings", "addendum"] },
+    "title": { "type": "string" },
+    "date": {},
+    "thread": { "type": "string", "x-note": "register-maintained list, rule 16 — validator warns on unknown" },
+    "from": { "type": "object", "required": ["actor", "role"] },
+    "to": { "type": "array", "items": { "type": "object", "required": ["actor", "role"] } },
+    "argument": { "type": "string", "x-must-start-with": "In which" },
+    "provenance": { "type": "object" },
+    "authority": { "type": "object", "required": ["decision_owner"] },
+    "register": { "type": "object", "required": ["number", "allocated_by"] },
+    "parts": { "type": "object" },
+    "findings": {
+      "type": "array",
+      "items": { "type": "object", "required": ["id", "summary"] }
+    },
+    "subtitle": {}, "cluster": {}, "repos": {}, "tags": {},
+    "downstream_audience": {}, "trace_forward_as": {},
+    "in_reply_to": {}, "supersedes": {}, "issued_as": {},
+    "register_version_read": { "x-note": "session-checklist item; validator warns when absent" }
+  },
+  "x-conditionally-required": {
+    "parts": ["handoff", "work_order"],
+    "findings": "when the body cites reserved-namespace finding IDs"
+  },
+  "x-retired-keys": ["document_id", "document_type", "version", "finding_ids"],
+  "x-body-rules": {
+    "finding_id_pattern": "\\b((?:R|N|X|S|Q|K)-\\d{2})\\b",
+    "sheet_prefixes_invalid_as_findings": ["A", "C", "F", "H", "J", "P"],
+    "legacy_alias_note": "021's F-01…F-08 are frozen aliases for S-15…S-22; new memos must not cite F-nn as findings",
+    "argument_prefix": { "value": "In which", "severity": "error" }
+  }
+}
