@@ -40,3 +40,7 @@
 - 2026-09-18 (publish sweep): pre-publish PII sweep flagged `v004-play-eli` (branch-name
   example, 9 occurrences in registered documents, unredactable — hash is identity). Operator
   human review ruled: not a name, not PII. Repo flipped public on that ruling.
+- 2026-09-18 (desktop-guidance PR): the review plan assumed stable repository references while
+  the two guidance commits were prepared; another local desktop process advanced pipeline `main`
+  and published the same one-file feature branch concurrently. Kept the refreshed remote branch
+  after verifying its PR contains only `AGENTS.md`; no history was rewritten.
