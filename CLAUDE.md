@@ -45,6 +45,15 @@ report, no workflow UI before the schema gate, no Frame topology by scaffolding.
 
 ## Fleet conventions
 
+**Never push to `main` — PR-flow is in force (register v2026-09-18.14).** Every change,
+correspondence landings included, lands branch → PR → merge. Branch names:
+`corr/<memo-or-register-version>` for correspondence landings, `feat/…`/`fix/…` otherwise.
+Merge authority: James merges; Claude Code may self-merge **only** PRs whose content James
+authorized by relay (file landings, instructed register bumps) — never code, schema, or
+policy. Operator relays authorize *content*; the PR is where the *commit* gets its review.
+Enforcement: server-side branch protection on `main` + `main-guard.yml` (red X on bypass) +
+per-clone hook — run `git config core.hooksPath .githooks` after cloning.
+
 pnpm only, never npm. Vertical slices. Grill before non-trivial work. Log plan deviations to
 `implementation-notes.md` `## Deviations`. Sibling content repo: `ojfbot/play-well-library`
 (canonical content; branch flow `play/<user>` → `staging` → `main`). Northstar:
