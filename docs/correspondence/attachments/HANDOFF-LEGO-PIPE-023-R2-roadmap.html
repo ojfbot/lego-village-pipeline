@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>
+<title>Drafting Table on Fixtures</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<style>
+:root{
+  --dt-bg:#F6F2E9;--dt-grid:#22303C0A;--dt-sheet:#FDFBF5;--dt-ink:#22303C;--dt-muted:#5E6B76;
+  --dt-accent:#B84F2B;--dt-accent-deep:#8F3B20;--dt-accent-bg:#F4E4DC;
+  --dt-pass:#2E6B4F;--dt-pass-bg:#E7EFE9;--dt-prov:#8F660E;--dt-prov-bg:#F5EDD8;
+  --dt-block:#C0392B;--dt-block-bg:#F9E9E4;--dt-info:#3D6B9E;--dt-info-deep:#33587E;--dt-info-bg:#E7EDF4;
+  --dt-line:#22303C33;--dt-rule:#22303C1F;
+  --dt-shadow:4px 4px 0 #B84F2B3A,8px 8px 0 #3D6B9E1F;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --dt-bg:#13202E;--dt-grid:#E4E9EE10;--dt-sheet:#1B2A3B;--dt-ink:#E4E9EE;--dt-muted:#93A5B5;
+  --dt-accent:#E0754A;--dt-accent-deep:#EC9067;--dt-accent-bg:#3A2A22;
+  --dt-pass:#63C494;--dt-pass-bg:#1B3629;--dt-prov:#D9A73E;--dt-prov-bg:#2E2716;
+  --dt-block:#E06552;--dt-block-bg:#3A2220;--dt-info:#7FA8D9;--dt-info-deep:#A3C2E8;--dt-info-bg:#1D2E42;
+  --dt-line:#E4E9EE4D;--dt-rule:#E4E9EE26;
+  --dt-shadow:4px 4px 0 #E0754A42,8px 8px 0 #7FA8D92E;
+}}
+:root[data-theme="dark"]{
+  --dt-bg:#13202E;--dt-grid:#E4E9EE10;--dt-sheet:#1B2A3B;--dt-ink:#E4E9EE;--dt-muted:#93A5B5;
+  --dt-accent:#E0754A;--dt-accent-deep:#EC9067;--dt-accent-bg:#3A2A22;
+  --dt-pass:#63C494;--dt-pass-bg:#1B3629;--dt-prov:#D9A73E;--dt-prov-bg:#2E2716;
+  --dt-block:#E06552;--dt-block-bg:#3A2220;--dt-info:#7FA8D9;--dt-info-deep:#A3C2E8;--dt-info-bg:#1D2E42;
+  --dt-line:#E4E9EE4D;--dt-rule:#E4E9EE26;
+  --dt-shadow:4px 4px 0 #E0754A42,8px 8px 0 #7FA8D92E;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--dt-bg);background-image:linear-gradient(var(--dt-grid) 1px,transparent 1px),linear-gradient(90deg,var(--dt-grid) 1px,transparent 1px);background-size:24px 24px;color:var(--dt-ink);font-family:'Libre Franklin',system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.5}
+.wrap{max-width:1060px;margin:0 auto;padding-block:32px 64px;padding-inline:16px}
+header{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--dt-ink);padding-bottom:12px;margin-bottom:8px}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dt-muted);font-weight:600}
+h1{font-size:clamp(24px,4vw,34px);font-weight:700;letter-spacing:-.01em;margin:4px 0 0;text-wrap:balance;line-height:1.15}
+.meta{font-size:12px;color:var(--dt-muted);font-variant-numeric:tabular-nums}
+.lede{max-width:66ch;color:var(--dt-ink);margin:12px 0 0}
+section{margin-top:44px}
+h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin:0 0 4px;display:flex;gap:10px;align-items:baseline}
+h2 .n{color:var(--dt-accent);font-variant-numeric:tabular-nums}
+.sub{color:var(--dt-muted);margin:0 0 16px;max-width:70ch}
+.sheet{background:var(--dt-sheet);border:1px solid var(--dt-line);border-radius:4px 18px 4px 4px;padding:18px;overflow-x:auto}
+svg{display:block;max-width:100%;height:auto;font-family:inherit}
+svg text{fill:var(--dt-ink)}
+svg .mut{fill:var(--dt-muted)}
+svg .lab{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+svg .sm{font-size:12px}
+svg .num{font-variant-numeric:tabular-nums}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;font-size:12px;color:var(--dt-muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:18px;height:10px;border-radius:2px;display:inline-block}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}
+.card{background:var(--dt-sheet);border:1px solid var(--dt-line);border-radius:4px 18px 4px 4px;padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.card.crit{border-color:var(--dt-accent);box-shadow:var(--dt-shadow)}
+.card h3{margin:0;font-size:16px;font-weight:700;line-height:1.25}
+.card .win{font-size:12px;color:var(--dt-muted);font-variant-numeric:tabular-nums;display:flex;gap:10px;flex-wrap:wrap}
+.tag{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--dt-info-bg);color:var(--dt-info-deep)}
+.tag.acc{background:var(--dt-accent-bg);color:var(--dt-accent-deep)}
+.tag.gate{background:var(--dt-block-bg);color:var(--dt-block)}
+.card dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:13.5px}
+.card dt{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--dt-muted);padding-top:3px}
+.card dd{margin:0}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:16px}
+.rule{border-left:3px solid var(--dt-info);padding:4px 0 4px 12px;font-size:13.5px}
+.rule b{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dt-info-deep);margin-bottom:2px}
+table.t{border-collapse:collapse;width:100%;font-size:13.5px;margin-top:8px}
+table.t th{text-align:left;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dt-muted);font-weight:700;padding:8px 10px;border-bottom:2px solid var(--dt-ink)}
+table.t td{padding:8px 10px;border-bottom:1px solid var(--dt-rule);vertical-align:top}
+table.t td:first-child{white-space:nowrap;font-weight:600}
+footer{margin-top:48px;font-size:12px;color:var(--dt-muted);border-top:1px solid var(--dt-rule);padding-top:12px}
+@media (prefers-reduced-motion:no-preference){.card.crit{transition:transform .15s}.card.crit:hover{transform:translate(-1px,-1px)}}
+</style>
+
+<div class="wrap">
+<header>
+  <div>
+    <div class="eyebrow">HANDOFF-LEGO-PIPE-023 · R2 · attachment · thread drafting-table</div>
+    <h1>The drafting table on fixtures — built bag by bag</h1>
+  </div>
+  <div class="meta">Drawn 2026-09-18 · gate 2026-10-21 · 33 days</div>
+</header>
+<p class="lede">Ten Claude Design prototypes become one running app on typed fixtures. The fixtures pass the same validators real data will pass, so the mock UI <em>is</em> the schema gate. Six numbered bags, each with its own booklet and the picture on the box agreed before it opens. Five agents and one operator work in lanes; design cuts every Friday; a pin, a drift report and a change request keep design and build in step. Frame watches from the tooling plane.</p>
+
+<!-- 1 · THE LADDER -->
+<section>
+  <h2><span class="n">1</span> How a bag is built — learning through play</h2>
+  <p class="sub">The shape of building a LEGO set: open the numbered bag, follow the booklet, look at the model while you build, compare with the picture on the box, step back. The LEGO Foundation's five characteristics — joyful, meaningful, actively engaged, iterative, socially interactive — are why it looks this way.</p>
+  <div class="sheet">
+  <svg viewBox="0 0 1000 250" role="img" aria-label="Six steps left to right: the booklet, a short memo naming the slice; the model in the booklet, the Claude Design standalone; the picture on the box, acceptance criteria agreed first; build it on the table, the sheet on fixtures; step back and look, a short memo; real bricks, real data behind the October gates.">
+    <defs>
+      <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--dt-muted)"/></marker>
+    </defs>
+    <!-- baseline -->
+    <line x1="30" y1="140" x2="970" y2="140" stroke="var(--dt-rule)" stroke-width="1"/>
+    <!-- rungs -->
+    <g font-size="12">
+      <!-- rung template: x positions 30,190,350,510,670,830 width 140 -->
+      <g transform="translate(30,60)">
+        <rect width="150" height="80" rx="3" fill="var(--dt-info-bg)" stroke="var(--dt-info)" stroke-width="1.5"/>
+        <text x="12" y="20" class="lab mut">the booklet</text>
+        <text x="12" y="44" font-weight="700" font-size="13">Short memo</text>
+        <text x="12" y="62" class="sm mut">names the slice · one diagram</text>
+      </g>
+      <g transform="translate(190,60)">
+        <rect width="150" height="80" rx="3" fill="var(--dt-info-bg)" stroke="var(--dt-info)" stroke-width="1.5"/>
+        <text x="12" y="20" class="lab mut">model in the booklet</text>
+        <text x="12" y="44" font-weight="700" font-size="13">Design standalone</text>
+        <text x="12" y="62" class="sm mut">looked at, never copied</text>
+      </g>
+      <g transform="translate(350,60)">
+        <rect width="150" height="80" rx="3" fill="var(--dt-info-bg)" stroke="var(--dt-info)" stroke-width="1.5"/>
+        <text x="12" y="20" class="lab mut">picture on the box</text>
+        <text x="12" y="44" font-weight="700" font-size="13">Acceptance criteria</text>
+        <text x="12" y="62" class="sm mut">agreed before the bag opens</text>
+      </g>
+      <g transform="translate(510,60)">
+        <rect width="150" height="80" rx="3" fill="var(--dt-info-bg)" stroke="var(--dt-info)" stroke-width="1.5"/>
+        <text x="12" y="20" class="lab mut">build it on the table</text>
+        <text x="12" y="44" font-weight="700" font-size="13">Sheet on fixtures</text>
+        <text x="12" y="62" class="sm mut">James builds with it</text>
+      </g>
+      <g transform="translate(670,60)">
+        <rect width="150" height="80" rx="3" fill="var(--dt-info-bg)" stroke="var(--dt-info)" stroke-width="1.5"/>
+        <text x="12" y="20" class="lab mut">step back and look</text>
+        <text x="12" y="44" font-weight="700" font-size="13">Short memo</text>
+        <text x="12" y="62" class="sm mut">slice delivered? what drifted?</text>
+      </g>
+      <g transform="translate(830,60)">
+        <rect width="150" height="80" rx="3" fill="var(--dt-accent-bg)" stroke="var(--dt-accent)" stroke-width="1.5" stroke-dasharray="5 3"/>
+        <text x="12" y="20" class="lab mut">real bricks</text>
+        <text x="12" y="44" font-weight="700" font-size="13">Real data</text>
+        <text x="12" y="62" class="sm mut">behind 14 / 21 Oct gates</text>
+      </g>
+      <!-- arrows -->
+      <g stroke="var(--dt-muted)" stroke-width="1.5" fill="none" marker-end="url(#arr)">
+        <line x1="181" y1="100" x2="189" y2="100"/><line x1="341" y1="100" x2="349" y2="100"/><line x1="501" y1="100" x2="509" y2="100"/><line x1="661" y1="100" x2="669" y2="100"/><line x1="821" y1="100" x2="829" y2="100"/>
+      </g>
+      <!-- mastery loop -->
+      <path d="M740 142 C740 200, 420 200, 420 142" fill="none" stroke="var(--dt-accent)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+      <text x="580" y="192" text-anchor="middle" class="sm" fill="var(--dt-accent-deep)" style="fill:var(--dt-accent-deep)">can't build it again without the booklet → next bag stays sealed</text>
+      <text x="500" y="232" text-anchor="middle" class="lab mut">open the bags in order · the picture on the box comes first</text>
+    </g>
+  </svg>
+  </div>
+</section>
+
+<!-- 2 · TIMELINE -->
+<section>
+  <h2><span class="n">2</span> The calendar, with lanes</h2>
+  <p class="sub">One implementer in the build lane; design cuts every Friday; review beside. Bags 4–6 overlap on purpose. If it slips, P-01 optimisation is sacrificed first; the six fit checks, M-01 and the C-01 rows with chips do not slip — they are what the gate is for.</p>
+  <div class="sheet">
+  <svg viewBox="0 0 1000 520" role="img" aria-label="Timeline from 18 September to 28 October with build, design and review lanes. A design cut every Friday: R2 25 September, R3 2 October, R4 9 October, R5 16 October, R6 23 October. Bag 0 the box 18 to 22 September; Bag 1 foundations 22 to 26 September; Bag 2 components 26 September to 2 October; Bag 3 Hub 30 September to 3 October; Bag 4 A-01 and geometry 3 to 14 October, critical path; Bag 5 M-01 and C-01 7 to 17 October, critical path; Bag 6 P-01 14 to 20 October. Milestones: 14 October geometry validated, 21 October order-by gate, 28 October orders placed.">
+    <defs>
+      <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="var(--dt-sheet)" stroke-width="2" opacity=".55"/></pattern>
+    </defs>
+    <!-- scale: day d → x = 150 + d*20 ; 18 Sep = day 0 ; 28 Oct = day 40 -->
+    <!-- week grid: Mondays 21 Sep(3), 28 Sep(10), 5 Oct(17), 12 Oct(24), 19 Oct(31), 26 Oct(38) -->
+    <g stroke="var(--dt-rule)" stroke-width="1">
+      <line x1="210" y1="40" x2="210" y2="470"/><line x1="350" y1="40" x2="350" y2="470"/><line x1="490" y1="40" x2="490" y2="470"/><line x1="630" y1="40" x2="630" y2="470"/><line x1="770" y1="40" x2="770" y2="470"/><line x1="910" y1="40" x2="910" y2="470"/>
+    </g>
+    <g class="sm mut num" text-anchor="middle">
+      <text x="210" y="30">Mon 21 Sep</text><text x="350" y="30">28 Sep</text><text x="490" y="30">5 Oct</text><text x="630" y="30">12 Oct</text><text x="770" y="30">19 Oct</text><text x="910" y="30">26 Oct</text>
+    </g>
+    <!-- today -->
+    <line x1="150" y1="40" x2="150" y2="470" stroke="var(--dt-ink)" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <text x="145" y="30" text-anchor="end" class="lab mut">today · 18 Sep</text>
+
+    <!-- rows: y = 60 + i*40 ; bar height 22 -->
+    <g class="sm" font-weight="600">
+      <text x="140" y="75" text-anchor="end">Bag 0 · the box</text>
+      <text x="140" y="115" text-anchor="end">Bag 1 · foundations</text>
+      <text x="140" y="155" text-anchor="end">Bag 2 · components</text>
+      <text x="140" y="195" text-anchor="end">Bag 3 · Hub</text>
+      <text x="140" y="235" text-anchor="end">Bag 4 · A-01</text>
+      <text x="140" y="275" text-anchor="end">Bag 5 · M-01 · C-01</text>
+      <text x="140" y="315" text-anchor="end">Bag 6 · P-01</text>
+      <text x="140" y="355" text-anchor="end">Bag 7 · real bricks</text>
+    </g>
+    <!-- bars (day start, day end): 0:(0,4) 1:(4,8) 2:(8,14) 3:(12,15) 4:(15,26) 5:(19,29) 6:(26,32) -->
+    <g>
+      <rect x="150" y="60" width="80" height="22" rx="3" fill="var(--dt-muted)"><title>Bag 0 · the box · 18–22 Sep · this memo, accepted</title></rect>
+      <rect x="230" y="100" width="80" height="22" rx="3" fill="var(--dt-info)"><title>Bag 1 · foundations · 22–26 Sep · workspace, tokens (D-1 fixed), schema + fixtures F1–F5, a11y harness, drift checker, fleet hook, cluster-onboarding research</title></rect>
+      <rect x="310" y="140" width="120" height="22" rx="3" fill="var(--dt-info)"><title>Bag 2 · components · 26 Sep – 2 Oct · 15 + 2 components in Ladle with a11y baselines</title></rect>
+      <rect x="390" y="180" width="60" height="22" rx="3" fill="var(--dt-info)"><title>Bag 3 · Hub with Right now · 30 Sep – 3 Oct · first running sheet</title></rect>
+      <rect x="450" y="220" width="220" height="22" rx="3" fill="var(--dt-accent)"><title>Bag 4 · A-01 + geometry · 3–14 Oct · six fit checks in code, Q13 BLOCK reproduced · critical path · pins R3</title></rect>
+      <rect x="450" y="220" width="220" height="22" rx="3" fill="url(#hatch)" pointer-events="none"/>
+      <rect x="530" y="260" width="200" height="22" rx="3" fill="var(--dt-accent)"><title>Bag 5 · M-01 + C-01 · 7–17 Oct · BOM rows with honest chips, ReleaseGate record · critical path</title></rect>
+      <rect x="530" y="260" width="200" height="22" rx="3" fill="url(#hatch)" pointer-events="none"/>
+      <rect x="670" y="300" width="120" height="22" rx="3" fill="var(--dt-info)"><title>Bag 6 · P-01 · 14–20 Oct · retroactive order path first, optimiser second</title></rect>
+      <rect x="810" y="340" width="150" height="22" rx="3" fill="none" stroke="var(--dt-accent)" stroke-width="1.5" stroke-dasharray="5 3"><title>Bag 7 · real bricks · from 21 Oct · DataSource = real, one entity at a time</title></rect>
+    </g>
+    <!-- bar labels -->
+    <g class="sm" style="fill:var(--dt-sheet)" font-weight="600">
+      <text x="158" y="75" style="fill:var(--dt-sheet)">memo</text>
+      <text x="238" y="115" style="fill:var(--dt-sheet)">schema</text>
+      <text x="318" y="155" style="fill:var(--dt-sheet)">packages/ui</text>
+      <text x="398" y="195" style="fill:var(--dt-sheet)">app</text>
+      <text x="458" y="235" style="fill:var(--dt-sheet)">six checks · Q13 BLOCK</text>
+      <text x="538" y="275" style="fill:var(--dt-sheet)">rows with chips · gate</text>
+      <text x="678" y="315" style="fill:var(--dt-sheet)">retro order</text>
+    </g>
+    <text x="818" y="355" class="sm" style="fill:var(--dt-accent-deep)">real bricks</text>
+    <!-- milestones: 14 Oct = day 26 → x 670 ; 21 Oct = day 33 → x 810 ; 28 Oct = day 40 → x 950 -->
+    <g>
+      <line x1="670" y1="40" x2="670" y2="470" stroke="var(--dt-pass)" stroke-width="2"/>
+      <polygon points="670,40 664,50 676,50" fill="var(--dt-pass)"/>
+      <text x="664" y="52" text-anchor="end" class="lab" style="fill:var(--dt-pass)">14 Oct · geometry verified</text>
+      <line x1="810" y1="40" x2="810" y2="470" stroke="var(--dt-block)" stroke-width="2.5"/>
+      <polygon points="810,40 804,50 816,50" fill="var(--dt-block)"/>
+      <text x="816" y="52" class="lab" style="fill:var(--dt-block)">21 Oct · ORDER-BY</text>
+      <line x1="950" y1="40" x2="950" y2="470" stroke="var(--dt-muted)" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="948" y="68" text-anchor="end" class="lab mut">28 Oct · placed</text>
+    </g>
+    <!-- dependencies -->
+    <g stroke="var(--dt-muted)" stroke-width="1.2" fill="none" marker-end="url(#arr)">
+      <path d="M270 82 L270 92 L230 92 L230 98" />
+      <path d="M310 122 L310 138"/>
+      <path d="M390 162 L390 178"/>
+      <path d="M450 202 L450 218"/>
+      <path d="M530 242 L530 258"/>
+      <path d="M670 282 L670 298"/>
+    </g>
+    <!-- lane divider -->
+    <line x1="60" y1="392" x2="970" y2="392" stroke="var(--dt-rule)"/>
+        <g class="sm" font-weight="600">
+      <text x="140" y="420" text-anchor="end">Design</text>
+      <text x="140" y="460" text-anchor="end">Review</text>
+    </g>
+    <!-- design lane: design-ahead continuous, cuts as diamonds. R2 = 3 Oct day15 → x450 ; R3 = 17 Oct day29 → x730 -->
+    <rect x="150" y="406" width="810" height="20" rx="3" fill="var(--dt-info-bg)" stroke="var(--dt-info)" stroke-dasharray="4 3"><title>Design-ahead queue, continuous: G-1 journeys, D-01 lift, Tier 2 receiving sheets, F-01, responsive. Design-behind changes to pinned sheets go through DEC entries and change requests only. A cut every Friday, seeded from the same fixtures as the app.</title></rect>
+    <text x="158" y="420" class="sm" style="fill:var(--dt-info-deep)">design-ahead · continuous</text>
+    <polygon points="290,398 299,416 290,434 281,416" fill="var(--dt-accent)"><title>Cut R2 · Fri 25 Sep · first fixture-seeded cut; carries Bag 1 schema answers</title></polygon>
+    <text x="290" y="446" text-anchor="middle" class="lab" style="fill:var(--dt-accent-deep)">R2</text>
+    <polygon points="430,398 439,416 430,434 421,416" fill="var(--dt-accent)"><title>Cut R3 · Fri 2 Oct · Bag 4 pins this</title></polygon>
+    <text x="430" y="446" text-anchor="middle" class="lab" style="fill:var(--dt-accent-deep)">R3</text>
+    <polygon points="570,398 579,416 570,434 561,416" fill="var(--dt-accent)"><title>Cut R4 · Fri 9 Oct · Tier 2 receiving sheets begin</title></polygon>
+    <text x="570" y="446" text-anchor="middle" class="lab" style="fill:var(--dt-accent-deep)">R4</text>
+    <polygon points="710,398 719,416 710,434 701,416" fill="var(--dt-accent)"><title>Cut R5 · Fri 16 Oct · Tier 2</title></polygon>
+    <text x="710" y="446" text-anchor="middle" class="lab" style="fill:var(--dt-accent-deep)">R5</text>
+    <polygon points="850,398 859,416 850,434 841,416" fill="var(--dt-accent)"><title>Cut R6 · Fri 23 Oct · weekly onward</title></polygon>
+    <text x="850" y="446" text-anchor="middle" class="lab" style="fill:var(--dt-accent-deep)">R6</text>
+    <!-- review lane -->
+    <rect x="150" y="452" width="80" height="16" rx="3" fill="var(--dt-muted)"><title>ChatGPT reviews 023</title></rect>
+    <rect x="310" y="452" width="120" height="16" rx="3" fill="var(--dt-muted)"><title>ChatGPT at L1: adversarial fixtures and the Q11 ruling during Bag 2</title></rect>
+    <rect x="450" y="452" width="220" height="16" rx="3" fill="var(--dt-muted)"><title>ChatGPT at L1: golden cases for the six fit checks during Bag 4</title></rect>
+    <text x="158" y="464" class="sm" style="fill:var(--dt-sheet)">023</text>
+    <text x="318" y="464" class="sm" style="fill:var(--dt-sheet)">L1 · fixtures</text>
+    <text x="458" y="464" class="sm" style="fill:var(--dt-sheet)">L1 · golden cases</text>
+    <!-- fridays: 25 Sep d7 x290, 2 Oct d14 x430, 9 Oct d21 x570, 16 Oct d28 x710, 23 Oct d35 x850 -->
+    <g fill="var(--dt-pass)">
+      <circle cx="290" cy="490" r="4"/><circle cx="430" cy="490" r="4"/><circle cx="570" cy="490" r="4"/><circle cx="710" cy="490" r="4"/><circle cx="850" cy="490" r="4"/>
+    </g>
+    <text x="150" y="494" class="lab mut">merge fridays</text>
+    <text x="500" y="514" text-anchor="middle" class="sm mut">A bag opens only after its booklet is accepted · cuts are the only way design reaches build · every Friday: merge, allocate, cut</text>
+  </svg>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--dt-info)"></i> bag in build</span>
+    <span><i class="sw" style="background:var(--dt-accent);background-image:repeating-linear-gradient(45deg,transparent 0 3px,#fff8 3px 5px)"></i> critical path (hatched) — does not slip</span>
+    <span><i class="sw" style="border:1.5px dashed var(--dt-accent)"></i> real bricks — real data</span>
+    <span><i class="sw" style="background:var(--dt-pass);height:3px"></i> 14 Oct milestone</span>
+    <span><i class="sw" style="background:var(--dt-block);height:3px"></i> 21 Oct gate</span>
+    <span><i class="sw" style="background:var(--dt-accent);width:10px;transform:rotate(45deg)"></i> Friday cut (zip + sha256, verbatim, fixture-seeded)</span>
+    <span><i class="sw" style="background:var(--dt-muted);height:6px"></i> review lane</span>
+  </div>
+  </div>
+</section>
+
+
+<!-- 3 · THE LOOP -->
+<section>
+  <h2><span class="n">3</span> How design keeps moving while a bag builds</h2>
+  <p class="sub">A bag builds against one pinned package revision. Design never edits that revision; it ships the next one as Friday's cut, seeded from the same fixtures the app runs on. Every cut is diffed, and every diff on a sheet in build is triaged before it touches code. A sheet has one owner at a time.</p>
+  <div class="sheet">
+  <svg viewBox="0 0 1000 300" role="img" aria-label="Loop: Claude Design produces a cut, a zip with a sha256, imported verbatim into the repo as H-01 R n. A drift checker diffs it against the previous revision and produces a drift report. For sheets in build, Claude Code triages each drift as absorb, defer or contest. Build proceeds against the pin. The step-back sends change requests back to Claude Design, graded P0 to P2, answered in the next cut.">
+    <defs><marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--dt-muted)"/></marker></defs>
+    <!-- design side -->
+    <g transform="translate(30,40)">
+      <rect width="190" height="90" rx="3" fill="var(--dt-info-bg)" stroke="var(--dt-info)" stroke-width="1.5"/>
+      <text x="12" y="22" class="lab" style="fill:var(--dt-info-deep)">Claude Design</text>
+      <text x="12" y="44" class="sm mut">design-ahead: unpinned sheets,</text>
+      <text x="12" y="60" class="sm mut">journeys, D-01, Tier 2/3</text>
+      <text x="12" y="80" class="sm mut">design-behind: DEC entries only</text>
+    </g>
+    <!-- cut -->
+    <g transform="translate(260,55)">
+      <polygon points="0,30 30,0 130,0 160,30 130,60 30,60" fill="var(--dt-accent-bg)" stroke="var(--dt-accent)" stroke-width="1.5"/>
+      <text x="80" y="26" text-anchor="middle" class="lab" style="fill:var(--dt-accent-deep)">cut R&lt;n&gt;</text>
+      <text x="80" y="44" text-anchor="middle" class="sm mut">zip · sha256 · verbatim</text>
+    </g>
+    <!-- drift -->
+    <g transform="translate(460,40)">
+      <rect width="170" height="90" rx="3" fill="var(--dt-sheet)" stroke="var(--dt-ink)" stroke-width="1.5"/>
+      <text x="12" y="22" class="lab">drift report</text>
+      <text x="12" y="44" class="sm mut">R&lt;n&gt; vs R&lt;n−1&gt;, per sheet:</text>
+      <text x="12" y="60" class="sm mut">spec · states · a11y tree ·</text>
+      <text x="12" y="76" class="sm mut">schema requests · DEC entries</text>
+    </g>
+    <!-- triage -->
+    <g transform="translate(670,40)">
+      <rect width="120" height="90" rx="3" fill="var(--dt-prov-bg)" stroke="var(--dt-prov)" stroke-width="1.5"/>
+      <text x="12" y="22" class="lab" style="fill:var(--dt-prov)">triage</text>
+      <text x="12" y="44" class="sm">absorb</text>
+      <text x="12" y="60" class="sm">defer → bag N</text>
+      <text x="12" y="76" class="sm">contest → back</text>
+    </g>
+    <!-- build -->
+    <g transform="translate(830,40)">
+      <rect width="140" height="90" rx="3" fill="var(--dt-info-bg)" stroke="var(--dt-info)" stroke-width="1.5"/>
+      <text x="12" y="22" class="lab" style="fill:var(--dt-info-deep)">Claude Code</text>
+      <text x="12" y="44" class="sm mut">builds against</text>
+      <text x="12" y="60" class="sm mut">design_pin only</text>
+      <text x="12" y="80" class="sm mut">one bag at a time</text>
+    </g>
+    <!-- forward arrows -->
+    <g stroke="var(--dt-muted)" stroke-width="1.5" fill="none" marker-end="url(#arr3)">
+      <line x1="222" y1="85" x2="258" y2="85"/><line x1="422" y1="85" x2="458" y2="85"/><line x1="632" y1="85" x2="668" y2="85"/><line x1="792" y1="85" x2="828" y2="85"/>
+    </g>
+    <!-- step-back + change request back -->
+    <g transform="translate(560,190)">
+      <rect width="230" height="60" rx="3" fill="var(--dt-sheet)" stroke="var(--dt-ink)" stroke-width="1.5"/>
+      <text x="12" y="22" class="lab">step-back → change request</text>
+      <text x="12" y="44" class="sm mut">design is wrong / under-specified · P0–P2</text>
+    </g>
+    <g transform="translate(240,190)">
+      <rect width="230" height="60" rx="3" fill="var(--dt-sheet)" stroke="var(--dt-line)"/>
+      <text x="12" y="22" class="lab">back to design with the booklet</text>
+      <text x="12" y="44" class="sm mut">fixtures · schema answers · findings</text>
+    </g>
+    <g stroke="var(--dt-accent)" stroke-width="1.5" fill="none" marker-end="url(#arr3)" stroke-dasharray="5 3">
+      <path d="M900 132 L900 220 L792 220"/>
+      <line x1="558" y1="220" x2="472" y2="220"/>
+      <path d="M238 220 L125 220 L125 132"/>
+    </g>
+    <text x="500" y="285" text-anchor="middle" class="lab mut">ownership flips only at a cut (design → build) or a dispatched change request (build → design)</text>
+  </svg>
+  </div>
+  <table class="t" aria-label="Lanes">
+    <thead><tr><th>Actor</th><th>Lane · venue</th><th>Produces</th><th>May not touch</th></tr></thead>
+    <tbody>
+      <tr><td>James</td><td>Operator · Mac, Claude Design, every chat</td><td>Decisions, merges, numbers, acceptance signatures, measurements, real orders</td><td>—</td></tr>
+      <tr><td>Claude Design</td><td>Design · its session and project</td><td>A cut every Friday (fixture-seeded), journeys, D-01, change-request answers</td><td>Repo code, fixtures, the register directly</td></tr>
+      <tr><td>Claude Code</td><td>Build · repo, CI, bag/&lt;n&gt; branches</td><td>Code, fixtures, schema, criteria proposals, step-backs, drift reports, board.json, the cluster-onboarding research</td><td>docs/design/H-01-R&lt;n&gt;/ (verbatim); others' memos</td></tr>
+      <tr><td>Claude (Cowork)</td><td>Program · Cowork sessions, correspondence/ branches</td><td>Booklets, roadmaps, reconciliations, PROGRAM.md narrative</td><td>Code, design package, others' memos</td></tr>
+      <tr><td>ChatGPT</td><td>Review + design + architecture · its project, PRs only</td><td>REVIEW-/CORR- memos; design proposals (journeys, sheets, states); architecture proposals (schema, packages, patterns); code PRs at rung L1 (now)</td><td>Direct commits; the verbatim package; code above its rung</td></tr>
+      <tr><td>GitHub</td><td>Record</td><td>main, PR-flow, CI gates, issues, milestones, board</td><td>—</td></tr>
+      <tr><td>Local (Mac)</td><td>Physical</td><td>The only pushes and merges; the running app; Studio, Blender, dev storage</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <div class="rules" style="margin-top:20px">
+    <div class="rule"><b>WIP · one bag open</b>Sheet work is serial even where elapsed windows overlap.</div>
+    <div class="rule"><b>WIP · one cut in flight</b>Friday's cut is imported and triaged before the next Friday.</div>
+    <div class="rule"><b>WIP · one PR per lane waiting on James</b>Build, program, review each hold one open PR; merge Friday takes minutes.</div>
+    <div class="rule" style="border-left-color:var(--dt-prov)"><b style="color:var(--dt-prov)">ChatGPT confidence ladder</b>L0 memos → <b>L1 fixtures &amp; tests (now)</b> → L2 packages → L3 ui &amp; app. James moves it by register ruling; PR-only and CI gates at every rung; proposals become real only through a cut or the pin.</div>
+    <div class="rule"><b>Before you open the bag</b>Booklet accepted and its slice stated · pin on main · drift triaged · picture on the box agreed · fixtures + contrast + a11y green · register reconciled · questions answered or parked · last slice described unaided.</div>
+  </div>
+</section>
+
+<!-- 4 · PACKAGE MAP -->
+<section>
+  <h2><span class="n">4</span> What gets built, and the one seam</h2>
+  <p class="sub">Packages read downward. The only place mock and real differ is the <code>DataSource</code> adapter; the sheets cannot tell which one is plugged in. Frame touches the tooling plane only.</p>
+  <div class="sheet">
+  <svg viewBox="0 0 1000 470" role="img" aria-label="Dependency map. packages/tokens and packages/schema with fixtures sit at the base. packages/ui depends on both. packages/geometry, evidence and procurement depend on schema. apps/drafting-table with sheets Hub, A-01, C-01, P-01, M-01 depends on ui, geometry and procurement, and reads data through a DataSource seam that is fixtures now and real later. A separate tooling plane holds Northstar, fleet status JSON, branch flow and CI, feeding the morning cockpit.">
+    <defs>
+      <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--dt-muted)"/></marker>
+    </defs>
+    <!-- experience plane frame -->
+    <rect x="20" y="20" width="640" height="430" rx="4" fill="none" stroke="var(--dt-rule)" stroke-dasharray="6 4"/>
+    <text x="34" y="42" class="lab mut">apps + packages · the Mac · Vite dev server · no Frame here</text>
+    <!-- app -->
+    <g transform="translate(60,60)">
+      <rect width="560" height="92" rx="3" fill="var(--dt-accent-bg)" stroke="var(--dt-accent)" stroke-width="1.5"/>
+      <text x="14" y="22" class="lab" style="fill:var(--dt-accent-deep)">apps/drafting-table</text>
+      <text x="14" y="44" class="sm mut">one app · sheet routing by id · body.dt-blueprint theme · role filtering deferred (K-4 stays open)</text>
+      <g class="sm" font-weight="600">
+        <rect x="14" y="56" width="52" height="24" rx="3" fill="var(--dt-sheet)" stroke="var(--dt-line)"/><text x="40" y="72" text-anchor="middle">Hub</text>
+        <rect x="76" y="56" width="52" height="24" rx="3" fill="var(--dt-sheet)" stroke="var(--dt-line)"/><text x="102" y="72" text-anchor="middle">A-01</text>
+        <rect x="138" y="56" width="52" height="24" rx="3" fill="var(--dt-sheet)" stroke="var(--dt-line)"/><text x="164" y="72" text-anchor="middle">M-01</text>
+        <rect x="200" y="56" width="52" height="24" rx="3" fill="var(--dt-sheet)" stroke="var(--dt-line)"/><text x="226" y="72" text-anchor="middle">C-01</text>
+        <rect x="262" y="56" width="52" height="24" rx="3" fill="var(--dt-sheet)" stroke="var(--dt-line)"/><text x="288" y="72" text-anchor="middle">P-01</text>
+        <text x="330" y="72" class="sm mut" font-weight="400">B-01 as a shared pattern only</text>
+      </g>
+    </g>
+    <!-- seam -->
+    <g transform="translate(60,172)">
+      <rect width="560" height="54" rx="3" fill="var(--dt-sheet)" stroke="var(--dt-ink)" stroke-width="2"/>
+      <text x="14" y="22" class="lab">DataSource — the one seam</text>
+      <rect x="270" y="10" width="120" height="34" rx="17" fill="var(--dt-info-bg)" stroke="var(--dt-info)" stroke-width="1.5"/>
+      <text x="330" y="32" text-anchor="middle" class="sm" font-weight="700">fixtures · now</text>
+      <rect x="410" y="10" width="120" height="34" rx="17" fill="none" stroke="var(--dt-accent)" stroke-width="1.5" stroke-dasharray="5 3"/>
+      <text x="470" y="32" text-anchor="middle" class="sm" font-weight="700" style="fill:var(--dt-accent-deep)">real · real bricks</text>
+      <text x="14" y="42" class="sm mut">the UI cannot tell which is plugged in</text>
+    </g>
+    <!-- mid packages -->
+    <g transform="translate(60,250)">
+      <rect width="130" height="60" rx="3" fill="var(--dt-info-bg)" stroke="var(--dt-info)" stroke-width="1.5"/>
+      <text x="12" y="22" class="lab" style="fill:var(--dt-info-deep)">packages/ui</text>
+      <text x="12" y="42" class="sm mut">15 + 2 components</text>
+      <text x="12" y="55" class="sm mut">a11y baselines</text>
+    </g>
+    <g transform="translate(205,250)">
+      <rect width="130" height="60" rx="3" fill="var(--dt-info-bg)" stroke="var(--dt-info)" stroke-width="1.5"/>
+      <text x="12" y="22" class="lab" style="fill:var(--dt-info-deep)">geometry</text>
+      <text x="12" y="42" class="sm mut">integer LDU · R40</text>
+      <text x="12" y="55" class="sm mut">six fit checks</text>
+    </g>
+    <g transform="translate(350,250)">
+      <rect width="130" height="60" rx="3" fill="var(--dt-info-bg)" stroke="var(--dt-info)" stroke-width="1.5"/>
+      <text x="12" y="22" class="lab" style="fill:var(--dt-info-deep)">evidence</text>
+      <text x="12" y="42" class="sm mut">five axes · chips</text>
+      <text x="12" y="55" class="sm mut">gate records · log</text>
+    </g>
+    <g transform="translate(495,250)">
+      <rect width="125" height="60" rx="3" fill="var(--dt-info-bg)" stroke="var(--dt-info)" stroke-width="1.5"/>
+      <text x="12" y="22" class="lab" style="fill:var(--dt-info-deep)">procurement</text>
+      <text x="12" y="42" class="sm mut">shop search</text>
+      <text x="12" y="55" class="sm mut">revalidation</text>
+    </g>
+    <!-- base packages -->
+    <g transform="translate(60,340)">
+      <rect width="200" height="88" rx="3" fill="var(--dt-sheet)" stroke="var(--dt-ink)" stroke-width="1.5"/>
+      <text x="12" y="22" class="lab">packages/tokens</text>
+      <text x="12" y="42" class="sm mut">dt/tokens.css verbatim + TS map</text>
+      <text x="12" y="58" class="sm mut">D-1 fixed · contrast check in CI</text>
+      <text x="12" y="76" class="sm mut">no hex in app code</text>
+    </g>
+    <g transform="translate(280,340)">
+      <rect width="340" height="88" rx="3" fill="var(--dt-sheet)" stroke="var(--dt-ink)" stroke-width="2.5"/>
+      <text x="12" y="22" class="lab">packages/schema + fixtures — the gate package</text>
+      <text x="12" y="42" class="sm mut">types · runtime validators · state machines</text>
+      <text x="12" y="58" class="sm mut">F1 typed · F2 evidence · F3 one seam · F4 our village</text>
+      <text x="12" y="76" class="sm mut">signed by James with the per-sheet acceptance criteria</text>
+    </g>
+    <!-- arrows: dependencies point downward to what is depended on -->
+    <g stroke="var(--dt-muted)" stroke-width="1.3" fill="none" marker-end="url(#arr2)">
+      <line x1="340" y1="152" x2="340" y2="170"/>
+      <line x1="125" y1="226" x2="125" y2="248"/>
+      <line x1="270" y1="226" x2="270" y2="248"/>
+      <line x1="415" y1="226" x2="415" y2="248"/>
+      <line x1="557" y1="226" x2="557" y2="248"/>
+      <line x1="125" y1="310" x2="125" y2="338"/>
+      <line x1="270" y1="310" x2="300" y2="338"/>
+      <line x1="415" y1="310" x2="420" y2="338"/>
+      <line x1="557" y1="310" x2="540" y2="338"/>
+      <path d="M160 310 L160 326 L250 326 L250 338"/>
+    </g>
+    <!-- tooling plane -->
+    <rect x="690" y="20" width="290" height="430" rx="4" fill="none" stroke="var(--dt-rule)" stroke-dasharray="6 4"/>
+    <text x="704" y="42" class="lab mut">tooling plane · where Frame sees us</text>
+    <g transform="translate(710,60)">
+      <rect width="250" height="66" rx="3" fill="var(--dt-pass-bg)" stroke="var(--dt-pass)" stroke-width="1.5"/>
+      <text x="12" y="22" class="lab" style="fill:var(--dt-pass)">morning cockpit</text>
+      <text x="12" y="42" class="sm mut">reads the status feed · shape from Bag 1 research</text>
+      <text x="12" y="58" class="sm mut">sees every bag land</text>
+    </g>
+    <g transform="translate(710,150)">
+      <rect width="250" height="56" rx="3" fill="var(--dt-sheet)" stroke="var(--dt-line)"/>
+      <text x="12" y="22" class="lab">fleet/status.json</text>
+      <text x="12" y="42" class="sm mut">bag · sheet · state · gates · last step-back</text>
+    </g>
+    <g transform="translate(710,226)">
+      <rect width="250" height="56" rx="3" fill="var(--dt-sheet)" stroke="var(--dt-line)"/>
+      <text x="12" y="22" class="lab">.claude/northstar.md</text>
+      <text x="12" y="42" class="sm mut">P1 · P2 current bumped per step-back</text>
+    </g>
+    <g transform="translate(710,302)">
+      <rect width="250" height="56" rx="3" fill="var(--dt-sheet)" stroke="var(--dt-line)"/>
+      <text x="12" y="22" class="lab">branch flow · CI</text>
+      <text x="12" y="42" class="sm mut">bag/&lt;n&gt;-&lt;slug&gt; · PR in memo shape</text>
+    </g>
+    <g transform="translate(710,378)">
+      <rect width="250" height="50" rx="3" fill="var(--dt-sheet)" stroke="var(--dt-line)"/>
+      <text x="12" y="22" class="lab">register + preflight</text>
+      <text x="12" y="40" class="sm mut">booklet · step-back · every commit bumps it</text>
+    </g>
+    <g stroke="var(--dt-muted)" stroke-width="1.3" fill="none" marker-end="url(#arr2)">
+      <line x1="835" y1="150" x2="835" y2="128"/>
+      <line x1="835" y1="226" x2="835" y2="208"/>
+      <line x1="835" y1="302" x2="835" y2="284"/>
+      <line x1="835" y1="378" x2="835" y2="360"/>
+      <path d="M660 250 L690 250 L690 178 L708 178"/>
+    </g>
+  </svg>
+  </div>
+  <div class="rules">
+    <div class="rule"><b>F1 · typed, validated</b>A fixture that fails the schema validator is a build failure.</div>
+    <div class="rule"><b>F2 · evidence-carrying</b>Every number carries <code>epistemic_state</code>; fixture math is <code>computed</code> with <code>method: fixture</code>, never <code>verified</code>.</div>
+    <div class="rule"><b>F3 · one seam</b><code>DataSource</code> has two implementations; sheets import the interface and nothing else knows.</div>
+    <div class="rule"><b>F4 · our village, not a sample</b>Tree 16 × 16 · 16 curves at R40 · 2 × 2 Sections · railhead unknown · the Q13 overlap present.</div>
+    <div class="rule"><b>F5 · real-world state, three axes</b>Every fixture set moves along ambiguity, fidelity or autonomy; the same set seeds the design prototypes, so prototype and app show one village.</div>
+  </div>
+</section>
+
+<!-- 5 · THE BAGS -->
+<section>
+  <h2><span class="n">5</span> The six bags</h2>
+  <p class="sub">Each card: what James is shown, what Claude Code builds, the slice delivered. Sheet behaviour is per the pinned design package; nothing here re-designs a sheet.</p>
+  <div class="cards">
+    <article class="card">
+      <h3>Bag 0 · the box</h3>
+      <div class="win"><span>18 – 22 Sep</span><span class="tag">this memo</span></div>
+      <dl><dt>shown</dt><dd>the fixture rule, how a bag is built, this map</dd><dt>built</dt><dd>nothing</dd><dt>slice</dt><dd>James's acceptance; two open items on the design package</dd></dl>
+    </article>
+    <article class="card">
+      <h3>Bag 1 · foundations</h3>
+      <div class="win"><span>22 – 26 Sep</span><span class="tag">gate package</span></div>
+      <dl><dt>shown</dt><dd>pnpm workspace for us · tokens & why no hex · runtime validators · the contrast contract and why D-1 fails it</dd><dt>built</dt><dd>workspace · packages/tokens (D-1 fixed, CI gate) · packages/schema with fixtures F1–F5 · a11y-tree harness · drift checker rewritten (D-2) · docs/program/ board.json · fleet hook · <b>research:</b> cluster ↔ ojfbot fleet + morning cockpit, and the cluster onboarding pipeline for next time</dd><dt>slice</dt><dd>fixtures validate; contrast green; the fleet can see us; we know how a cluster is born</dd></dl>
+    </article>
+    <article class="card">
+      <h3>Bag 2 · components</h3>
+      <div class="win"><span>26 Sep – 2 Oct</span><span class="tag">Ladle</span></div>
+      <dl><dt>shown</dt><dd>why components come first · the evidence chips one by one · what an accessible name is and why an agent needs it</dd><dt>built</dt><dd>packages/ui — the 15 in index.json + ReleaseGate + PriorityStrip, in Ladle, each with an a11y baseline and its announcement sentences</dd><dt>slice</dt><dd>every component on the table, named, chipped · James reads a BasisChip and names its four axes</dd></dl>
+    </article>
+    <article class="card">
+      <h3>Bag 3 · Hub · Right now</h3>
+      <div class="win"><span>30 Sep – 3 Oct</span><span class="tag">first running sheet</span></div>
+      <dl><dt>shown</dt><dd>the app shell · a view over records vs a store</dd><dt>built</dt><dd>apps/drafting-table · sheet index + decision log from DEC fixtures · PriorityStrip derived from findings, facts-without-method, Q-items · no-nag done / not-today</dd><dt>slice</dt><dd>an app James opens every morning; A1's review question answered by use</dd></dl>
+    </article>
+    <article class="card crit">
+      <h3>Bag 4 · A-01 · geometry</h3>
+      <div class="win"><span>3 – 14 Oct</span><span class="tag acc">critical path</span><span class="tag gate">14 Oct</span></div>
+      <dl><dt>shown</dt><dd>integer LDU and display units · the six fit checks, one diagram each · what Q13 is and why BLOCK is the design working</dd><dt>built</dt><dd>packages/geometry (LDU, R40, envelopes, six checks with property tests + golden cases) · 2D canvas + 3D viewer on one representation, Three.js pinned (D-3, Q12) · exact transform · rig · plantings with restate-before-save</dd><dt>slice</dt><dd>the six checks return BLOCK on the 8 × 8 inner-corner overlap, in code, from the F4 inputs — the 14 Oct milestone · axis: ambiguity</dd></dl>
+    </article>
+    <article class="card crit">
+      <h3>Bag 5 · M-01 · C-01</h3>
+      <div class="win"><span>7 – 17 Oct</span><span class="tag acc">critical path</span></div>
+      <dl><dt>shown</dt><dd>the two M-01 loops and return-to-caller · four stored + two derived axes on a part row · a GateRecord: quiet stamp, loud record</dd><dt>built</dt><dd>M-01 facts & claims with pending restatement and earlier-values-kept · C-01 sources by basis, options with stances, requests never deleted, parts list by the four axes, approval trail, ReleaseGate emitting <code>?released=</code></dd><dt>slice</dt><dd>BOM rows with honest chips before any optimiser · James records a real measurement and watches C-01 rows go ▲ STALE · axis: fidelity</dd></dl>
+    </article>
+    <article class="card">
+      <h3>Bag 6 · P-01</h3>
+      <div class="win"><span>14 – 20 Oct</span><span class="tag">sacrificed first if slipping</span></div>
+      <dl><dt>shown</dt><dd>shop-combination search and deterministic ties · revalidation TTL · why a retroactive order is first-class</dd><dt>built</dt><dd>read-only until released · three priorities with previews · parts × shops paged three at a time · search with stated invariants · revalidate on scripted drift · <b>manual / retroactive order first</b> · MARK ORDERED → ordered, never owned</dd><dt>slice</dt><dd>three priorities, three different orders; a hand-entered order counts against the list · axis: autonomy</dd></dl>
+    </article>
+    <article class="card">
+      <h3>Bag 7 · real bricks</h3>
+      <div class="win"><span>from 21 Oct</span><span class="tag gate">21 Oct gate</span></div>
+      <dl><dt>shown</dt><dd>its own booklet, per entity</dd><dt>built</dt><dd><code>DataSource = real</code> one entity at a time: geometry (14 Oct) · BOM rows from inventory + price observations (21 Oct) · BrickLink store data (Q6)</dd><dt>slice</dt><dd>release on software artifacts — or order anyway and record it after the fact, which the system supports by design</dd></dl>
+    </article>
+  </div>
+</section>
+
+<!-- 5 · QUESTIONS -->
+<section>
+  <h2><span class="n">6</span> Rulings recorded · two items still open</h2>
+  <table class="t">
+    <thead><tr><th>#</th><th>Ruling (James, 18 Sep)</th><th>Lands in</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Morning cockpit → a Claude Code research item: cluster ↔ ojfbot fleet, and the cluster onboarding pipeline for the next one</td><td>Bag 1</td></tr>
+      <tr><td>2</td><td>Thread is <code>drafting-table</code> — the whole thing, adapters to schema to UI</td><td>frontmatter · register rule 16</td></tr>
+      <tr><td>3</td><td>023 confirmed; 024 next free (read at .21)</td><td>—</td></tr>
+      <tr><td>4</td><td>Ladle</td><td>Bag 2</td></tr>
+      <tr><td>5</td><td>Each booklet names the slice it delivers; the step-back says whether it was</td><td>§2 · before-you-open</td></tr>
+      <tr><td>6</td><td>Diving language walked back; LEGO learning-through-play and set-building language instead</td><td>everywhere</td></tr>
+      <tr><td>7</td><td>No GitHub Projects. board.json only, feeding cockpit and fleet</td><td>§6.4 · §7</td></tr>
+      <tr><td>8</td><td>One village: prototypes and app seeded from the same fixtures; fixtures start from real-world state and progress in ambiguity · fidelity · autonomy</td><td>rule F5 · §5.2</td></tr>
+      <tr><td>9</td><td>Cut every Friday</td><td>§5.2 · calendar</td></tr>
+      <tr><td>10</td><td>ChatGPT at L1 now</td><td>§4.1</td></tr>
+      <tr><td colspan="3" style="color:var(--dt-prov);font-weight:600">Open — needed by cut R2, 25 Sep: (a) the design package's own identity — a fielded manifest and a name that is not the H-01 sheet id; (b) where package cuts are registered — an instruments table (017 §1.2) or HANDOFF- rows.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>Attachment to HANDOFF-LEGO-PIPE-023-R2 (supersedes R1) · Drafting Table tokens (paper / blueprint) · every number here is a plan, not a measurement · the memo is canonical where the two disagree.</footer>
+</div>
+
+</body></html>
