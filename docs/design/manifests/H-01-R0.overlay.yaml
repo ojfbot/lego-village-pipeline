@@ -1,0 +1,51 @@
+# Reconstruction overlay — H-01 R0, the first design bundle (72 files).
+# The bundle the legacy review (design-review/claude-review-of-design-bundle-R0.md)
+# covered, executing the 007-R2 design brief. Its bytes land at docs/design/H-01-R0/
+# (PR-B). No archive record for it survives in the register.
+overlay_schema: design-package-overlay/v1
+design_package: H-01
+revision: R0
+cut_state: as-exported
+package_path: docs/design/H-01-R0
+tree_sha256: 5de8520a267df5becf5e72ee78705ec8a66f574fd39c964332bf58ecf6e9cd48
+manifest_origin: importer_reconstructed
+governing_brief: HANDOFF-LEGO-PIPE-007-R2
+answers: []
+supersedes: null    # first cut in the lineage
+maturity: prototype
+tier_coverage: none   # the tier vocabulary arrives with 014 (DEC-020); applying it to R0 retroactively would overstate what was declared
+mock_math: true
+path_prefix_strip: "handoff/"
+archive_sha256_claimed: null
+archive_digest_status: unavailable
+decisions:
+  ledger: decisions.md
+  last_id: null
+  count: 0            # the R0 ledger's rows carried no DEC-nnn ids; they were numbered in place at R1 (ledger header note, 2026-09-17)
+fixtures: null
+known_defects: []     # D-1…D-6 are 019's first-day facts about R1; R0's defect record is the legacy review itself (see sources)
+reconstruction:
+  authored_by: Claude Code
+  date: 2026-09-19
+  sources:
+    - "design-review/claude-review-of-design-bundle-R0.md (legacy, unnumbered — the R0 defect record; register row cites 72 files / 8.0 MB)"
+    - "HANDOFF-LEGO-PIPE-007-R2 register row (the governing design brief; the memo lives inside the R1 package at brief/LEGO-PIPE-007-R2.md)"
+    - "the unzipped desktop folder 'Lego Village Pipeline Design Handoff Initial' (measured)"
+    - "HANDOFF-LEGO-PIPE-024-R1 (this protocol)"
+  corroboration: >
+    Received unzipped; no archive digest was ever registered for R0, so there is no claim
+    to preserve. Identity is corroborated by the legacy review's 72-file record against
+    the measured 72 files / 8,138,947 bytes (the review's "8.0 MB" was a rounded figure —
+    exact bytes stated here per 025 R-21), and by content lineage: the R1 as-reviewed
+    tree extends this one with 28 changed and 22 added files, zero removed
+    (drift-H-01-R0-to-H-01-R1-reviewed.md, mechanical). Known R0-specific path defect,
+    recorded not repaired: index.json points at dt/tokens.css while this tree ships
+    tokens/tokens.css — the tokens moved to dt/ only at R1.
+evidence:
+  tree_sha256: {source: "tools/design_pkg.py digest over the desktop folder", strength: measured}
+  governing_brief: {source: "007-R2 register row + brief bytes inside the R1 package", strength: declared}
+  supersedes: {source: "register lineage (007-R2 → H-01 R0 is the first executed cut)", strength: declared}
+  maturity: {source: "legacy review R0", strength: declared}
+  tier_coverage: {source: "absence of tier vocabulary before 014 (DEC-020)", strength: declared}
+  mock_math: {source: "package README / legacy review", strength: declared}
+  decisions: {source: "parsed decisions.md of the desktop folder (no DEC ids present)", strength: measured}

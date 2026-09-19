@@ -3,8 +3,9 @@
 
 Replaces the v1 reference `tools/preflight.py` (kept unedited: the register cites it).
 Dispatches on `correspondence_schema`; the schema contracts live as JSON Schema files in
-tools/schemas/ — those files are the canonical artifact, this CLI interprets the subset
-they use. Never crashes on malformed input: every defect is an ERROR line, exit 1.
+tools/schemas/ — those files are the canonical artifact. The subset interpreter is shared
+with package_preflight.py via tools/schema_lint.py (REVIEW-025 R-06 / outcome 13).
+Never crashes on malformed input: every defect is an ERROR line, exit 1.
 
 Usage: memo_preflight.py MEMO.md REGISTER.md
 Exit:  0 pass (warnings allowed) · 1 errors · 2 usage/IO
@@ -12,73 +13,14 @@ Exit:  0 pass (warnings allowed) · 1 errors · 2 usage/IO
 Dependency note: needs PyYAML. If the running interpreter lacks it, the CLI re-executes
 itself with tools/.venv/bin/python when that exists; `tools/setup-preflight.sh` creates it.
 """
-import json
-import os
 import re
 import sys
 
-TOOLS_DIR = os.path.dirname(os.path.abspath(__file__))
+from schema_lint import check_against_schema, load_schema, require_yaml
 
-try:
-    import yaml
-except ImportError:
-    venv_py = os.path.join(TOOLS_DIR, ".venv", "bin", "python")
-    if os.path.exists(venv_py) and not os.environ.get("MEMO_PREFLIGHT_REEXEC"):
-        os.environ["MEMO_PREFLIGHT_REEXEC"] = "1"
-        os.execv(venv_py, [venv_py, os.path.abspath(__file__)] + sys.argv[1:])
-    sys.stderr.write(
-        "ERROR: PyYAML not available. Run tools/setup-preflight.sh once to create tools/.venv\n"
-    )
-    sys.exit(2)
+yaml = require_yaml()
 
 SHEET_PREFIXES = {"A", "C", "F", "H", "J", "P"}
-
-
-def load_schema(version):
-    p = os.path.join(TOOLS_DIR, "schemas", f"lego-pipe-memo.{version}.schema.json")
-    with open(p, encoding="utf-8") as f:
-        return json.load(f)
-
-
-def type_ok(value, ty):
-    m = {
-        "object": dict, "array": list, "string": str,
-        "number": (int, float), "integer": int, "boolean": bool,
-    }
-    if isinstance(ty, list):
-        return any(type_ok(value, t) for t in ty)
-    exp = m.get(ty)
-    return exp is None or isinstance(value, exp)
-
-
-def check_against_schema(fm, schema, errs):
-    for k in schema.get("required", []):
-        if k not in fm:
-            errs.append(f"missing {k}")
-    for k, sub in schema.get("properties", {}).items():
-        if k not in fm or fm[k] is None:
-            continue
-        v = fm[k]
-        if "const" in sub and v != sub["const"]:
-            errs.append(f"{k}: expected {sub['const']!r}, got {v!r}")
-        if "enum" in sub and v not in sub["enum"]:
-            errs.append(f"{k}: {v!r} not in {sub['enum']}")
-        if "type" in sub and not type_ok(v, sub["type"]):
-            errs.append(f"{k}: wrong type {type(v).__name__}")
-        if "pattern" in sub and isinstance(v, str) and not re.fullmatch(sub["pattern"], v):
-            errs.append(f"{k}: {v!r} does not match {sub['pattern']}")
-        for rk in sub.get("required", []):
-            if isinstance(v, dict) and rk not in v:
-                errs.append(f"{k}.{rk} missing")
-        item_req = sub.get("items", {}).get("required", [])
-        if item_req and isinstance(v, list):
-            for i, entry in enumerate(v):
-                if not isinstance(entry, dict):
-                    errs.append(f"{k}[{i}]: must be a mapping")
-                    continue
-                for rk in item_req:
-                    if rk not in entry:
-                        errs.append(f"{k}[{i}].{rk} missing")
 
 
 def main():
@@ -129,7 +71,7 @@ def main():
     if version is None:
         errs.append(f"unknown correspondence_schema {schema_id!r} (expected lego-pipe-memo/v1 or /v2)")
         version = "v1"  # evaluate against operative schema so the report is still useful
-    schema = load_schema(version)
+    schema = load_schema(f"lego-pipe-memo.{version}")
     check_against_schema(fm, schema, errs)
 
     argument = str(fm.get("argument", "") or "")

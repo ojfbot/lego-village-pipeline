@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "design-package-overlay/v1",
+  "title": "design-package-overlay/v1 — importer-reconstructed description of a historical cut (docs/design/manifests/<dir>.overlay.yaml)",
+  "description": "HANDOFF-LEGO-PIPE-024-R1 contract. A reconstruction is NOT a manifest (026 R-09 / 025 Q3): the designer cannot retro-sign bytes it did not export, so historical cuts (H-01 R0, H-01 R1 as-reviewed, H-01 R1 as-committed) get this distinct type, bound to {package_path, tree_sha256}, carrying field-level sources and evidence strength. A file bearing manifest_origin: designer found in docs/design/manifests/ is an ERROR — a designer manifest outside the verbatim bytes did not come from the designer. path_base is meaningless in a file that lives outside the tree it describes and is absent here; path_prefix_strip is declared data valid ONLY in this schema (025 R-12).",
+  "type": "object",
+  "required": [
+    "overlay_schema", "design_package", "revision", "cut_state", "package_path",
+    "tree_sha256", "manifest_origin", "governing_brief", "answers", "supersedes",
+    "maturity", "tier_coverage", "mock_math", "reconstruction", "evidence"
+  ],
+  "properties": {
+    "overlay_schema": { "const": "design-package-overlay/v1" },
+    "design_package": { "type": "string" },
+    "revision": { "type": "string", "pattern": "^R\\d+$" },
+    "cut_state": { "type": "string" },
+    "package_path": { "type": "string" },
+    "tree_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "x-note": "Digest of the described tree per design-package-import/v1 x-tree-digest-spec. This binding is what makes the overlay's claims falsifiable: recompute and compare."
+    },
+    "manifest_origin": { "const": "importer_reconstructed" },
+    "governing_brief": { "type": "string", "pattern": "^(HANDOFF|CORR|REVIEW)-LEGO-PIPE-\\d{3}-R\\d+$" },
+    "answers": { "type": "array" },
+    "supersedes": {
+      "type": ["object", "null"],
+      "required": ["design_package", "revision", "tree_sha256"]
+    },
+    "maturity": { "enum": ["direction", "intent", "prototype"] },
+    "tier_coverage": { "enum": ["none", "tier-1", "tier-2", "tier-3"] },
+    "mock_math": { "type": "boolean" },
+    "path_prefix_strip": {
+      "type": "string",
+      "x-note": "Deterministic prefix removed when resolving the historical index.json's structured paths (H-01: 'handoff/' — the RULE for 86 of 102 paths, not a fallback; 025 R-12). Valid only in overlays; a designer manifest with the same mistake fails preflight."
+    },
+    "archive_sha256_claimed": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$",
+      "x-note": "A register-cited historic archive digest preserved as a CLAIM (e.g. the 014-R0 row's e898a64a… for the as-reviewed cut). Never presented as verified: the archives are gone; corroboration prose lives in reconstruction.corroboration."
+    },
+    "archive_digest_status": { "enum": ["claimed", "unavailable"] },
+    "known_defects": {
+      "type": "array",
+      "items": { "required": ["id", "rule_id", "paths", "expected_failure", "evidence", "status"] },
+      "x-note": "For historical cuts the D-1…D-6 ids come from HANDOFF-LEGO-PIPE-019-R0 §4.2 — a memo, not the package (the package's own known_defects_open is two prose sentences without ids). 019 §4.2 must therefore appear in reconstruction.sources (025 R-02 / Q3)."
+    },
+    "debts": { "type": "array" },
+    "decisions": { "type": "object", "required": ["ledger", "last_id", "count"] },
+    "fixtures": { "type": ["object", "null"], "x-note": "null for historical cuts — fixture seeding starts at cut R2 (023-R2 F5)." },
+    "reconstruction": {
+      "type": "object",
+      "required": ["authored_by", "date", "sources"],
+      "x-note": "sources[] names every document the reconstructed facts came from; corroboration (free text) is where 'folders received unzipped; identity corroborated by file count, size and content diff' belongs — never in a digest field (025 R-23)."
+    },
+    "evidence": {
+      "type": "object",
+      "x-note": "Map of overlay field name → {source, strength}. strength enum: measured (recomputed from bytes in this repo), corroborated (consistent with independent records), declared (asserted by a cited document), unknown."
+    },
+    "notes": { "type": "string" }
+  },
+  "x-evidence-strengths": ["measured", "corroborated", "declared", "unknown"]
+}

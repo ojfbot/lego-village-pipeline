@@ -1,0 +1,44 @@
+# package.yaml — designer manifest, at the archive root. Schema: design-package/v1
+# (mirror in this kit; canonical: tools/schemas/design-package.v1.schema.json).
+# Every <angle-bracket> value must be replaced; delete guidance comments freely.
+manifest_schema: design-package/v1
+design_package: DT-DESIGN          # never a sheet id; H-01 stays historical
+revision: R2                       # R<n>
+cut_state: as-exported             # a fresh designer cut is always as-exported
+cut: 2026-09-25                    # the Friday of this cut
+manifest_origin: designer
+path_base: "."                     # paths resolve from the archive root, as written
+
+governing_brief: HANDOFF-LEGO-PIPE-014-R0
+answers: []                        # change requests this cut answers, e.g. [CORR-LEGO-PIPE-027-R0]
+
+supersedes:                        # qualified + digest-bound; null only with no predecessor at all
+  design_package: H-01
+  revision: R1
+  tree_sha256: b5664a2ad0ed7b7c7f093f4a1b369b32095799f73ade2af074b882e8038b9a1d
+
+maturity: prototype                # direction | intent | prototype
+tier_coverage: tier-1              # none | tier-1 | tier-2 | tier-3
+mock_math: true                    # flipping to false needs a recorded operator ruling
+
+index: index.json
+sheets:                            # must match index.json's sheet set exactly
+  - {id: Hub, title: "<title>"}
+  - {id: A-01, title: "<title>"}
+  # …one line per sheet
+
+decisions:
+  ledger: decisions.md
+  last_id: DEC-0NN                 # the highest id after your prepends
+  count: NN                        # unique ids in the ledger
+
+fixtures:
+  set: <fixture-set-name>          # what seeded this cut (023-R2 F5)
+  sha256: <digest-of-the-fixture-set>
+
+known_defects: []                  # each: {id, rule_id, paths, expected_failure, evidence, status}
+debts: []
+schema_requests: schema-requests.md
+authoring_kit_version: "1.0"
+# extensions:                      # namespaced producer metadata, never required
+#   dt: {…}
