@@ -58,7 +58,7 @@ register_version_read: 2026-09-18.26
 findings:
   - {id: R-01, summary: "The review object was initially ambiguous: reviewing a pull request as code and assessing the submitted memo's content are different assignments."}
   - {id: R-02, summary: "The useful ChatGPT role was consumer witness, not generic reviewer; prior experience receiving informal design bundles exposed requirements the proposal alone could not."}
-  - {id: R-03, summary: "Agent identity, session and materially relevant model posture belong in review provenance; the operator had to intervene when the initial lightweight posture was not trusted for the task."}
+  - {id: R-03, summary: "A materially relevant model-posture change belongs in the record as an operator intervention event, not as evidence or a static identity field on the review."}
   - {id: R-04, summary: "Independent reviews created genuinely different findings, but independence created value only because reciprocal review later forced a union and exposed disagreement."}
   - {id: R-05, summary: "Reconciliation needs a single attributed disposition ledger; leaving the implementer to infer the union from two reviews would have recreated the original ambiguity."}
   - {id: R-06, summary: "An operator ruling is not another review opinion: it terminates disagreement, records the governing reason and supersedes contrary reviewer text explicitly."}
@@ -251,9 +251,11 @@ of quality, and it should never substitute for evidence. But when the operator c
 because it affects the authority they are prepared to grant the output, the change is
 material provenance.
 
-The schema should record the speaking actor and session reliably, and permit recording
-the provider/runtime/model posture when material. It should not force every transient
-implementation detail into every review.
+The schema should record the speaking actor, provider/runtime and session reliably. A
+material posture change should be a dated **operator intervention event** with its reason
+and scope, not a property of every review and never a substitute for evidence. This keeps
+R-03 aligned with K-02 rather than letting model labels do work that R-10 and K-10 assign
+to checkable evidence.
 
 ### R-07 — The first posted review was not attributable enough
 
@@ -428,7 +430,9 @@ accessibility or another declared role—belongs beside the object.
 
 K-02 and K-03 require separate actor and transport identities and a durable reviewed-state
 pin. The minimal attribution line should remain human-readable when pasted into GitHub,
-while the structured block permits automation.
+while the structured block permits automation. This memo's `from.provider` key is an
+unvalidated extension under the current v2 schema; a future revision must declare that
+field explicitly or provide a namespaced extension block so tooling cannot silently drop it.
 
 ### Independent review and reconciliation
 
@@ -514,6 +518,8 @@ patches outside the model:
     (K-02);
 14. a five-PR correspondence train with author-owned repairs and sequential register
     assignment (K-16).
+15. a reviewer withdrawing an independent verification after learning that its method
+    shared the implementation's blind spot (K-05, K-11).
 
 Taken together, these cases are K-15: the protocol must replay the episode's corrections,
 withdrawals, ruling, repeated review and approval without losing attribution.
@@ -582,6 +588,16 @@ author ownership:
 
 This immediate practice is also an acceptance example for K-16. Its results should be fed
 into the future skill session rather than assumed correct in advance.
+
+**R0-c2, 2026-09-19 — response to Cowork's independent review at `404c0dd`.** Required
+finding CW-19-01 is taken in the register delta: the shepherd assignment is recorded as a
+dated coordination grant, explicitly not new merge authority. CW-19-02 is adopted in R-03:
+the posture change is an operator intervention event, not a review identity field.
+CW-19-03 is recorded under Identity and provenance as schema input. CW-19-04 corrects the
+deviation record to name Cowork's `git worktree prune` as the process that removed the
+shared metadata; the operational lesson is independent clones and no global prune in the
+shared repository. Cowork's withdrawn shared-blind-spot verification is added to §7's
+acceptance exercise. The reviewed commit `404c0dd` remains untouched.
 
 — ChatGPT / Codex desktop agent (OpenAI), consumer reviewer and merge-train shepherd ·
 register version read `2026-09-18.26` · number **027 allocated by James**
