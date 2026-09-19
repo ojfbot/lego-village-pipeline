@@ -95,14 +95,31 @@ def check_value(value, sub, label, errs):
         errs.append(f"{label}: wrong type {type(value).__name__}{hint}")
     if "pattern" in sub and isinstance(value, str) and not re.fullmatch(sub["pattern"], value):
         errs.append(f"{label}: {value!r} does not match {sub['pattern']}")
+    if "minLength" in sub and isinstance(value, str) and len(value.strip()) < sub["minLength"]:
+        errs.append(f"{label}: blank or too short — a named value is required, got {value!r}")
+    if sub.get("format") == "date" and isinstance(value, str) and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+        errs.append(f"{label}: {value!r} is not a YYYY-MM-DD date")
 
     if isinstance(value, dict):
         for rk in sub.get("required", []):
             if rk not in value:
                 errs.append(f"{label}.{rk} missing")
-        for pk, psub in (sub.get("properties") or {}).items():
+        props = sub.get("properties") or {}
+        for pk, psub in props.items():
             if pk in value:
                 check_value(value[pk], psub, f"{label}.{pk}", errs)
+        # Dynamic maps (e.g. the overlay's per-field `evidence`) declare their VALUE
+        # schema here. Without it the map is unenforced however well-typed it reads
+        # (PR #13 third review round).
+        extra = sub.get("additionalProperties")
+        if isinstance(extra, dict) and extra:
+            for pk, pv in value.items():
+                if pk not in props:
+                    check_value(pv, extra, f"{label}.{pk}", errs)
+        elif extra is False:
+            for pk in value:
+                if pk not in props:
+                    errs.append(f"{label}.{pk}: unexpected key")
     elif isinstance(value, list):
         isub = sub.get("items")
         if isinstance(isub, dict) and isub:

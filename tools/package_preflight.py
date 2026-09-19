@@ -26,7 +26,7 @@ import os
 import sys
 
 from design_pkg import (
-    SHEET_ID_RE, collect_index_refs, compare_ledgers, cut_state_vocabulary,
+    SHEET_ID_RE, read_json, read_text, collect_index_refs, compare_ledgers, cut_state_vocabulary,
     instruments_rows, memo_ref_operative, parse_ledger, resolve_ref, tree_sha256,
 )
 from schema_lint import check_against_schema, check_value, load_schema, require_yaml
@@ -77,7 +77,7 @@ def main():
         sys.stderr.write(f"ERROR: not a directory: {pkg_dir}\n")
         return 2
     try:
-        regtxt = open(reg_path, encoding="utf-8").read()
+        regtxt = read_text(reg_path)
     except OSError as e:
         sys.stderr.write(f"ERROR: cannot read register: {e}\n")
         return 2
@@ -204,7 +204,7 @@ def main():
         errs.append(f"[structural_check] index not found at {index_rel!r}")
     else:
         try:
-            index = json.load(open(index_path, encoding="utf-8"))
+            index = read_json(index_path)
         except (OSError, json.JSONDecodeError) as e:
             errs.append(f"[structural_check] index.json unreadable: {str(e).splitlines()[0]}")
     if index:
@@ -250,8 +250,17 @@ def main():
                 for i, w in enumerate(rec.get("waivers") or []):
                     werrs = []
                     check_value(w, witems, f"waivers[{i}]", werrs)
+                    # The authority a waiver cites must itself be real: an operative
+                    # register row, not merely a well-formed memo id.
+                    if not werrs and isinstance(w, dict):
+                        state, detail = memo_ref_operative(w.get("memo"), regtxt)
+                        if state != "ok":
+                            werrs.append(f"waivers[{i}].memo: {detail}")
                     if werrs:
-                        errs += [f"[structural_check] import record: {e}" for e in werrs]
+                        # The field-level errors are already reported by the record-level
+                        # schema check above; add only what it cannot say.
+                        errs += [f"[structural_check] import record: {e}" for e in werrs
+                                 if f"[structural_check] import record: {e}" not in errs]
                         errs.append(f"[structural_check] import record: waivers[{i}] is not a valid waiver and grants nothing — a waiver names authority")
                     elif w.get("defect_id"):
                         waived_ids.add(w["defect_id"])
@@ -306,7 +315,7 @@ def main():
     if ledger_rel:
         status, resolved = resolve_ref(pkg_dir, ledger_rel, strip_prefix=strip)
         if status in ("as-written", "stripped"):
-            ledger_text = open(os.path.join(pkg_dir, resolved), encoding="utf-8").read()
+            ledger_text = read_text(os.path.join(pkg_dir, resolved))
             ledger = parse_ledger(ledger_text)
             if ledger["order"] == "unknown":
                 warns.append("[structural_check] ledger declares no order in its header — comparison is by DEC id regardless, but the header should state it")
@@ -335,7 +344,7 @@ def main():
         if prev_ledger_path is None:
             warns.append(f"[unavailable] no decisions.md found under --previous {prev_dir}")
         else:
-            prev = parse_ledger(open(prev_ledger_path, encoding="utf-8").read())
+            prev = parse_ledger(read_text(prev_ledger_path))
             breaches, lnotes, new_ids = compare_ledgers(prev, ledger)
             for n in lnotes:
                 notes.append(f"[structural_check] {n}")

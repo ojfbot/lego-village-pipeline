@@ -153,6 +153,32 @@ ChatGPT re-reviewed the repairs and found three more, all the same class:
    differential over all 27 memos (§4) — verified to fail when the live validator's
    behaviour is perturbed.
 
+### The third pass, on `dfaaa0a`
+
+Three more, same class, each reproduced first:
+
+10. **The overlay's `evidence` map was unenforced.** Its value shape lived in an
+    `x-value-shape` annotation — a note to human readers that the interpreter never
+    read — so `{source: null, strength: banana}` validated and outcome 10 stayed prose.
+    The interpreter now supports `additionalProperties`, and the map declares an
+    executable value schema: non-blank `source`, `strength` in the four-value enum.
+11. **A schema-valid waiver could still name no authority.** Rejecting the all-null
+    waiver was not enough: `authorized_by: ""`, `disposition: ""` and `date:
+    not-a-date` all passed, because strings had no minimum length and `format: date`
+    was decorative. Non-blank constraints and a date pattern are enforced now, and the
+    **memo a waiver cites must itself resolve to an operative register row** — the
+    authority has to be real, not merely well-formed.
+12. **A pin with a blank `Status` still resolved.** The lifecycle check fired only on a
+    non-empty unrecognised value, so an unstated lifecycle was treated as acceptable —
+    and my own reply to the previous round had claimed the opposite. Resolution now
+    requires exactly `current` or `superseded`.
+
+And a correction to that reply: I wrote that the `ResourceWarning`s were gone. They were
+not — 42 remained, and I had fixed only the two visible in the output I happened to
+read. Every file handle in `tools/` and `tests/` now goes through a context manager, and
+the suite asserts its own cleanliness by re-running itself under
+`-W error::ResourceWarning`, so that claim cannot rot again either.
+
 A note on defect 7's shape: the first repair pass fixed the *interpreter* and declared
 the job done, because the interpreter was where the bug appeared. But a recursive
 interpreter over a schema with no nested types is still a validator that validates
@@ -282,15 +308,16 @@ changed / 22 added / 0 removed and records that R0's ledger rows carried no DEC 
 all (numbered in place at R1) — history, mechanically stated.
 
 **`tests/test_design_package.py`** — the acceptance battery, committed and runnable from
-a clean checkout in one command (`python3 tests/test_design_package.py`, 49 cases). It
+a clean checkout in one command (`python3 tests/test_design_package.py`, 56 cases). It
 builds its R2 fixture from the committed package at run time, so nothing large is
 duplicated into the repository, and it covers every enforcement claim this memo makes:
 null, hollow and malformed nested records, malformed qualified `supersedes`,
 bare/ambiguous/unregistered/rejected pins, file and directory symlinks, waivers without
 authority, rejected and manifest-less import records, digest mismatch, package-root
 escape, ledger edits/deletions and the one permitted status transition, the reference
-path counts and digest, drift ground truth, the authoring-kit mirror, and the R2 happy
-path.
+path counts and digest, drift ground truth, the authoring-kit mirror, the evidence-map value shape, blank-authority and
+unregistered-memo waivers, blank-status pins, the suite's own handle hygiene, and the
+R2 happy path.
 
 The corpus claim is a **differential**, not an assertion: `tests/fixtures/
 memo_preflight_pre_extraction.py` is the validator frozen at commit `5535428`, before

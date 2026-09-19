@@ -31,7 +31,8 @@
     "design_package": {
       "type": "string",
       "x-not-a-sheet-id": "^[A-Z]{1,2}-\\d{2}$",
-      "x-note": "REJECTED when it matches x-not-a-sheet-id or equals any sheets[].id in this manifest (025 R-19). Current package name from cut R2: DT-DESIGN (operator ruling 2026-09-18). Existing H-01 rows keep their name; no alias redirects H-01 pins to DT-DESIGN."
+      "x-note": "REJECTED when it matches x-not-a-sheet-id or equals any sheets[].id in this manifest (025 R-19). Current package name from cut R2: DT-DESIGN (operator ruling 2026-09-18). Existing H-01 rows keep their name; no alias redirects H-01 pins to DT-DESIGN.",
+      "minLength": 1
     },
     "revision": {
       "type": "string",
@@ -45,7 +46,8 @@
       "type": "string",
       "format": "date",
       "x-note": "A date is a STRING: quote it in YAML (`\"2026-09-25\"`), or the parser yields a date object and this field fails.",
-      "x-cut": "the Friday cut date"
+      "x-cut": "the Friday cut date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
     },
     "manifest_origin": {
       "const": "designer"
@@ -183,7 +185,8 @@
       "x-note": "No ranges (025 R-13). ledger is a package_path to decisions.md; last_id and count are mechanically checked against the parsed ledger. The ledger is NEWEST-FIRST (verified 2026-09-19); comparison is by stable DEC-nnn id, never byte position, with exactly one permitted prior-row transition: a Status cell gaining a supersession reference naming a new, higher id (025 R-08 / 026 R-07).",
       "properties": {
         "ledger": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "last_id": {
           "type": "string",
@@ -203,7 +206,8 @@
       "x-note": "Identity of the fixture set that seeded this cut (023-R2 F5). Without it, weekly fixture reseeding dominates apparent drift (025 R-14 / 026 R-08).",
       "properties": {
         "set": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "sha256": {
           "type": "string",
@@ -225,10 +229,12 @@
         ],
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "rule_id": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "paths": {
             "type": "array",
@@ -237,13 +243,16 @@
             }
           },
           "expected_failure": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "evidence": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         }
       },

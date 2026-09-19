@@ -24,7 +24,8 @@ import json
 import os
 import sys
 
-from design_pkg import compare_ledgers, file_sha256, iter_files, parse_ledger, tree_sha256
+from design_pkg import (compare_ledgers, file_sha256, iter_files, parse_ledger,
+                        read_json, read_text, tree_sha256)
 from schema_lint import require_yaml
 
 yaml = require_yaml()
@@ -35,7 +36,7 @@ def load_index(root):
         p = os.path.join(root, cand)
         if os.path.isfile(p):
             try:
-                return json.load(open(p, encoding="utf-8"))
+                return read_json(p)
             except (OSError, json.JSONDecodeError):
                 return None
     return None
@@ -46,7 +47,7 @@ def load_manifest(root, explicit):
     if not os.path.isfile(path):
         return None
     try:
-        doc = yaml.safe_load(open(path, encoding="utf-8"))
+        doc = yaml.safe_load(read_text(path))
         return doc if isinstance(doc, dict) else None
     except (OSError, yaml.YAMLError):
         return None
@@ -56,7 +57,7 @@ def load_ledger(root):
     for cand in ("decisions.md", "handoff/decisions.md"):
         p = os.path.join(root, cand)
         if os.path.isfile(p):
-            return parse_ledger(open(p, encoding="utf-8").read())
+            return parse_ledger(read_text(p))
     return None
 
 

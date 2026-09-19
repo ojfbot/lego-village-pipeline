@@ -210,12 +210,14 @@
       "x-note": "sources[] names every document the reconstructed facts came from; corroboration (free text) is where 'folders received unzipped; identity corroborated by file count, size and content diff' belongs — never in a digest field (025 R-23).",
       "properties": {
         "authored_by": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "date": {
           "type": "string",
           "format": "date",
-          "x-note": "A date is a STRING: quote it in YAML (`\"2026-09-25\"`), or the parser yields a date object and this field fails."
+          "x-note": "A date is a STRING: quote it in YAML (`\"2026-09-25\"`), or the parser yields a date object and this field fails.",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
         },
         "sources": {
           "type": "array",
@@ -233,10 +235,28 @@
     },
     "evidence": {
       "type": "object",
-      "x-note": "Map of overlay field name → {source, strength}. strength enum: measured (recomputed from bytes in this repo), corroborated (consistent with independent records), declared (asserted by a cited document), unknown.",
-      "x-value-shape": {
-        "source": "string",
-        "strength": "one of x-evidence-strengths"
+      "x-note": "Map of overlay field name -> {source, strength}. The VALUE schema is additionalProperties and is enforced by the shipping interpreter: a null source or an unknown strength is an error, not prose (outcome 10).",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "source",
+          "strength"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "x-note": "where this field's value came from — never blank"
+          },
+          "strength": {
+            "enum": [
+              "measured",
+              "corroborated",
+              "declared",
+              "unknown"
+            ]
+          }
+        }
       }
     },
     "notes": {
