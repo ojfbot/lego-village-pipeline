@@ -48,39 +48,72 @@ def type_ok(value, ty):
     m = {
         "object": dict, "array": list, "string": str,
         "number": (int, float), "integer": int, "boolean": bool,
+        "null": type(None),
     }
     if isinstance(ty, list):
         return any(type_ok(value, t) for t in ty)
     exp = m.get(ty)
-    return exp is None or isinstance(value, exp)
+    if exp is None:
+        return True
+    if exp is bool:
+        return isinstance(value, bool)
+    if exp in ((int, float), int) and isinstance(value, bool):
+        return False  # bool is an int in Python; a flag is not a number
+    return isinstance(value, exp)
+
+
+def _declares_null(sub):
+    ty = sub.get("type")
+    return ty == "null" or (isinstance(ty, list) and "null" in ty)
+
+
+def check_value(value, sub, label, errs):
+    """Validate one value against a schema subset, recursing into objects and arrays.
+
+    Null is validated, never skipped (PR #13 review, both stewards): a null passes only
+    where the schema declares "null" among its types, or where no type is declared at
+    all. Skipping nulls made `required` mean nothing but "the key exists".
+    """
+    import re
+    if value is None:
+        if "type" in sub and not _declares_null(sub):
+            errs.append(f"{label}: null not permitted (type {sub['type']})")
+        elif "const" in sub:
+            errs.append(f"{label}: expected {sub['const']!r}, got None")
+        elif "enum" in sub and None not in sub["enum"]:
+            errs.append(f"{label}: None not in {sub['enum']}")
+        return
+
+    if "const" in sub and value != sub["const"]:
+        errs.append(f"{label}: expected {sub['const']!r}, got {value!r}")
+    if "enum" in sub and value not in sub["enum"]:
+        errs.append(f"{label}: {value!r} not in {sub['enum']}")
+    if "type" in sub and not type_ok(value, sub["type"]):
+        errs.append(f"{label}: wrong type {type(value).__name__}")
+    if "pattern" in sub and isinstance(value, str) and not re.fullmatch(sub["pattern"], value):
+        errs.append(f"{label}: {value!r} does not match {sub['pattern']}")
+
+    if isinstance(value, dict):
+        for rk in sub.get("required", []):
+            if rk not in value:
+                errs.append(f"{label}.{rk} missing")
+        for pk, psub in (sub.get("properties") or {}).items():
+            if pk in value:
+                check_value(value[pk], psub, f"{label}.{pk}", errs)
+    elif isinstance(value, list):
+        isub = sub.get("items")
+        if isinstance(isub, dict) and isub:
+            for i, entry in enumerate(value):
+                if isub.get("required") and not isinstance(entry, dict):
+                    errs.append(f"{label}[{i}]: must be a mapping")
+                    continue
+                check_value(entry, isub, f"{label}[{i}]", errs)
 
 
 def check_against_schema(fm, schema, errs):
-    import re
     for k in schema.get("required", []):
         if k not in fm:
             errs.append(f"missing {k}")
     for k, sub in schema.get("properties", {}).items():
-        if k not in fm or fm[k] is None:
-            continue
-        v = fm[k]
-        if "const" in sub and v != sub["const"]:
-            errs.append(f"{k}: expected {sub['const']!r}, got {v!r}")
-        if "enum" in sub and v not in sub["enum"]:
-            errs.append(f"{k}: {v!r} not in {sub['enum']}")
-        if "type" in sub and not type_ok(v, sub["type"]):
-            errs.append(f"{k}: wrong type {type(v).__name__}")
-        if "pattern" in sub and isinstance(v, str) and not re.fullmatch(sub["pattern"], v):
-            errs.append(f"{k}: {v!r} does not match {sub['pattern']}")
-        for rk in sub.get("required", []):
-            if isinstance(v, dict) and rk not in v:
-                errs.append(f"{k}.{rk} missing")
-        item_req = sub.get("items", {}).get("required", [])
-        if item_req and isinstance(v, list):
-            for i, entry in enumerate(v):
-                if not isinstance(entry, dict):
-                    errs.append(f"{k}[{i}]: must be a mapping")
-                    continue
-                for rk in item_req:
-                    if rk not in entry:
-                        errs.append(f"{k}[{i}].{rk} missing")
+        if k in fm:
+            check_value(fm[k], sub, k, errs)

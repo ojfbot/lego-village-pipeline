@@ -15,8 +15,8 @@
     "revision": { "type": "string", "pattern": "^R\\d+$" },
     "cut_state": { "type": "string" },
     "package_path": {
-      "type": "string",
-      "x-note": "Repo-relative path of the verbatim tree, e.g. docs/design/H-01-R1. For disposition rejected / recorded_not_imported — where no bytes land — null is permitted and the record IS the trace (025 R-20 / outcome 12)."
+      "type": ["string", "null"],
+      "x-note": "Repo-relative path of the verbatim tree, e.g. docs/design/H-01-R1. Null ONLY for disposition rejected / recorded_not_imported, where no bytes land and the record IS the trace (025 R-20 / outcome 12). See x-conditional-required: disposition 'imported' requires both package_path and tree_sha256 non-null, enforced by package_preflight.py."
     },
     "tree_sha256": {
       "type": ["string", "null"],
@@ -45,6 +45,9 @@
       "x-note": "A waiver NAMES AUTHORITY: who authorized import despite a declared defect, on what date, under which memo, with what disposition/expiry. Never authored by the producing agent alone. The four x-never-designer-waivable classes in design-package/v1 cannot be waived here either."
     },
     "notes": { "type": "string" }
+  },
+  "x-conditional-required": {
+    "imported": "disposition 'imported' requires non-null package_path AND tree_sha256; 'rejected' and 'recorded_not_imported' permit both null — no bytes landed, and the record is the trace. Enforced by package_preflight.py."
   },
   "x-tree-digest-spec": {
     "algorithm": "sha256",

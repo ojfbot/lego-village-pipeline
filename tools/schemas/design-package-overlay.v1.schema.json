@@ -22,10 +22,16 @@
     },
     "manifest_origin": { "const": "importer_reconstructed" },
     "governing_brief": { "type": "string", "pattern": "^(HANDOFF|CORR|REVIEW)-LEGO-PIPE-\\d{3}-R\\d+$" },
-    "answers": { "type": "array" },
+    "answers": { "type": "array", "items": { "type": "string", "pattern": "^(HANDOFF|CORR|REVIEW)-LEGO-PIPE-\\d{3}-R\\d+$" } },
     "supersedes": {
       "type": ["object", "null"],
-      "required": ["design_package", "revision", "tree_sha256"]
+      "required": ["design_package", "revision", "tree_sha256"],
+      "properties": {
+        "design_package": { "type": "string" },
+        "revision": { "type": "string", "pattern": "^R\\d+$" },
+        "cut_state": { "type": "string" },
+        "tree_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" }
+      }
     },
     "maturity": { "enum": ["direction", "intent", "prototype"] },
     "tier_coverage": { "enum": ["none", "tier-1", "tier-2", "tier-3"] },

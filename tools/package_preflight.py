@@ -26,7 +26,7 @@ import os
 import sys
 
 from design_pkg import (
-    SHEET_ID_RE, collect_index_refs, compare_ledgers,
+    SHEET_ID_RE, collect_index_refs, compare_ledgers, cut_state_vocabulary,
     instruments_rows, memo_ref_operative, parse_ledger, resolve_ref, tree_sha256,
 )
 from schema_lint import check_against_schema, load_schema, require_yaml
@@ -154,18 +154,43 @@ def main():
         warns.append("[declared] mock_math is FALSE — confirm the operator ruling that authorized real math is recorded on this cut")
 
     # ---- cut-key uniqueness against the instruments table (operator ruling 2026-09-19) ----
-    triple = (name, str(manifest.get("revision", "")), str(manifest.get("cut_state", "")))
+    cut_state = str(manifest.get("cut_state", ""))
+    triple = (name, str(manifest.get("revision", "")), cut_state)
+    vocab = cut_state_vocabulary(regtxt)
+    undeclared_state = bool(vocab) and cut_state not in vocab
+    if undeclared_state:
+        # Rule-16 idiom: vocabulary is register data, so a new state stays legal — but it
+        # is coined in the REGISTER first, never in a manifest. A typo here would
+        # otherwise mint an identity and skip the check protecting it (PR #13 review).
+        warns.append(f"[structural_check] cut_state {cut_state!r} is not in the register's declared list ({sorted(vocab)}) — declare a new received state in the register before using it")
     inst = instruments_rows(regtxt)
     if inst:
+        matched = 0
         for row in inst:
             row_triple = (row.get("Instrument", ""), row.get("Revision", ""), row.get("Cut state", ""))
-            if row_triple == triple:
-                row_digest = row.get("tree_sha256", "")
-                my_digest = str(manifest.get("tree_sha256", "")) if historical else None
-                if my_digest and row_digest and my_digest not in row_digest:
-                    errs.append(f"[structural_check] instruments row for {triple} carries a different tree_sha256 — two trees may not share one cut key; a new received state needs a new cut_state")
-                else:
-                    notes.append(f"[structural_check] cut key {triple} matches its instruments row")
+            if row_triple != triple:
+                continue
+            matched += 1
+            row_digest = row.get("tree_sha256", "")
+            my_digest = str(manifest.get("tree_sha256", "")) if historical else None
+            if my_digest and row_digest and my_digest not in row_digest:
+                errs.append(f"[structural_check] instruments row for {triple} carries a different tree_sha256 — two trees may not share one cut key; a new received state needs a new cut_state")
+            else:
+                notes.append(f"[structural_check] cut key {triple} matches its instruments row")
+        if matched > 1:
+            errs.append(f"[structural_check] {matched} instruments rows share the cut key {triple} — uniqueness is enforced on the triple")
+        elif matched == 0:
+            # No row means the digest binding went UNCHECKED — never silence it (PR #13
+            # review). But a cut's row is written at landing, AFTER this check passes, so
+            # an unregistered key is normal for a new cut and must not fail it. The typo
+            # case is separated by the vocabulary: an undeclared cut_state with no row is
+            # an invented identity that also disabled its own check — that is an error.
+            msg = (f"no instruments row for the cut key {triple} — the digest binding that "
+                   "enforces the cut-key ruling went unchecked")
+            if undeclared_state:
+                errs.append(f"[structural_check] {msg}, and {cut_state!r} is not a declared cut state: an undeclared state with no row is an invented identity, not a new one")
+            else:
+                warns.append(f"[structural_check] {msg}; expected for a cut whose row lands with its bytes — add the row in the landing PR")
     else:
         warns.append("[unavailable] no instruments table found in the register — cut-key uniqueness not checkable")
 
@@ -212,6 +237,11 @@ def main():
             if rec is not None:
                 rerrs = []
                 check_against_schema(rec, load_schema("design-package-import.v1"), rerrs)
+                # x-conditional-required: bytes landed → path and digest are not optional
+                if rec.get("disposition") == "imported":
+                    for k in ("package_path", "tree_sha256"):
+                        if rec.get(k) is None:
+                            rerrs.append(f"{k} is null but disposition is 'imported' — null is for rejected / recorded_not_imported, where no bytes landed")
                 errs += [f"[structural_check] import record: {e}" for e in rerrs]
                 for w in rec.get("waivers") or []:
                     if isinstance(w, dict) and w.get("defect_id"):

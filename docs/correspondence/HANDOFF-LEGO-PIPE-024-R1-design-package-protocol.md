@@ -38,6 +38,7 @@ provenance:
     - {name: "REVIEW-LEGO-PIPE-025-R1", role: "Cowork's review; §7.4 union list consumed in full; two operator rulings recorded there are dispositive"}
     - {name: "REVIEW-LEGO-PIPE-026-R0", role: "ChatGPT's consumer review; §4 acceptance outcomes are this memo's acceptance structure, amended by the cut-key ruling and outcomes 13–15"}
     - {name: "PR #12 reconciliation comment (2026-09-19)", role: "the controlling implementation handoff: both stewards' post-ruling disposition"}
+    - {name: "PR #13 review round (ChatGPT/Codex + Claude Cowork on commit 4f208c4, 2026-09-19)", role: "six enforcement defects, all reproduced here before repair; §1a"}
     - {name: "operator rulings 2026-09-19 (this session)", role: "import-lane boundary ratified at the narrow scope; authoring kit relayed ahead of PR-A; schema corrections delegated to Claude Code"}
     - {name: "docs/design/H-01-R1/ + the two desktop bundles", role: "measured: tree digests, path resolution 5/86/11/0, ledger DEC-001…036 newest-first, the .9 delta reproduced exactly"}
   method: >
@@ -54,6 +55,7 @@ in_reply_to: HANDOFF-LEGO-PIPE-023-R2
 supersedes: HANDOFF-LEGO-PIPE-024-R0
 parts:
   "1": "What changed at R1, and the controlling record"
+  "1a": "What the PR review round then found, and what it cost"
   "2": "The rulings this memo executes"
   "3": "The contract: three schemas and the cut key"
   "4": "The tools, and what they measured on first run"
@@ -85,6 +87,55 @@ The controlling record, in order of authority: the operator's rulings (R0 §2's 
 plus the three of 2026-09-19) → REVIEW-026 §4's acceptance outcomes as amended in the
 PR #12 reconciliation comment (outcomes 13–15 added) → REVIEW-025-R1 §7.4's union list
 as the per-finding detail. Where older review text differs, the rulings win.
+
+## §1a What the PR review round then found, and what it cost
+
+The artifacts were reviewed on commit `4f208c4` by ChatGPT (Codex lane) and Claude
+(Cowork); both returned *changes requested*, and both were right. Six enforcement
+defects, all of one class — **guarantees written as prose that the shipping code did not
+impose** — are repaired in this revision:
+
+1. **Nested `supersedes` values were unvalidated.** The interpreter checked nested key
+   *presence* and never recursed, so `revision: not-a-revision` with `tree_sha256:
+   banana` produced no error. Outcome 2 was not enforced. The interpreter now recurses
+   into objects and array items; the nested values are constrained in the schema.
+2. **Null bypassed validation entirely.** `check_against_schema` skipped any present-but-
+   null value, so a document with *every* required key set to null returned zero errors
+   and `mock_math: null` satisfied outcome 15's "required boolean". "Required" meant only
+   "the key exists". Null is now validated against the declared type: it passes only
+   where the schema declares `"null"`.
+3. **The tree digest ignored directory symlinks.** `os.walk` leaves a symlinked directory
+   in `dirnames` and does not descend it, so an entire package hidden behind one link
+   digested to `e3b0c442…` — byte-identical to an empty directory — with exit 0. Two
+   materially different trees could share one recorded digest, which is the one thing the
+   digest exists to prevent. Directory entries are now inspected, and the CLI refuses to
+   print a digest for a tree containing links.
+4. **`package_path` was typed `string` while its own note required null** for a rejected
+   or manifest-less cut; it passed only because defect 2 was covering for it. Now
+   `["string", "null"]`, with the conditional rule (disposition `imported` requires bytes)
+   enforced by the preflight.
+5. **Outcome 1 had no validator.** Nothing parsed a pin, so "a bare pin is a validator
+   error" was a sentence in the register. `design_pkg.py pin` now resolves a booklet's
+   `design_pin` through the instruments table; bare, ambiguous and unregistered pins
+   exit 1.
+6. **An unrecognised `cut_state` silently disabled the digest-binding check** (Cowork's
+   addition). The uniqueness block acted only on a matching row, so a one-character typo
+   both minted a new identity and switched off the check protecting it — a wrong digest
+   then passed with exit 0. A new cut state is now coined in the register (declared list
+   read at run time, rule-16 idiom); an undeclared state warns, and an undeclared state
+   with no matching row is an error. A *declared* state with no row stays a warning,
+   because a cut's row is written at landing, after this check passes — a distinction the
+   committed battery caught in the first fix for this very defect.
+
+Two further points are recorded rather than repaired. Cowork withdrew its independent
+verification of the digest spec: its reimplementation also used `os.walk`, so it
+reproduced the blind spot instead of testing around it — what was established is that
+two implementations agreed on a symlink-free tree, not that the spec compels agreement.
+And the null-skip was **pre-existing**, inherited faithfully from `memo_preflight.py` at
+register `.20`; the fix therefore changes the correspondence validator too, so the
+byte-identical corpus regression was deliberately re-baselined: the corrected
+interpreter produces **no change** on any memo in the corpus (the only diff is this
+memo's own new file), and that result is now a case in the battery.
 
 ## §2 The rulings this memo executes
 
@@ -199,14 +250,19 @@ removed, one new ledger id (DEC-036), no breaches. The R0 → as-reviewed run sh
 changed / 22 added / 0 removed and records that R0's ledger rows carried no DEC ids at
 all (numbered in place at R1) — history, mechanically stated.
 
-A ten-case negative battery (scratchpad, not committed) confirms the failure modes:
-sheet-id package name; designer manifest needing the prefix strip (86 named errors);
-`path_prefix_strip` smuggled into a designer manifest; a prior ledger row edited
-beyond the permitted transition; a deleted ledger row (preflight and drift gate both);
-unqualified `supersedes`; missing `mock_math`; an import-record digest mismatch
-(non-waivable); a superseded `governing_brief`. The full R2 rehearsal — a scratch
-DT-DESIGN R2 with corrected paths, a designer manifest from the kit's template, and a
-**prepended** DEC-037 — imports clean end to end.
+**`tests/test_design_package.py`** — the acceptance battery, committed and runnable from
+a clean checkout in one command (`python3 tests/test_design_package.py`, 38 cases). It
+builds its R2 fixture from the committed package at run time, so nothing large is
+duplicated into the repository, and it covers every enforcement claim this memo makes:
+null and malformed required values, malformed qualified `supersedes`, bare/ambiguous/
+unregistered pins, file and directory symlinks, rejected and manifest-less import
+records, digest mismatch, package-root escape, ledger edits/deletions and the one
+permitted status transition, the reference path counts and digest, drift ground truth,
+and the R2 happy path.
+
+This exists because the first submission described the battery instead of shipping it,
+and the PR #13 review round then found five enforcement defects the description had
+claimed were covered — each reachable in minutes from a clean checkout (§1a).
 
 ## §5 docs/design/ — home, README, authoring kit, relay
 
@@ -274,7 +330,7 @@ then follows the README checklist as rehearsed.
 
 | # | Outcome | Satisfied by | Evidence |
 |---|---|---|---|
-| 1 | a pin resolves through one row to one path and one immutable tree digest | instruments table + import/overlay `tree_sha256` | first row live; digests measured |
+| 1 | a pin resolves through one row to one path and one immutable tree digest | instruments table + `design_pkg.py pin` resolver | bare/ambiguous/unregistered pins exit 1 (battery) |
 | 2 | lineage crosses the rename with no bare revision, no floating alias | manifest/overlay `supersedes` (qualified, digest-bound); no-alias rule | template pre-fills the R2 crossing |
 | 3 | governing brief and answered inputs independently queryable, validated | `governing_brief` + `answers[]`; exact-row check | superseded-brief negative test |
 | 4 | duplicated assertions: one named authority + mechanical agreement | schema `x-field-authority`; sheet-set, `decisions.last_id/count` checks | preflight run |
@@ -286,7 +342,7 @@ then follows the README checklist as rehearsed.
 | 10 | overlays state what is known, how, and which tree they describe | overlay schema: `evidence` map, `reconstruction.sources`, digest binding | three overlays landed |
 | 11 | the lane enumerates deterministic products and excludes interpretation | §6 ratified boundary, in README and register note | ruling recorded |
 | 12 | failed/re-exported cuts leave an audit record; pins do not move | `disposition` enum + instruments Status + checklist step 8 | — |
-| 13 | shared schema interpreter | `schema_lint.py` | byte-identical corpus regression |
+| 13 | shared schema interpreter | `schema_lint.py`, now validating nulls and recursing | corpus regression re-baselined: no change (§1a) |
 | 14 | the historical superset dispute is closed and gates nothing | ruling 2 | drift report happens to name the seven files; no action |
 | 15 | `mock_math` is a required boolean field, not a pinned value | schema + loud warn + ruling-to-flip | missing-field negative test |
 
