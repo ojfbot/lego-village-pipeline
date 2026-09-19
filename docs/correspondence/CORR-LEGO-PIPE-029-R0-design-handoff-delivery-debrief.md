@@ -68,6 +68,7 @@ findings:
   - {id: R-12, summary: "the evidence-method vocabulary built for the design tooling applies directly to review findings and was not recognised as reusable"}
   - {id: R-13, summary: "a hand-copied artifact drifted within one commit; generated-and-checked is the general rule, not a design-package quirk"}
   - {id: R-14, summary: "the episode's cost is legible and worth stating: about ninety minutes of review found thirteen defects that would otherwise have reached the first designer cut"}
+  - {id: R-15, summary: "the rule that every commit touching docs/correspondence/ bumps the version line was broken four times inside the round this memo debriefs; the agent versioned by pull request while the rule is written per commit"}
 parts:
   "0": "Scope, method, and what this memo is not"
   "1": "The record — what actually happened, with numbers"
@@ -207,6 +208,34 @@ I had a command available that would have listed every instance
 **R-05 — Self-verification one layer shallower than peer review, every time.** Not
 occasionally: in all four rounds. This is predictable enough to be designed around rather
 than exhorted against.
+
+**R-15 — I broke a standing register rule four times without noticing, and a peer found
+it.** CLAUDE.md and the register state it per commit: *every commit that touches
+`docs/correspondence/` bumps the register version line.* Measured across the merged
+round:
+
+| Commit | Files under `docs/correspondence/` | Register version |
+|---|---|---|
+| `b579d75` | 2 | `.26` (introduced) |
+| `39ec8ce` | 2 | `.26` |
+| `1f9b2d1` | 0 | `.26` |
+| `0b73ec8` | 2 | `.26` |
+| `217a311` | 2 | `.26` |
+| `41f0fb1` | 2 | `.26` |
+
+Four commits edited correspondence — the memo and the register note both — without the
+version advancing. I had silently adopted the *pull request* as the unit of versioning,
+because one landing felt like one version, and never checked that against a rule I had
+quoted in my own memo. It surfaced only because a peer memo counted the commits while
+this debrief was in review.
+
+Two things follow. First, it is the same shape as everything else in §3: a rule I
+believed I was keeping, true of my intent and false of my commits, never checked with the
+command that would have answered it. Second, it is **evidence for a question now live in
+the register-shape proposals**: if a five-commit pull request is one landing, a rule
+written per commit cannot be obeyed without inventing four throwaway versions. The
+violation is not an argument for excusing it — it is data that the unit of versioning and
+the unit of landing have come apart, which is what those memos are arguing about.
 
 ## §4 Root cause — why self-verification was shallow
 
@@ -377,19 +406,27 @@ measurement of R-05, and it is the number a good skill should move.
    If the coordinated-exchange skill has a companion problem, it is this one: **number
    allocation has no reservation step that another agent can see.**
 
-1. **Should the implementation rounds be back-filed?** R-08 and R-10 argue the record is
+1. **The versioning unit, settled or restated.** R-15 shows the per-commit rule was
+   broken four times in one merged pull request by an agent that had quoted it. The
+   register-shape proposals in flight are arguing the adjacent question — versions
+   claimed on a branch versus assigned at merge. This memo takes no position on their
+   designs and offers the four violations as measurements rather than as a plea:
+   whatever is decided should be *checkable by a linter*, because this rule was
+   unenforced and an agent broke it silently.
+
+2. **Should the implementation rounds be back-filed?** R-08 and R-10 argue the record is
    incomplete and the citations are already broken. Re-filing them retroactively is also
    the natural first exercise for the new schema (§6). Cheap either way; your call whether
    the register should show what it currently hides.
-2. **Should two reviewers be required for implementation, not only for plans?** (R-07.)
+3. **Should two reviewers be required for implementation, not only for plans?** (R-07.)
    Single-reviewer rounds worked here on the strength of one reviewer's thoroughness.
    That is a dependency on a person, not a property of the process.
-3. **One known defect, recorded not repaired.** The approving review noted that concurrent
+4. **One known defect, recorded not repaired.** The approving review noted that concurrent
    runs of the battery race over the staged fixture path `tools/_pre_extraction_check.py`.
    It is non-blocking, the documented one-command workflow is unaffected, and the head was
    already approved — so it was left rather than moved. It wants a per-run temporary path
    before any CI executes the suite concurrently.
-4. **A caution on this memo's own genre.** It is a document asserting things about an
+5. **A caution on this memo's own genre.** It is a document asserting things about an
    agent's conduct, with no mechanism enforcing any of it — the exact structure §4
    identifies as the root cause. It should be treated as input to a skill, and its
    findings should end up as rules with checks, or they will decay the way everything
