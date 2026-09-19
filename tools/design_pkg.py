@@ -22,10 +22,21 @@ DEC_ID_RE = re.compile(r"DEC-(\d{3})")
 
 
 def iter_files(root):
-    """Sorted POSIX relative paths of regular files under root. Errors on symlinks."""
+    """Sorted POSIX relative paths of regular files under root. Errors on symlinks.
+
+    Directory entries are inspected too: os.walk does not descend a symlinked
+    directory and leaves it in dirnames, so checking only filenames let an entire
+    package hide behind one link and digest identically to an empty tree
+    (PR #13 review, both stewards). A symlink of either kind is an error.
+    """
     out, errors = [], []
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames.sort()
+        for name in sorted(dirnames):
+            full = os.path.join(dirpath, name)
+            if os.path.islink(full):
+                rel = os.path.relpath(full, root).replace(os.sep, "/")
+                errors.append(f"directory symlink in tree: {rel}/ (not descended — the tree is not what it appears)")
         for name in sorted(filenames):
             full = os.path.join(dirpath, name)
             rel = os.path.relpath(full, root).replace(os.sep, "/")
@@ -244,6 +255,66 @@ def memo_ref_operative(ref, regtxt):
     return "ok", num_rev
 
 
+def cut_state_vocabulary(regtxt):
+    """Declared cut_state values, read from the register at run time (rule-16 idiom:
+    vocabulary is register data, not a hardcoded validator enum). Empty set = unknown."""
+    m = re.search(r"Current cut states:\s*([^\n]+)", regtxt)
+    if not m:
+        return set()
+    # Bounded to the declaration clause: the backticked values before the em-dash.
+    # Reading to end-of-line would swallow the explanatory prose that follows it.
+    clause = re.split(r"\s+—\s+", m.group(1))[0]
+    return set(re.findall(r"`([^`]+)`", clause))
+
+
+def resolve_pin(pin, regtxt):
+    """Resolve a design_pin against the instruments table (acceptance outcome 1).
+
+    A pin must be the qualified triple {design_package, revision, cut_state}; a pin
+    naming only package and revision is a validator ERROR, never a silent choice
+    (operator ruling 2026-09-19, register .24).
+
+    Returns (status, detail, row): 'ok' | 'bare' | 'malformed' | 'unknown' | 'ambiguous'.
+    """
+    if isinstance(pin, str):
+        m = re.fullmatch(r"\s*([A-Za-z0-9-]+)\s+(R\d+)\s*", pin)
+        if m:
+            return ("bare", f"bare pin {pin!r} names only package and revision — "
+                            "pins must name {design_package, revision, cut_state}", None)
+        return ("malformed", f"pin {pin!r} is not a qualified mapping", None)
+    if not isinstance(pin, dict):
+        return "malformed", f"pin is a {type(pin).__name__}, not a mapping", None
+    missing = [k for k in ("design_package", "revision", "cut_state") if not pin.get(k)]
+    if missing:
+        status = "bare" if missing == ["cut_state"] else "malformed"
+        return status, f"pin is missing {missing} — a pin names the full cut key", None
+    triple = (str(pin["design_package"]), str(pin["revision"]), str(pin["cut_state"]))
+    matches = [r for r in instruments_rows(regtxt)
+               if (r.get("Instrument"), r.get("Revision"), r.get("Cut state")) == triple]
+    if not matches:
+        return "unknown", f"no instruments row for {triple}", None
+    if len(matches) > 1:
+        return "ambiguous", f"{len(matches)} instruments rows share the cut key {triple}", None
+    row = matches[0]
+    return "ok", f"{triple} → {row.get('Path')} @ {row.get('tree_sha256')}", row
+
+
+def frontmatter_pins(path):
+    """Every design_pin found in a markdown file's YAML frontmatter (or a plain YAML file)."""
+    from schema_lint import require_yaml
+    yaml = require_yaml()
+    raw = open(path, encoding="utf-8").read()
+    m = re.match(r"^---\n(.*?)\n---\s*\n", raw, re.S)
+    text = m.group(1) if m else raw
+    try:
+        doc = yaml.safe_load(text)
+    except Exception as e:
+        return None, f"frontmatter is not valid YAML: {str(e).splitlines()[0]}"
+    if not isinstance(doc, dict):
+        return None, "frontmatter did not parse to a mapping"
+    return ([doc["design_pin"]] if "design_pin" in doc else []), None
+
+
 def instruments_rows(regtxt):
     """Parse the instruments table if present: list of dicts keyed by column header."""
     lines = regtxt.splitlines()
@@ -329,10 +400,37 @@ def main():
         digest, total, count, errors = tree_sha256(root)
         for e in errors:
             print(f"ERROR {e}")
+        if errors:
+            # Never emit a copy-pasteable digest for a tree that is not what it appears.
+            print("tree_sha256: REFUSED — the tree contains links or special files")
+            return 1
         print(f"tree_sha256: {digest}")
         print(f"bytes: {total}")
         print(f"file_count: {count}")
-        return 1 if errors else 0
+        return 0
+    if len(sys.argv) >= 4 and sys.argv[1] == "pin":
+        target, reg_path = sys.argv[2], sys.argv[3]
+        try:
+            regtxt = open(reg_path, encoding="utf-8").read()
+        except OSError as e:
+            sys.stderr.write(f"ERROR: cannot read register: {e}\n")
+            return 2
+        pins, err = frontmatter_pins(target)
+        if err:
+            print(f"ERROR {target}: {err}")
+            return 1
+        if not pins:
+            print(f"{target}: no design_pin — nothing to resolve")
+            return 0
+        bad = 0
+        for pin in pins:
+            status, detail, _ = resolve_pin(pin, regtxt)
+            if status == "ok":
+                print(f"OK  {detail}")
+            else:
+                print(f"ERROR [{status}] {detail}")
+                bad += 1
+        return 1 if bad else 0
     if len(sys.argv) >= 3 and sys.argv[1] == "inventory":
         design_dir = sys.argv[2]
         if "--write" in sys.argv[3:]:

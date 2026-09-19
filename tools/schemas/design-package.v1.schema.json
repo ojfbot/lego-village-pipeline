@@ -35,13 +35,19 @@
     },
     "answers": {
       "type": "array",
-      "x-items-pattern": "^(HANDOFF|CORR|REVIEW)-LEGO-PIPE-\\d{3}-R\\d+$",
+      "items": { "type": "string", "pattern": "^(HANDOFF|CORR|REVIEW)-LEGO-PIPE-\\d{3}-R\\d+$" },
       "x-note": "Zero or more change requests / booklets this cut answers. Distinct relation from governing_brief; each resolved to an exact operative register row."
     },
     "supersedes": {
       "type": ["object", "null"],
       "required": ["design_package", "revision", "tree_sha256"],
-      "x-note": "Fully qualified predecessor (025 R-03 / 026 R-01): null ONLY when no predecessor exists in any package lineage. DT-DESIGN R2 supersedes {H-01, R1, <tree digest of the as-committed state>} — the rename does not break lineage."
+      "properties": {
+        "design_package": { "type": "string" },
+        "revision": { "type": "string", "pattern": "^R\\d+$" },
+        "cut_state": { "type": "string" },
+        "tree_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      },
+      "x-note": "Fully qualified predecessor (025 R-03 / 026 R-01): null ONLY when no predecessor exists in any package lineage. DT-DESIGN R2 supersedes {H-01, R1, <tree digest of the as-committed state>} — the rename does not break lineage. The nested values are constrained and the interpreter recurses into them: a malformed revision or digest is an error, not prose (PR #13 review)."
     },
     "maturity": {
       "enum": ["direction", "intent", "prototype"],

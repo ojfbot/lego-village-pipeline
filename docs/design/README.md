@@ -25,7 +25,15 @@ redirects `H-01` pins to `DT-DESIGN`.**
 
 **Qualified pin grammar** (supersedes the bare `design_pin: H-01 R<n>` form in 023-R2's
 prose): a booklet pins `design_pin: {design_package: H-01, revision: R1, cut_state:
-as-committed}`. Bags 1–3 pin exactly that cut.
+as-committed}`. Bags 1–3 pin exactly that cut. Check a booklet with
+`python3 tools/design_pkg.py pin <booklet.md> docs/correspondence/REGISTER.md` — bare,
+ambiguous and unregistered pins all exit 1.
+
+**A new cut state is coined in the register, never in a manifest.** The declared list
+lives beside the instruments table (`Current cut states:`), read at run time like rule
+16's thread names. An undeclared state warns; an undeclared state with no matching row
+is an error, because that combination is indistinguishable from a typo that would both
+invent an identity and skip the digest check protecting it.
 
 ## Two authors, three record types
 
@@ -59,12 +67,18 @@ Deterministic names: `<dir>.import.yaml` · `<dir>.overlay.yaml` ·
 ## Tools
 
 ```sh
+python3 tests/test_design_package.py            # the acceptance battery — run this first
 python3 tools/package_preflight.py PACKAGE_DIR docs/correspondence/REGISTER.md \
         [--overlay manifests/<dir>.overlay.yaml] [--import-record …] [--previous PREV_DIR]
 python3 tools/package_drift.py OLD_DIR NEW_DIR --out docs/design/manifests/drift-<old>-to-<new>.md
 python3 tools/design_pkg.py digest DIR          # the normative tree_sha256
+python3 tools/design_pkg.py pin BOOKLET.md docs/correspondence/REGISTER.md
 python3 tools/design_pkg.py inventory docs/design --write
 ```
+
+`tests/test_design_package.py` is the enforcement record: every claim this directory
+makes is a case there, runnable from a clean checkout in one command. A claim without a
+case in it is a claim about one afternoon, not a property of the tools.
 
 Every preflight line names its evidence method (`structural_check` · `measured` ·
 `declared` · `unattributed` · `unavailable`). The tool checks structure only; runtime
