@@ -12,9 +12,12 @@ per-file sha256 over bytes, tree digest = sha256 of the UTF-8 concatenation of
 '<hex>  <path>\\n' lines (sha256sum-manifest style). Modes and mtimes are ignored.
 """
 import hashlib
+import json
 import os
 import re
 import sys
+
+TOOLS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 SHEET_ID_RE = re.compile(r"^[A-Z]{1,2}-\d{2}$")
 MEMO_REF_RE = re.compile(r"^(HANDOFF|CORR|REVIEW)-LEGO-PIPE-\d{3}-R\d+$")
@@ -391,7 +394,59 @@ def write_inventory(design_dir):
     return 0
 
 
+MIRROR_KEY = "x-mirror"
+MIRROR_NOTE = ("COPY for the Claude Design authoring kit, stamped at register {version}. "
+               "Canonical: tools/schemas/design-package.v1.schema.json in "
+               "ojfbot/lego-village-pipeline — the canonical file wins if they differ. "
+               "Regenerate with `python3 tools/design_pkg.py kit-mirror --write`; "
+               "tests/test_design_package.py fails if this copy drifts.")
+
+
+def _register_version(repo_root):
+    reg = os.path.join(repo_root, "docs", "correspondence", "REGISTER.md")
+    m = re.search(r"Register version:\s*([0-9.\-]+)", open(reg, encoding="utf-8").read())
+    return m.group(1) if m else "unknown"
+
+
+def kit_mirror(repo_root, write=False):
+    """Keep the authoring kit's schema copy identical to canonical, modulo its stamp.
+
+    A hand-copied mirror drifts the moment the canonical file is edited — which it did,
+    within one commit (PR #13 review round). Generated and checked instead.
+    """
+    canonical_path = os.path.join(repo_root, "tools", "schemas", "design-package.v1.schema.json")
+    mirror_path = os.path.join(repo_root, "docs", "design", "authoring-kit",
+                               "design-package.v1.schema.json")
+    with open(canonical_path, encoding="utf-8") as f:
+        canonical = json.load(f)
+    expected = dict(canonical)
+    expected[MIRROR_KEY] = MIRROR_NOTE.format(version=_register_version(repo_root))
+    if write:
+        with open(mirror_path, "w", encoding="utf-8") as f:
+            json.dump(expected, f, indent=2, ensure_ascii=False)
+            f.write("\n")
+        return 0, f"wrote {mirror_path}"
+    try:
+        with open(mirror_path, encoding="utf-8") as f:
+            actual = json.load(f)
+    except (OSError, json.JSONDecodeError) as e:
+        return 1, f"mirror unreadable: {e}"
+    a, b = dict(actual), dict(expected)
+    a.pop(MIRROR_KEY, None)
+    b.pop(MIRROR_KEY, None)
+    if a != b:
+        return 1, "authoring-kit schema mirror has DRIFTED from canonical — run kit-mirror --write"
+    if actual.get(MIRROR_KEY) != expected[MIRROR_KEY]:
+        return 1, "mirror stamp is stale (register version moved) — run kit-mirror --write"
+    return 0, "authoring-kit schema mirror matches canonical"
+
+
 def main():
+    if len(sys.argv) >= 2 and sys.argv[1] == "kit-mirror":
+        repo_root = os.path.dirname(TOOLS_DIR)
+        code, msg = kit_mirror(repo_root, write="--write" in sys.argv[2:])
+        print(("ERROR " if code else "") + msg)
+        return code
     if len(sys.argv) >= 3 and sys.argv[1] == "digest":
         root = sys.argv[2]
         if not os.path.isdir(root):
