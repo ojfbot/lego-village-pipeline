@@ -14,6 +14,7 @@ nothing large is duplicated into the repository.
 Needs PyYAML: re-execs itself under tools/.venv (tools/setup-preflight.sh creates it).
 """
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -702,14 +703,26 @@ class MemoCorpusRegression(unittest.TestCase):
         self.assertEqual(code, 0, out)
 
     def test_the_suite_leaks_no_file_handles(self):
-        # A claim about hygiene rots exactly like any other claim: asserted here so
-        # "the warnings are gone" is checked rather than eyeballed (PR #13, round 3).
+        # A claim about hygiene rots exactly like any other claim: checked here so
+        # "the warnings are gone" is established rather than eyeballed (PR #13, round 3).
+        #
+        # The child runs every other case under warnings-as-errors. It must be asserted
+        # to have RUN something: the first version of this check filtered the child's
+        # suite by string match, which discarded the whole module and passed on zero
+        # tests (PR #13, round 4). A vacuous check is worse than no check — it reads
+        # like evidence.
+        if os.environ.get("LVP_NO_RECURSE"):
+            self.skipTest("child run: this recursive case is skipped, the rest execute")
         p = subprocess.run([sys.executable, "-W", "error::ResourceWarning",
                             os.path.abspath(__file__)],
                            capture_output=True, text=True, cwd=REPO,
                            env=dict(os.environ, LVP_NO_RECURSE="1"))
-        self.assertNotIn("ResourceWarning", p.stdout + p.stderr,
-                         "the suite leaks file handles")
+        out = p.stdout + p.stderr
+        ran = re.search(r"^Ran (\d+) tests?", out, re.M)
+        self.assertIsNotNone(ran, f"child produced no test count:\n{out}")
+        self.assertGreater(int(ran.group(1)), 1, f"child ran no real tests:\n{out}")
+        self.assertEqual(p.returncode, 0, f"child run failed:\n{out}")
+        self.assertNotIn("ResourceWarning", out, "the suite leaks file handles")
 
     def test_frozen_v1_validator_is_untouched(self):
         p = subprocess.run(["git", "diff", "--quiet", "origin/main", "--", "tools/preflight.py"],
@@ -718,13 +731,4 @@ class MemoCorpusRegression(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    if os.environ.get("LVP_NO_RECURSE"):
-        # The handle-leak check re-runs this file under -W error::ResourceWarning; skip
-        # that one case in the child so it cannot recurse.
-        loader = unittest.TestLoader()
-        suite = unittest.TestSuite(
-            t for t in loader.discover(os.path.dirname(os.path.abspath(__file__)),
-                                       pattern=os.path.basename(__file__))
-            if "leaks_no_file_handles" not in str(t))
-        sys.exit(0 if unittest.TextTestRunner(verbosity=0).run(suite).wasSuccessful() else 1)
     unittest.main(verbosity=2)
