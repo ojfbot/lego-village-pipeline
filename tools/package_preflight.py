@@ -29,7 +29,7 @@ from design_pkg import (
     SHEET_ID_RE, collect_index_refs, compare_ledgers, cut_state_vocabulary,
     instruments_rows, memo_ref_operative, parse_ledger, resolve_ref, tree_sha256,
 )
-from schema_lint import check_against_schema, load_schema, require_yaml
+from schema_lint import check_against_schema, check_value, load_schema, require_yaml
 
 yaml = require_yaml()
 
@@ -243,8 +243,17 @@ def main():
                         if rec.get(k) is None:
                             rerrs.append(f"{k} is null but disposition is 'imported' — null is for rejected / recorded_not_imported, where no bytes landed")
                 errs += [f"[structural_check] import record: {e}" for e in rerrs]
-                for w in rec.get("waivers") or []:
-                    if isinstance(w, dict) and w.get("defect_id"):
+                # Only a SCHEMA-VALID waiver waives: a record with a defect_id and no
+                # authority is not a waiver, and must not act as one (PR #13 re-review).
+                witems = (load_schema("design-package-import.v1")
+                          .get("properties", {}).get("waivers", {}).get("items", {}))
+                for i, w in enumerate(rec.get("waivers") or []):
+                    werrs = []
+                    check_value(w, witems, f"waivers[{i}]", werrs)
+                    if werrs:
+                        errs += [f"[structural_check] import record: {e}" for e in werrs]
+                        errs.append(f"[structural_check] import record: waivers[{i}] is not a valid waiver and grants nothing — a waiver names authority")
+                    elif w.get("defect_id"):
                         waived_ids.add(w["defect_id"])
                 rec_digest = rec.get("tree_sha256")
                 if rec_digest:

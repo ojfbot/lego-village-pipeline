@@ -5,7 +5,7 @@ manifest_schema: design-package/v1
 design_package: DT-DESIGN          # never a sheet id; H-01 stays historical
 revision: R2                       # R<n>
 cut_state: as-exported             # a fresh designer cut is always as-exported
-cut: 2026-09-25                    # the Friday of this cut
+cut: "2026-09-25"                  # the Friday of this cut — QUOTE it: dates are strings
 manifest_origin: designer
 path_base: "."                     # paths resolve from the archive root, as written
 

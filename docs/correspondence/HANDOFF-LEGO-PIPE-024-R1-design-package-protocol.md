@@ -127,6 +127,37 @@ impose** — are repaired in this revision:
    because a cut's row is written at landing, after this check passes — a distinction the
    committed battery caught in the first fix for this very defect.
 
+### The second pass, on `956b272`
+
+ChatGPT re-reviewed the repairs and found three more, all the same class:
+
+7. **Required nested records were structurally hollow.** `check_value` recursed correctly,
+   but several schemas gave it nothing to enforce: `sheets[]`, `decisions`, `fixtures`,
+   `known_defects[]`, import `waivers[]` and overlay `reconstruction` declared field
+   *names* and no types. A waiver reading `{defect_id: D-X, authorized_by: null, date:
+   null, memo: null, disposition: null}` validated — and the preflight then honoured it,
+   so **the contract said a waiver names authority while the validator accepted a waiver
+   containing none.** Every required record now declares nested types, patterns and item
+   types; only a schema-valid waiver enters the waived set.
+8. **Rejected cuts resolved as valid pins.** `resolve_pin` enforced the triple's
+   uniqueness but never looked at the row's Status, Path or digest, so a row with Status
+   `rejected` and blank bytes returned `ok` with an empty path — contradicting outcome 1
+   (one path, one immutable digest) and outcome 12 (a failed cut must not move the pin).
+   A pin now requires a landed path and a valid 64-hex digest; `rejected` and
+   `recorded-not-imported` rows do not resolve, while a `superseded` row with real bytes
+   stays addressable.
+9. **The corpus claim outran its committed evidence.** The memo said the full corpus was
+   unchanged and that the result was a case in the battery; the committed case checked
+   six hand-picked memos for exit 0. That is the same gap in miniature. Repaired by
+   vendoring the pre-extraction validator as a frozen fixture and asserting a true
+   differential over all 27 memos (§4) — verified to fail when the live validator's
+   behaviour is perturbed.
+
+A note on defect 7's shape: the first repair pass fixed the *interpreter* and declared
+the job done, because the interpreter was where the bug appeared. But a recursive
+interpreter over a schema with no nested types is still a validator that validates
+nothing — the defect had simply moved from the code to the contract.
+
 Two further points are recorded rather than repaired. Cowork withdrew its independent
 verification of the digest spec: its reimplementation also used `os.walk`, so it
 reproduced the blind spot instead of testing around it — what was established is that
@@ -251,14 +282,22 @@ changed / 22 added / 0 removed and records that R0's ledger rows carried no DEC 
 all (numbered in place at R1) — history, mechanically stated.
 
 **`tests/test_design_package.py`** — the acceptance battery, committed and runnable from
-a clean checkout in one command (`python3 tests/test_design_package.py`, 38 cases). It
+a clean checkout in one command (`python3 tests/test_design_package.py`, 49 cases). It
 builds its R2 fixture from the committed package at run time, so nothing large is
 duplicated into the repository, and it covers every enforcement claim this memo makes:
-null and malformed required values, malformed qualified `supersedes`, bare/ambiguous/
-unregistered pins, file and directory symlinks, rejected and manifest-less import
-records, digest mismatch, package-root escape, ledger edits/deletions and the one
-permitted status transition, the reference path counts and digest, drift ground truth,
-and the R2 happy path.
+null, hollow and malformed nested records, malformed qualified `supersedes`,
+bare/ambiguous/unregistered/rejected pins, file and directory symlinks, waivers without
+authority, rejected and manifest-less import records, digest mismatch, package-root
+escape, ledger edits/deletions and the one permitted status transition, the reference
+path counts and digest, drift ground truth, the authoring-kit mirror, and the R2 happy
+path.
+
+The corpus claim is a **differential**, not an assertion: `tests/fixtures/
+memo_preflight_pre_extraction.py` is the validator frozen at commit `5535428`, before
+the extraction and the null fix. The battery runs it and the live validator over all 27
+memos in `docs/correspondence/` — frozen and expected-to-fail material included — and
+asserts identical exit codes and output. So "the extraction changed nothing" is
+re-provable on any future commit rather than a sentence about one afternoon.
 
 This exists because the first submission described the battery instead of shipping it,
 and the PR #13 review round then found five enforcement defects the description had

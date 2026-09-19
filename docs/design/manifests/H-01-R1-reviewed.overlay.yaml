@@ -66,7 +66,7 @@ known_defects:
     status: open
 reconstruction:
   authored_by: Claude Code
-  date: 2026-09-19
+  date: "2026-09-19"
   sources:
     - "HANDOFF-LEGO-PIPE-014-R0 register row (design package 'LEGO Village Pipeline 2.zip', sha256 e898a64a…7789 abbreviated, 9,850,637 bytes, received 2026-09-17)"
     - "HANDOFF-LEGO-PIPE-019-R0 §4.2 (defect ids D-1…D-6)"

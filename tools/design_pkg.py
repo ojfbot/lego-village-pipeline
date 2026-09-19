@@ -299,7 +299,28 @@ def resolve_pin(pin, regtxt):
     if len(matches) > 1:
         return "ambiguous", f"{len(matches)} instruments rows share the cut key {triple}", None
     row = matches[0]
-    return "ok", f"{triple} → {row.get('Path')} @ {row.get('tree_sha256')}", row
+
+    # A pin must resolve to bytes (outcome 1), and a cut that never landed must not
+    # resolve at all (outcome 12) — otherwise a rejected row becomes a valid pin and the
+    # build follows a cut that does not exist (PR #13 re-review).
+    status = (row.get("Status") or "").strip().lower()
+    if status in ("rejected", "recorded-not-imported", "recorded_not_imported"):
+        return ("not_landed",
+                f"{triple} resolves to a row with Status {status!r} — that cut landed no bytes; "
+                "the previous pin does not move", row)
+    path = (row.get("Path") or "").strip().strip("`")
+    digest = (row.get("tree_sha256") or "").strip().strip("`")
+    if not path:
+        return "incomplete", f"{triple} row carries no Path — a pin resolves to one package path", row
+    if not re.fullmatch(r"[0-9a-f]{64}", digest):
+        return ("incomplete",
+                f"{triple} row carries no valid tree_sha256 — a pin resolves to one immutable digest",
+                row)
+    if status and status not in ("current", "superseded"):
+        return ("incomplete",
+                f"{triple} row has unrecognised Status {status!r} (expected current or superseded)",
+                row)
+    return "ok", f"{triple} → {path} @ {digest} (Status: {status or 'unstated'})", row
 
 
 def frontmatter_pins(path):

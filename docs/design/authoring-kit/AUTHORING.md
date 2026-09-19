@@ -57,7 +57,10 @@ forever. Ten minutes of manifest, in exchange for never being misquoted.
    anyone but the operator explicitly.
 9. **`fixtures` names what seeded the cut** (set name + sha256). Weekly reseeding
    otherwise reads as design drift.
-10. **A Friday without a manifest is recorded, not imported.** The previous pin stays;
+10. **Every required record is structurally checked, not just present.** `decisions`,
+    `fixtures`, `sheets[]` and `known_defects[]` have typed fields: a null or malformed
+    value inside one is an error, not a shrug.
+11. **A Friday without a manifest is recorded, not imported.** The previous pin stays;
     the record shows a cut that didn't land. If you can't finish the manifest, say so
     in the relay instead of shipping without it.
 
@@ -65,7 +68,8 @@ forever. Ten minutes of manifest, in exchange for never being misquoted.
 
 - [ ] `package.yaml` at archive root, `manifest_schema: design-package/v1`, filled from
       the template — including `authoring_kit_version: "1.0"`.
-- [ ] `design_package: DT-DESIGN`, `revision`, `cut_state: as-exported`, `cut` date.
+- [ ] `design_package: DT-DESIGN`, `revision`, `cut_state: as-exported`, `cut` date
+      **quoted** (`cut: "2026-09-25"` — unquoted YAML yields a date object and fails).
 - [ ] Every `index.json` structured path opens from the archive root as written.
 - [ ] New DEC entries prepended, contiguous after the last id; nothing else changed.
 - [ ] `decisions.last_id` / `count` match the ledger.

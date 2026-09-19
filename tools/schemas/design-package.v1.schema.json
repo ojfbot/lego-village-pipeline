@@ -5,25 +5,51 @@
   "description": "HANDOFF-LEGO-PIPE-024-R1 contract, post-review (REVIEW-025-R1 union list / REVIEW-026 acceptance outcomes 1-15). Authored by Claude Design inside the exported archive from cut R2 onward; lives at the archive root as package.yaml and travels inside the verbatim bytes. A file of this schema found OUTSIDE a designer-exported tree (e.g. in docs/design/manifests/) is an error — reconstructions use design-package-overlay/v1. Identity is the cut key {design_package, revision, cut_state} (operator ruling 2026-09-19); the directory name is never identity.",
   "type": "object",
   "required": [
-    "manifest_schema", "design_package", "revision", "cut_state", "cut",
-    "manifest_origin", "path_base", "governing_brief", "answers", "supersedes",
-    "maturity", "tier_coverage", "mock_math", "index", "sheets", "decisions",
-    "fixtures", "authoring_kit_version"
+    "manifest_schema",
+    "design_package",
+    "revision",
+    "cut_state",
+    "cut",
+    "manifest_origin",
+    "path_base",
+    "governing_brief",
+    "answers",
+    "supersedes",
+    "maturity",
+    "tier_coverage",
+    "mock_math",
+    "index",
+    "sheets",
+    "decisions",
+    "fixtures",
+    "authoring_kit_version"
   ],
   "properties": {
-    "manifest_schema": { "const": "design-package/v1" },
+    "manifest_schema": {
+      "const": "design-package/v1"
+    },
     "design_package": {
       "type": "string",
       "x-not-a-sheet-id": "^[A-Z]{1,2}-\\d{2}$",
       "x-note": "REJECTED when it matches x-not-a-sheet-id or equals any sheets[].id in this manifest (025 R-19). Current package name from cut R2: DT-DESIGN (operator ruling 2026-09-18). Existing H-01 rows keep their name; no alias redirects H-01 pins to DT-DESIGN."
     },
-    "revision": { "type": "string", "pattern": "^R\\d+$" },
+    "revision": {
+      "type": "string",
+      "pattern": "^R\\d+$"
+    },
     "cut_state": {
       "type": "string",
       "x-note": "Immutable component of identity, NOT lifecycle status (PR #12 reconciliation). Vocabulary is register data like thread names; current values: as-exported (default for a fresh designer cut), as-reviewed, as-committed. A second received state under the same package+revision gets a new durable cut_state; an existing key never changes."
     },
-    "cut": { "x-note": "the Friday cut date, YYYY-MM-DD" },
-    "manifest_origin": { "const": "designer" },
+    "cut": {
+      "type": "string",
+      "format": "date",
+      "x-note": "A date is a STRING: quote it in YAML (`\"2026-09-25\"`), or the parser yields a date object and this field fails.",
+      "x-cut": "the Friday cut date"
+    },
+    "manifest_origin": {
+      "const": "designer"
+    },
     "path_base": {
       "const": ".",
       "x-note": "All package_path references resolve against the archive root. No prefix-strip semantics exist for designer manifests — a manifest needing them fails (025 R-12; closes defect D-4 by contract)."
@@ -35,26 +61,55 @@
     },
     "answers": {
       "type": "array",
-      "items": { "type": "string", "pattern": "^(HANDOFF|CORR|REVIEW)-LEGO-PIPE-\\d{3}-R\\d+$" },
+      "items": {
+        "type": "string",
+        "pattern": "^(HANDOFF|CORR|REVIEW)-LEGO-PIPE-\\d{3}-R\\d+$"
+      },
       "x-note": "Zero or more change requests / booklets this cut answers. Distinct relation from governing_brief; each resolved to an exact operative register row."
     },
     "supersedes": {
-      "type": ["object", "null"],
-      "required": ["design_package", "revision", "tree_sha256"],
+      "type": [
+        "object",
+        "null"
+      ],
+      "required": [
+        "design_package",
+        "revision",
+        "tree_sha256"
+      ],
       "properties": {
-        "design_package": { "type": "string" },
-        "revision": { "type": "string", "pattern": "^R\\d+$" },
-        "cut_state": { "type": "string" },
-        "tree_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        "design_package": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^R\\d+$"
+        },
+        "cut_state": {
+          "type": "string"
+        },
+        "tree_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
       },
       "x-note": "Fully qualified predecessor (025 R-03 / 026 R-01): null ONLY when no predecessor exists in any package lineage. DT-DESIGN R2 supersedes {H-01, R1, <tree digest of the as-committed state>} — the rename does not break lineage. The nested values are constrained and the interpreter recurses into them: a malformed revision or digest is an error, not prose (PR #13 review)."
     },
     "maturity": {
-      "enum": ["direction", "intent", "prototype"],
+      "enum": [
+        "direction",
+        "intent",
+        "prototype"
+      ],
       "x-note": "Design-artifact maturity. Split from delivery coverage (025 R-22 / 026 R-03); neither field grants build authority — that comes only from a booklet's pin."
     },
     "tier_coverage": {
-      "enum": ["none", "tier-1", "tier-2", "tier-3"],
+      "enum": [
+        "none",
+        "tier-1",
+        "tier-2",
+        "tier-3"
+      ],
       "x-note": "How much of the governing brief's scope has been applied. Orthogonal to maturity: H-01 R1 is maturity=prototype with tier_coverage=tier-1."
     },
     "mock_math": {
@@ -68,7 +123,49 @@
     },
     "sheets": {
       "type": "array",
-      "items": { "required": ["id", "title"] },
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-type": "design_source"
+          },
+          "spec": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-type": "package_path"
+          },
+          "standalone": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-type": "package_path"
+          },
+          "screenshots": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "x-reference-types": {
         "source": "design_source — opaque design-session provenance (.dc.html etc.), NEVER resolved against the package (025 R-01 P0: 11 of H-01-R1's 102 structured paths are these)",
         "spec": "package_path — must resolve inside the package root",
@@ -78,22 +175,96 @@
     },
     "decisions": {
       "type": "object",
-      "required": ["ledger", "last_id", "count"],
-      "x-note": "No ranges (025 R-13). ledger is a package_path to decisions.md; last_id and count are mechanically checked against the parsed ledger. The ledger is NEWEST-FIRST (verified 2026-09-19); comparison is by stable DEC-nnn id, never byte position, with exactly one permitted prior-row transition: a Status cell gaining a supersession reference naming a new, higher id (025 R-08 / 026 R-07)."
+      "required": [
+        "ledger",
+        "last_id",
+        "count"
+      ],
+      "x-note": "No ranges (025 R-13). ledger is a package_path to decisions.md; last_id and count are mechanically checked against the parsed ledger. The ledger is NEWEST-FIRST (verified 2026-09-19); comparison is by stable DEC-nnn id, never byte position, with exactly one permitted prior-row transition: a Status cell gaining a supersession reference naming a new, higher id (025 R-08 / 026 R-07).",
+      "properties": {
+        "ledger": {
+          "type": "string"
+        },
+        "last_id": {
+          "type": "string",
+          "pattern": "^DEC-\\d{3}$"
+        },
+        "count": {
+          "type": "integer"
+        }
+      }
     },
     "fixtures": {
       "type": "object",
-      "required": ["set", "sha256"],
-      "x-note": "Identity of the fixture set that seeded this cut (023-R2 F5). Without it, weekly fixture reseeding dominates apparent drift (025 R-14 / 026 R-08)."
+      "required": [
+        "set",
+        "sha256"
+      ],
+      "x-note": "Identity of the fixture set that seeded this cut (023-R2 F5). Without it, weekly fixture reseeding dominates apparent drift (025 R-14 / 026 R-08).",
+      "properties": {
+        "set": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
     },
     "known_defects": {
       "type": "array",
-      "items": { "required": ["id", "rule_id", "paths", "expected_failure", "evidence", "status"] },
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "rule_id",
+          "paths",
+          "expected_failure",
+          "evidence",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "rule_id": {
+            "type": "string"
+          },
+          "paths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expected_failure": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
       "x-note": "A defect NAMES A FAILURE — it is not a waiver (025 R-02 P0 / 026 R-05). Import authorization lives in a separate waiver record in the import record, never producer-authored. rule_id 'path-resolution' is reserved for path defects: it is the only rule preflight can itself verify, so only such defects can downgrade unresolved-path errors, and one whose paths all resolve is reported as stale (stale declaration = drift). All other rule_ids are declared runtime/DOM facts the tool reports without judging."
     },
-    "debts": { "type": "array" },
-    "schema_requests": { "type": "string", "x-reference-type": "package_path" },
-    "authoring_kit_version": { "type": "string" },
+    "debts": {
+      "type": "array",
+      "items": {
+        "type": [
+          "object",
+          "string"
+        ]
+      }
+    },
+    "schema_requests": {
+      "type": "string",
+      "x-reference-type": "package_path"
+    },
+    "authoring_kit_version": {
+      "type": "string"
+    },
     "extensions": {
       "type": "object",
       "x-note": "Namespaced producer metadata (026 §3.1); compatible additions land here without a schema revision."
@@ -107,13 +278,37 @@
   ],
   "x-field-authority": {
     "note": "One owner per field; every assertion duplicated from index.json carries a mechanical agreement check or is not duplicated (outcome 4 / 025 R-13, R-24).",
-    "package.yaml": ["identity (cut key)", "lineage", "governing_brief/answers", "maturity", "tier_coverage", "mock_math", "decisions.last_id/count", "fixtures", "known_defects", "debts"],
-    "index.json": ["package-internal navigation only, pending the cut-R2 DEC entry"],
-    "import record": ["digests", "byte/file counts", "disposition", "waivers"],
-    "instruments table": ["registration, lifecycle Status, pin resolution"]
+    "package.yaml": [
+      "identity (cut key)",
+      "lineage",
+      "governing_brief/answers",
+      "maturity",
+      "tier_coverage",
+      "mock_math",
+      "decisions.last_id/count",
+      "fixtures",
+      "known_defects",
+      "debts"
+    ],
+    "index.json": [
+      "package-internal navigation only, pending the cut-R2 DEC entry"
+    ],
+    "import record": [
+      "digests",
+      "byte/file counts",
+      "disposition",
+      "waivers"
+    ],
+    "instruments table": [
+      "registration, lifecycle Status, pin resolution"
+    ]
   },
   "x-cut-key": {
-    "key": ["design_package", "revision", "cut_state"],
+    "key": [
+      "design_package",
+      "revision",
+      "cut_state"
+    ],
     "rule": "Uniqueness is enforced on the triple; a pin naming only package and revision is a validator error, never a silent choice. Operator ruling 2026-09-19 (register .24), superseding REVIEW-026 R-01's key."
   }
 }

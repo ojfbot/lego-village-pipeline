@@ -89,7 +89,10 @@ def check_value(value, sub, label, errs):
     if "enum" in sub and value not in sub["enum"]:
         errs.append(f"{label}: {value!r} not in {sub['enum']}")
     if "type" in sub and not type_ok(value, sub["type"]):
-        errs.append(f"{label}: wrong type {type(value).__name__}")
+        hint = ""
+        if sub.get("format") == "date" and type(value).__name__ in ("date", "datetime"):
+            hint = " — quote the date in YAML so it parses as a string"
+        errs.append(f"{label}: wrong type {type(value).__name__}{hint}")
     if "pattern" in sub and isinstance(value, str) and not re.fullmatch(sub["pattern"], value):
         errs.append(f"{label}: {value!r} does not match {sub['pattern']}")
 
