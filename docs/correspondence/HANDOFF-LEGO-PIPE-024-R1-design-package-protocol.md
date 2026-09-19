@@ -176,8 +176,22 @@ Three more, same class, each reproduced first:
 And a correction to that reply: I wrote that the `ResourceWarning`s were gone. They were
 not — 42 remained, and I had fixed only the two visible in the output I happened to
 read. Every file handle in `tools/` and `tests/` now goes through a context manager, and
-the suite asserts its own cleanliness by re-running itself under
-`-W error::ResourceWarning`, so that claim cannot rot again either.
+the suite checks its own cleanliness by re-running itself under
+`-W error::ResourceWarning`.
+
+13. **And that self-check was itself vacuous.** Its first version filtered the child
+    run's suite by string match; the discovered item is the enclosing suite, whose
+    repr contains the method name, so the child discarded every test and exited 0 on
+    `Ran 0 tests`. The parent asserted only the absence of a substring, so a zero-test
+    run read as proof. The fourth review round caught it. The child now skips just this
+    one case by environment guard and runs the other 55, and the parent asserts the
+    child's exit code **and** a positive test count. Verified by mutation: reintroducing
+    the string filter fails the check with `0 not greater than 1: child ran no real
+    tests`.
+
+    Worth stating plainly, because it is the whole lesson of this PR in one artifact:
+    the test written to stop a claim from rotting was itself a claim that had rotted.
+    Evidence has to be checked the same way the thing it certifies is checked.
 
 A note on defect 7's shape: the first repair pass fixed the *interpreter* and declared
 the job done, because the interpreter was where the bug appeared. But a recursive
