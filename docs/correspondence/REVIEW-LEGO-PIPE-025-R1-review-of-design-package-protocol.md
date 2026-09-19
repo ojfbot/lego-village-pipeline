@@ -554,7 +554,7 @@ started; from 25 September every Friday import contends on the same line. The co
 already normal here — `.22` renumbered on rebase, exactly as `.21` anticipated — so the fix
 is to stop treating it as an exception: write **renumber-on-rebase** into the import
 checklist as ordinary procedure for instruments rows, and have whichever of 025/026 merges
-second renumber. This memo's delta claims `.25` on the assumption 026 lands at `.24`.
+second renumber. Settled by merge order: the operator ruled PR #11 merges first, so this memo's delta is `.24` and REVIEW-026 renumbers to `.25` when PR #12 lands.
 
 ## §4 The six questions of §8, answered in order
 
