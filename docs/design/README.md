@@ -74,6 +74,7 @@ python3 tools/package_drift.py OLD_DIR NEW_DIR --out docs/design/manifests/drift
 python3 tools/design_pkg.py digest DIR          # the normative tree_sha256
 python3 tools/design_pkg.py pin BOOKLET.md docs/correspondence/REGISTER.md
 python3 tools/design_pkg.py inventory docs/design --write
+python3 tools/design_pkg.py kit-mirror [--write]   # keep the kit's schema copy honest
 ```
 
 `tests/test_design_package.py` is the enforcement record: every claim this directory

@@ -58,7 +58,10 @@
     },
     "answers": {
       "type": "array",
-      "x-items-pattern": "^(HANDOFF|CORR|REVIEW)-LEGO-PIPE-\\d{3}-R\\d+$",
+      "items": {
+        "type": "string",
+        "pattern": "^(HANDOFF|CORR|REVIEW)-LEGO-PIPE-\\d{3}-R\\d+$"
+      },
       "x-note": "Zero or more change requests / booklets this cut answers. Distinct relation from governing_brief; each resolved to an exact operative register row."
     },
     "supersedes": {
@@ -71,7 +74,23 @@
         "revision",
         "tree_sha256"
       ],
-      "x-note": "Fully qualified predecessor (025 R-03 / 026 R-01): null ONLY when no predecessor exists in any package lineage. DT-DESIGN R2 supersedes {H-01, R1, <tree digest of the as-committed state>} — the rename does not break lineage."
+      "properties": {
+        "design_package": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^R\\d+$"
+        },
+        "cut_state": {
+          "type": "string"
+        },
+        "tree_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "x-note": "Fully qualified predecessor (025 R-03 / 026 R-01): null ONLY when no predecessor exists in any package lineage. DT-DESIGN R2 supersedes {H-01, R1, <tree digest of the as-committed state>} — the rename does not break lineage. The nested values are constrained and the interpreter recurses into them: a malformed revision or digest is an error, not prose (PR #13 review)."
     },
     "maturity": {
       "enum": [
@@ -201,5 +220,5 @@
     ],
     "rule": "Uniqueness is enforced on the triple; a pin naming only package and revision is a validator error, never a silent choice. Operator ruling 2026-09-19 (register .24), superseding REVIEW-026 R-01's key."
   },
-  "x-mirror": "COPY for the Claude Design authoring kit, taken at register 2026-09-18.26. Canonical: tools/schemas/design-package.v1.schema.json in ojfbot/lego-village-pipeline — the canonical file wins if they differ."
+  "x-mirror": "COPY for the Claude Design authoring kit, stamped at register 2026-09-18.26. Canonical: tools/schemas/design-package.v1.schema.json in ojfbot/lego-village-pipeline — the canonical file wins if they differ. Regenerate with `python3 tools/design_pkg.py kit-mirror --write`; tests/test_design_package.py fails if this copy drifts."
 }

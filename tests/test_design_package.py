@@ -488,6 +488,12 @@ class MemoCorpusRegression(unittest.TestCase):
             code, out = run("memo_preflight.py", path, REGISTER)
             self.assertEqual(code, 0, f"{name}: {out}")
 
+    def test_authoring_kit_schema_mirror_has_not_drifted(self):
+        # The kit Claude Design authors against must not diverge from canonical.
+        # The hand-copied mirror drifted within one commit; it is generated now.
+        code, out = run("design_pkg.py", "kit-mirror")
+        self.assertEqual(code, 0, out)
+
     def test_frozen_v1_validator_is_untouched(self):
         p = subprocess.run(["git", "diff", "--quiet", "origin/main", "--", "tools/preflight.py"],
                            cwd=REPO, capture_output=True)
