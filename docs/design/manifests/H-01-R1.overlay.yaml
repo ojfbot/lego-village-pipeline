@@ -65,7 +65,7 @@ known_defects:
     status: open
 reconstruction:
   authored_by: Claude Code
-  date: 2026-09-19
+  date: "2026-09-19"
   sources:
     - "register .9 note (import ruling: LATEST.zip = as-reviewed cut + ADDENDUM-A1 + three hub captures)"
     - "HANDOFF-LEGO-PIPE-019-R0 §4.2 (defect ids D-1…D-6 — a memo, not the package: the package's own known_defects_open carries no ids)"

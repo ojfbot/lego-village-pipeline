@@ -5,46 +5,145 @@
   "description": "HANDOFF-LEGO-PIPE-024-R1 contract. Written by the importing agent when a cut lands (or bounces): the record of what was received, its digests, and its disposition. Lives OUTSIDE the verbatim package tree so `diff -r` against the received bytes stays empty with no exclusions. A digest field holds a digest or null — never prose (025 R-23 / 026 R-01).",
   "type": "object",
   "required": [
-    "import_schema", "design_package", "revision", "cut_state", "package_path",
-    "tree_sha256", "archive_sha256", "archive_digest_status", "bytes", "file_count",
-    "disposition", "imported_at_register_version", "import_date", "imported_by"
+    "import_schema",
+    "design_package",
+    "revision",
+    "cut_state",
+    "package_path",
+    "tree_sha256",
+    "archive_sha256",
+    "archive_digest_status",
+    "bytes",
+    "file_count",
+    "disposition",
+    "imported_at_register_version",
+    "import_date",
+    "imported_by"
   ],
   "properties": {
-    "import_schema": { "const": "design-package-import/v1" },
-    "design_package": { "type": "string" },
-    "revision": { "type": "string", "pattern": "^R\\d+$" },
-    "cut_state": { "type": "string" },
+    "import_schema": {
+      "const": "design-package-import/v1"
+    },
+    "design_package": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "string",
+      "pattern": "^R\\d+$"
+    },
+    "cut_state": {
+      "type": "string"
+    },
     "package_path": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "x-note": "Repo-relative path of the verbatim tree, e.g. docs/design/H-01-R1. Null ONLY for disposition rejected / recorded_not_imported, where no bytes land and the record IS the trace (025 R-20 / outcome 12). See x-conditional-required: disposition 'imported' requires both package_path and tree_sha256 non-null, enforced by package_preflight.py."
     },
     "tree_sha256": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "pattern": "^[0-9a-f]{64}$",
       "x-note": "Reproducible digest of the received tree; the subject pins and supersedes resolve through. Specification (x-tree-digest-spec below) is normative. Null only for dispositions that landed no bytes."
     },
     "archive_sha256": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "pattern": "^[0-9a-f]{64}$",
       "x-note": "Digest of the received archive, when one existed and was hashed. Null when unavailable (e.g. the three historical desktop bundles arrived unzipped). Historic claimed values that cannot be re-verified go in archive_sha256_claimed on the overlay, not here."
     },
-    "archive_digest_status": { "enum": ["verified", "claimed", "unavailable"] },
-    "bytes": { "type": ["integer", "null"] },
-    "file_count": { "type": ["integer", "null"] },
+    "archive_digest_status": {
+      "enum": [
+        "verified",
+        "claimed",
+        "unavailable"
+      ]
+    },
+    "bytes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "file_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
     "disposition": {
-      "enum": ["imported", "rejected", "recorded_not_imported"],
+      "enum": [
+        "imported",
+        "rejected",
+        "recorded_not_imported"
+      ],
       "x-note": "A cut that fails preflight or arrives without a designer manifest is RECORDED, not imported (025 R-09 amended, R-20): this record plus an instruments row with the matching Status land, the previous pin does not move, and any degraded import is an explicit operator-authorized exception."
     },
-    "imported_at_register_version": { "type": "string" },
-    "import_date": {},
-    "imported_by": { "type": "string" },
-    "governing_brief": { "type": "string", "pattern": "^(HANDOFF|CORR|REVIEW)-LEGO-PIPE-\\d{3}-R\\d+$" },
+    "imported_at_register_version": {
+      "type": "string"
+    },
+    "import_date": {
+      "type": "string",
+      "format": "date",
+      "x-note": "A date is a STRING: quote it in YAML (`\"2026-09-25\"`), or the parser yields a date object and this field fails."
+    },
+    "imported_by": {
+      "type": "string"
+    },
+    "governing_brief": {
+      "type": "string",
+      "pattern": "^(HANDOFF|CORR|REVIEW)-LEGO-PIPE-\\d{3}-R\\d+$"
+    },
     "waivers": {
       "type": "array",
-      "items": { "required": ["defect_id", "authorized_by", "date", "memo", "disposition"] },
+      "items": {
+        "type": "object",
+        "required": [
+          "defect_id",
+          "authorized_by",
+          "date",
+          "memo",
+          "disposition"
+        ],
+        "properties": {
+          "defect_id": {
+            "type": "string"
+          },
+          "authorized_by": {
+            "type": "string",
+            "x-note": "the AUTHORITY — never the producing agent, never null"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "x-note": "A date is a STRING: quote it in YAML (`\"2026-09-25\"`), or the parser yields a date object and this field fails."
+          },
+          "memo": {
+            "type": "string",
+            "pattern": "^(HANDOFF|CORR|REVIEW)-LEGO-PIPE-\\d{3}-R\\d+$"
+          },
+          "disposition": {
+            "type": "string"
+          },
+          "expiry": {
+            "type": [
+              "string",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
       "x-note": "A waiver NAMES AUTHORITY: who authorized import despite a declared defect, on what date, under which memo, with what disposition/expiry. Never authored by the producing agent alone. The four x-never-designer-waivable classes in design-package/v1 cannot be waived here either."
     },
-    "notes": { "type": "string" }
+    "notes": {
+      "type": "string"
+    }
   },
   "x-conditional-required": {
     "imported": "disposition 'imported' requires non-null package_path AND tree_sha256; 'rejected' and 'recorded_not_imported' permit both null — no bytes landed, and the record is the trace. Enforced by package_preflight.py."

@@ -26,7 +26,7 @@ fixtures: null
 known_defects: []     # D-1…D-6 are 019's first-day facts about R1; R0's defect record is the legacy review itself (see sources)
 reconstruction:
   authored_by: Claude Code
-  date: 2026-09-19
+  date: "2026-09-19"
   sources:
     - "design-review/claude-review-of-design-bundle-R0.md (legacy, unnumbered — the R0 defect record; register row cites 72 files / 8.0 MB)"
     - "HANDOFF-LEGO-PIPE-007-R2 register row (the governing design brief; the memo lives inside the R1 package at brief/LEGO-PIPE-007-R2.md)"

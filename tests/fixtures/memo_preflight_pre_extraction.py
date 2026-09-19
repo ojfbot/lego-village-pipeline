@@ -1,0 +1,239 @@
+# FROZEN FIXTURE — tools/memo_preflight.py as it stood on main at commit 5535428,
+# before the schema interpreter was extracted to tools/schema_lint.py and before null
+# validation was corrected (PR #13 review round).
+#
+# NEVER EDIT. Below this banner the file is byte-identical to that commit.
+#
+# It exists so the claim "the extraction and the null fix changed nothing for the
+# correspondence corpus" is a differential test that can be re-run forever, rather than a
+# sentence in a memo about one afternoon — which is exactly the gap the review round
+# found. tests/test_design_package.py runs this and the live validator over every memo in
+# docs/correspondence/ and asserts byte-identical output.
+#
+# It loads its schemas from tools/schemas/ as the original did, so both validators are
+# compared against the same contracts, not against a frozen copy of them.
+#!/usr/bin/env python3
+"""lego-pipe-memo preflight — version-dispatching validator (011-R2 scope item 2).
+
+Replaces the v1 reference `tools/preflight.py` (kept unedited: the register cites it).
+Dispatches on `correspondence_schema`; the schema contracts live as JSON Schema files in
+tools/schemas/ — those files are the canonical artifact, this CLI interprets the subset
+they use. Never crashes on malformed input: every defect is an ERROR line, exit 1.
+
+Usage: memo_preflight.py MEMO.md REGISTER.md
+Exit:  0 pass (warnings allowed) · 1 errors · 2 usage/IO
+
+Dependency note: needs PyYAML. If the running interpreter lacks it, the CLI re-executes
+itself with tools/.venv/bin/python when that exists; `tools/setup-preflight.sh` creates it.
+"""
+import json
+import os
+import re
+import sys
+
+TOOLS_DIR = os.path.dirname(os.path.abspath(__file__))
+
+try:
+    import yaml
+except ImportError:
+    venv_py = os.path.join(TOOLS_DIR, ".venv", "bin", "python")
+    if os.path.exists(venv_py) and not os.environ.get("MEMO_PREFLIGHT_REEXEC"):
+        os.environ["MEMO_PREFLIGHT_REEXEC"] = "1"
+        os.execv(venv_py, [venv_py, os.path.abspath(__file__)] + sys.argv[1:])
+    sys.stderr.write(
+        "ERROR: PyYAML not available. Run tools/setup-preflight.sh once to create tools/.venv\n"
+    )
+    sys.exit(2)
+
+SHEET_PREFIXES = {"A", "C", "F", "H", "J", "P"}
+
+
+def load_schema(version):
+    p = os.path.join(TOOLS_DIR, "schemas", f"lego-pipe-memo.{version}.schema.json")
+    with open(p, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def type_ok(value, ty):
+    m = {
+        "object": dict, "array": list, "string": str,
+        "number": (int, float), "integer": int, "boolean": bool,
+    }
+    if isinstance(ty, list):
+        return any(type_ok(value, t) for t in ty)
+    exp = m.get(ty)
+    return exp is None or isinstance(value, exp)
+
+
+def check_against_schema(fm, schema, errs):
+    for k in schema.get("required", []):
+        if k not in fm:
+            errs.append(f"missing {k}")
+    for k, sub in schema.get("properties", {}).items():
+        if k not in fm or fm[k] is None:
+            continue
+        v = fm[k]
+        if "const" in sub and v != sub["const"]:
+            errs.append(f"{k}: expected {sub['const']!r}, got {v!r}")
+        if "enum" in sub and v not in sub["enum"]:
+            errs.append(f"{k}: {v!r} not in {sub['enum']}")
+        if "type" in sub and not type_ok(v, sub["type"]):
+            errs.append(f"{k}: wrong type {type(v).__name__}")
+        if "pattern" in sub and isinstance(v, str) and not re.fullmatch(sub["pattern"], v):
+            errs.append(f"{k}: {v!r} does not match {sub['pattern']}")
+        for rk in sub.get("required", []):
+            if isinstance(v, dict) and rk not in v:
+                errs.append(f"{k}.{rk} missing")
+        item_req = sub.get("items", {}).get("required", [])
+        if item_req and isinstance(v, list):
+            for i, entry in enumerate(v):
+                if not isinstance(entry, dict):
+                    errs.append(f"{k}[{i}]: must be a mapping")
+                    continue
+                for rk in item_req:
+                    if rk not in entry:
+                        errs.append(f"{k}[{i}].{rk} missing")
+
+
+def main():
+    if len(sys.argv) != 3:
+        sys.stderr.write(__doc__ or "")
+        return 2
+    memo_path, reg_path = sys.argv[1], sys.argv[2]
+    errs, warns = [], []
+
+    try:
+        raw = open(memo_path, encoding="utf-8").read()
+    except OSError as e:
+        sys.stderr.write(f"ERROR: cannot read memo: {e}\n")
+        return 2
+    try:
+        regtxt = open(reg_path, encoding="utf-8").read()
+    except OSError as e:
+        sys.stderr.write(f"ERROR: cannot read register: {e}\n")
+        return 2
+
+    m = re.match(r"^---\n(.*?)\n---\s*\n", raw, re.S)
+    if not m:
+        print(f"{memo_path}: schema=none")
+        print("  ERROR no frontmatter (opening/closing --- fence not found)")
+        return 1
+    fm_text, body = m.group(1), raw[m.end():]
+
+    if "\t" in fm_text:
+        errs.append("tab in frontmatter")
+    tops = re.findall(r"^([A-Za-z_][\w-]*):", fm_text, re.M)
+    dups = {k for k in tops if tops.count(k) > 1}
+    if dups:
+        errs.append(f"duplicate keys {sorted(dups)}")
+
+    try:
+        fm = yaml.safe_load(fm_text)
+    except yaml.YAMLError as e:
+        print(f"{memo_path}: schema=unparseable")
+        print(f"  ERROR frontmatter is not valid YAML: {str(e).splitlines()[0]}")
+        return 1
+    if not isinstance(fm, dict):
+        print(f"{memo_path}: schema=unparseable")
+        print("  ERROR frontmatter did not parse to a mapping")
+        return 1
+
+    schema_id = fm.get("correspondence_schema")
+    version = {"lego-pipe-memo/v1": "v1", "lego-pipe-memo/v2": "v2"}.get(str(schema_id))
+    if version is None:
+        errs.append(f"unknown correspondence_schema {schema_id!r} (expected lego-pipe-memo/v1 or /v2)")
+        version = "v1"  # evaluate against operative schema so the report is still useful
+    schema = load_schema(version)
+    check_against_schema(fm, schema, errs)
+
+    argument = str(fm.get("argument", "") or "")
+    if not argument.lstrip().startswith("In which"):
+        (errs if version == "v2" else warns).append('argument does not begin "In which"')
+
+    if version == "v2":
+        for rk in schema.get("x-retired-keys", []):
+            if rk in fm:
+                errs.append(f"retired key present: {rk}")
+        if isinstance(fm.get("to"), str) or (
+            isinstance(fm.get("to"), list) and any(isinstance(e, str) for e in fm["to"])
+        ):
+            errs.append("to: string form is retired in v2 — use {actor, role, provider} mappings")
+        if fm.get("memo_type") in {"handoff", "work_order"} and "parts" not in fm:
+            errs.append(f"parts required for memo_type {fm.get('memo_type')}")
+        if "register_version_read" not in fm:
+            warns.append("register_version_read absent (session-checklist item)")
+
+    # ---- finding-ID discipline ----
+    pattern = schema["x-body-rules"]["finding_id_pattern"]
+    used = set(re.findall(pattern, body))
+    declared_entries = fm.get("findings") or []
+    declared = {f.get("id") for f in declared_entries if isinstance(f, dict)}
+    if version == "v1":
+        if "findings" in fm:
+            undeclared = sorted(u for u in used if u not in declared)
+            if undeclared:
+                errs.append(f"finding ids used but not declared: {undeclared}")
+    else:
+        undeclared = sorted(u for u in used if u not in declared)
+        if undeclared:
+            errs.append(
+                f"finding ids used but not declared: {undeclared}"
+                + ("" if "findings" in fm else " (findings: key required when the body cites reserved-namespace IDs)")
+            )
+        bad_declared = sorted(
+            str(d) for d in declared
+            if not re.fullmatch(r"(R|N|X|S|Q|K|OD|D)-\d{2}", str(d))
+        )
+        if bad_declared:
+            errs.append(f"finding ids outside the reserved namespace: {bad_declared}")
+        sheet_cited = sorted(set(re.findall(r"\b([ACFHJP]-\d{2})\b", body)) - used)
+        f_cited = [s for s in sheet_cited if s.startswith("F-")]
+        if f_cited:
+            errs.append(
+                f"F-nn cited as finding ids in a v2 memo: {f_cited} — F- is a sheet prefix; "
+                "021's F-01…F-08 are frozen aliases for S-15…S-22"
+            )
+
+    # ---- register cross-checks ----
+    memo_id = fm.get("memo")
+    if isinstance(memo_id, str) and memo_id:
+        num = memo_id.split("-")[-1]
+        key = f"{num}-{fm.get('revision')}"
+        if key in regtxt and "superseded" not in regtxt.split(key, 1)[1].split("\n", 1)[0]:
+            warns.append(f"{key} already listed in register (expected on re-run)")
+    else:
+        errs.append("memo identifier missing — register uniqueness not checkable")
+        num = None
+
+    irt = fm.get("in_reply_to")
+    if irt:
+        n = str(irt.get("memo") if isinstance(irt, dict) else irt).split("-")[-1]
+        if n not in regtxt:
+            errs.append(f"in_reply_to {n} not in register")
+    sup = fm.get("supersedes")
+    if sup:
+        parts = str(sup).split("-")
+        target = parts[-2] if len(parts) >= 2 else str(sup)
+        if target not in regtxt:
+            errs.append(f"supersedes {sup} not in register")
+
+    thread = fm.get("thread")
+    tm = re.search(r"Current names:\s*([^\n]+)", regtxt)
+    if thread and tm:
+        names = {t.strip().strip("`.") for t in tm.group(1).split(",")}
+        if thread not in names:
+            warns.append(f"thread {thread!r} not in the register's rule-16 list ({sorted(names)})")
+
+    print(
+        f"{memo_path}: schema={schema_id} memo={memo_id} rev={fm.get('revision')} "
+        f"status={fm.get('status')} keys={len(fm)} findings={len(declared_entries)} ids_used_in_body={len(used)}"
+    )
+    for w in warns:
+        print("  WARN", w)
+    for e in errs:
+        print("  ERROR", e)
+    return 1 if errs else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -99,6 +99,37 @@ class SchemaInterpreter(unittest.TestCase):
             self.schema, errs)
         self.assertEqual([e for e in errs if "supersedes" in e], [])
 
+    def test_required_nested_records_are_not_hollow(self):
+        # Regression: required structured records declared field NAMES but no types,
+        # so an all-null decisions/fixtures/known_defects/sheets entry validated.
+        cases = [
+            ({"decisions": {"ledger": None, "last_id": None, "count": None}}, "decisions"),
+            ({"fixtures": {"set": None, "sha256": None}}, "fixtures"),
+            ({"known_defects": [{"id": None, "rule_id": None, "paths": None,
+                                 "expected_failure": None, "evidence": None,
+                                 "status": None}]}, "known_defects"),
+            ({"sheets": [{"id": None, "title": None}]}, "sheets"),
+        ]
+        for doc, key in cases:
+            errs = []
+            check_against_schema(doc, self.schema, errs)
+            self.assertTrue([e for e in errs if e.startswith(key)],
+                            f"{key} accepted an all-null record")
+
+    def test_malformed_nested_values_are_rejected(self):
+        errs = []
+        check_against_schema({"decisions": {"ledger": "decisions.md", "last_id": "nope",
+                                            "count": "three"}}, self.schema, errs)
+        self.assertTrue(any("last_id" in e for e in errs), errs)
+        self.assertTrue(any("count" in e for e in errs), errs)
+
+    def test_overlay_reconstruction_is_not_hollow(self):
+        errs = []
+        check_against_schema({"reconstruction": {"authored_by": None, "date": None,
+                                                 "sources": None}},
+                             load_schema("design-package-overlay.v1"), errs)
+        self.assertTrue([e for e in errs if e.startswith("reconstruction")], errs)
+
     def test_bool_is_not_an_integer(self):
         errs = []
         check_against_schema({"bytes": True}, load_schema("design-package-import.v1"), errs)
@@ -176,6 +207,50 @@ class PinResolution(unittest.TestCase):
             code, out = run("design_pkg.py", "pin", f, REGISTER)
             self.assertEqual(code, 1, out)
             self.assertIn("no instruments row", out)
+
+    # A pin must resolve to bytes; a cut that never landed must not resolve at all.
+    REJECTED_ROW = ("\n| Instrument | Revision | Cut state | Governing brief | Path | "
+                    "tree_sha256 | Archive digest | Imported at | Pinned by | Status |\n"
+                    "|---|---|---|---|---|---|---|---|---|---|\n"
+                    "| DT-DESIGN | R9 | as-exported | 014-R0 |  |  | none | .27 | — | rejected |\n")
+
+    def _register_with(self, tmp, extra):
+        p = os.path.join(tmp, "REGISTER.md")
+        with open(REGISTER, encoding="utf-8") as f:
+            base = f.read()
+        with open(p, "w", encoding="utf-8") as f:
+            f.write(base + extra)
+        return p
+
+    def test_rejected_cut_does_not_resolve_as_a_pin(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            reg = self._register_with(tmp, self.REJECTED_ROW)
+            f = self._pin_file(tmp, "{design_package: DT-DESIGN, revision: R9, cut_state: as-exported}")
+            code, out = run("design_pkg.py", "pin", f, reg)
+            self.assertEqual(code, 1, out)
+            self.assertIn("landed no bytes", out)
+
+    def test_row_without_a_valid_digest_does_not_resolve(self):
+        row = self.REJECTED_ROW.replace("| rejected |", "| current |")
+        with tempfile.TemporaryDirectory() as tmp:
+            reg = self._register_with(tmp, row)
+            f = self._pin_file(tmp, "{design_package: DT-DESIGN, revision: R9, cut_state: as-exported}")
+            code, out = run("design_pkg.py", "pin", f, reg)
+            self.assertEqual(code, 1, out)
+            self.assertIn("no Path", out)
+
+    def test_superseded_row_with_real_bytes_stays_addressable(self):
+        row = ("\n| Instrument | Revision | Cut state | Governing brief | Path | tree_sha256 "
+               "| Archive digest | Imported at | Pinned by | Status |\n"
+               "|---|---|---|---|---|---|---|---|---|---|\n"
+               f"| H-01 | R0 | as-exported | 007-R2 | `docs/design/H-01-R0` | `{'5d'*32}` "
+               "| none | .27 | — | superseded |\n")
+        with tempfile.TemporaryDirectory() as tmp:
+            reg = self._register_with(tmp, row)
+            f = self._pin_file(tmp, "{design_package: H-01, revision: R0, cut_state: as-exported}")
+            code, out = run("design_pkg.py", "pin", f, reg)
+            self.assertEqual(code, 0, out)
+            self.assertIn("superseded", out)
 
 
 class HistoricalCuts(unittest.TestCase):
@@ -278,6 +353,27 @@ class ImportRecords(unittest.TestCase):
                    tree_sha256=None, bytes=None, file_count=None)
         check_against_schema(doc, load_schema("design-package-import.v1"), errs)
         self.assertEqual(errs, [], "a bounced Friday must still be recordable")
+
+    def test_a_waiver_without_authority_grants_nothing(self):
+        # A record with a defect_id and no authority is not a waiver (PR #13 re-review).
+        with tempfile.TemporaryDirectory() as tmp:
+            rec = self._record(tmp, waivers=[{"defect_id": "D-4", "authorized_by": None,
+                                              "date": None, "memo": None, "disposition": None}])
+            code, out = run("package_preflight.py", R1, REGISTER,
+                            "--overlay", OVERLAY_R1, "--import-record", rec)
+            self.assertEqual(code, 1, out)
+            self.assertIn("grants nothing", out)
+            self.assertIn("authorized_by", out)
+
+    def test_a_valid_waiver_is_accepted(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            rec = self._record(tmp, waivers=[{
+                "defect_id": "D-4", "authorized_by": "James",
+                "date": "2026-09-19", "memo": "HANDOFF-LEGO-PIPE-024-R1",
+                "disposition": "imported with the defect recorded"}])
+            code, out = run("package_preflight.py", R1, REGISTER,
+                            "--overlay", OVERLAY_R1, "--import-record", rec)
+            self.assertEqual(code, 0, out)
 
     def test_imported_record_may_not_carry_null_bytes(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -470,8 +566,30 @@ class DriftGroundTruth(unittest.TestCase):
         self.assertIn("unavailable", out)
 
 
+def corpus_memos():
+    """Every memo in docs/correspondence/, including frozen and expected-to-fail material."""
+    root = os.path.join(REPO, "docs", "correspondence")
+    out = []
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = sorted(d for d in dirnames if d != "attachments")
+        for name in sorted(filenames):
+            if not name.endswith(".md"):
+                continue
+            if name in ("REGISTER.md",) or name.startswith(("ROUTING", "ARCHITECTURE")):
+                continue
+            out.append(os.path.join(dirpath, name))
+    return sorted(out)
+
+
 class MemoCorpusRegression(unittest.TestCase):
-    """The shared interpreter also validates correspondence — it must not regress."""
+    """The shared interpreter also validates correspondence — it must not regress.
+
+    The claim of record is that extracting the interpreter and correcting null handling
+    changed NOTHING for the corpus. That is asserted here as a differential against a
+    frozen copy of the pre-extraction validator (tests/fixtures/), over every memo —
+    frozen and expected-to-fail material included — comparing exit code and output line
+    by line. A claim in a memo is not evidence; this is.
+    """
 
     OPERATIVE = [
         "HANDOFF-LEGO-PIPE-024-R1-design-package-protocol.md",
@@ -482,11 +600,36 @@ class MemoCorpusRegression(unittest.TestCase):
         "HANDOFF-LEGO-PIPE-019-R0-initial-handover-claude-code.md",
     ]
 
+    def test_the_corpus_is_not_empty(self):
+        self.assertGreaterEqual(len(corpus_memos()), 20, "corpus enumeration is broken")
+
     def test_operative_memos_still_pass(self):
         for name in self.OPERATIVE:
             path = os.path.join(REPO, "docs", "correspondence", name)
             code, out = run("memo_preflight.py", path, REGISTER)
             self.assertEqual(code, 0, f"{name}: {out}")
+
+    def test_full_corpus_output_is_identical_to_the_pre_extraction_validator(self):
+        # The frozen fixture resolves tools/.venv and tools/schemas/ relative to itself,
+        # so it is staged inside tools/ for the run and removed afterwards. Both
+        # validators therefore read the same schema files, not a frozen copy of them.
+        fixture = os.path.join(REPO, "tests", "fixtures", "memo_preflight_pre_extraction.py")
+        staged = os.path.join(TOOLS, "_pre_extraction_check.py")
+        shutil.copyfile(fixture, staged)
+        try:
+            differences = []
+            for memo in corpus_memos():
+                before = run("_pre_extraction_check.py", memo, REGISTER)
+                after = run("memo_preflight.py", memo, REGISTER)
+                before_out = before[1].replace("_pre_extraction_check.py", "memo_preflight.py")
+                if (before[0], before_out) != after:
+                    differences.append(
+                        f"{os.path.relpath(memo, REPO)}\n"
+                        f"  before: exit={before[0]}\n{before_out}\n"
+                        f"  after:  exit={after[0]}\n{after[1]}")
+            self.assertEqual(differences, [], "\n\n".join(differences))
+        finally:
+            os.remove(staged)
 
     def test_authoring_kit_schema_mirror_has_not_drifted(self):
         # The kit Claude Design authors against must not diverge from canonical.
