@@ -21,6 +21,9 @@ reference `tools/preflight.py` is frozen — cited by register rows, never edite
 Current work order: `HANDOFF-LEGO-PIPE-019` (founding) executing `LEGO-PIPE-011-R2` (build
 harness, Parts B–D; ADR amendments at the end of Parts C/D win over earlier text) and the design
 package `docs/design/H-01-R1/` (build Tier 1 from it; defects D-1…D-6 are known first-day facts).
+Design packages are governed by the design-package protocol (HANDOFF-LEGO-PIPE-024-R1): identity
+is the cut key `{design_package, revision, cut_state}` in the register's instruments table; read
+`docs/design/README.md` before touching anything under `docs/design/`.
 Nothing beyond the authorised scope in 019 §6 — no production package boundaries before S1/S2/S7
 report, no workflow UI before the schema gate, no Frame topology by scaffolding.
 

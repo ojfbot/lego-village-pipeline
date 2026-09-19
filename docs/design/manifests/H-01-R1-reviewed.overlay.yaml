@@ -1,0 +1,92 @@
+# Reconstruction overlay — H-01 R1 as REVIEWED (the cut the review round covered).
+# The 94-file tree Claude Design exported and ChatGPT/Cowork reviewed, received on the
+# 014-R0 row as "LEGO Village Pipeline 2.zip". Its bytes land at
+# docs/design/H-01-R1-reviewed/ (PR-C); the committed H-01-R1 is this plus the
+# operator-requested addendum and three captures (register .9).
+overlay_schema: design-package-overlay/v1
+design_package: H-01
+revision: R1
+cut_state: as-reviewed
+package_path: docs/design/H-01-R1-reviewed
+tree_sha256: fd6141f6f36d4f8852ceedc1fa5dc7306a12ffb507ced462bab99c1999a83bef
+manifest_origin: importer_reconstructed
+governing_brief: HANDOFF-LEGO-PIPE-014-R0
+answers: []
+supersedes:
+  design_package: H-01
+  revision: R0
+  tree_sha256: 5de8520a267df5becf5e72ee78705ec8a66f574fd39c964332bf58ecf6e9cd48
+maturity: prototype
+tier_coverage: tier-1
+mock_math: true
+path_prefix_strip: "handoff/"
+archive_sha256_claimed: null   # the 014-R0 row records the zip hash in abbreviated form (e898a64a…7789, 9,850,637 bytes); a digest field holds a full digest or null — the citation lives in reconstruction.corroboration
+archive_digest_status: unavailable
+decisions:
+  ledger: decisions.md
+  last_id: DEC-035
+  count: 35
+fixtures: null
+known_defects:
+  - id: D-1
+    rule_id: contrast-contract
+    paths: ["dt/tokens.css"]
+    expected_failure: "node dt/check-contrast.mjs → FAIL … 1 contrast failure(s), exit 1"
+    evidence: HANDOFF-LEGO-PIPE-019-R0 §4.2
+    status: open
+  - id: D-2
+    rule_id: package-self-check
+    paths: ["check-manifest.mjs", "screenshots/STATES.md"]
+    expected_failure: "four state captures in index.json but not STATES.md; ENOENT on .dc.html sources"
+    evidence: HANDOFF-LEGO-PIPE-019-R0 §4.2
+    status: open at this cut (the STATES.md half closed only at the as-committed state, register .9)
+  - id: D-3
+    rule_id: offline-render
+    paths: ["standalone/A-01 Layout canvas.html"]
+    expected_failure: "A-01 loads Three.js from a CDN; offline canvas: 0"
+    evidence: HANDOFF-LEGO-PIPE-019-R0 §4.2
+    status: open
+  - id: D-4
+    rule_id: path-base
+    paths: ["index.json"]
+    expected_failure: "path_base describes directories the archive did not ship; handoff/ prefix on most structured paths"
+    evidence: HANDOFF-LEGO-PIPE-019-R0 §4.2
+    status: open at this cut
+  - id: D-5
+    rule_id: a11y-landmarks
+    paths: ["standalone/"]
+    expected_failure: "landmarks thin outside A-01/C-01/P-01"
+    evidence: HANDOFF-LEGO-PIPE-019-R0 §4.2
+    status: open
+  - id: D-6
+    rule_id: file-fetch
+    paths: ["standalone/H-01 Handoff.html"]
+    expected_failure: "inline file preview fetch()es a file:// URL"
+    evidence: HANDOFF-LEGO-PIPE-019-R0 §4.2
+    status: open
+reconstruction:
+  authored_by: Claude Code
+  date: 2026-09-19
+  sources:
+    - "HANDOFF-LEGO-PIPE-014-R0 register row (design package 'LEGO Village Pipeline 2.zip', sha256 e898a64a…7789 abbreviated, 9,850,637 bytes, received 2026-09-17)"
+    - "HANDOFF-LEGO-PIPE-019-R0 §4.2 (defect ids D-1…D-6)"
+    - "register .9 note (the committed R1 = this cut + addendum + three captures)"
+    - "the unzipped desktop folder 'Lego Village Pipeline Design Handoff Second' (measured)"
+    - "HANDOFF-LEGO-PIPE-024-R1 (this protocol)"
+  corroboration: >
+    The folder was received unzipped; the original archive is gone, so the register-cited
+    zip hash cannot be recomputed and the row records it only in abbreviated form —
+    identity is corroborated, not archive-verified: 94 files / 12,886,907 bytes; the
+    committed H-01-R1 differs from this tree by exactly seven changed files plus the
+    four .9 additions (drift-H-01-R1-reviewed-to-H-01-R1.md, mechanical); the ledger
+    runs to DEC-035 where the committed tree adds DEC-036; and the operator confirmed
+    on 2026-09-19 that the historical decision ledgers were not rewritten.
+evidence:
+  tree_sha256: {source: "tools/design_pkg.py digest over the desktop folder", strength: measured}
+  governing_brief: {source: "014-R0 register row", strength: declared}
+  supersedes: {source: "register lineage + measured digest of the R0 folder", strength: corroborated}
+  maturity: {source: "019-R0 §4 readiness verdict", strength: declared}
+  tier_coverage: {source: "019-R0 §4 readiness verdict", strength: declared}
+  mock_math: {source: "019-R0 §8 / package README", strength: declared}
+  decisions: {source: "parsed decisions.md of the desktop folder", strength: measured}
+  known_defects: {source: "019-R0 §4.2", strength: declared}
