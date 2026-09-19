@@ -389,9 +389,15 @@ small typed payload for each act.
 ### R-09 — Commit identity and content identity
 
 PR #13 was merged by rebase. The original reviewed branch commits are not ancestors of
-`main` and direct commit lookup does not resolve them after branch deletion, although the
-GitHub PR record still exposes their SHAs and tree identities. That means the evidence is
-not wholly gone, but its retrieval now depends on platform retention and reconstruction.
+`main` and are absent from a fresh clone. GitHub currently exposes them through the PR
+commits API, both direct full-SHA commit endpoints, and their tree objects. The evidence is
+therefore not gone, but its retrieval depends on platform retention of unreachable objects
+rather than on canonical repository history.
+
+**R0-c1 correction, 2026-09-19.** The first filed wording said direct commit lookup did not
+resolve the objects. Claude Code challenged that in its PR #16 response. Rechecking with
+the full SHA returned the object from both endpoints; the earlier 404 resulted from sending
+the short SHA to the Git-object endpoint. The narrower claim above is the measured one.
 
 A durable review pin should carry:
 
