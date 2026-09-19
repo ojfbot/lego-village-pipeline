@@ -702,6 +702,47 @@ class MemoCorpusRegression(unittest.TestCase):
         code, out = run("design_pkg.py", "kit-mirror")
         self.assertEqual(code, 0, out)
 
+    def _mirror_fixture(self, tmp, version, mutate_canonical=False):
+        """A minimal repo tree the mirror check can be pointed at."""
+        import json as _json
+        from design_pkg import MIRROR_KEY, MIRROR_NOTE
+        schemas = os.path.join(tmp, "tools", "schemas")
+        kit = os.path.join(tmp, "docs", "design", "authoring-kit")
+        corr = os.path.join(tmp, "docs", "correspondence")
+        for d in (schemas, kit, corr):
+            os.makedirs(d, exist_ok=True)
+        canonical = _json.loads(read_text(
+            os.path.join(REPO, "tools", "schemas", "design-package.v1.schema.json")))
+        mirror = dict(canonical)
+        mirror[MIRROR_KEY] = MIRROR_NOTE.format(version="2026-09-18.01")  # taken earlier
+        if mutate_canonical:
+            canonical = dict(canonical)
+            canonical["x-added-after-the-copy"] = True
+        write_text(os.path.join(schemas, "design-package.v1.schema.json"),
+                   _json.dumps(canonical, indent=2))
+        write_text(os.path.join(kit, "design-package.v1.schema.json"),
+                   _json.dumps(mirror, indent=2))
+        write_text(os.path.join(corr, "REGISTER.md"),
+                   f"**Register version: {version}** — bump this line on every edit.\n")
+        return tmp
+
+    def test_a_register_bump_alone_does_not_fail_the_mirror(self):
+        # Regression: the stamp recorded the register version and was compared for
+        # equality, so every register-only edit — every correspondence PR — turned the
+        # battery red while the schemas were byte-identical.
+        from design_pkg import kit_mirror
+        with tempfile.TemporaryDirectory() as tmp:
+            code, msg = kit_mirror(self._mirror_fixture(tmp, "2026-09-18.99"))
+            self.assertEqual(code, 0, msg)
+
+    def test_canonical_schema_drift_still_fails(self):
+        from design_pkg import kit_mirror
+        with tempfile.TemporaryDirectory() as tmp:
+            code, msg = kit_mirror(self._mirror_fixture(tmp, "2026-09-18.01",
+                                                        mutate_canonical=True))
+            self.assertEqual(code, 1, msg)
+            self.assertIn("DRIFTED", msg)
+
     def test_the_suite_leaks_no_file_handles(self):
         # A claim about hygiene rots exactly like any other claim: checked here so
         # "the warnings are gone" is established rather than eyeballed (PR #13, round 3).
