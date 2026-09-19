@@ -90,10 +90,12 @@
     "import_date": {
       "type": "string",
       "format": "date",
-      "x-note": "A date is a STRING: quote it in YAML (`\"2026-09-25\"`), or the parser yields a date object and this field fails."
+      "x-note": "A date is a STRING: quote it in YAML (`\"2026-09-25\"`), or the parser yields a date object and this field fails.",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
     },
     "imported_by": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "governing_brief": {
       "type": "string",
@@ -112,23 +114,28 @@
         ],
         "properties": {
           "defect_id": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "authorized_by": {
             "type": "string",
-            "x-note": "the AUTHORITY — never the producing agent, never null"
+            "minLength": 1,
+            "x-note": "the AUTHORITY who accepted the defect — never the producing agent, never blank"
           },
           "date": {
             "type": "string",
             "format": "date",
-            "x-note": "A date is a STRING: quote it in YAML (`\"2026-09-25\"`), or the parser yields a date object and this field fails."
+            "x-note": "A date is a STRING: quote it in YAML (`\"2026-09-25\"`), or the parser yields a date object and this field fails.",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
           },
           "memo": {
             "type": "string",
             "pattern": "^(HANDOFF|CORR|REVIEW)-LEGO-PIPE-\\d{3}-R\\d+$"
           },
           "disposition": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1,
+            "x-note": "what was decided — never blank"
           },
           "expiry": {
             "type": [
@@ -137,7 +144,8 @@
               "null"
             ]
           }
-        }
+        },
+        "x-note": "A waiver names AUTHORITY. Every field is non-blank and the cited memo must resolve to an operative register row (checked by package_preflight.py): a record that names no authority grants nothing."
       },
       "x-note": "A waiver NAMES AUTHORITY: who authorized import despite a declared defect, on what date, under which memo, with what disposition/expiry. Never authored by the producing agent alone. The four x-never-designer-waivable classes in design-package/v1 cannot be waived here either."
     },

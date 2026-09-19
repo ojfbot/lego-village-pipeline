@@ -31,12 +31,14 @@ def main():
     errs, warns = [], []
 
     try:
-        raw = open(memo_path, encoding="utf-8").read()
+        with open(memo_path, encoding="utf-8") as fh:
+            raw = fh.read()
     except OSError as e:
         sys.stderr.write(f"ERROR: cannot read memo: {e}\n")
         return 2
     try:
-        regtxt = open(reg_path, encoding="utf-8").read()
+        with open(reg_path, encoding="utf-8") as fh:
+            regtxt = fh.read()
     except OSError as e:
         sys.stderr.write(f"ERROR: cannot read register: {e}\n")
         return 2

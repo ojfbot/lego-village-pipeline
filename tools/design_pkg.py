@@ -19,6 +19,21 @@ import sys
 
 TOOLS_DIR = os.path.dirname(os.path.abspath(__file__))
 
+def read_text(path):
+    with open(path, encoding="utf-8") as f:
+        return f.read()
+
+
+def write_text(path, text):
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(text)
+
+
+def read_json(path):
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
 SHEET_ID_RE = re.compile(r"^[A-Z]{1,2}-\d{2}$")
 MEMO_REF_RE = re.compile(r"^(HANDOFF|CORR|REVIEW)-LEGO-PIPE-\d{3}-R\d+$")
 DEC_ID_RE = re.compile(r"DEC-(\d{3})")
@@ -316,18 +331,21 @@ def resolve_pin(pin, regtxt):
         return ("incomplete",
                 f"{triple} row carries no valid tree_sha256 — a pin resolves to one immutable digest",
                 row)
-    if status and status not in ("current", "superseded"):
+    # Lifecycle is not optional at the resolver boundary: a blank Status is as
+    # unresolvable as an unknown one (PR #13 third review round).
+    if status not in ("current", "superseded"):
         return ("incomplete",
-                f"{triple} row has unrecognised Status {status!r} (expected current or superseded)",
+                f"{triple} row has Status {status or '(blank)'!r}, expected 'current' or 'superseded' — "
+                "a pin resolves only through a row whose lifecycle is stated",
                 row)
-    return "ok", f"{triple} → {path} @ {digest} (Status: {status or 'unstated'})", row
+    return "ok", f"{triple} → {path} @ {digest} (Status: {status})", row
 
 
 def frontmatter_pins(path):
     """Every design_pin found in a markdown file's YAML frontmatter (or a plain YAML file)."""
     from schema_lint import require_yaml
     yaml = require_yaml()
-    raw = open(path, encoding="utf-8").read()
+    raw = read_text(path)
     m = re.match(r"^---\n(.*?)\n---\s*\n", raw, re.S)
     text = m.group(1) if m else raw
     try:
@@ -375,7 +393,7 @@ def build_inventory(design_dir):
     for name in sorted(os.listdir(man_dir)) if os.path.isdir(man_dir) else []:
         if not (name.endswith(".overlay.yaml") or name.endswith(".import.yaml")):
             continue
-        doc = yaml.safe_load(open(os.path.join(man_dir, name), encoding="utf-8"))
+        doc = yaml.safe_load(read_text(os.path.join(man_dir, name)))
         if not isinstance(doc, dict):
             continue
         kind = "overlay" if name.endswith(".overlay.yaml") else "import record"
@@ -403,14 +421,14 @@ def build_inventory(design_dir):
 
 def write_inventory(design_dir):
     readme = os.path.join(design_dir, "README.md")
-    text = open(readme, encoding="utf-8").read()
+    text = read_text(readme)
     if INV_BEGIN not in text or INV_END not in text:
         sys.stderr.write("ERROR: inventory markers not found in README.md\n")
         return 1
     head, rest = text.split(INV_BEGIN, 1)
     _, tail = rest.split(INV_END, 1)
     table = build_inventory(design_dir)
-    open(readme, "w", encoding="utf-8").write(head + INV_BEGIN + "\n" + table + "\n" + INV_END + tail)
+    write_text(readme, head + INV_BEGIN + "\n" + table + "\n" + INV_END + tail)
     print(f"inventory regenerated in {readme}")
     return 0
 
@@ -425,7 +443,7 @@ MIRROR_NOTE = ("COPY for the Claude Design authoring kit, stamped at register {v
 
 def _register_version(repo_root):
     reg = os.path.join(repo_root, "docs", "correspondence", "REGISTER.md")
-    m = re.search(r"Register version:\s*([0-9.\-]+)", open(reg, encoding="utf-8").read())
+    m = re.search(r"Register version:\s*([0-9.\-]+)", read_text(reg))
     return m.group(1) if m else "unknown"
 
 
@@ -487,7 +505,7 @@ def main():
     if len(sys.argv) >= 4 and sys.argv[1] == "pin":
         target, reg_path = sys.argv[2], sys.argv[3]
         try:
-            regtxt = open(reg_path, encoding="utf-8").read()
+            regtxt = read_text(reg_path)
         except OSError as e:
             sys.stderr.write(f"ERROR: cannot read register: {e}\n")
             return 2

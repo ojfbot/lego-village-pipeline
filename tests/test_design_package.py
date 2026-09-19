@@ -45,6 +45,16 @@ def run(script, *args):
     return p.returncode, p.stdout + p.stderr
 
 
+def read_text(path):
+    with open(path, encoding="utf-8") as f:
+        return f.read()
+
+
+def write_text(path, text):
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(text)
+
+
 def load_yaml(path):
     with open(path, encoding="utf-8") as f:
         return yaml.safe_load(f)
@@ -135,6 +145,28 @@ class SchemaInterpreter(unittest.TestCase):
         check_against_schema({"bytes": True}, load_schema("design-package-import.v1"), errs)
         self.assertTrue(any("bytes" in e for e in errs), "a flag is not a byte count")
 
+    def test_dynamic_evidence_map_values_are_enforced(self):
+        # Regression: the evidence map's value shape was an x- annotation the shipping
+        # interpreter never read, so outcome 10 was prose.
+        errs = []
+        check_against_schema({"evidence": {"tree_sha256": {"source": None, "strength": "banana"}}},
+                             load_schema("design-package-overlay.v1"), errs)
+        self.assertTrue(any("evidence.tree_sha256.source" in e for e in errs), errs)
+        self.assertTrue(any("evidence.tree_sha256.strength" in e for e in errs), errs)
+
+    def test_valid_evidence_entry_passes(self):
+        errs = []
+        check_against_schema(
+            {"evidence": {"tree_sha256": {"source": "tools/design_pkg.py digest",
+                                          "strength": "measured"}}},
+            load_schema("design-package-overlay.v1"), errs)
+        self.assertEqual([e for e in errs if e.startswith("evidence")], [])
+
+    def test_blank_strings_are_not_values(self):
+        errs = []
+        check_against_schema({"design_package": "   "}, self.schema, errs)
+        self.assertTrue(any("design_package" in e for e in errs), errs)
+
 
 class TreeDigest(unittest.TestCase):
     """The digest is normative or it is nothing: two importers must not disagree."""
@@ -177,7 +209,7 @@ class PinResolution(unittest.TestCase):
 
     def _pin_file(self, tmp, pin_yaml):
         p = os.path.join(tmp, "booklet.md")
-        open(p, "w", encoding="utf-8").write(f"---\ndesign_pin: {pin_yaml}\n---\n\nbody\n")
+        write_text(p, f"---\ndesign_pin: {pin_yaml}\n---\n\nbody\n")
         return p
 
     def test_qualified_pin_resolves(self):
@@ -216,10 +248,7 @@ class PinResolution(unittest.TestCase):
 
     def _register_with(self, tmp, extra):
         p = os.path.join(tmp, "REGISTER.md")
-        with open(REGISTER, encoding="utf-8") as f:
-            base = f.read()
-        with open(p, "w", encoding="utf-8") as f:
-            f.write(base + extra)
+        write_text(p, read_text(REGISTER) + extra)
         return p
 
     def test_rejected_cut_does_not_resolve_as_a_pin(self):
@@ -238,6 +267,18 @@ class PinResolution(unittest.TestCase):
             code, out = run("design_pkg.py", "pin", f, reg)
             self.assertEqual(code, 1, out)
             self.assertIn("no Path", out)
+
+    def test_row_with_blank_status_does_not_resolve(self):
+        # Regression: lifecycle was optional at the resolver boundary when Status was
+        # blank — only an unrecognised non-empty value failed.
+        row = self.REJECTED_ROW.replace("|  |  | none |", f"| `docs/design/DT-DESIGN-R9` | `{'ab'*32}` | none |") \
+                               .replace("| rejected |", "|  |")
+        with tempfile.TemporaryDirectory() as tmp:
+            reg = self._register_with(tmp, row)
+            f = self._pin_file(tmp, "{design_package: DT-DESIGN, revision: R9, cut_state: as-exported}")
+            code, out = run("design_pkg.py", "pin", f, reg)
+            self.assertEqual(code, 1, out)
+            self.assertIn("expected 'current' or 'superseded'", out)
 
     def test_superseded_row_with_real_bytes_stays_addressable(self):
         row = ("\n| Instrument | Revision | Cut state | Governing brief | Path | tree_sha256 "
@@ -365,6 +406,31 @@ class ImportRecords(unittest.TestCase):
             self.assertIn("grants nothing", out)
             self.assertIn("authorized_by", out)
 
+    def test_a_waiver_naming_blank_authority_grants_nothing(self):
+        # Regression: schema-valid was not the same as meaningful — empty strings and a
+        # non-date date passed, and the preflight honoured the record.
+        with tempfile.TemporaryDirectory() as tmp:
+            rec = self._record(tmp, waivers=[{
+                "defect_id": "D-4", "authorized_by": "", "date": "not-a-date",
+                "memo": "HANDOFF-LEGO-PIPE-024-R1", "disposition": ""}])
+            code, out = run("package_preflight.py", R1, REGISTER,
+                            "--overlay", OVERLAY_R1, "--import-record", rec)
+            self.assertEqual(code, 1, out)
+            self.assertIn("grants nothing", out)
+            self.assertIn("authorized_by", out)
+            self.assertIn("not a YYYY-MM-DD date", out)
+
+    def test_a_waiver_citing_an_unregistered_memo_grants_nothing(self):
+        # The authority a waiver cites must itself be real.
+        with tempfile.TemporaryDirectory() as tmp:
+            rec = self._record(tmp, waivers=[{
+                "defect_id": "D-4", "authorized_by": "James", "date": "2026-09-19",
+                "memo": "HANDOFF-LEGO-PIPE-999-R0", "disposition": "imported"}])
+            code, out = run("package_preflight.py", R1, REGISTER,
+                            "--overlay", OVERLAY_R1, "--import-record", rec)
+            self.assertEqual(code, 1, out)
+            self.assertIn("grants nothing", out)
+
     def test_a_valid_waiver_is_accepted(self):
         with tempfile.TemporaryDirectory() as tmp:
             rec = self._record(tmp, waivers=[{
@@ -394,8 +460,7 @@ class DesignerCut(unittest.TestCase):
         shutil.copytree(R1, cls.pkg, symlinks=False)
         import json
         idx_path = os.path.join(cls.pkg, "index.json")
-        with open(idx_path, encoding="utf-8") as f:
-            idx = json.load(f)
+        idx = json.loads(read_text(idx_path))
 
         def strip(x):
             return x[len("handoff/"):] if isinstance(x, str) and x.startswith("handoff/") else x
@@ -413,16 +478,15 @@ class DesignerCut(unittest.TestCase):
             st["file"] = strip(st["file"])
         if (idx.get("review_round") or {}).get("brief"):
             idx["review_round"]["brief"] = strip(idx["review_round"]["brief"])
-        with open(idx_path, "w", encoding="utf-8") as f:
-            json.dump(idx, f, indent=2)
+        write_text(idx_path, json.dumps(idx, indent=2))
 
         # A real designer cut PREPENDS its new decision: the ledger is newest-first.
         led = os.path.join(cls.pkg, "decisions.md")
-        text = open(led, encoding="utf-8").read()
+        text = read_text(led)
         row = ("| DEC-037 | 2026-09-25 09:00 | **index.json is package-internal navigation; "
                "DEC-028's single-source-of-status claim is retired.** | index.json | accepted "
                "| R2 | DEC-028 (authority claim) |\n")
-        open(led, "w", encoding="utf-8").write(text.replace("| DEC-036 |", row + "| DEC-036 |", 1))
+        write_text(led, text.replace("| DEC-036 |", row + "| DEC-036 |", 1))
         cls.ledger_original = text
 
         cls.manifest = {
@@ -452,7 +516,7 @@ class DesignerCut(unittest.TestCase):
 
     def tearDown(self):
         self._write_manifest()
-        open(os.path.join(self.pkg, "decisions.md"), "w", encoding="utf-8").write(
+        write_text(os.path.join(self.pkg, "decisions.md"),
             self.ledger_original.replace(
                 "| DEC-036 |",
                 "| DEC-037 | 2026-09-25 09:00 | **index.json is package-internal navigation; "
@@ -485,31 +549,31 @@ class DesignerCut(unittest.TestCase):
     def test_package_root_escape_is_an_error(self):
         import json
         idx_path = os.path.join(self.pkg, "index.json")
-        original = open(idx_path, encoding="utf-8").read()
+        original = read_text(idx_path)
         try:
             idx = json.loads(original)
             idx["tokens"] = "../../../etc/hosts"
-            open(idx_path, "w", encoding="utf-8").write(json.dumps(idx))
+            write_text(idx_path, json.dumps(idx))
             code, out = run("package_preflight.py", self.pkg, REGISTER)
             self.assertEqual(code, 1, out)
             self.assertIn("escapes the package root", out)
         finally:
-            open(idx_path, "w", encoding="utf-8").write(original)
+            write_text(idx_path, original)
 
     def test_editing_a_prior_decision_is_a_breach(self):
         led = os.path.join(self.pkg, "decisions.md")
-        text = open(led, encoding="utf-8").read()
-        open(led, "w", encoding="utf-8").write(text.replace("| DEC-030 | 2026-09-17 17:55 | **A-01",
-                                                            "| DEC-030 | 2026-09-17 17:55 | **EDITED A-01"))
+        text = read_text(led)
+        write_text(led, text.replace("| DEC-030 | 2026-09-17 17:55 | **A-01",
+                                     "| DEC-030 | 2026-09-17 17:55 | **EDITED A-01"))
         code, out = run("package_preflight.py", self.pkg, REGISTER, "--previous", R1)
         self.assertEqual(code, 1, out)
         self.assertIn("DEC-030 changed beyond", out)
 
     def test_deleting_a_prior_decision_is_a_breach(self):
         led = os.path.join(self.pkg, "decisions.md")
-        kept = [ln for ln in open(led, encoding="utf-8").read().splitlines(True)
+        kept = [ln for ln in read_text(led).splitlines(True)
                 if not ln.startswith("| DEC-033 ")]
-        open(led, "w", encoding="utf-8").write("".join(kept))
+        write_text(led, "".join(kept))
         code, out = run("package_preflight.py", self.pkg, REGISTER, "--previous", R1)
         self.assertEqual(code, 1, out)
         self.assertIn("DEC-033 removed", out)
@@ -517,12 +581,12 @@ class DesignerCut(unittest.TestCase):
     def test_permitted_status_transition_is_accepted(self):
         # A prior row MAY gain a supersession reference naming a new, higher id.
         led = os.path.join(self.pkg, "decisions.md")
-        text = open(led, encoding="utf-8").read()
+        text = read_text(led)
         old = "| DEC-028 | 2026-09-17 16:20 |"
         line = next(ln for ln in text.splitlines() if ln.startswith(old))
         cells = line.split("|")
         cells[5] = " superseded by DEC-037 "
-        open(led, "w", encoding="utf-8").write(text.replace(line, "|".join(cells)))
+        write_text(led, text.replace(line, "|".join(cells)))
         code, out = run("package_preflight.py", self.pkg, REGISTER, "--previous", R1)
         self.assertEqual(code, 0, out)
         self.assertIn("permitted transition", out)
@@ -546,9 +610,9 @@ class DriftGroundTruth(unittest.TestCase):
             new = os.path.join(tmp, "H-01-R1-edited")
             shutil.copytree(R1, new, symlinks=False)
             led = os.path.join(new, "decisions.md")
-            kept = [ln for ln in open(led, encoding="utf-8").read().splitlines(True)
+            kept = [ln for ln in read_text(led).splitlines(True)
                     if not ln.startswith("| DEC-033 ")]
-            open(led, "w", encoding="utf-8").write("".join(kept))
+            write_text(led, "".join(kept))
             code, out = run("package_drift.py", R1, new)
             self.assertEqual(code, 1, out)
             self.assertIn("BREACH", out)
@@ -637,6 +701,16 @@ class MemoCorpusRegression(unittest.TestCase):
         code, out = run("design_pkg.py", "kit-mirror")
         self.assertEqual(code, 0, out)
 
+    def test_the_suite_leaks_no_file_handles(self):
+        # A claim about hygiene rots exactly like any other claim: asserted here so
+        # "the warnings are gone" is checked rather than eyeballed (PR #13, round 3).
+        p = subprocess.run([sys.executable, "-W", "error::ResourceWarning",
+                            os.path.abspath(__file__)],
+                           capture_output=True, text=True, cwd=REPO,
+                           env=dict(os.environ, LVP_NO_RECURSE="1"))
+        self.assertNotIn("ResourceWarning", p.stdout + p.stderr,
+                         "the suite leaks file handles")
+
     def test_frozen_v1_validator_is_untouched(self):
         p = subprocess.run(["git", "diff", "--quiet", "origin/main", "--", "tools/preflight.py"],
                            cwd=REPO, capture_output=True)
@@ -644,4 +718,13 @@ class MemoCorpusRegression(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    if os.environ.get("LVP_NO_RECURSE"):
+        # The handle-leak check re-runs this file under -W error::ResourceWarning; skip
+        # that one case in the child so it cannot recurse.
+        loader = unittest.TestLoader()
+        suite = unittest.TestSuite(
+            t for t in loader.discover(os.path.dirname(os.path.abspath(__file__)),
+                                       pattern=os.path.basename(__file__))
+            if "leaks_no_file_handles" not in str(t))
+        sys.exit(0 if unittest.TextTestRunner(verbosity=0).run(suite).wasSuccessful() else 1)
     unittest.main(verbosity=2)
