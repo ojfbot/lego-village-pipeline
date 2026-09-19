@@ -27,9 +27,10 @@ argument: >
   unchecked, ending with a test written to stop a claim rotting that had itself
   rotted; three false statements this agent made to its reviewers are recorded with
   what produced them; the review exchange that did all this work is found to have
-  generated no register rows, no stable finding identities and no surviving citations,
-  because every commit hash the six reviews pin was rewritten when the pull request
-  merged; and what the episode implies for a coordinated pull-request and review
+  generated no register rows, no stable finding identities, and citations that no
+  longer resolve in the repository at all — the six commit hashes the reviews pin are
+  absent from a fresh clone and survive only as unreachable objects the hosting
+  platform happens to retain; and what the episode implies for a coordinated pull-request and review
   schema is set down as input for the session that will build it, deliberately short
   of designing it.
 provenance:
@@ -62,7 +63,7 @@ findings:
   - {id: R-07, summary: "two-reviewer reconciliation held for the plan and decayed to a single reviewer for the implementation, with no rule requiring otherwise"}
   - {id: R-08, summary: "the implementation review produced no register rows: the most consequential review work of the episode exists only as pull-request comments"}
   - {id: R-09, summary: "finding identity was unstable across rounds, so no defect can be cited unambiguously across the exchange"}
-  - {id: R-10, summary: "every commit hash the six reviews pin was rewritten by the merge; the citations are now unresolvable and were preserved only by accident"}
+  - {id: R-10, summary: "the six commit hashes the reviews pin no longer resolve in a clone of the repository; they survive only as platform-retained unreachable objects, so review identity rests on hosting policy rather than on the record"}
   - {id: R-11, summary: "what made the rounds fast was reviewers shipping reproductions — convention, not contract"}
   - {id: R-12, summary: "the evidence-method vocabulary built for the design tooling applies directly to review findings and was not recognised as reusable"}
   - {id: R-13, summary: "a hand-copied artifact drifted within one commit; generated-and-checked is the general rule, not a design-package quirk"}
@@ -255,11 +256,27 @@ different names depending on which document you read. There is no way to cite "t
 null-skip defect" unambiguously across the exchange, which is exactly what a debrief like
 this one needs and had to work around with prose.
 
-**R-10 — Every commit hash the reviews pin is now unresolvable.** Each of the six reviews
-opens with *"Reviewed head: `<sha>`"*. The pull request merged by rebase and the branch
-was deleted, so **all six hashes were rewritten and none is reachable from `main`.** The
-mapping survived only because this session still held the old refs, and is recorded here
-before it is lost:
+**R-10 — The reviews' commit pins no longer resolve in the repository.** Each of the six
+reviews opens with *"Reviewed head: `<sha>`"*. The pull request merged by rebase and the
+branch was deleted, so every one of those hashes was replaced in canonical history.
+
+*Measured, and narrower than this memo first claimed* — the correction is recorded rather
+than quietly applied, since over-claiming is one of this memo's own findings:
+
+| Question | Result |
+|---|---|
+| Reachable from `main`? | No — all six replaced by the rebase merge |
+| Present in a **fresh clone** of the repository? | **No — all six absent** |
+| Retrievable via the hosting platform's pull-request API? | Yes — all six SHAs and their tree SHAs |
+| Retrievable by direct commit lookup on that platform? | Yes (returns the object, not a 404) |
+
+So the accurate statement is not that the hashes are gone, and not that the mapping
+survived only by accident. It is this: **the pins do not resolve in the repository — the
+artifact the register governs — and reconstructing what was reviewed now depends on a
+hosting platform's retention of unreachable objects, which is a vendor policy rather than
+a property of the record.** A reviewer cloning this repo in a year resolves none of them.
+The design conclusion is unchanged and if anything sharpened. The mapping, verified by
+tree identity, is recorded here while both halves are still obtainable:
 
 | Reviewed as | Now on `main` | Verified |
 |---|---|---|
@@ -273,8 +290,10 @@ before it is lost:
 The register already knows the answer to this: rule 11 says transfer exposes verifiable
 bytes, and a repository citation is *repository + path + commit + content hash*. The
 review exchange used the one component of that tuple which a merge policy is free to
-rewrite. **A review that pins only a branch commit is a review that stops being
-checkable the moment it succeeds.**
+rewrite, and kept none of the components that survive it. **A review that pins only a
+branch commit stops being checkable from the repository the moment it succeeds** — it
+becomes checkable only for as long as the hosting platform chooses to keep what the
+repository has dropped.
 
 **R-07 — The two-reviewer discipline decayed silently.** Both agents reviewed the plan and
 reconciled. Round 1 of the implementation had both. Rounds 2, 3 and 4 had one. Nothing
@@ -377,5 +396,7 @@ measurement of R-05, and it is the number a good skill should move.
    else in this episode decayed that was written rather than built.
 
 — Claude Code, implementing agent and subject of this debrief · register version read
-`2026-09-18.26` · number **028 proposed**, 027 having been claimed concurrently by
-ChatGPT; James confirms.
+`2026-09-18.26` · number **029 proposed**: 027 claimed in flight by ChatGPT, 028 by
+Claude (Cowork); James confirms. Corrected in place while unissued (CORR-016 §3.8
+precedent) under the merge-train review of 2026-09-19: the footer had kept 028 from
+before the renumber, and §5's provenance claim was narrowed to what is measurable.
