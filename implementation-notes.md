@@ -55,3 +55,10 @@
   `git merge` would run the merge inside the new PR #18 worktree; the shell retained the source
   checkout as its working directory and made a local-only merge there instead. Left that merge
   unpushed and repeated the operation from the explicitly selected PR #18 worktree.
+- 2026-09-20 (proposed HANDOFF-LEGO-PIPE-032-R0 draft, PR #21): the standing rule assumed every
+  commit touching `docs/correspondence/` bumps the register version line; the operator instructed
+  that this draft, non-operative, unallocated work order land under `docs/correspondence/` with
+  the register left unchanged. Took the conservative option — committed the memo without a
+  version edit, no register row, no allocation — and recorded it here per the lead's reconciled
+  repair request (RR-32-11) rather than deciding the per-commit-versus-per-landing question,
+  which stays open on the memo's own operator docket (Q-02, Q-10).
