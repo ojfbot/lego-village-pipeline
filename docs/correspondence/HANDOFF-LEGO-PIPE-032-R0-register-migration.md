@@ -71,7 +71,7 @@ findings:
   - {id: N-05, summary: "Neither memo states an abort path; the plan makes immutability apply to version records on main only, so an abandoned or stale branch finalization leaves nothing to repair and a post-merge error is repaired forward by a new version"}
   - {id: N-06, summary: "The standing per-commit bump rule and the proposed per-landing unit conflict today; this PR lands a memo under docs/correspondence/ with no register edit by instruction, recorded as a deviation and put on the docket"}
   - {id: N-07, summary: "Slice 1 does not remove textual contention on the correspondence-table tail and next-free row; the rehearsal measures that conflict rather than claiming it gone"}
-  - {id: N-08, summary: "PR #19, the landing of CORR-027, appears nowhere in the register; the allocation ledger's seed must be checked against the merged-PR list"}
+  - {id: N-08, summary: "PR #19, the landing of CORR-027, appears nowhere in the register; the allocation ledger's seed derives landed status from the register's own rows offline (canonical), with an optional one-time human cross-check against the merged-PR list at authoring time (RR-32-R3-09) — never a lint or acceptance dependency on that list"}
   - {id: Q-01, summary: "Allocation of 032–035: confirm 032 for this work order; decide whether 033/034 are the two independent reviews as registered memos and 035 the as-built report, or reviews stay platform-native"}
   - {id: Q-02, summary: "Unit of versioning: one register version per accepted landing transaction (recommended) or per commit touching docs/correspondence/ (current text)"}
   - {id: Q-03, summary: "Assignment: version assigned only during finalization against protected main (recommended) or claimed on the branch and renumbered"}
@@ -222,7 +222,7 @@ repairs the source record.
 
 | Item | Claim | This author's check | Disposition |
 |---|---|---|---|
-| CW-33-P01 | the naive seam regex splits the `.24` note at a quoted label | reproduced independently before reading the issue: one rejected candidate at char offset 26,072 (N-02) | **reproduced**; answered by the committed seam manifest + mutation test (G-02, AO-03) |
+| CW-33-P01 | the naive seam regex splits the `.24` note at a quoted label | reproduced independently before reading the issue: one rejected candidate at **byte** offset 26,240 (RR-32-R3-08, closing CW-32-R3-08: restated in bytes, matching §2's single unambiguous unit; N-02) | **reproduced**; answered by the committed seam manifest + mutation test (G-02, AO-03) |
 | CW-33-P02 | "25 notes" was a version count; at `cab89cd` there were 19 slices | reproduced from `git show cab89cd:…`: 27,337 bytes, 19 slices, 25 versions, one rejected `.22` | **reproduced**; the manifest states `version_count` and `slice_count` separately and RL-05 asserts both (§6 G-03a) |
 | CW-33-P03 | `.2`–`.7` have no note of their own | reproduced: seams stop at `.8`; the 561-byte `Superseded versions:` enumeration is inside the `.8` slice (N-01) | **reproduced**; representation is **Q-11** (operator), not decided here |
 | CW-33-P04 | the baseline has moved; digest must be taken at the real base | reproduced: `.26`→`.31`, 53,770→72,260 bytes; this memo's own figures will be stale at the base | **reproduced**; RL-16 baseline check and freeze-first ordering (§8 steps 2–3) |
@@ -230,7 +230,7 @@ repairs the source record.
 | CW-33-P06 | "verbatim" is verbatim as of the base; in-place repairs exist | reproduced: the `.14` note says it "corrects a duplicated phrase in the `.11` note"; the `.22` note says it "repairs doubled version labels … in the `.15`–`.19` notes" | **reproduced**; `verbatim_as_of` + `known_in_place_repairs[]` in the manifest |
 | CW-33-P07 | merge-method enforcement not steward-verifiable (unauthenticated 401) | reproduced the *gap* with an authenticated read: all three merge methods enabled, no required checks (N-03) | **reproduced**; G-11 downgraded to an operator action + CI re-check; the read is quoted here so both stewards can cite it |
 | CW-33-P08 | CW-18-06/07 are admissibility conditions and unanswered | agreed; answered in §5 (Git-derived facts; author runs, other steward reruns to empty diff) with the actor choice left to **Q-08** | **addressed in plan**; reviewers judge sufficiency |
-| CW-33-P09 | PR #19 (027's landing) is absent from the register | reproduced: zero occurrences of `#19` in `REGISTER.md` at `582fb63` (N-08) | **reproduced**; AO-06 cross-checks the ledger seed against the merged-PR list |
+| CW-33-P09 | PR #19 (027's landing) is absent from the register | reproduced: zero occurrences of `#19` in `REGISTER.md` at `582fb63` (N-08) | **reproduced**; the canonical model never needed the PR number in the first place (RR-32-R2-03/RR-32-R3-09) — AO-06's offline case is seed completeness against the register's own rows, and the merged-PR-list cross-check is a separate, optional, one-time, non-gating human step at authoring time, never a lint or acceptance dependency |
 
 Two of Cowork's concentration-checklist items are also taken: the **abort path** (§5, N-05) and
 the **table-tail rehearsal case** (§9 step 4, N-07). Nothing else from issue #20 is adopted
@@ -250,7 +250,9 @@ docs/correspondence/
     KNOWN-ANOMALIES.yaml              # frozen historical irregularities, each with citation + permitted check failure
     MIGRATION-<base>.yaml             # the slice manifest: base commit, file/line sha256, byte slices, seams, known repairs
     versions/
-      2026-09-17.2.md … 2026-09-18.31.md   # migrated: one immutable record per version; .2–.7 cite the shared tail slice
+      2026-09-17.2.md … 2026-09-18.31.md   # migrated: one immutable record per version; .2–.7 resolve to a
+                                            #   byte range inside .8's slice via resolutions[], never a slice
+                                            #   of their own (RR-32-01/RR-32-R3-05 — not "the shared tail slice")
       2026-09-18.32.md                     # created by finalization, never by hand
     pending/
       <memo-or-purpose>.md            # branch-side note drafts, uniquely named; consumed by finalization
@@ -258,6 +260,10 @@ tools/
   register_lint.py                    # structural checker; rule ids RL-nn; ERROR lines, exit 0/1/2
   register_finalize.py                # deterministic; --check reruns and diffs; refuses stale base
   register_migrate.py                 # runs once against the base bytes; rerunnable from `git show <base>:…`
+  schemas/
+    register-version.v1.schema.json   # per-kind field contract (§4 item 8); RL-12 validates every
+                                       #   versions/*.md record against it; RR-32-R3-05 adds it here,
+                                       #   the last of the six inventories that still omitted it
 tests/
   test_register.py                    # battery incl. mutation cases, two-branch rehearsal in a temp repo
 .github/workflows/
@@ -284,6 +290,7 @@ by accident"):
 | Landing commit, second parent, landing time | **Git** (first-parent merge on `main` introducing the version file) | never stored (N-04) |
 | Known irregularity and why it is tolerated | `KNOWN-ANOMALIES.yaml` | lint reports it as baseline, refuses new instances |
 | Source bytes of migrated notes | `MIGRATION-<base>.yaml` + Git history at the base | version records cite slice ids |
+| Merge-method enforcement state | `REGISTER.md` Rule 18 (or its numbered successor) — present, absent, or superseded | `register-lint.yml`'s settings-read step reads it (RL-18/AO-14), never writes it; ratchet enforced by RL-18, not by this table (RR-32-R3-02) |
 
 ## §4 The atomic migration slice — artifacts
 
@@ -323,7 +330,7 @@ authoritative until that merge; if the PR is abandoned nothing has changed on `m
 
    | `kind` | Produced by | Requires | Forbids | When it exists |
    |---|---|---|---|---|
-   | `migrated` | `register_migrate.py`, once, against the base bytes | exactly one of `slice: <id>` or `resolution: {in_slice, range}` (RR-32-01) | `finalized_from_main` | one record per version `.2`–`.31` at the plan base — the historical backfill, written only by the migration run |
+   | `migrated` | `register_migrate.py`, once, against the base bytes | exactly one of `slice: <id>` or `resolution: {in_slice, range}` (RR-32-01); **when `resolution` is present, also `shared_slice: true` and an anomaly id** (RR-32-R3-03, closing the gap CW-32-R3-03 found between this table, the schema and G-03b: a resolution-bearing record without these two fields could not satisfy G-03b/RL-07, and this table's own "never more" rule forbade adding them anywhere else) | `finalized_from_main`; `shared_slice` and the anomaly id are themselves **forbidden** on a `slice`-bearing `migrated` record — they mean "this version has no raw bytes of its own," which a `slice`-bearing record's existence already contradicts | one record per version `.2`–`.31` at the plan base — the historical backfill, written only by the migration run. **Q-11 is unaffected and stays open** (§12): if the operator instead narrows the resolver contract to `.8`+, no version ever takes the `resolution` branch, and `shared_slice`/the anomaly id simply never appear in the corpus — this row states the shape a resolution-bearing record must have *if any exist*, not that any must |
    | `finalized` | `register_finalize.py`, on every ordinary landing (§5) | `finalized_from_main` (the `origin/main` sha the run verified against, RR-32-R2-02), `affected_memos[]`, `allocations_consumed[]` | both `slice` and `resolution` | every landing after the migration, including the migration PR's own version **if Q-12 chooses self-hosting** — in that case it is a `finalized` record like any other, produced by a real finalizer run as the migration PR's last commit, and no third kind is needed for it |
    | `bootstrap` | `register_migrate.py`, **only** if Q-12 chooses the manual-assignment alternative | `manifest_ref: <MIGRATION-<base>.yaml path>` | `finalized_from_main`, `slice`, `resolution` | at most one record, only when the migration PR's own version is hand-assigned by the migration script rather than by a finalizer run — it names no byte range (it is not a slice of the old line) and no `origin/main` verification (it was not produced by the finalizer's algorithm) |
 
@@ -365,11 +372,13 @@ authoritative until that merge; if the PR is abandoned nothing has changed on `m
    the `.6`/`.7` summary makes ambiguous. Each entry: `id`, `affects`, `observed`, `cited_by`,
    `permits: RL-nn`, `frozen: true`. Collisions (009, 010) are **not** anomalies — they are rule-4
    facts, and RL-02 reads the ledger's discriminators instead.
-6. **`tools/register_lint.py`** — §7. Runs offline on a checkout; Git-derived checks run when
-   `.git` is present and are skipped with a WARN naming them when it is not (RL-01…RL-09,
-   RL-11…RL-15 are offline; RL-10, RL-16, and the ledger's PR derivation need `.git` and
-   `origin/main` — RR-32-08 makes this split explicit rather than one undifferentiated "needs
-   Git" note).
+6. **`tools/register_lint.py`** — §7, which is this item's single source of truth for which
+   rules are offline and which need `.git`/`origin/main` (RR-32-R3-04, closing CW-32-R3-04: this
+   item previously kept its own, separately-drifting copy of the tier split — including a
+   "ledger's PR derivation" check that RR-32-R2-03 had already removed entirely and a missing
+   RL-17/RL-18 — so this item now defers to §7 rather than restating it, and there is exactly one
+   place in the memo that enumerates the tiers). Skipped Git-tier checks WARN by name; nothing is
+   silently treated as passed.
 7. **`tools/register_finalize.py`** — §5.
 8. **`tools/schemas/register-version.v1.schema.json`** — the frontmatter schema RL-12 validates
    against, in the same idiom as `tools/schemas/lego-pipe-memo.v2.schema.json` and the
@@ -378,17 +387,25 @@ authoritative until that merge; if the PR is abandoned nothing has changed on `m
    (RR-32-R2-01, closing the contradiction TR-32-R2-01 found — the finalizer's own output must
    validate against this schema's `finalized` branch, so the branch is written to match §5's
    actual output, not the other way round):
-   - `kind: migrated` → required: exactly one of `slice`/`resolution`; forbidden: `finalized_from_main`;
-   - `kind: finalized` → required: `finalized_from_main`; forbidden: `slice`, `resolution`;
-   - `kind: bootstrap` → required: `manifest_ref`; forbidden: `finalized_from_main`, `slice`, `resolution`.
+   - `kind: migrated` → required: exactly one of `slice`/`resolution`; **if `resolution` is
+     present, also required: `shared_slice: true` and an anomaly id; if `slice` is present,
+     `shared_slice` and the anomaly-id field are themselves forbidden** (RR-32-R3-03); forbidden
+     in every case: `finalized_from_main`;
+   - `kind: finalized` → required: `finalized_from_main`; forbidden: `slice`, `resolution`,
+     `shared_slice`, the anomaly-id field;
+   - `kind: bootstrap` → required: `manifest_ref`; forbidden: `finalized_from_main`, `slice`,
+     `resolution`, `shared_slice`, the anomaly-id field.
 
    No fourth shape is valid; a record with none of the three branches' required keys, or with a
    forbidden key present, fails schema validation. Owner: Claude Code, in the tool's own PR.
    Validated by the existing `schema_lint.py` subset interpreter (no new interpreter). Test
    coverage: one positive fixture per `kind` **matching what §5's algorithm and
-   `register_migrate.py` actually emit**, one negative fixture per required-key omission, one
+   `register_migrate.py` actually emit**, plus a fourth positive fixture for the `migrated`+
+   `resolution`+`shared_slice`+anomaly-id combination (RR-32-R3-03's own case, not covered by the
+   plain `migrated`+`slice` fixture); one negative fixture per required-key omission; one
    negative fixture per forbidden-key presence (including a `finalized` record carrying a `slice`
-   or `resolution` — the exact defect TR-32-R2-01 found in the prior draft), and one negative
+   or `resolution` — the exact defect TR-32-R2-01 found in the prior draft, and a `slice`-bearing
+   `migrated` record carrying `shared_slice` — the defect CW-32-R3-03 found); and one negative
    fixture asserting a second `bootstrap` record is rejected (at most one, per §4 item 3's table).
    Changed-scope contract: this file is new, additive, and `register_lint.py` fails closed
    (ERROR, not skip) if it is missing — a record cannot be validated against a schema that is not
@@ -422,11 +439,24 @@ authoritative until that merge; if the PR is abandoned nothing has changed on `m
     rule, added the same way rules 1–17 already were, reading exactly: *"Rule 18. Merge-method
     enforcement: canonical `main` accepts only merge commits; `register-lint.yml`'s settings check
     fails a PR that finds squash or rebase merging enabled. Ratified `<date>`, register `<version>`."*
-    `register_lint.py` (offline tier, RL-18) checks for that exact sentinel's presence — a single
-    grep-able rule text, version-controlled and diffed like every other rule, never a second file
-    whose absence or edit a PR reviewer could miss. **Every other byte of both tables identical** —
-    proved by RL-13 in the PR, not asserted; RL-13 defines "row" as a table **data** row,
-    excluding header and separator rows (37 at the plan base — RR-32-07).
+    `register_lint.py` (offline tier, **RL-18**) checks for that exact sentinel's presence — a
+    single grep-able rule text, version-controlled and diffed like every other rule, never a
+    second file whose absence or edit a PR reviewer could miss. **RL-18 is a ratchet, not a
+    toggle (RR-32-R3-02, closing CW-32-R3-02: an owned surface that anyone can silently edit back
+    off is the same defect `POLICY.yaml` had, relocated, not fixed):** once Rule 18 is present on
+    `origin/main`, its absence or any text alteration on a branch head is an **ERROR** — the same
+    treatment RL-09 already gives a merged version record's bytes, applied to a rule's text
+    instead. The only way to end enforcement once ratified is an **operator-ratified, explicitly
+    numbered successor rule** (e.g. "Rule 19. Supersedes Rule 18: merge-method enforcement
+    withdrawn, ratified `<date>`, register `<version>`") — never a deletion, never an edit in
+    place, and never an anomaly entry (RR-32-R3-02 explicitly rejects using
+    `KNOWN-ANOMALIES.yaml` to switch enforcement off: an anomaly records a historical
+    irregularity that already happened, not a live policy lever). RL-18 checks the
+    predecessor/successor relation the same way RL-09/RL-10 check version-record ancestry: a
+    branch may only remove or alter Rule 18's text in the same commit that adds a rule whose text
+    names Rule 18 as superseded. **Every other byte of both tables identical** — proved by RL-13
+    in the PR, not asserted; RL-13 defines "row" as a table **data** row, excluding header and
+    separator rows (37 at the plan base — RR-32-07).
 12. **`AGENTS.md`, `CLAUDE.md`** — the per-commit bump sentence and the "run
     `memo_preflight.py`" sentence gain the register tools (Q-10). Nothing else.
 
@@ -534,14 +564,15 @@ cover fewer rules than the tools declare (029's "ran 0 tests" shape).
 | G-03a | Versions and slices are counted separately and both counts are checked | manifest `version_count`, `slice_count`, `resolution_count` | RL-05 also: `version_count == slice_count + resolution_count`; `version_count == current − lowest + 1`; every version has exactly one `slices[]` or `resolutions[]` entry, never zero, never both (RR-32-01, correcting CW-33-P02's conflation) | fixture manifest with `version_count: 25, slice_count: 25` on a 19-slice line → red (25 ≠ 19 + 0); fixture where a version has both a `slice` and a `resolution` entry → red |
 | G-03b | A version with no bytes of its own is declared, not discovered, and never claims a raw slice | `resolutions[]` (§4 item 2) + anomaly entries (Q-11) | RL-05 as above; RL-07 requires each such version's record to carry `kind: migrated`, `resolution: {in_slice, range}`, `shared_slice: true` and an anomaly id — **never** a `slice:` field of its own (RR-32-01 closes the overlap TR-32-01/CW-32-01 both named) | mutation: remove the `.6` anomaly entry → red naming `.6`; mutation: give `.6` a `slice:` field (claiming raw bytes `.8` already owns) → RL-01 red for the resulting overlap, not merely RL-08 |
 | G-03c | The baseline cannot drift under the proof | manifest `base_commit` + `source_sha256` | RL-16 (`--git`): `sha256(git show <base_commit>:docs/correspondence/REGISTER.md) == source_sha256`, `base_commit` is an ancestor of HEAD, and no commit between `base_commit` and the migration commit touches `docs/correspondence/` | temp repo: commit an unrelated register edit between base and migration → red naming the commit; tamper `source_sha256` → red |
-| G-04 | Old records never change | Git + lint | RL-09: for every `versions/*.md` present on `origin/main`, bytes on HEAD equal bytes on `origin/main` | temp repo: commit record, branch, edit one byte, lint → red; regenerate pointer to agree → still red (031 outcome 10) |
+| G-04 | Old records never change | lint, given a prior tree | RL-09 (**offline** — RR-32-R3-04, aligning this row with §7's tier list, which the prior draft's live-fetch wording contradicted): given a caller-supplied prior tree of `register/versions/` (a fixture in the offline test mode; the checkout's already-fetched `origin/main` ref in CI — never a fresh network fetch at lint time), for every `versions/*.md` present in that prior tree, bytes on HEAD equal bytes there | temp repo: commit record, branch, edit one byte, lint (fixture-supplied prior tree) → red; regenerate pointer to agree → still red (031 outcome 10) |
 | G-05 | One version per accepted landing; versions never collide | finalizer + Git-derived facts | **RF-02** (branch must be an ancestor-superset of `origin/main` before a version is even computed — RR-32-04); **RF-03** (write-time drift: the re-fetched `origin/main` sha differs from `observed_main` at all, whether or not the new commit touches `docs/correspondence/` — RR-32-R2-02); RL-10 (`--git`): each finalized record is introduced by exactly one first-parent commit whose first parent is `finalized_from_main` | two-branch rehearsal (§9): **the ordinary stale-branch case exits non-zero with RF-02**, not RF-03 (CW-32-03's correction); after `git merge origin/main` and rerun, finalization assigns `next+1`; first record byte-identical; a race manufactured by pausing the finalizer between its step-2 ancestor check and its step-4 re-fetch exercises RF-03; **a variant of that same pause where the intervening commit is a plain code change with no `docs/correspondence/` touch must still trip RF-03** (RR-32-R2-02's mutation case — nothing is written in either variant) |
 | G-06 | Finalization is reproducible | fixed emitter; no clock/identity inputs | `register_finalize.py --check` → empty diff | test runs finalize twice in two clones of one temp repo and diffs the trees: empty; mutation: inject a timestamp field in a fixture record → `--check` non-empty |
 | G-07 | Branches claim no version | finalizer is the only writer of `versions/` and the pointer | RL-11: on a PR head, any `versions/<v>.md` not on `origin/main` must have `finalized_from_main == origin/main` sha (else it was finalized against a stale base or hand-written) | temp repo: hand-write a record → red; finalize properly → green |
 | G-08 | Allocation is separate from landing; next free is derived | `ALLOCATIONS.yaml` | RL-02: one entry per identity (collisions carry discriminators); `landed` ⇒ row exists and `landed_version` record exists; `reserved`/`in_flight` ⇒ no row required; next free = max+1 | test seeds five `reserved` with zero rows → green (031 outcome 6); mutation: duplicate identity → red; `landed` without row → red |
 | G-09 | The authoritative set is complete or it is not the register | authority sentence + lint | RL-03: every component the declaration enumerates exists; run against a directory holding only `REGISTER.md` → ERROR naming each missing component | test copies only `REGISTER.md` to a temp dir → red naming four components |
 | G-10 | Historical irregularities are data, new ones fail | `KNOWN-ANOMALIES.yaml` | RL-07: doubled label / chain break / shared slice accepted only where an anomaly entry `permits` that rule for that version; RL-08: no anomaly entry may permit a rule for a version newer than the migration base | test: base fixture green; doubled label in a new record → red; anomaly entry added for the new version → RL-08 red |
-| G-11 | Merges preserve cited commits | **repository setting** (Q-06), verified by API read in CI | CI step `settings-read`: squash disabled, rebase disabled, linear history not required, else fail | not testable offline; acceptance evidence is the authenticated read quoted in the PR with date and reader; **downgraded to a recorded operator action with CI re-check** until Q-06 is done (CW-33-P07) |
+| G-11 | Merges preserve cited commits | **repository setting** (Q-06), verified by API read in CI, **gated by Rule 18's sentinel, never unconditional** (RR-32-R3-01, closing CW-32-R3-01: this row previously said "else fail" unconditionally, contradicting §4 item 10/11's two-state design) | CI step `settings-read` **always reports** `allow_squash_merge`/`allow_rebase_merge`; it **fails only when RL-18 finds Rule 18's sentinel present** on `REGISTER.md` and the reported settings still permit squash or rebase; with the sentinel absent (Q-06 declined or not yet ratified) the step reports and passes | not testable offline for the settings read itself (repository-settings API access); acceptance evidence is the authenticated read quoted in the PR with date and reader, **plus RL-18's offline pass/fail on the sentinel**, which *is* testable offline; a declined-Q-06 fixture (no sentinel, settings permissive) must show the step passing, and a ratified fixture (sentinel present, settings permissive) must show it failing — both cases exercised, not only the downgraded one (CW-33-P07's downgrade still applies to the settings-read half, not to RL-18's own logic) |
+| G-11a | The merge-method switch cannot be turned off by editing text | RL-18's ratchet (§4 item 11, RR-32-R3-02) | RL-18: a branch head where Rule 18's exact sentinel text, present on `origin/main`, is absent or altered is an ERROR **unless** the same head adds a rule whose text names Rule 18 as the rule it supersedes | mutation: delete Rule 18's line on a branch (sentinel was present on `origin/main`) → red; edit one word of it → red; add "Rule 19. Supersedes Rule 18: …" alongside the deletion → green; the same deletion with no successor rule anywhere in the diff → red |
 | G-12 | Memo behaviour unchanged | `memo_preflight.py` untouched | corpus differential: exit code + output for every `docs/correspondence/**/*.md` before and after, equal | test runs preflight on every memo against `REGISTER.md` at base (from `git show`) and at HEAD, compares |
 | G-13 | Tables are byte-identical except the permitted cells | lint in migration mode | RL-13: every table **data** row at HEAD equals the row at base except the enumerated permitted rows (032 row added; 030/031/next-free per Q-13); "row" excludes header and separator lines — **37 data rows at the plan base, not 39** (RR-32-07/CW-32-06) | test: diff row sets; mutation: change one character in a historical row → red; test asserts the row-count definition against a fixture with a header line to guard the header/data conflation |
 | G-14 | Design-package battery unaffected | `tests/test_design_package.py` | 58 cases OK at migration head and at the canary head | run and quoted with count |
@@ -626,7 +657,12 @@ terminal condition):
    pins it by `note_sha256` (or the manifest's `resolution`/`slice` id for migrated content),
    never by branch name or commit alone (RR-32-10, answering CW-32's question 2): a branch can be
    deleted on merge or abandonment, and 029's tenth finding is what happens when a review's only
-   anchor was a commit that later stopped resolving in a clone.**
+   anchor was a commit that later stopped resolving in a clone. **A reviewer's `register_finalize.py
+   --check` statement names the exact `origin/main` sha it ran against, and is valid only against
+   that sha (RR-32-R3-07): because RF-03 refuses on any drift at all, `main` advancing after a
+   `--check` post — for any reason, correspondence-related or not — makes that statement stale,
+   and the lead treats a stale `--check` as unverified rather than as evidence, asking for a
+   rerun rather than inferring the result still holds.**
 3. **Dispositions.** Claude Code answers every finding by id — taken / taken-with-modification /
    disputed-with-reason / deferred-with-record — in **additive commits** (`H1`, `H2`…); `H0` is
    never amended; `main` is merged in if it moved, never rebased onto.
@@ -672,8 +708,8 @@ list from `git diff --stat B...HEAD`; ancestry of every cited head.
 | AO-11 | Corpus differential unchanged | battery case | Claude Code → ChatGPT |
 | AO-12 | Tables byte-identical except permitted cells | `register_lint.py --migration` RL-13/14 | Claude Code → Cowork |
 | AO-13 | Design-package battery 58 OK | `tools/.venv/bin/python -m unittest tests.test_design_package` | Claude Code → ChatGPT |
-| AO-14 | Settings read: squash and rebase disabled, linear history not required | `gh api repos/ojfbot/lego-village-pipeline` (merge fields) and the `branches/main/protection` read | **James changes; ChatGPT reads and quotes**; not steward-changeable |
-| AO-15 | Meta-test: every RL/RF id (including RL-16, RL-17, RF-02/03/04) has positive + mutation cases | battery case | Claude Code → Cowork |
+| AO-14 | Settings read, **two-state (RR-32-R3-01)**: always reports `allow_squash_merge`/`allow_rebase_merge`; fails only when Rule 18's sentinel is present **and** those settings still permit squash or rebase | `gh api repos/ojfbot/lego-village-pipeline` (merge fields) and the `branches/main/protection` read, evaluated against RL-18's sentinel-presence result | **James changes the settings; ChatGPT reads and quotes both the settings and the sentinel state**; not steward-changeable |
+| AO-15 | Meta-test: every RL/RF id (including RL-16, RL-17, **RL-18**, RF-02/03/04) has positive + mutation cases | battery case | Claude Code → Cowork |
 | AO-16 | Canary green (below) | on `main` after the canary merge | canary author → the other steward |
 | AO-17 | Bootstrap replay: migration commit's thirty (plus, under Q-12, one) `migrated`/`bootstrap` records are invisible to G-16 (not exempted — never counted) and RL-17 confirms they share one introducing commit; the ordinary `finalized` landing immediately after is counted correctly | battery case (temp repo) — RR-32-R2-01 | Claude Code → ChatGPT |
 | AO-18 | Adversarial seam fixture: a quoted label equal to the next expected version is rejected by `byte_offset`; an arbitrary quoted label is correctly accepted unchanged | battery case — RR-32-02 | Claude Code → both |
@@ -754,7 +790,16 @@ is read by two people. *Self-hosting* (Q-12) — using the finalizer on its own 
 test and the worst place for a first bug; the rehearsal runs before it. *Repo-wide merge
 setting* (Q-06) — code PRs lose squash; history gets merge commits everywhere; the alternative
 (a remembered rule) is what failed on PR #13. *Freeze overlapping cut R2* (Q-07) — the
-instruments table is register data; an import PR during the freeze waits. *Two authorities by
+instruments table is register data; an import PR during the freeze waits. *Exact-head freshness
+is strict, not optimistic* (RR-32-R3-07, closing CW-32-R3-07) — RF-03 (§5, RR-32-R2-02) refuses on
+*any* `origin/main` drift since a run's `observed_main`, including an ordinary code merge that
+touches nothing the register owns; `register_finalize.py --check` re-fetches exactly as a real run
+would, so a reviewer's empty-diff statement is valid only against the `main` it names and expires
+the moment `main` advances at all, for any reason. 031 §5.2 called the design "optimistic
+serialization"; as specified here it is **strict serialization against all repository activity**,
+which is tolerable only because the freeze (Q-07) is what bounds how much activity there is —
+the freeze's scope is doing real work here, not just sequencing correspondence PRs, and it cannot
+be short by accident. *Two authorities by
 accident* — the next-free row and the ledger say the same thing until Q-13 removes one; RL-02
 checks they agree meanwhile. *Table-tail contention remains* (N-07) — this slice reduces, it
 does not eliminate; the memo says so. *Overbuilding* — no generated views, no per-memo records,
@@ -817,7 +862,13 @@ closes it on AO-16; landings of correspondence-touching PRs pause, allocations c
 tight; (b) open after cut R2's import PR lands (week of 2026-09-28), so the cut proceeds under
 current rules with one more manual version. *Consequence:* (a) risks a rushed review of an
 authority migration six days after the last one; (b) delays the fix past one more Friday and
-lands the cut under the contention it is meant to remove.
+lands the cut under the contention it is meant to remove. **A third consequence applies to
+either timing option (RR-32-R3-07):** because RF-03 refuses on any `origin/main` drift at all
+(§5, §11), the freeze's scope is not only "which correspondence PRs pause" but "how much
+unrelated repository activity a finalization commit and a reviewer's `--check` statement have to
+survive" — a freeze that pauses correspondence landings but leaves ordinary code merges running
+against `main` still invalidates finalizations and re-checks on every such merge, whichever
+timing option is chosen.
 
 **Q-08 · Who finalizes.** *Recommend:* the landing PR's author runs it; the other steward reruns
 `--check`; the lead verifies. *Alternatives:* the lead runs it for every landing (a single point
@@ -872,7 +923,9 @@ because it is a policy about *reviews*, not numbers, and 027's first question is
 memo file and one `implementation-notes.md` deviation bullet**, and nothing else. It places a
 memo under `docs/correspondence/` **without** a register edit, on the operator's instruction that
 032 is proposed and the register is not to be updated. That is a departure from the standing
-sentence "every commit that touches `docs/correspondence/` bumps the register version line".
+sentence "every commit that touches `docs/correspondence/` bumps the register version line" —
+**this is finding N-06** (RR-32-R3-06, restoring N-06's only citation, dropped by the TR-32-R2-05
+rewrite; preflight should again read `ids_used_in_body=22`, matching `findings=22`).
 **RR-32-11 (the lead's reconciled disposition of TR-32-03/CW-32-09):** the deviation is logged
 conservatively in `implementation-notes.md` `## Deviations` — the durable location the repository
 instructions name — as a factual bullet stating only what happened (an unallocated, non-operative
