@@ -304,9 +304,11 @@ authoritative until that merge; if the PR is abandoned nothing has changed on `m
    with exit 0. Committed so any reviewer reruns it against the base and diffs.
 2. **`register/MIGRATION-<base>.yaml`** — `base_commit`, `source_sha256` (file), `line_index: 7`,
    `line_sha256`, `line_bytes`, `encoding: utf-8`, `verbatim_as_of`, `known_in_place_repairs[]`,
-   `version_count`, `slice_count`, `resolution_count`, `lowest_version` (the oldest version the
-   line names — `.2` at the plan base — whose record alone carries `previous_version: null`,
-   TR-32-R4-02),
+   `version_count`, `slice_count`, `resolution_count`, `lowest_version` (the oldest version that
+   receives a record, whose record alone carries `previous_version: null`, TR-32-R4-02 — **its
+   value follows Q-11 (RR-32-R4-01):** `.2` under Q-11(a), where `.2`–`.7` receive resolution
+   records; `.8` under Q-11(b), where the resolver contract is narrowed and no resolution records
+   exist),
    `preamble {start, end, sha256}`, and **two separate collections (RR-32-01, answering
    TR-32-01/CW-32-01 together — a raw-byte partition and a set of resolution references are not
    the same claim and must not share one field):**
@@ -327,17 +329,23 @@ authoritative until that merge; if the PR is abandoned nothing has changed on `m
      entries back a `slices[]` boundary; rejected entries carry a human-readable `reason` (e.g.
      "quoted inside the `.24` note, describing a historical label, not introducing a new one")
      that a steward reading the manifest can agree or disagree with (RR-32-02).
-3. **`register/versions/<v>.md`** ×30 (plus one more if Q-12 self-hosts — see the per-kind
-   contract below, RR-32-R2-01/TR-32-R2-01) — frontmatter `register_version`, `previous_version`,
+3. **`register/versions/<v>.md`** — ×30 under Q-11(a) (`.2`–`.31`, 24 via `slice` + 6 via
+   `resolution`) or ×24 under Q-11(b) (`.8`–`.31`, all via `slice`, no resolution records), plus
+   one more if Q-12 self-hosts (RR-32-R4-01: every concrete count in this memo is a Q-11(a)
+   worked example unless it says otherwise; the contract below is the same under both) — see the
+   per-kind contract, RR-32-R2-01/TR-32-R2-01 — frontmatter `register_version`, `previous_version`,
    `kind`, `note_sha256`, and **exactly the fields that kind's row below requires, never more**.
    **`previous_version` (TR-32-R4-02):** for every record except one, the `register_version` of
-   the record immediately below it in the chain. For the **lowest migrated record** — `.2` at the
-   plan base, the oldest version the source line names — `previous_version` is the literal YAML
+   the record immediately below it in the chain. For the **lowest migrated record** — the
+   oldest version that receives a record — `previous_version` is the literal YAML
    `null` (schema type `["string", "null"]`; `null` permitted **only** on the record whose
    `register_version` equals the manifest's `lowest_version`, a new manifest field recorded by
-   `register_migrate.py`). The register's history begins at `.2` (`.1` was never a numbered
-   state: the `.2` note describes a circulated attachment, not a successor to anything), and the
-   plan does **not** invent a `.1` record to give `.2` a predecessor — an invented record would be
+   `register_migrate.py`). **Which record that is follows Q-11 (RR-32-R4-01):** under Q-11(a) it
+   is `.2` — the register's history begins there (`.1` was never a numbered state: the `.2` note
+   describes a circulated attachment, not a successor to anything); under Q-11(b) it is `.8`, the
+   oldest version with a slice of its own, and `.2`–`.7` receive no record at all rather than a
+   record with a predecessor problem. In neither case does the plan invent a missing record to
+   give the first one a predecessor — an invented record would be
    exactly the editorial rewrite CORR-030 §4.1 forbids. `null` is the boundary; RL-06 knows it is
    the boundary because the manifest says so, not because it is the first file in a directory
    listing. No `finalized` or `bootstrap` record may carry `null` (they always have a predecessor
@@ -386,7 +394,8 @@ authoritative until that merge; if the PR is abandoned nothing has changed on `m
    cited by that version's record — RR-32-01). Each entry: `id`, `affects`, `observed`,
    `cited_by`, `permits: RL-nn`, `frozen: true`. Collisions (009, 010) are **not** anomalies —
    they are rule-4 facts, and RL-02 reads the ledger's discriminators instead. **The start of the
-   chain is not an anomaly either** (TR-32-R4-02): the `.2` record's `previous_version: null` is
+   chain is not an anomaly either** (TR-32-R4-02): the `lowest_version` record's (`.2` under
+   Q-11(a), `.8` under Q-11(b)) `previous_version: null` is
    the defined boundary sentinel of §4 item 3, permitted by the schema and by RL-06 on exactly
    the record the manifest names as `lowest_version` — it needs no anomaly entry, and an entry
    that tried to `permit` a second `null` elsewhere would itself be rejected by RL-08.
@@ -427,11 +436,13 @@ authoritative until that merge; if the PR is abandoned nothing has changed on `m
    or `resolution` — the exact defect TR-32-R2-01 found in the prior draft, and a `slice`-bearing
    `migrated` record carrying `shared_slice` — the defect CW-32-R3-03 found); and one negative
    fixture asserting a second `bootstrap` record is rejected (at most one, per §4 item 3's table);
-   and, for the chain boundary (TR-32-R4-02): a positive fixture for the `.2` record with
-   `previous_version: null` and `register_version == lowest_version`; a negative fixture for a
+   and, for the chain boundary (TR-32-R4-02): a positive fixture for the `lowest_version` record with
+   `previous_version: null` (the `.2` record under Q-11(a); the `.8` record under Q-11(b) — the
+   battery ships the fixture matching the ratified branch, RR-32-R4-01); a negative fixture for a
    `migrated` record other than `lowest_version` carrying `null`; a negative fixture for a
-   `finalized` record carrying `null`; and a negative fixture where `.2` names a `previous_version`
-   string for a record that does not exist (the "invented `.1`" case).
+   `finalized` record carrying `null`; and a negative fixture where the lowest record names a `previous_version`
+   string for a record that does not exist (the "invented `.1`" case under Q-11(a); an
+   "invented `.7`" under Q-11(b)).
    Changed-scope contract: this file is new, additive, and `register_lint.py` fails closed
    (ERROR, not skip) if it is missing — a record cannot be validated against a schema that is not
    there (RR-32-09/TR-32-02).
@@ -585,9 +596,9 @@ cover fewer rules than the tools declare (029's "ran 0 tests" shape).
 |---|---|---|---|---|
 | G-01 | Every byte of the version line at the base is in exactly one place after migration | `MIGRATION-<base>.yaml` `slices[]` (raw partition only — RR-32-01) + `register_migrate.py` | RL-01: preamble + `slices[]` are contiguous, non-overlapping, sum to `line_bytes` exactly, each slice's bytes hash to its digest. **No overlap is ever declared or permitted in `slices[]`** — a version with no bytes of its own appears only in `resolutions[]` (G-03b), never as a second slice over another's bytes | fixture = base line bytes; test shifts one slice boundary by one byte → RL-01 red; test removes one slice → red; test adds a slice that overlaps another's range → red |
 | G-02 | The decomposition is the right one, not merely a consistent one | committed `seams[]` with per-candidate `byte_offset`, `accepted`, `reason`; the seam rule; steward read | RL-01 requires every accepted seam's `matched` text to sit at its committed `byte_offset` **and** the resulting slice boundaries to equal the accepted seams' offsets exactly — not merely that the slice count matches | **RR-32-02/CW-32-01, the case whole-line reconstruction and slice-count checks both miss:** fixture line with a quoted `At \`.n\`` where *n equals the next expected version at that point in the descending scan* — reproduced at `582fb63`: injecting a quoted `` At `.25` `` into the `.26` note leaves the slice count at 24 and the whole-line reconstruction byte-exact, while the real `.25` boundary moves from byte 20,508 to byte 12,511 and the `.26` note is cut mid-sentence. This fixture **must** go red on `byte_offset` mismatch even though slice-count and reconstruction checks pass it. A second fixture with an arbitrary quoted label (`.19`, not the next expected version) must be correctly accepted unchanged, so the test also proves the rule isn't simply tightened into rejecting everything |
-| G-03 | Every version `.2`–`.31` resolves to exactly one slice or exactly one cited resolution | version records' `slice:` or `resolution:`; `register_lint.py resolve <v>` | RL-05: every version from the lowest record to current has a record; a record with `slice:` cites an existing slice whose `version` field matches; a record with `resolution:` cites an `in_slice` that exists and a `range` inside that slice's `[start, end)`, plus an anomaly id (Q-11) | test resolves all 30 (24 via `slice`, 6 via `resolution`) and compares digests to the manifest; mutation: delete `.13`'s record → red naming `.13`; mutation: a `resolution.range` that extends outside its `in_slice`'s bounds → red |
-| G-03a | Versions and slices are counted separately and both counts are checked | manifest `version_count`, `slice_count`, `resolution_count`, `lowest_version` | RL-05 also: `version_count == slice_count + resolution_count`; `version_count == current − lowest_version + 1`; every version has exactly one `slices[]` or `resolutions[]` entry, never zero, never both (RR-32-01, correcting CW-33-P02's conflation); `lowest_version` is the version the lowest-numbered record carries, and that record is the one whose `previous_version` is `null` (TR-32-R4-02) | fixture manifest with `version_count: 25, slice_count: 25` on a 19-slice line → red (25 ≠ 19 + 0); fixture where a version has both a `slice` and a `resolution` entry → red; fixture where `lowest_version: .3` while a `.2` record exists → red |
-| G-03d | The chain has exactly one beginning, and it is declared, not inferred | `previous_version: null` sentinel (§4 item 3) + manifest `lowest_version` | RL-06: for every record, `previous_version` names the record immediately below it and that record exists — **except** the record whose `register_version == lowest_version`, which must carry `previous_version: null`; exactly one record in the corpus carries `null`; a `null` on any other record, or on any `finalized`/`bootstrap` record, is an ERROR (TR-32-R4-02: the prior draft's "the record below it" had no answer for `.2`, and would have failed its own first record) | fixture: migrated corpus `.2`–`.31` with `.2: null` → green; mutation: `.2` names `.1` (no such record) → red naming the missing predecessor; mutation: `.9` carries `null` → red ("second chain start"); mutation: a `finalized` record carries `null` → red; mutation: delete the `.2` record and leave `lowest_version: .2` → red under both RL-05 (missing version) and RL-06 (no record carries `null`) |
+| G-03 | Every version from `lowest_version` to `.31` resolves to exactly one slice or exactly one cited resolution (Q-11(a): `.2`–`.31`; Q-11(b): `.8`–`.31`) | version records' `slice:` or `resolution:`; `register_lint.py resolve <v>` | RL-05: every version from the lowest record to current has a record; a record with `slice:` cites an existing slice whose `version` field matches; a record with `resolution:` cites an `in_slice` that exists and a `range` inside that slice's `[start, end)`, plus an anomaly id (Q-11) | test resolves every record (Q-11(a): 30 — 24 via `slice`, 6 via `resolution`; Q-11(b): 24, all via `slice`) and compares digests to the manifest; mutation: delete `.13`'s record → red naming `.13`; mutation: a `resolution.range` that extends outside its `in_slice`'s bounds → red |
+| G-03a | Versions and slices are counted separately and both counts are checked | manifest `version_count`, `slice_count`, `resolution_count`, `lowest_version` | RL-05 also: `version_count == slice_count + resolution_count`; `version_count == current − lowest_version + 1`; every version has exactly one `slices[]` or `resolutions[]` entry, never zero, never both (RR-32-01, correcting CW-33-P02's conflation); `lowest_version` is the version the lowest-numbered record carries, and that record is the one whose `previous_version` is `null` (TR-32-R4-02) | fixture manifest with `version_count: 25, slice_count: 25` on a 19-slice line → red (25 ≠ 19 + 0); fixture where a version has both a `slice` and a `resolution` entry → red; fixture where `lowest_version` names a version higher than an existing record (`.3` with a `.2` record present under Q-11(a); `.9` with `.8` present under Q-11(b)) → red |
+| G-03d | The chain has exactly one beginning, and it is declared, not inferred | `previous_version: null` sentinel (§4 item 3) + manifest `lowest_version` | RL-06: for every record, `previous_version` names the record immediately below it and that record exists — **except** the record whose `register_version == lowest_version`, which must carry `previous_version: null`; exactly one record in the corpus carries `null`; a `null` on any other record, or on any `finalized`/`bootstrap` record, is an ERROR (TR-32-R4-02: the prior draft's "the record below it" had no answer for the first record, and would have failed it) | **Q-11(a) worked example (RR-32-R4-01; under Q-11(b) read `.8` for `.2`, `.7` for `.1`, and a 24-record corpus `.8`–`.31`):** fixture: migrated corpus `.2`–`.31` with `.2: null` → green; mutation: `.2` names `.1` (no such record) → red naming the missing predecessor; mutation: `.9` carries `null` → red ("second chain start"); mutation: a `finalized` record carries `null` → red; mutation: delete the `.2` record and leave `lowest_version: .2` → red under both RL-05 (missing version) and RL-06 (no record carries `null`) |
 | G-03b | A version with no bytes of its own is declared, not discovered, and never claims a raw slice | `resolutions[]` (§4 item 2) + anomaly entries (Q-11) | RL-05 as above; RL-07 requires each such version's record to carry `kind: migrated`, `resolution: {in_slice, range}`, `shared_slice: true` and an anomaly id — **never** a `slice:` field of its own (RR-32-01 closes the overlap TR-32-01/CW-32-01 both named) | mutation: remove the `.6` anomaly entry → red naming `.6`; mutation: give `.6` a `slice:` field (claiming raw bytes `.8` already owns) → RL-01 red for the resulting overlap, not merely RL-08 |
 | G-03c | The baseline cannot drift under the proof | manifest `base_commit` + `source_sha256` | RL-16 (`--git`): `sha256(git show <base_commit>:docs/correspondence/REGISTER.md) == source_sha256`, `base_commit` is an ancestor of HEAD, and no commit between `base_commit` and the migration commit touches `docs/correspondence/` | temp repo: commit an unrelated register edit between base and migration → red naming the commit; tamper `source_sha256` → red |
 | G-04 | Old records never change | lint, given a prior tree | RL-09 (**offline** — RR-32-R3-04, aligning this row with §7's tier list, which the prior draft's live-fetch wording contradicted): given a caller-supplied prior tree of `register/versions/` (a fixture in the offline test mode; the checkout's already-fetched `origin/main` ref in CI — never a fresh network fetch at lint time), for every `versions/*.md` present in that prior tree, bytes on HEAD equal bytes there | temp repo: commit record, branch, edit one byte, lint (fixture-supplied prior tree) → red; regenerate pointer to agree → still red (031 outcome 10) |
@@ -603,8 +614,8 @@ cover fewer rules than the tools declare (029's "ran 0 tests" shape).
 | G-13 | Tables are byte-identical except the permitted cells | lint in migration mode | RL-13: every table **data** row at HEAD equals the row at base except the enumerated permitted rows (032 row added; 030/031/next-free per Q-13); "row" excludes header and separator lines — **37 data rows at the plan base, not 39** (RR-32-07/CW-32-06) | test: diff row sets; mutation: change one character in a historical row → red; test asserts the row-count definition against a fixture with a header line to guard the header/data conflation |
 | G-14 | Design-package battery unaffected | `tests/test_design_package.py` | 58 cases OK at migration head and at the canary head | run and quoted with count |
 | G-15 | Structural lint runs where preflight runs | `register-lint.yml`; required check (Q-09) | workflow present and required | settings read; a deliberately failing test PR shows the red check (rehearsal step 6) |
-| G-16 | The per-landing rule is checkable, **counting only ordinary landings** | RL-10 above + Git, counting `kind: finalized` records exclusively — `kind: migrated`/`kind: bootstrap` records are never counted, positively or negatively, by this rule (RR-32-R2-01 simplification: no manifest-level flag is needed to exempt them, because only `register_migrate.py` ever produces those two kinds, and §4 item 3's schema already forbids a `finalized` record from carrying `slice`/`resolution`, so the count cannot be gamed by mislabeling) | for every first-parent merge on `main` whose diff touches `docs/correspondence/`, exactly one new `versions/*.md` with `kind: finalized` — else ERROR naming the merge; a merge introducing only `migrated`/`bootstrap` records is invisible to this rule by construction, not by exemption | temp repo: merge an ordinary correspondence change without a finalized record → red; merge with two finalized records → red; merge introducing thirty `migrated` records and zero `finalized` records → **not** red (G-16 does not apply to it at all) |
-| G-16a | `migrated`/`bootstrap` records are one-time, not a channel for ongoing landings | RL-17 (new): every `kind: migrated` record must be introduced by the *same* first-parent merge (the migration's own); every `kind: bootstrap` record, if any exist, must also be introduced by that same merge, and at most one `bootstrap` record may ever exist in the repository's history | RL-17 walks the introducing merge of every `migrated`/`bootstrap` record and asserts they are all the same commit, and that the `bootstrap` count across all of history is 0 or 1 (RR-32-R2-01, closing TR-32-R2-01's second half: no separate manifest flag decides what counts as "the bootstrap commit" — Git's own record of which commit introduced which file decides it, mechanically) | temp repo replay (also AO-17): (1) the migration merge introduces 30 `migrated` records (one per version, 24 via `slice` and 6 via `resolution` — RR-32-01) via one first-parent commit, zero `finalized`, zero or one `bootstrap` per Q-12 — RL-17 green, G-16 silent on it; (2) one ordinary `finalized` landing immediately after — G-16 green (exactly one `finalized`), RL-17 unaffected (no new `migrated`/`bootstrap`); (3) a second commit introducing another `migrated`-kind record anywhere later in history → RL-17 red, naming both commits |
+| G-16 | The per-landing rule is checkable, **counting only ordinary landings** | RL-10 above + Git, counting `kind: finalized` records exclusively — `kind: migrated`/`kind: bootstrap` records are never counted, positively or negatively, by this rule (RR-32-R2-01 simplification: no manifest-level flag is needed to exempt them, because only `register_migrate.py` ever produces those two kinds, and §4 item 3's schema already forbids a `finalized` record from carrying `slice`/`resolution`, so the count cannot be gamed by mislabeling) | for every first-parent merge on `main` whose diff touches `docs/correspondence/`, exactly one new `versions/*.md` with `kind: finalized` — else ERROR naming the merge; a merge introducing only `migrated`/`bootstrap` records is invisible to this rule by construction, not by exemption | temp repo: merge an ordinary correspondence change without a finalized record → red; merge with two finalized records → red; merge introducing thirty (Q-11(a)) or twenty-four (Q-11(b)) `migrated` records and zero `finalized` records → **not** red (G-16 does not apply to it at all) |
+| G-16a | `migrated`/`bootstrap` records are one-time, not a channel for ongoing landings | RL-17 (new): every `kind: migrated` record must be introduced by the *same* first-parent merge (the migration's own); every `kind: bootstrap` record, if any exist, must also be introduced by that same merge, and at most one `bootstrap` record may ever exist in the repository's history | RL-17 walks the introducing merge of every `migrated`/`bootstrap` record and asserts they are all the same commit, and that the `bootstrap` count across all of history is 0 or 1 (RR-32-R2-01, closing TR-32-R2-01's second half: no separate manifest flag decides what counts as "the bootstrap commit" — Git's own record of which commit introduced which file decides it, mechanically) | temp repo replay (also AO-17): (1) the migration merge introduces the migrated records (Q-11(a): 30, one per version, 24 via `slice` and 6 via `resolution`; Q-11(b): 24, all via `slice` — RR-32-01/RR-32-R4-01) via one first-parent commit, zero `finalized`, zero or one `bootstrap` per Q-12 — RL-17 green, G-16 silent on it; (2) one ordinary `finalized` landing immediately after — G-16 green (exactly one `finalized`), RL-17 unaffected (no new `migrated`/`bootstrap`); (3) a second commit introducing another `migrated`-kind record anywhere later in history → RL-17 red, naming both commits |
 
 What this table does **not** claim: that table-tail conflicts are gone (N-07); that prose status
 cells are validated (§7); that repository settings are enforced before James changes them.
@@ -665,9 +676,16 @@ green run as a semantic pass.
    fixture and the CI merge-base check, and read the seam manifest, before reading each other's
    review; findings in stable ids; author dispositions per finding; re-review by both to an exact
    head.
-7. **Repository settings changed by James** (Q-06, Q-09) — before merge, so the migration PR
-   itself merges under the new setting; the settings read is quoted in the PR.
-8. **James merges by merge commit.** The migration PR's version is `.next` — assigned by the
+7. **Settings decision executed and read, before approval is confirmed** (RR-32-R4-02): if
+   Q-06/Q-09 are accepted, James changes the repository settings; if declined, no setting
+   changes. **Either way**, AO-14's settings read is then run and posted against the review
+   head — enforcing (sentinel present, settings must disallow squash/rebase) or report-only
+   (sentinel absent) — **before** §8a step 5's approval confirmation, so the approval condition's
+   "every pre-merge outcome posted green" includes AO-14 in whichever of its two states applies,
+   and the migration PR merges under the settings that were actually read. This step sits
+   between step 6 (verification) and the §8a terminal step in time; James remains the only
+   actor who changes settings, and the stewards only read and quote them.
+8. **James merges by merge commit**, after §8a step 5 has confirmed. The migration PR's version is `.next` — assigned by the
    finalizer if Q-12 says so.
 9. **Canary** (§9) — the first ordinary landing; freeze lifts only when it is green on `main`.
 10. **Row trimming, generated log, typed memo records** — separate memos, later.
@@ -715,9 +733,14 @@ terminal condition):
    every finding closed or an explicitly accepted residual, **and with every pre-merge outcome
    AO-01…AO-15, AO-17…AO-19 posted green by its named verifier against that same head**
    (TR-32-R4-03) — an approval that omits any of them is incomplete, not an approval with a
-   gap. The lead confirms the two approvals name the same head, confirms the outcome list is
-   complete, and posts the docket state (Q-06/Q-09 done, AO-14 quoted in its two-state form).
-   AO-16 is then the sole remaining outcome, owed after the merge (step 8).
+   gap. **AO-14 is among them, in whichever of its two states applies (RR-32-R4-02):** before
+   this confirmation, James has either changed the settings (Q-06/Q-09 accepted) or declined to
+   (§8 step 7), and the settings read has been posted against this same head — enforcing or
+   report-only — by ChatGPT; a confirmation issued before that post is premature, not
+   provisional. The lead confirms the two approvals name the same head, confirms the outcome
+   list is complete including AO-14's posted result, and posts the docket state (Q-06/Q-09
+   decided either way; AO-14 quoted in its two-state form). AO-16 is then the sole remaining
+   outcome, owed after the merge (step 8).
 6. **Terminal — escalate.** A finding disputed after one re-review round, or a residual one
    reviewer will not accept, goes to James through the lead as a ruling request naming the
    disagreement, the two positions and the consequence of each. James's ruling closes it; the
@@ -754,10 +777,10 @@ list from `git diff --stat B...HEAD`; ancestry of every cited head.
 | AO-11 | Corpus differential unchanged | battery case | Claude Code → ChatGPT |
 | AO-12 | Tables byte-identical except permitted cells | `register_lint.py --migration` RL-13/14 | Claude Code → Cowork |
 | AO-13 | Design-package battery 58 OK | `tools/.venv/bin/python -m unittest tests.test_design_package` | Claude Code → ChatGPT |
-| AO-14 | Settings read, **two-state (RR-32-R3-01)**: always reports `allow_squash_merge`/`allow_rebase_merge`; fails only when Rule 18's sentinel is present **and** those settings still permit squash or rebase | `gh api repos/ojfbot/lego-village-pipeline` (merge fields) and the `branches/main/protection` read, evaluated against RL-18's sentinel-presence result | **James changes the settings; ChatGPT reads and quotes both the settings and the sentinel state**; not steward-changeable |
+| AO-14 | Settings read, **two-state (RR-32-R3-01)**: always reports `allow_squash_merge`/`allow_rebase_merge`; fails only when Rule 18's sentinel is present **and** those settings still permit squash or rebase | `gh api repos/ojfbot/lego-village-pipeline` (merge fields) and the `branches/main/protection` read, evaluated against RL-18's sentinel-presence result | **James decides and, if accepted, changes the settings; ChatGPT reads and quotes both the settings and the sentinel state, against the review head, before §8a step 5 confirms** (RR-32-R4-02); not steward-changeable |
 | AO-15 | Meta-test: every RL/RF id (including RL-16, RL-17, **RL-18**, RF-02/03/04) has positive + mutation cases | battery case | Claude Code → Cowork |
 | AO-16 | Canary green (below) | on `main` after the canary merge | canary author → the other steward |
-| AO-17 | Bootstrap replay: migration commit's thirty (plus, under Q-12, one) `migrated`/`bootstrap` records are invisible to G-16 (not exempted — never counted) and RL-17 confirms they share one introducing commit; the ordinary `finalized` landing immediately after is counted correctly | battery case (temp repo) — RR-32-R2-01 | Claude Code → ChatGPT |
+| AO-17 | Bootstrap replay: migration commit's thirty (Q-11(a)) or twenty-four (Q-11(b)) `migrated` records (plus, under Q-12, one `bootstrap`) are invisible to G-16 (not exempted — never counted) and RL-17 confirms they share one introducing commit; the ordinary `finalized` landing immediately after is counted correctly | battery case (temp repo) — RR-32-R2-01 | Claude Code → ChatGPT |
 | AO-18 | Adversarial seam fixture: a quoted label equal to the next expected version is rejected by `byte_offset`; an arbitrary quoted label is correctly accepted unchanged | battery case — RR-32-02 | Claude Code → both |
 | AO-19 | CI merge-base check: a PR whose finalized record's `finalized_from_main` does not equal `git merge-base origin/main HEAD` fails the required check | live on the register-lint workflow — RR-32-08 | Claude Code → ChatGPT |
 
@@ -794,7 +817,8 @@ steps on two throwaway branches off the migration branch, never merged to `main`
 landing after the merge — a real memo, preferably one of the review memos if Q-14 registers
 them — goes through `pending/` → finalize → other-steward `--check` → merge commit. This is also
 the **live confirmation of AO-17's bootstrap replay** (RR-32-R2-01): the migration merge itself
-introduced thirty (or, under Q-12, thirty-one) `kind: migrated`/`kind: bootstrap` records, which
+introduced the `kind: migrated` records (thirty under Q-11(a), twenty-four under Q-11(b), plus
+one `kind: bootstrap` under Q-12's alternative), which
 G-16 never counted in the first place, and the canary is the first `kind: finalized` record
 G-16's rule actually governs.
 Green means: lint exit 0 on `main`; `--git` resolves the merge and its first parent; `versions/`
@@ -813,7 +837,7 @@ verifier's post, not the author's.
 | Independent review 2 | ChatGPT/Codex | — | same; written before reading review 1 |
 | Author dispositions | Claude Code | both reviewers rerun | every finding: taken / taken-with-modification / disputed-with-reason / deferred-with-record |
 | Re-review loop | **both stewards own it**; neither stops until terminal | — | both approve the same head by sha and content digest, or James rules on the residual |
-| Settings change | James | ChatGPT quotes the read | AO-14 |
+| Settings decision (accept or decline Q-06/Q-09) and any change | James | ChatGPT posts AO-14's read against the review head, in its enforcing or report-only state | AO-14 posted **before** §8a step 5's approval confirmation, whichever way Q-06 went (RR-32-R4-02) |
 | Merge | James | — | merge commit; `main-guard` green |
 | Canary | whoever lands the next memo | the other steward | AO-16 |
 | As-built report | Claude Code (035 or 032-R1, Q-01) | both | register row |
@@ -967,7 +991,7 @@ leaves six versions unaddressable.
 run, after the rehearsal — the migration PR's own version is then an ordinary `kind: finalized`
 record (§4 item 3's table), produced the same way every later landing's is, and no third kind is
 needed for it; the canary (§9) becomes the *second* finalizer run, not the first. *Alternative:*
-last manual assignment — `register_migrate.py` writes it directly, alongside the thirty migrated
+last manual assignment — `register_migrate.py` writes it directly, alongside the migrated
 records, as the one `kind: bootstrap` record §4 item 3's table defines (`manifest_ref` naming the
 same `MIGRATION-<base>.yaml`, no `finalized_from_main` because no finalizer run produced it); the
 finalizer's first real run is then the canary. *Consequence:* the recommendation proves the tool
