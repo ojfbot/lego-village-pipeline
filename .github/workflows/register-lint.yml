@@ -1,0 +1,74 @@
+name: register-lint
+# Structural register checks (HANDOFF-LEGO-PIPE-032-R1, R0 §4 item 10; Q-09 makes the
+# `register-lint` job a required check on main). Runs on every PR that touches the
+# correspondence directory or the register tools. No step calls a hosting API for a
+# canonical check (RR-32-R2-03); the settings-read step is the one API read, and it is
+# two-state: it always REPORTS allow_squash_merge / allow_rebase_merge and FAILS only
+# when REGISTER.md carries Rule 18's ratification sentinel and the settings still permit
+# squash or rebase (RR-32-R3-01, G-11/G-11a).
+on:
+  pull_request:
+    paths:
+      - "docs/correspondence/**"
+      - "tools/register_*.py"
+      - "tools/schema_lint.py"
+      - "tools/schemas/register-version.v1.schema.json"
+      - "tests/test_register.py"
+      - ".github/workflows/register-lint.yml"
+  push:
+    branches: [main]
+    paths:
+      - "docs/correspondence/**"
+      - "tools/register_*.py"
+jobs:
+  register-lint:
+    name: register-lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch protected main
+        run: git fetch --no-tags origin main:refs/remotes/origin/main
+      - name: Set up the tools venv (PyYAML)
+        run: sh tools/setup-preflight.sh
+      - name: Register battery — offline mode
+        run: tools/.venv/bin/python tests/test_register.py
+      - name: Register battery — --with-git mode (temporary repositories, rehearsal)
+        run: tools/.venv/bin/python tests/test_register.py --with-git
+      - name: Design-package battery (corpus regression, 58 cases at the base)
+        run: tools/.venv/bin/python -m unittest tests.test_design_package
+      - name: register_lint --git
+        run: tools/.venv/bin/python tools/register_lint.py --git
+      - name: register_migrate --check (rerun from the manifest's base to an empty diff)
+        run: |
+          base=$(tools/.venv/bin/python -c "import glob,yaml;print(yaml.safe_load(open(glob.glob('docs/correspondence/register/MIGRATION-*.yaml')[0]))['base_commit'])")
+          tools/.venv/bin/python tools/register_migrate.py --base "$base" --check
+      - name: register_finalize --check against git merge-base origin/main HEAD (AO-19)
+        if: github.event_name == 'pull_request'
+        run: |
+          if git diff --quiet origin/main...HEAD -- docs/correspondence/; then
+            echo "no correspondence change on this PR; finalization not required"
+          else
+            tools/.venv/bin/python tools/register_finalize.py --check
+          fi
+      - name: Settings read — two-state (reports always; fails only with Rule 18 present)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sentinel=$(tools/.venv/bin/python tools/register_lint.py rule18)
+          settings=$(gh api "repos/${{ github.repository }}" --jq '{allow_merge_commit, allow_squash_merge, allow_rebase_merge}')
+          echo "Rule 18 sentinel: $sentinel"
+          echo "repository settings: $settings"
+          protection=$(gh api "repos/${{ github.repository }}/branches/main/protection" --jq '{required_linear_history: .required_linear_history.enabled, required_checks: [.required_status_checks.contexts[]?]}' 2>/dev/null || echo "branch protection not readable with this token (reported, not evaluated)")
+          echo "branch protection: $protection"
+          squash=$(echo "$settings" | tools/.venv/bin/python -c "import json,sys;print(json.load(sys.stdin)['allow_squash_merge'])")
+          rebase=$(echo "$settings" | tools/.venv/bin/python -c "import json,sys;print(json.load(sys.stdin)['allow_rebase_merge'])")
+          if [ "$sentinel" = "present" ] && { [ "$squash" = "True" ] || [ "$rebase" = "True" ]; }; then
+            echo "::error::Rule 18 is ratified but allow_squash_merge=$squash allow_rebase_merge=$rebase — James must disable squash and rebase merging (Q-06)."
+            exit 1
+          fi
+          echo "OK: settings step $( [ "$sentinel" = present ] && echo enforcing || echo report-only )"

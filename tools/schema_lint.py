@@ -8,7 +8,8 @@ tools/preflight.py is frozen (register rows cite it) and does not import this mo
 
 The canonical contract artifacts are the JSON Schema files in tools/schemas/; this module
 interprets the subset they use: required, properties, const, enum, type, pattern,
-nested required, items.required. Extend here, never by copy.
+nested required, items.required, additionalProperties, and (since HANDOFF-032) the
+combinators oneOf / anyOf / allOf / not. Extend here, never by copy.
 """
 import json
 import os
@@ -100,6 +101,25 @@ def check_value(value, sub, label, errs):
     if sub.get("format") == "date" and isinstance(value, str) and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
         errs.append(f"{label}: {value!r} is not a YYYY-MM-DD date")
 
+    # Combinators (register-version/v1, HANDOFF-032 R0 §4 item 8): a per-kind contract
+    # is a `oneOf` over branches that each `required`/`not`-forbid keys of the SAME object.
+    # Additive — no existing schema under tools/schemas/ uses these keywords, so the memo
+    # corpus differential (tests/test_design_package.py) is the proof nothing else moved.
+    if "oneOf" in sub:
+        matched = [b for b in sub["oneOf"] if not _errs_of(value, b, label)]
+        if len(matched) != 1:
+            errs.append(f"{label}: matches {len(matched)} of {len(sub['oneOf'])} oneOf branches (exactly 1 required)")
+    if "anyOf" in sub:
+        if not any(not _errs_of(value, b, label) for b in sub["anyOf"]):
+            errs.append(f"{label}: matches none of {len(sub['anyOf'])} anyOf branches")
+    if "allOf" in sub:
+        for i, b in enumerate(sub["allOf"]):
+            for e in _errs_of(value, b, label):
+                errs.append(f"{label}: allOf[{i}]: {e}")
+    if "not" in sub:
+        if not _errs_of(value, sub["not"], label):
+            errs.append(f"{label}: matches a forbidden shape ({_describe(sub['not'])})")
+
     if isinstance(value, dict):
         for rk in sub.get("required", []):
             if rk not in value:
@@ -130,6 +150,24 @@ def check_value(value, sub, label, errs):
                 check_value(entry, isub, f"{label}[{i}]", errs)
 
 
+def _errs_of(value, sub, label):
+    """Errors a value would raise against a sub-schema, without touching the caller's list."""
+    inner = []
+    check_value(value, sub, label, inner)
+    return inner
+
+
+def _describe(sub):
+    keys = []
+    if "required" in sub:
+        keys.append("required " + "/".join(sub["required"]))
+    if "anyOf" in sub:
+        keys.append("anyOf " + ", ".join(_describe(b) for b in sub["anyOf"]))
+    if "const" in sub:
+        keys.append(f"const {sub['const']!r}")
+    return "; ".join(keys) or "schema"
+
+
 def check_against_schema(fm, schema, errs):
     for k in schema.get("required", []):
         if k not in fm:
@@ -137,3 +175,10 @@ def check_against_schema(fm, schema, errs):
     for k, sub in schema.get("properties", {}).items():
         if k in fm:
             check_value(fm[k], sub, k, errs)
+    # Top-level combinators and additionalProperties are delegated to check_value so a
+    # document-level `oneOf` (the register-version per-kind contract) is enforced too.
+    top = {k: v for k, v in schema.items() if k in ("oneOf", "anyOf", "allOf", "not", "additionalProperties")}
+    if top:
+        if "additionalProperties" in top:
+            top["properties"] = schema.get("properties", {})
+        check_value(fm, top, "document", errs)
