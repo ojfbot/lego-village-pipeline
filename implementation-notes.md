@@ -57,8 +57,11 @@
   unpushed and repeated the operation from the explicitly selected PR #18 worktree.
 - 2026-09-20 (proposed HANDOFF-LEGO-PIPE-032-R0 draft, PR #21): the standing rule assumed every
   commit touching `docs/correspondence/` bumps the register version line; the operator instructed
-  that this draft, non-operative, unallocated work order land under `docs/correspondence/` with
-  the register left unchanged. Took the conservative option — committed the memo without a
-  version edit, no register row, no allocation — and recorded it here per the lead's reconciled
-  repair request (RR-32-11) rather than deciding the per-commit-versus-per-landing question,
-  which stays open on the memo's own operator docket (Q-02, Q-10).
+  that this draft, non-operative, unallocated work order be **committed to the unmerged draft
+  branch** `corr/032-register-migration-work-order` under `docs/correspondence/`, with canonical
+  `main` and the register left unchanged (TR-32-R2-05: this commit has not landed — "landed"
+  means merged to canonical `main`, which the register itself defines as where correspondence
+  takes effect, and PR #21 remains open and unmerged). Took the conservative option — committed
+  the memo without a version edit, no register row, no allocation — and recorded it here per the
+  lead's reconciled repair request (RR-32-11) rather than deciding the per-commit-versus-per-
+  landing question, which stays open on the memo's own operator docket (Q-02, Q-10).
