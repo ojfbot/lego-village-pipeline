@@ -19,7 +19,7 @@ reference `tools/preflight.py` is frozen — cited by register rows, never edite
 **One register version per accepted landing (PR merge to `main`), assigned only at finalization against protected
 `main` — never claimed on a branch, never bumped by hand (HANDOFF-LEGO-PIPE-032-R1, Q-02/Q-03).** A landing that touches
 `docs/correspondence/` adds a note under `docs/correspondence/register/pending/`; its author runs
-`tools/register_finalize.py` as the branch's last commit, the other steward reruns `tools/register_finalize.py --check`
+`tools/register_finalize.py --repo <clone>` as the branch's last commit (the target is always explicit and printed — never inferred), the other steward reruns `tools/register_finalize.py --repo <clone> --check`
 to an empty diff, and `tools/register_lint.py --git` must exit 0 (the `register-lint` check on every such PR). The
 register is the enumerated set rooted at `REGISTER.md` (`register/ALLOCATIONS.yaml`, `register/KNOWN-ANOMALIES.yaml`,
 `register/MIGRATION-*.yaml`, `register/versions/`); history reads newest first via `tools/register_lint.py render`.

@@ -57,6 +57,13 @@ SEAM_RE = re.compile(rb"At `\.(\d+)`")
 DOUBLED_LABEL_RE = re.compile(r"At `\.(\d+)` `\.\1`")
 ANOMALY_ID_RE = re.compile(r"^A-\d{2}$")
 AUTHORITY_RE = re.compile(r"The canonical register is the enumerated set rooted at `docs/correspondence/REGISTER\.md`:(.*?)\. Each component is authoritative")
+# Q-13 as ratified (PR #21 decision docket, comment 5752476543; RR-32-R3 carried condition 2):
+# the ONLY table changes the migration landing may make. RL-13 binds the manifest's
+# table_baseline.permitted_changes to this set (CW-33-I03) — a manifest that widens the
+# whitelist is itself an RL-13 error, so the author of the migration cannot widen the set of
+# rows allowed to differ in the same commit that uses the width.
+RATIFIED_Q13 = {"rows_added": frozenset({"032-R1"}), "rows_modified": frozenset({"030-R0", "031-R0"}), "next_free_row": True}
+
 RULE18_RE = re.compile(r"^18\. \*\*Merge-method enforcement:\*\* canonical `main` accepts only merge commits; `register-lint\.yml`'s settings check fails a PR that finds squash or rebase merging enabled\. Ratified .*$", re.M)
 SUPERSEDES_RULE18_RE = re.compile(r"^\d+\. \*\*Supersedes Rule 18", re.M)
 LEDGER_STATES = ("reserved", "in_flight", "landed", "withdrawn")
@@ -591,6 +598,18 @@ class Lint:
         permitted = m.get("table_baseline", {}).get("permitted_changes", {})
         added = set(permitted.get("rows_added", []))
         modified = set(permitted.get("rows_modified", []))
+        # bind the whitelist to the ratified set before using it (CW-33-I03)
+        for field, allowed in (("rows_added", RATIFIED_Q13["rows_added"]), ("rows_modified", RATIFIED_Q13["rows_modified"])):
+            extra = sorted(set(permitted.get(field, [])) - allowed)
+            if extra:
+                self.err("RL-13", f"manifest permitted_changes.{field} names {extra}, which Q-13 did not ratify (ratified: {sorted(allowed)}) — the whitelist is bound, not self-declared")
+        if permitted.get("next_free_row") not in (None, False, True):
+            self.err("RL-13", "manifest permitted_changes.next_free_row must be a boolean")
+        unknown = sorted(set(permitted) - {"basis", "rows_added", "rows_modified", "next_free_row"})
+        if unknown:
+            self.err("RL-13", f"manifest permitted_changes carries unratified keys {unknown}")
+        added &= RATIFIED_Q13["rows_added"]
+        modified &= RATIFIED_Q13["rows_modified"]
         base_rows, head_rows = dict(base["correspondence"]), dict(head["correspondence"])
         if len(base["correspondence"]) != m["table_baseline"]["correspondence_rows"] or len(base["instruments"]) != m["table_baseline"]["instruments_rows"]:
             self.err("RL-13", f"base data rows {len(base['correspondence'])}+{len(base['instruments'])} != manifest baseline {m['table_baseline']['correspondence_rows']}+{m['table_baseline']['instruments_rows']}")

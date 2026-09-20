@@ -712,6 +712,42 @@ class ImmutabilityRowsRule18(unittest.TestCase):
             errs, _, _ = lint_errs(root, migration_base=basep)
             self.assertTrue(any("row 033-R0 added" in e for e in errs_for("RL-13", errs)), errs)
 
+    def test_mutation_rl13_widened_whitelist_and_row_change_together(self):
+        """CW-33-I03: the manifest's permitted_changes is bound to the ratified Q-13 set. Widening
+        the whitelist AND changing the row in the same tree must fail — the width is not the
+        author's to declare."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = copy_tree(tmp)
+            basep = os.path.join(tmp, "base-REGISTER.md")
+            RL.write_bytes(basep, pre_migration_rows(reconstruct_base_register(root)))
+            regp = os.path.join(root, RL.REGISTER_REL)
+            RL.write_bytes(regp, RL.read_bytes(regp).replace(b"| 013 | `build-harness/CORR-LEGO-PIPE-013-reconciliation.md`", b"| 013 | `build-harness/CORR-LEGO-PIPE-013-reconciliation.MD`"))
+            # control: unwhitelisted change is red
+            errs, _, _ = lint_errs(root, migration_base=basep)
+            self.assertTrue(any("row 013 differs" in e for e in errs_for("RL-13", errs)), errs)
+            # mutation: widen the whitelist in the same tree — must STILL be red, now naming the widening
+            edit_yaml(manifest_path(root), lambda m: m["table_baseline"]["permitted_changes"]["rows_modified"].append("013"))
+            errs, _, _ = lint_errs(root, migration_base=basep)
+            rl13 = errs_for("RL-13", errs)
+            self.assertTrue(any("rows_modified names ['013'], which Q-13 did not ratify" in e for e in rl13), rl13)
+            self.assertTrue(any("row 013 differs" in e for e in rl13), "the widened entry must not be honoured: " + str(rl13))
+            # and the same for an unratified addition
+        with tempfile.TemporaryDirectory() as tmp:
+            root = copy_tree(tmp)
+            basep = os.path.join(tmp, "base-REGISTER.md")
+            RL.write_bytes(basep, pre_migration_rows(reconstruct_base_register(root)))
+            regp = os.path.join(root, RL.REGISTER_REL)
+            RL.write_bytes(regp, RL.read_bytes(regp).replace(b"| 036+ |", b"| 033-R0 | x | REVIEW | x | x | drafted here |\n| 036+ |"))
+            edit_yaml(manifest_path(root), lambda m: m["table_baseline"]["permitted_changes"]["rows_added"].append("033-R0"))
+            errs, _, _ = lint_errs(root, migration_base=basep)
+            rl13 = errs_for("RL-13", errs)
+            self.assertTrue(any("rows_added names ['033-R0'], which Q-13 did not ratify" in e for e in rl13), rl13)
+            self.assertTrue(any("row 033-R0 added" in e for e in rl13), rl13)
+            # an unknown key in permitted_changes is also refused
+            edit_yaml(manifest_path(root), lambda m: m["table_baseline"]["permitted_changes"].update(rows_deleted=["029-R0"]))
+            errs, _, _ = lint_errs(root, migration_base=basep)
+            self.assertTrue(any("unratified keys ['rows_deleted']" in e for e in errs_for("RL-13", errs)), errs)
+
     def test_mutation_rl14_instruments_row_changed(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = copy_tree(tmp)
@@ -783,6 +819,31 @@ class ImmutabilityRowsRule18(unittest.TestCase):
 
 # ======================================================================= migration tool
 
+class WorkflowShape(unittest.TestCase):
+    """The evidence pipeline's two sequencing properties (CW-33-I06, CW-33-I02), read from the
+    workflow file so a later edit that drops them fails here rather than in a red CI job."""
+
+    def steps(self):
+        wf = yaml.safe_load(RL.read_bytes(os.path.join(REPO, ".github", "workflows", "register-lint.yml")).decode("utf-8"))
+        return wf["jobs"]["register-lint"]["steps"]
+
+    def test_settings_read_runs_even_when_the_finalization_check_fails(self):
+        steps = self.steps()
+        settings = [st for st in steps if st.get("name", "").startswith("Settings read")]
+        self.assertEqual(len(settings), 1, [st.get("name") for st in steps])
+        self.assertEqual(str(settings[0].get("if")).strip(), "always()", settings[0])
+        names = [st.get("name", "") for st in steps]
+        self.assertLess([i for i, n in enumerate(names) if n.startswith("register_finalize --check")][0],
+                        names.index(settings[0]["name"]), "the finalization check precedes the settings read; if: always() is what keeps AO-14 reachable")
+
+    def test_every_finalizer_invocation_names_its_target(self):
+        for st in self.steps():
+            run = st.get("run") or ""
+            for line in run.split("\n"):
+                if "register_finalize.py" in line:
+                    self.assertIn("--repo", line, line)
+
+
 class MigrationTool(unittest.TestCase):
     def test_idempotent_and_reproducible_offline(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -843,7 +904,38 @@ class CorpusDifferential(unittest.TestCase):
                     out.append(os.path.join(root, f))
         return sorted(out)
 
-    def test_memo_preflight_unchanged_between_base_and_head(self):
+    # G-12 / CW-33-I01: the register cross-check in memo_preflight.py (`key in regtxt` … first
+    # line containing the key) was distorted at B by the 39 KB version line: for memos the line
+    # mentioned, the WARN "NNN-Rn already listed in register (expected on re-run)" was
+    # suppressed (first hit inside the version line, whose remainder never says "superseded");
+    # for 011-R0/011-R1, whose rows DO say "superseded by R1/R2", the first hit was ALSO the
+    # version line, whose remainder lacks the word, so the WARN fired spuriously. With the line
+    # migrated the first hit is the row itself: the WARN correctly appears for 13 memos and
+    # correctly disappears for 2. Both directions are asserted by exact membership; a future
+    # change that removed a WARN it should not, or added one, moves a memo between these sets
+    # and fails here. memo_preflight.py itself is out of scope (R0 §11) and is not changed.
+    WARN = "already listed in register (expected on re-run)"
+    EXPECTED_GAINED = (
+        "CORR-LEGO-PIPE-016-correspondence-alignment-chatgpt.md",
+        "CORR-LEGO-PIPE-017-correspondence-alignment-claude.md",
+        "CORR-LEGO-PIPE-027-R0-chatgpt-design-handoff-review-debrief.md",
+        "CORR-LEGO-PIPE-028-R0-debrief-design-handoff-schema-round.md",
+        "CORR-LEGO-PIPE-029-R0-design-handoff-delivery-debrief.md",
+        "CORR-LEGO-PIPE-030-R0-register-shape-cleanup.md",
+        "CORR-LEGO-PIPE-031-R0-register-concurrency-peer-memo.md",
+        "HANDOFF-LEGO-PIPE-023-R2-drafting-table-on-fixtures-and-the-program.md",
+        "HANDOFF-LEGO-PIPE-024-R1-design-package-protocol.md",
+        "REVIEW-LEGO-PIPE-025-R1-review-of-design-package-protocol.md",
+        "REVIEW-LEGO-PIPE-026-R0-chatgpt-review-of-design-package-protocol.md",
+        "build-harness/HANDOFF-LEGO-PIPE-018-spikes-S1-S7-claude-code.md",
+        "build-harness/LEGO-PIPE-011-from-studio-to-stage-R2.md",
+    )
+    EXPECTED_LOST = (
+        "build-harness/LEGO-PIPE-011-from-studio-to-stage-R0.md",
+        "build-harness/LEGO-PIPE-011-from-studio-to-stage-R1.md",
+    )
+
+    def differential(self):
         memos = self.memos()
         self.assertGreaterEqual(len(memos), 27)
         with tempfile.TemporaryDirectory() as tmp:
@@ -852,29 +944,43 @@ class CorpusDifferential(unittest.TestCase):
                 RL.write_bytes(basep, RL.git_bytes(REPO, "show", f"{RL.Register(REPO).manifest['base_commit']}:docs/correspondence/REGISTER.md"))
             else:
                 RL.write_bytes(basep, reconstruct_base_register(REPO))
-            diffs, masked = [], 0
+            exit_diffs, other_diffs, gained, lost, mixed = [], [], [], [], []
             for memo in memos:
+                rel = os.path.relpath(memo, CORR)
                 before = run_tool("memo_preflight.py", memo, basep)
                 after = run_tool("memo_preflight.py", memo, REGISTER)
                 if before[0] != after[0]:
-                    diffs.append(f"{os.path.relpath(memo, REPO)}: exit {before[0]} → {after[0]}")
-                    continue
-                # Deviation (implementation-notes.md, 2026-09-20): memo_preflight.py's register
-                # cross-check scans the whole file by substring, so at B the 39 KB version line
-                # masked its "already listed" WARN for every memo the line mentions; with the line
-                # migrated the WARN appears — a true statement the base was suppressing by
-                # accident. memo_preflight.py is out of scope (R0 §11), so the differential
-                # asserts exit codes identical and outputs identical except that exact WARN.
-                b_lines = [l for l in before[1].split("\n") if "already listed in register (expected on re-run)" not in l]
-                a_lines = [l for l in after[1].split("\n") if "already listed in register (expected on re-run)" not in l]
-                if b_lines != a_lines:
-                    diffs.append(f"{os.path.relpath(memo, REPO)}\n  base: {before}\n  head: {after}")
-                elif before[1] != after[1]:
-                    masked += 1
-                    extra = [l for l in after[1].split("\n") if l not in before[1].split("\n")]
-                    self.assertTrue(all("already listed in register (expected on re-run)" in l for l in extra), extra)
-            self.assertEqual(diffs, [], "\n".join(diffs))
-            print(f"\n[corpus differential] {len(memos)} memos: exit codes identical; {masked} gained only the 'already listed' WARN the base version line was masking")
+                    exit_diffs.append(f"{rel}: exit {before[0]} → {after[0]}")
+                b_all, a_all = before[1].split("\n"), after[1].split("\n")
+                b_warn = [l for l in b_all if self.WARN in l]
+                a_warn = [l for l in a_all if self.WARN in l]
+                b_rest = [l for l in b_all if self.WARN not in l]
+                a_rest = [l for l in a_all if self.WARN not in l]
+                if b_rest != a_rest:
+                    other_diffs.append(f"{rel}\n  base: {before}\n  head: {after}")
+                if a_warn and not b_warn:
+                    gained.append(rel)
+                elif b_warn and not a_warn:
+                    lost.append(rel)
+                elif b_warn != a_warn:
+                    mixed.append(rel)
+            return len(memos), exit_diffs, other_diffs, sorted(gained), sorted(lost), sorted(mixed)
+
+    def test_memo_preflight_exit_codes_and_non_warn_output_identical(self):
+        n, exit_diffs, other_diffs, gained, lost, mixed = self.differential()
+        self.assertEqual(exit_diffs, [], "\n".join(exit_diffs))
+        self.assertEqual(other_diffs, [], "\n".join(other_diffs))
+        self.assertEqual(mixed, [], f"WARN text changed rather than gained/lost: {mixed}")
+        print(f"\n[corpus differential] {n} memos: exit codes identical; non-WARN output identical; "
+              f"'already listed' WARN gained by {len(gained)}, lost by {len(lost)} (see test_g12_gained_and_lost_sets_are_exact)")
+
+    def test_g12_gained_and_lost_sets_are_exact(self):
+        """CW-33-I01: direction and membership, not just text."""
+        n, _, _, gained, lost, _ = self.differential()
+        self.assertEqual(gained, sorted(self.EXPECTED_GAINED), f"gained set changed: +{sorted(set(gained) - set(self.EXPECTED_GAINED))} -{sorted(set(self.EXPECTED_GAINED) - set(gained))}")
+        self.assertEqual(lost, sorted(self.EXPECTED_LOST), f"lost set changed: +{sorted(set(lost) - set(self.EXPECTED_LOST))} -{sorted(set(self.EXPECTED_LOST) - set(lost))}")
+        self.assertEqual((len(gained), len(lost)), (13, 2))
+        print(f"\n[G-12] gained {len(gained)}: {gained}\n[G-12] lost {len(lost)}: {lost}")
 
     def test_032_memos_pass_preflight_at_head(self):
         for rev in ("R0", "R1"):
@@ -1150,6 +1256,177 @@ class GitTier(unittest.TestCase):
             for rel, data in before.items():
                 self.assertEqual(RL.read_bytes(os.path.join(a, rel)), data, rel)
 
+    def porcelain(self, repo):
+        p = subprocess.run(["git", "status", "--porcelain"], cwd=repo, capture_output=True, text=True, env=GIT_ENV)
+        return sorted(l for l in p.stdout.split("\n") if l.strip())  # keep the leading status columns
+
+    def snapshot(self, repo):
+        """Every file the finalizer may touch, plus the working tree's porcelain."""
+        out = {}
+        for rel in (RL.REGISTER_REL, os.path.join(RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml")):
+            out[rel] = RL.read_bytes(os.path.join(repo, rel))
+        for sub in ("versions", "pending"):
+            d = os.path.join(repo, RL.REGISTER_DIR_REL, sub)
+            out[sub] = {n: RL.read_bytes(os.path.join(d, n)) for n in sorted(os.listdir(d))} if os.path.isdir(d) else None
+        out["porcelain"] = self.porcelain(repo)
+        return out
+
+    def test_mutation_rf07_missing_or_wrong_target(self):
+        """CW-33-I02: the finalizer never infers its target. Missing --repo, a non-directory, a
+        directory that is not a Git work tree, a subdirectory of one, and a work tree with no
+        register all refuse with RF-07 before any fetch; every run's first line names its target."""
+        with tempfile.TemporaryDirectory() as tmp:
+            T = TempRepo(tmp)
+            a = T.clone("a")
+            T.reserve(a, "044-R0", 44); T.add_row(a, "044-R0", "x")
+            T.pending(a, "044.md", "CORR-LEGO-PIPE-044-R0", "044-R0", b"x")
+            T.commit(a, "memo 044")
+            before = self.snapshot(a)
+            # missing --repo, run from inside the target repo AND from /tmp: both refuse
+            for cwd in (a, tmp):
+                for extra in ((), ("--check",)):
+                    code, out = run_tool("register_finalize.py", *extra, cwd=cwd, env=GIT_ENV)
+                    self.assertEqual(code, 1, out)
+                    self.assertEqual(out.split("\n")[0], "target: (none)", out)
+                    self.assertIn("RF-07", out)
+                    self.assertIn("--repo DIR is required", out)
+            # wrong targets
+            for bad, why in ((os.path.join(tmp, "nope"), "is not a directory"),
+                             (os.path.join(tmp, "plain"), "is not inside a Git work tree"),
+                             (os.path.join(a, "docs"), "is not the top level of its Git work tree"),
+                             (os.path.join(tmp, "gitnoreg"), "has no docs/correspondence/REGISTER.md")):
+                if why.startswith("is not inside"):
+                    os.makedirs(bad)
+                if why.startswith("has no"):
+                    _git(tmp, "init", "-q", "-b", "main", bad, env=GIT_ENV)
+                code, out = run_tool("register_finalize.py", "--repo", bad, cwd=tmp, env=GIT_ENV)
+                self.assertEqual(code, 1, out)
+                self.assertEqual(out.split("\n")[0], f"target: {os.path.abspath(bad)}", out)
+                self.assertIn("RF-07", out)
+                self.assertIn(why, out)
+            # nothing was written anywhere in the real repo by any of the refusals
+            self.assertEqual(self.snapshot(a), before)
+            # positive: the explicit target is announced first, then the run proceeds
+            code, out = T.finalize(a)
+            self.assertEqual(code, 0, out)
+            self.assertEqual(out.split("\n")[0], f"target: {os.path.abspath(a)}", out)
+
+    def test_mutation_rf06_yaml_parse_failure_after_record_and_pointer_writes_rolls_back(self):
+        """CDX-34-I01: the ledger is read AFTER the record and pointer are written. A parser
+        failure there must enter RF-06, revert both writes, restore the pending note, and leave
+        the working tree differing only by the deliberately corrupted ledger — no traceback."""
+        with tempfile.TemporaryDirectory() as tmp:
+            T = TempRepo(tmp)
+            a = T.clone("a")
+            T.reserve(a, "045-R0", 45); T.add_row(a, "045-R0", "x")
+            T.pending(a, "045.md", "CORR-LEGO-PIPE-045-R0", "045-R0", b"note 045")
+            T.commit(a, "memo 045")
+            ledger_rel = os.path.join(RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml")
+            ledger_path = os.path.join(a, ledger_rel)
+            RL.write_bytes(ledger_path, b"allocations: [\n  - key: broken\n    state: {unclosed\n")  # yaml.parser.ParserError
+            before = self.snapshot(a)
+            self.assertEqual(before["porcelain"], [f" M {ledger_rel}"])
+            code, out = T.finalize(a)
+            self.assertEqual(code, 1, out)
+            self.assertIn("RF-06", out)
+            self.assertIn("ParserError", out)
+            self.assertNotIn("Traceback", out)
+            after = self.snapshot(a)
+            self.assertEqual(after, before, "rollback must restore pointer, record, ledger, pending notes and the porcelain")
+            self.assertFalse(os.path.exists(os.path.join(a, RL.REGISTER_DIR_REL, "versions", "2026-09-18.32.md")))
+            self.assertIn(b"**Register version: 2026-09-18.31**", after[RL.REGISTER_REL])
+            self.assertIn("045.md", after["pending"])
+            self.assertEqual(after["porcelain"], [f" M {ledger_rel}"])
+
+    def test_mutation_rf06_decode_and_filesystem_failures_after_first_write_roll_back(self):
+        """CDX-34-I01, the other two operational classes: a ledger that is not UTF-8, and a
+        ledger path that is a directory (OSError on read) — both after the first write."""
+        for corrupt in (lambda p: RL.write_bytes(p, b"\xff\xfe not utf-8"),
+                        lambda p: (os.remove(p), os.makedirs(p))):
+            with tempfile.TemporaryDirectory() as tmp:
+                T = TempRepo(tmp)
+                a = T.clone("a")
+                T.reserve(a, "046-R0", 46); T.add_row(a, "046-R0", "x")
+                T.pending(a, "046.md", "CORR-LEGO-PIPE-046-R0", "046-R0", b"note 046")
+                T.commit(a, "memo 046")
+                ledger_path = os.path.join(a, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml")
+                corrupt(ledger_path)
+                pointer_before = RL.read_bytes(os.path.join(a, RL.REGISTER_REL))
+                code, out = T.finalize(a)
+                self.assertEqual(code, 1, out)
+                self.assertIn("RF-06", out)
+                self.assertNotIn("Traceback", out)
+                self.assertFalse(os.path.exists(os.path.join(a, RL.REGISTER_DIR_REL, "versions", "2026-09-18.32.md")))
+                self.assertEqual(RL.read_bytes(os.path.join(a, RL.REGISTER_REL)), pointer_before)
+                self.assertTrue(os.path.exists(os.path.join(a, RL.REGISTER_DIR_REL, "pending", "046.md")))
+
+    def test_mutation_reserved_allocation_cannot_be_consumed(self):
+        """CDX-34-I02: only in_flight is consumable. A reserved allocation named by a pending
+        note refuses through RF-06 with the tree left exactly as committed."""
+        with tempfile.TemporaryDirectory() as tmp:
+            T = TempRepo(tmp)
+            a = T.clone("a")
+            T.reserve(a, "047-R0", 47); T.add_row(a, "047-R0", "x")
+            edit_yaml(os.path.join(a, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"),
+                      lambda d: [e.update(state="reserved") for e in d["allocations"] if e["key"] == "047-R0"])
+            T.pending(a, "047.md", "CORR-LEGO-PIPE-047-R0", "047-R0", b"note 047")
+            T.commit(a, "memo 047 reserved")
+            before = self.snapshot(a)
+            self.assertEqual(before["porcelain"], [])
+            code, out = T.finalize(a)
+            self.assertEqual(code, 1, out)
+            self.assertIn("RF-06", out)
+            self.assertIn("allocation 047-R0 is 'reserved', not in_flight", out)
+            self.assertEqual(self.snapshot(a), before)
+            # and a landed one is refused too (never re-consumed)
+            edit_yaml(os.path.join(a, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"),
+                      lambda d: [e.update(state="landed", landed_version="2026-09-18.30") for e in d["allocations"] if e["key"] == "047-R0"])
+            T.commit(a, "047 landed elsewhere")
+            code, out = T.finalize(a)
+            self.assertEqual(code, 1, out)
+            self.assertIn("is 'landed', not in_flight", out)
+            self.assertEqual(self.porcelain(a), [])
+
+    def test_positive_zero_allocation_landing_finalizes(self):
+        """CW-33-I04: a revision or policy-text-only landing consumes no number (rule 8).
+        `allocations_consumed: []` finalizes; the ledger is untouched byte for byte; --check is
+        an empty diff; affected_memos may not be empty."""
+        with tempfile.TemporaryDirectory() as tmp:
+            T = TempRepo(tmp)
+            a = T.clone("a")
+            RL.write_bytes(os.path.join(a, RL.REGISTER_DIR_REL, "pending", "048.md"),
+                           RL.record_bytes({"affected_memos": ["CORR-LEGO-PIPE-030-R1"], "allocations_consumed": []}, b"R1 of 030: revision consumes no number"))
+            T.commit(a, "030-R1 revision")
+            ledger_rel = os.path.join(RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml")
+            ledger_before = RL.read_bytes(os.path.join(a, ledger_rel))
+            code, out = T.finalize(a)
+            self.assertEqual(code, 0, out)
+            self.assertIn("consumed []", out)
+            fm, body = RL.parse_record(RL.read_bytes(os.path.join(a, RL.REGISTER_DIR_REL, "versions", "2026-09-18.32.md")))
+            self.assertEqual(fm["allocations_consumed"], [])
+            self.assertEqual(fm["affected_memos"], ["CORR-LEGO-PIPE-030-R1"])
+            self.assertEqual(RL.read_bytes(os.path.join(a, ledger_rel)), ledger_before)
+            T.commit(a, "finalize 030-R1")
+            code, out = T.finalize(a, "--check")
+            self.assertEqual(code, 0, out)
+            self.assertIn("empty diff", out)
+            code, out = T.lint(a)
+            self.assertEqual(code, 0, out)
+            # the schema accepts the record the finalizer emitted
+            errs = []
+            check_against_schema(fm, load_schema("register-version.v1"), errs)
+            self.assertEqual(errs, [], errs)
+        # affected_memos: [] is still refused
+        with tempfile.TemporaryDirectory() as tmp:
+            T = TempRepo(tmp)
+            a = T.clone("a")
+            RL.write_bytes(os.path.join(a, RL.REGISTER_DIR_REL, "pending", "049.md"),
+                           RL.record_bytes({"affected_memos": [], "allocations_consumed": []}, b"x"))
+            code, out = T.finalize(a)
+            self.assertEqual(code, 1, out)
+            self.assertIn("RF-05", out)
+            self.assertIn("affected_memos must be a non-empty list", out)
+
     def test_two_branch_rehearsal(self):
         """R0 §9: steps 1–8 — stale finalization fails at RF-02 (not RF-03), refresh assigns
         the following version without editing the first, table-tail conflict measured, RF-03 in
@@ -1396,8 +1673,14 @@ RULE_TESTS = {
     "RF-03": ("GitTier.test_positive_rf_happy_path_and_g06_determinism", "GitTier.test_two_branch_rehearsal"),
     "RF-04": ("GitTier.test_positive_rf_happy_path_and_g06_determinism", "GitTier.test_mutation_rf04_leftover_stale_record"),
     "RF-05": ("GitTier.test_positive_rf_happy_path_and_g06_determinism", "GitTier.test_mutation_rf05_nothing_to_finalize_and_check_before_finalization"),
-    "RF-06": ("GitTier.test_positive_rf_happy_path_and_g06_determinism", "GitTier.test_mutation_rf06_lint_error_reverts_every_write"),
+    "RF-06": ("GitTier.test_positive_rf_happy_path_and_g06_determinism", "GitTier.test_mutation_rf06_yaml_parse_failure_after_record_and_pointer_writes_rolls_back"),
+    "RF-07": ("GitTier.test_positive_rf_happy_path_and_g06_determinism", "GitTier.test_mutation_rf07_missing_or_wrong_target"),
 }
+# Further mutation cases beyond the one-per-rule minimum RULE_TESTS records (H0→H1 repairs):
+#   RF-06: test_mutation_rf06_lint_error_reverts_every_write, test_mutation_rf06_decode_and_filesystem_failures_after_first_write_roll_back,
+#          test_mutation_reserved_allocation_cannot_be_consumed
+#   RL-13: test_mutation_rl13_widened_whitelist_and_row_change_together
+#   G-12:  CorpusDifferential.test_g12_gained_and_lost_sets_are_exact
 
 
 class MetaTest(unittest.TestCase):
@@ -1418,7 +1701,7 @@ class MetaTest(unittest.TestCase):
                 cls, meth = name.split(".")
                 self.assertTrue(hasattr(getattr(module, cls), meth), f"{rule}: {name} does not exist")
             self.assertNotEqual(pos, mut, rule)
-        self.assertGreaterEqual(len(declared), 23)
+        self.assertGreaterEqual(len(declared), 24)
 
     def test_battery_is_not_vacuous(self):
         loader = unittest.TestLoader()

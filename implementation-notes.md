@@ -123,3 +123,22 @@
   `register/pending/.gitkeep` (not authority, not a note) so the directory is never emptied,
   written by the finalizer if absent; the battery reproduces the hazard without it and its
   absence with it. One file added to the inventory, recorded here.
+- 2026-09-21 (032-R1 implementation, H0→H1 repair; corrects the G-12 bullet above forward, not
+  in place): the H0 differential assumed the masked WARN moved in one direction ("appears with
+  the line migrated") and filtered it from both sides before comparing, so it could not see
+  direction; the territory (REVIEW-033 CW-33-I01, reproduced): the WARN is **gained** by 13
+  memos and **lost** by 2 (`build-harness/LEGO-PIPE-011-…-R0.md`, `…-R1.md`, whose rows say
+  "superseded" but whose first substring hit at `B` was the version line, which does not). Both
+  are corrections of the base's accident, not regressions. Took the executable option — the
+  battery now records the gained and lost sets separately and asserts exact membership
+  (`CorpusDifferential.test_g12_gained_and_lost_sets_are_exact`), so a future change that moves a
+  memo between the sets fails. `memo_preflight.py` remains untouched (R0 §11). Also in this
+  repair, from the same review round (REVIEW-033/034, lead reconciliation): the finalizer's
+  target is explicit (`--repo` required, RF-07, printed first — CW-33-I02); every operational
+  failure after the first write reverts (parser/decode/OS errors, CDX-34-I01); only `in_flight`
+  allocations are consumed (CDX-34-I02); `allocations_consumed: []` is a legal zero-number
+  landing (CW-33-I04); RL-13's whitelist is bound to the ratified Q-13 set (CW-33-I03); the
+  settings step runs `if: always()` so AO-14 is reachable on pre-finalization heads (CW-33-I06);
+  the H0 commit message's "77 cases" was 79 at H0 and is 88 at H1 (CW-33-I05) — H0 is not
+  amended. No migrated byte, seam, resolution, R0/R1 file or base changed; the pending
+  migration note is preserved for the controlled finalization step.

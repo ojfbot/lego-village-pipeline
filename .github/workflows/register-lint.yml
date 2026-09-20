@@ -5,7 +5,10 @@ name: register-lint
 # canonical check (RR-32-R2-03); the settings-read step is the one API read, and it is
 # two-state: it always REPORTS allow_squash_merge / allow_rebase_merge and FAILS only
 # when REGISTER.md carries Rule 18's ratification sentinel and the settings still permit
-# squash or rebase (RR-32-R3-01, G-11/G-11a).
+# squash or rebase (RR-32-R3-01, G-11/G-11a). The settings step runs with `if: always()` so
+# AO-14's two-state result is emitted even when the AO-19 finalization check fails on a
+# pre-finalization head (CW-33-I06). Every finalizer invocation names its target with --repo
+# (CW-33-I02).
 on:
   pull_request:
     paths:
@@ -53,9 +56,14 @@ jobs:
           if git diff --quiet origin/main...HEAD -- docs/correspondence/; then
             echo "no correspondence change on this PR; finalization not required"
           else
-            tools/.venv/bin/python tools/register_finalize.py --check
+            tools/.venv/bin/python tools/register_finalize.py --repo "$GITHUB_WORKSPACE" --check
           fi
+      # CW-33-I06: AO-14 must be obtainable on every head, including pre-finalization heads
+      # where the AO-19 step above intentionally fails (RF-05). `if: always()` makes this step
+      # run regardless; the job stays red until both intentional gates are satisfied, but both
+      # results are visible in the log (RR-32-R4-02: the read is posted before approval).
       - name: Settings read — two-state (reports always; fails only with Rule 18 present)
+        if: always()
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

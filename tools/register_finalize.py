@@ -37,8 +37,25 @@ pointer line, ledger — and diffs. The reviewer's statement is "`--check` at ba
 head <sha>: empty diff", valid only against the origin/main it names (RR-32-R3-07). CI runs
 the same check against `git merge-base origin/main HEAD` (AO-19).
 
-Usage: register_finalize.py [--repo DIR] [--check] [--remote NAME]
+Usage: register_finalize.py --repo DIR [--check] [--remote NAME]
 Exit: 0 · 1 refusal (RF-nn) or lint error · 2 usage/IO
+
+`--repo DIR` is REQUIRED for real and --check runs alike (RF-07, CW-33-I02): the tool never
+infers its target from its own location or from the working directory. The first line of every
+run — success or refusal — is `target: <absolute path>`, printed before any fetch, refusal or
+write, so the record of a run always names the repository it acted on. RF-07 also refuses a DIR
+that is not a Git work tree or that has no docs/correspondence/REGISTER.md.
+
+Rollback boundary (RF-06, CDX-34-I01): once the first byte is written, every operational failure
+— lint errors, ledger/record parse errors (yaml.YAMLError), decode errors, filesystem errors
+(OSError), and value/key/type errors — reverts every write and removal of this run before the
+tool exits 1. KeyboardInterrupt and SystemExit are not masked.
+
+Allocation lifecycle (CDX-34-I02): only `in_flight` allocations may be consumed; a `reserved`
+allocation named in a pending note is refused through RF-06 with the tree restored. A landing that
+consumes no allocation (a revision, a policy-text-only landing — rule 8) declares
+`allocations_consumed: []`; the key stays mandatory, the list may be empty (CW-33-I04).
+`affected_memos` must be non-empty.
 Test hook (never for real use): REGISTER_FINALIZE_PAUSE_CMD is executed between step 3 and
 the step-4 re-fetch so the battery can manufacture the RF-03 race.
 
@@ -78,8 +95,12 @@ def pending_notes(repo):
         if name.endswith(".md"):
             fm, body = parse_record(read_bytes(os.path.join(pdir, name)))
             for k in PENDING_REQUIRED:
-                if not isinstance(fm.get(k), list) or not fm[k]:
-                    raise ValueError(f"pending/{name}: {k} must be a non-empty list")
+                if not isinstance(fm.get(k), list):
+                    raise ValueError(f"pending/{name}: {k} must be a list (may be empty only for allocations_consumed)")
+                if not all(isinstance(x, str) and x for x in fm[k]):
+                    raise ValueError(f"pending/{name}: {k} entries must be non-empty strings")
+            if not fm["affected_memos"]:
+                raise ValueError(f"pending/{name}: affected_memos must be a non-empty list")
             out.append((name, fm, body))
     return out
 
@@ -104,18 +125,45 @@ def compute(current, observed_main, notes):
 
 
 def consume(ledger, consumed, nxt):
-    """Move consumed allocations in_flight → landed; returns the new ledger dict."""
+    """Move consumed allocations in_flight → landed; returns the new ledger dict.
+
+    Only `in_flight` is consumable (R0 §5 step 6; CDX-34-I02). `reserved` is a distinct
+    lifecycle state — a number James has allocated whose memo has not yet been drafted against
+    it — and a landing may not skip it; the reservation must first be moved to in_flight on the
+    branch that carries the memo."""
     keys = {e["key"] for e in ledger["allocations"]}
     missing = [k for k in consumed if k not in keys]
     if missing:
         raise ValueError(f"allocations_consumed names keys not in the ledger: {missing}")
     for e in ledger["allocations"]:
         if e["key"] in consumed:
-            if e["state"] not in ("in_flight", "reserved"):
-                raise ValueError(f"allocation {e['key']} is {e['state']}, not in_flight/reserved")
+            if e["state"] != "in_flight":
+                raise ValueError(f"allocation {e['key']} is '{e['state']}', not in_flight — only in_flight allocations are consumed by a landing (reserved → in_flight is a branch edit, never a finalization side effect)")
             e["state"] = "landed"
             e["landed_version"] = nxt
     return ledger
+
+
+def resolve_target(args):
+    """RF-07: the target repository is always explicit and always announced."""
+    if "--repo" not in args:
+        return None, "--repo DIR is required; this tool never infers its target from its own location or the working directory"
+    i = args.index("--repo")
+    if i + 1 >= len(args):
+        return None, "--repo given without a directory"
+    repo = os.path.abspath(args[i + 1])
+    del args[i:i + 2]
+    if not os.path.isdir(repo):
+        return repo, f"{repo} is not a directory"
+    p = subprocess.run(["git", "rev-parse", "--show-toplevel"], cwd=repo, capture_output=True, text=True)
+    if p.returncode != 0:
+        return repo, f"{repo} is not inside a Git work tree"
+    top = os.path.realpath(p.stdout.strip())
+    if top != os.path.realpath(repo):
+        return repo, f"{repo} is not the top level of its Git work tree ({top})"
+    if not os.path.exists(os.path.join(repo, REGISTER_REL)):
+        return repo, f"{repo} has no {REGISTER_REL} — not a register repository"
+    return repo, None
 
 
 def pointer_line(regtxt, nxt):
@@ -127,10 +175,11 @@ def pointer_line(regtxt, nxt):
 
 def main(argv):
     args = list(argv)
-    repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     remote = "origin"
-    if "--repo" in args:
-        i = args.index("--repo"); repo = os.path.abspath(args[i + 1]); del args[i:i + 2]
+    repo, why = resolve_target(args)
+    print(f"target: {repo if repo else '(none)'}")
+    if why:
+        return refuse("RF-07", why)
     if "--remote" in args:
         i = args.index("--remote"); remote = args[i + 1]; del args[i:i + 2]
     check = "--check" in args
@@ -291,9 +340,11 @@ def main(argv):
             for e in lint.errs:
                 print("  " + e)
             raise ValueError(f"register_lint reported {len(lint.errs)} error(s); reverting this run's writes")
-    except (ValueError, KeyError, RuntimeError) as e:
+    except (ValueError, KeyError, TypeError, RuntimeError, yaml.YAMLError, UnicodeDecodeError, OSError) as e:
+        # CDX-34-I01: one transaction boundary for every operational failure after the first
+        # write — parser, decode and filesystem errors included. Never KeyboardInterrupt/SystemExit.
         revert()
-        return refuse("RF-06", str(e))
+        return refuse("RF-06", f"{type(e).__name__}: {e} — every write of this run reverted")
     print(f"finalized {nxt} (previous {current}) from {remote}/main {observed_main} on head {head}: "
           f"{len(notes)} note(s), affected {fm['affected_memos']}, consumed {fm['allocations_consumed']}, note_sha256 {fm['note_sha256']}")
     return 0
