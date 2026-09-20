@@ -51,3 +51,7 @@
   Cowork later identified its global `git worktree prune` as the process that removed the first
   worktree's metadata; agents now avoid global pruning in the shared repository and use isolated
   clones or remove only their own worktrees by explicit path.
+- 2026-09-20 (CORR-031 train finalization): the plan assumed a chained `git worktree add` then
+  `git merge` would run the merge inside the new PR #18 worktree; the shell retained the source
+  checkout as its working directory and made a local-only merge there instead. Left that merge
+  unpushed and repeated the operation from the explicitly selected PR #18 worktree.
