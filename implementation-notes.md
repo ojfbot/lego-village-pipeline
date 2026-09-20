@@ -44,3 +44,10 @@
   the two guidance commits were prepared; another local desktop process advanced pipeline `main`
   and published the same one-file feature branch concurrently. Kept the refreshed remote branch
   after verifying its PR contains only `AGENTS.md`; no history was rewritten.
+- 2026-09-19 (CORR-027 merge-train shepherding): the plan assumed the allocated 027 branch would
+  retain the shared checkout while its memo was prepared; Claude Code switched that checkout to
+  PR #16 and began its author-owned corrections, leaving both agents' uncommitted files together.
+  Left Claude Code's 029 and register edits untouched and moved 027 into an independent clone.
+  Cowork later identified its global `git worktree prune` as the process that removed the first
+  worktree's metadata; agents now avoid global pruning in the shared repository and use isolated
+  clones or remove only their own worktrees by explicit path.
