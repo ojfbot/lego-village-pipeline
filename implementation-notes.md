@@ -65,3 +65,11 @@
   the memo without a version edit, no register row, no allocation — and recorded it here per the
   lead's reconciled repair request (RR-32-11) rather than deciding the per-commit-versus-per-
   landing question, which stays open on the memo's own operator docket (Q-02, Q-10).
+- 2026-09-20 (HANDOFF-LEGO-PIPE-032-R1, PR #21): the standing rule assumed every commit touching
+  `docs/correspondence/` bumps the register version line; the operator's ratified docket (PR #21
+  comment 5752476543) directed a ratified R1 revision to be committed to the same unmerged draft
+  branch, with the register still unedited until the separate atomic migration landing and no
+  version claimed on a branch (Q-03). Took the conservative option — added the R1 memo only,
+  no register row, no version edit, R0 untouched — and recorded it here; the per-commit rule
+  is retired by Q-02/Q-10 only when the migration PR merges, so this is a recorded departure,
+  not an application of the new rule.
