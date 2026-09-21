@@ -142,3 +142,18 @@
   the H0 commit message's "77 cases" was 79 at H0 and is 88 at H1 (CW-33-I05) — H0 is not
   amended. No migrated byte, seam, resolution, R0/R1 file or base changed; the pending
   migration note is preserved for the controlled finalization step.
+- 2026-09-21 (032-R1 implementation, H4 — F-08): the plan (R0 §9, the battery "in a temporary
+  repository built with the migrated tree") assumed the migrated tree the battery copies is the
+  migration's own output; the territory: every fixture (`copy_tree`, `TempRepo`,
+  `reconstruct_base_register`) and `register_migrate --check` took the LIVE register tree as
+  that output, which held only until the first real finalization (H3) legitimately advanced it
+  (`.32` record, pointer `.32`, `032-R1` landed). Took the bounded option James authorized
+  (PR #23 comment 5754777058): fixtures now construct the bootstrap state explicitly by running
+  the migrator over the offline-reconstructed base and overlaying the immutable committed
+  manifest; `register_migrate --check` compares migration-owned artifacts byte-for-byte and the
+  three forward-moving surfaces (finalized records, pointer, ledger lifecycle) structurally
+  against the seed, with negative controls for every migration-owned artifact and every
+  illegitimate ledger movement; forward state stays governed by `register_finalize --check` and
+  lint. No byte under `docs/correspondence/**` changed; no finalizer run; H3 unamended. Recorded
+  because the class was named in advance (031 N-17, R0 §2a P07) and the batteries still shared
+  the blind spot.

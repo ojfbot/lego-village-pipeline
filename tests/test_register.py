@@ -69,14 +69,52 @@ def errs_for(rule, errs):
     return [e for e in errs if e.startswith(rule + " ")]
 
 
-def copy_tree(tmp):
-    """A working copy of the committed register set + tools, for mutation."""
-    root = os.path.join(tmp, "repo")
-    os.makedirs(os.path.join(root, "docs", "correspondence"))
-    shutil.copyfile(REGISTER, os.path.join(root, RL.REGISTER_REL))
-    shutil.copytree(REG_DIR, os.path.join(root, RL.REGISTER_DIR_REL),
-                    ignore=shutil.ignore_patterns("pending"))
+def bootstrap_tree(tmp, name="repo"):
+    """The MIGRATION's own output — the bootstrap state — constructed explicitly, never copied
+    from the live tree (F-08/H4). At H0–H2 the live tree happened to equal this; after the
+    first real finalization it legitimately does not (pointer .32, a finalized record, a
+    consumed allocation), and a fixture that copied it asserted bootstrap facts against
+    forward state. Built by running register_migrate.migrate() over the offline-reconstructed
+    base (its version line is proved identical to B's by the manifest digests) and overlaying
+    the committed manifest, which is migration-owned and immutable — the only artifact whose
+    whole-file source fields cannot be recomputed without B's rows. Result: 30 `kind:
+    migrated` records, pointer at the manifest's current_version, the seed ledger (032-R1
+    in_flight, 033/034/035 reserved), the anomalies — and nothing produced by finalization."""
+    root = os.path.join(tmp, name)
+    live = RL.Register(REPO)
+    RM.migrate(reconstruct_base_register(REPO), live.manifest["base_commit"], root)
+    produced_manifest = manifest_path(root)
+    committed_manifest = live.manifest_paths[0]
+    prod = RL.load_yaml_file(produced_manifest)
+    for k in ("line_sha256", "line_bytes", "slices", "resolutions", "seams", "preamble", "lowest_version", "version_count", "current_version"):
+        assert prod[k] == live.manifest[k], f"bootstrap fixture: migrator no longer reproduces manifest.{k}"
+    shutil.copyfile(committed_manifest, produced_manifest)
+    reg = RL.Register(root)
+    assert len(reg.records) == 30 and all(fm["kind"] == "migrated" for fm, _, _ in reg.records.values())
+    assert RL.register_version_line(reg.regtxt)[2] == reg.manifest["current_version"]
     return root
+
+
+def copy_tree(tmp):
+    """Bootstrap-state working tree for mutation (kept under its historical name; see
+    bootstrap_tree — this is no longer a copy of the live tree)."""
+    return bootstrap_tree(tmp)
+
+
+def migration_note_bytes():
+    """The 032 migration's pending note, for fixtures that need a real-sized note: read from
+    register/pending/ on a pre-finalization tree, or re-derived from the finalized record that
+    consumed it on a post-finalization tree (frontmatter from the record's fields, body byte-
+    exact — the finalizer's note_sha256 is sha256(body), so the derived note finalizes to the
+    same digest)."""
+    pending = os.path.join(REG_DIR, "pending", "032-register-migration.md")
+    if os.path.exists(pending):
+        return RL.read_bytes(pending)
+    reg = RL.Register(REPO)
+    for fm, body, _ in reg.records.values():
+        if fm.get("kind") == "finalized" and fm.get("allocations_consumed") == ["032-R1"]:
+            return RL.record_bytes({"affected_memos": list(fm["affected_memos"]), "allocations_consumed": ["032-R1"]}, body)
+    raise AssertionError("neither the 032 pending note nor its finalized record is present")
 
 
 def manifest_path(root):
@@ -402,11 +440,20 @@ class MigrationProof(unittest.TestCase):
         self.assertEqual(m["line_bytes"] - m["line_characters"], 283)
 
     def test_positive_rl05_resolve_every_version_and_compare_digests(self):
+        """30 MIGRATED records always; the live tree may carry finalized records on top
+        (31 at H3). The distinction is asserted, not blurred."""
         reg = RL.Register(REPO)
-        self.assertEqual(len(reg.records), 30)
+        migrated = {v: r for v, r in reg.records.items() if r[0]["kind"] == "migrated"}
+        finalized = {v: r for v, r in reg.records.items() if r[0]["kind"] in ("finalized", "bootstrap")}
+        self.assertEqual(len(migrated), 30)
+        self.assertEqual(len(reg.records), 30 + len(finalized))
         via_slice = via_res = 0
         for v in reg.sorted_versions():
             kind, loc, digest, body = RL.resolve(reg, v)
+            if v in finalized:
+                self.assertEqual(kind, "finalized")
+                self.assertEqual(digest, finalized[v][0]["note_sha256"])
+                continue
             if kind == "slice":
                 via_slice += 1
                 self.assertEqual(digest, reg.slices()[loc]["sha256"], v)
@@ -417,8 +464,13 @@ class MigrationProof(unittest.TestCase):
         self.assertEqual((via_slice, via_res), (24, 6))
         code, out = run_tool("register_lint.py", "resolve", "--all")
         self.assertEqual(code, 0, out)
-        self.assertEqual(out.count(" OK"), 30)
+        self.assertEqual(out.count(" OK"), len(reg.records))
         self.assertIn("2026-09-17.6: resolution s-08[38728, 38930]", out)
+        # bootstrap state: exactly 30, none finalized
+        with tempfile.TemporaryDirectory() as tmp:
+            boot = RL.Register(bootstrap_tree(tmp))
+            self.assertEqual(len(boot.records), 30)
+            self.assertFalse(any(r[0]["kind"] != "migrated" for r in boot.records.values()))
 
     def test_positive_resolution_records_are_real_bytes_inside_dot8(self):
         reg = RL.Register(REPO)
@@ -548,19 +600,39 @@ class Anomalies(unittest.TestCase):
 
 class LedgerSetPointer(unittest.TestCase):
     def test_positive_rl02_ledger_seed_complete_and_next_free_derived(self):
+        """Live tree (whatever forward state it is in) AND the bootstrap state, separately."""
         reg = RL.Register(REPO)
         keys = {e["key"] for e in reg.ledger["allocations"]}
         rows = [k for k, _ in RL.table_data_rows(reg.regtxt)["correspondence"] if not re.fullmatch(r"\d{3}\+", k)]
         self.assertTrue(set(rows) <= keys, set(rows) - keys)
-        self.assertEqual(reg.ledger["next_free"], 36)
-        self.assertEqual(RL.next_free_row_number(reg.regtxt), 36)
-        states = {e["key"]: e["state"] for e in reg.ledger["allocations"]}
-        self.assertEqual(states["032-R1"], "in_flight")
-        self.assertEqual({states["033"], states["034"], states["035"]}, {"reserved"})
-        self.assertEqual(states["031-R0"], "landed")
-        self.assertTrue(all("landing_pr" not in e for e in reg.ledger["allocations"]))
+        self.assertEqual(reg.ledger["next_free"], RL.next_free_row_number(reg.regtxt))
+        self.assertEqual(reg.ledger["next_free"], max(e["number"] for e in reg.ledger["allocations"] if isinstance(e["number"], int)) + 1)
+        entries = {e["key"]: e for e in reg.ledger["allocations"]}
+        for k in ("032-R1", "033", "034", "035", "031-R0"):
+            self.assertIn(k, entries)
+        # 032-R1 is in_flight (bootstrap) or landed at a finalized record that names it (forward)
+        e = entries["032-R1"]
+        if e["state"] == "landed":
+            rec = reg.records.get(e["landed_version"])
+            self.assertIsNotNone(rec, e)
+            self.assertEqual(rec[0]["kind"], "finalized")
+            self.assertIn("032-R1", rec[0]["allocations_consumed"])
+        else:
+            self.assertEqual(e["state"], "in_flight")
+            self.assertIsNone(e["landed_version"])
+        self.assertEqual(entries["031-R0"]["state"], "landed")
+        self.assertTrue(all("landing_pr" not in x for x in reg.ledger["allocations"]))
         errs, _, _ = lint_errs(REPO)
         self.assertEqual(errs_for("RL-02", errs), [])
+        # bootstrap state, constructed explicitly: exactly the seed
+        with tempfile.TemporaryDirectory() as tmp:
+            boot = RL.Register(bootstrap_tree(tmp))
+            states = {x["key"]: x["state"] for x in boot.ledger["allocations"]}
+            self.assertEqual(states["032-R1"], "in_flight")
+            self.assertEqual({states["033"], states["034"], states["035"]}, {"reserved"})
+            self.assertEqual(boot.ledger["next_free"], 36)
+            self.assertEqual(RL.next_free_row_number(boot.regtxt), 36)
+            self.assertTrue(all(x["landed_version"] is None for x in boot.ledger["allocations"] if x["state"] != "landed"))
 
     def test_positive_rl02_five_reserved_with_zero_rows_is_green(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -615,8 +687,17 @@ class LedgerSetPointer(unittest.TestCase):
             self.assertEqual(code, 1, out)
 
     def test_positive_rl04_pointer(self):
+        # live tree: the pointer equals whatever the newest record is (bootstrap .31, or later)
+        reg = RL.Register(REPO)
+        newest = reg.sorted_versions()[-1]
+        self.assertEqual(RL.register_version_line(reg.regtxt)[2], newest)
         errs, _, notes = lint_errs(REPO)
-        self.assertTrue(any("RL-04 pointer 2026-09-18.31 equals the newest record" in n for n in notes), notes)
+        self.assertTrue(any(f"RL-04 pointer {newest} equals the newest record" in n for n in notes), notes)
+        # bootstrap state: the pointer is the migrated version
+        with tempfile.TemporaryDirectory() as tmp:
+            root = bootstrap_tree(tmp)
+            _, _, notes = lint_errs(root)
+            self.assertTrue(any("RL-04 pointer 2026-09-18.31 equals the newest record" in n for n in notes), notes)
 
     def test_mutation_rl04_pointer_behind_and_doubled(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -1002,7 +1083,7 @@ class MigrationTool(unittest.TestCase):
             regp = os.path.join(root, RL.REGISTER_REL)
             RL.write_bytes(regp, RL.read_bytes(regp).replace(b"**Register version: 2026-09-18.31** \xe2\x80\x94 one register version", b"**Register version: 2026-09-18.31** \xe2\x80\x94 something else"))
             with self.assertRaises(RuntimeError):
-                RM.rewrite_register_in_place(root, reconstruct_base_register(REPO), RL.read_bytes(REGISTER))
+                RM.rewrite_register_in_place(root, reconstruct_base_register(REPO), RL.read_bytes(regp).replace(b"something else", b"one register version"))
 
     def test_fixed_emitter_round_trips_version_strings(self):
         doc = {"register_version": "2026-09-18.31", "previous_version": None, "n": 2026, "d": "2026-09-18"}
@@ -1013,6 +1094,93 @@ class MigrationTool(unittest.TestCase):
         self.assertEqual(back["d"], "2026-09-18", "dates are quoted by the emitter, never parsed back as date objects")
         self.assertEqual(RL.dump_yaml(back), out)
 
+    def _produced_with_committed_manifest(self, tmp):
+        """A fresh migrator run over the reconstructed base, with the committed (immutable)
+        manifest overlaid — the offline stand-in for `--base B`, whose whole-file source fields
+        only the --with-git case can recompute."""
+        produced = os.path.join(tmp, "produced")
+        RM.migrate(reconstruct_base_register(REPO), RL.Register(REPO).manifest["base_commit"], produced)
+        shutil.copyfile(RL.Register(REPO).manifest_paths[0], manifest_path(produced))
+        return produced
+
+    def test_reproduction_accepts_forward_state_and_detects_migration_artifact_corruption(self):
+        """F-08/H4: the reproduction proof is about the migration's own artifacts. Legitimate
+        forward state (a finalized record, an advanced pointer, a landed allocation) is not a
+        difference; corruption of anything the migration owns, or an illegitimate ledger
+        movement, still is."""
+        manifest = RL.Register(REPO).manifest
+        with tempfile.TemporaryDirectory() as tmp:
+            produced = self._produced_with_committed_manifest(tmp)
+            # (a) the bootstrap tree itself: empty
+            boot = bootstrap_tree(tmp, name="boot")
+            self.assertEqual(RM.reproduction_diffs(produced, boot, manifest), [])
+            # (b) legitimate forward state, constructed the way the finalizer would produce it
+            fwd = bootstrap_tree(tmp, name="fwd")
+            body = b"forward landing"
+            write_record(fwd, {"register_version": "2026-09-18.32", "previous_version": "2026-09-18.31", "kind": "finalized",
+                               "finalized_from_main": "b" * 40, "affected_memos": ["HANDOFF-LEGO-PIPE-032-R1"],
+                               "allocations_consumed": ["032-R1"], "note_sha256": sha(body)}, body)
+            regp = os.path.join(fwd, RL.REGISTER_REL)
+            RL.write_bytes(regp, RF.pointer_line(RL.read_bytes(regp).decode(), "2026-09-18.32").encode())
+            lp = os.path.join(fwd, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml")
+            edit_yaml(lp, lambda d: [e.update(state="landed", landed_version="2026-09-18.32") for e in d["allocations"] if e["key"] == "032-R1"])
+            self.assertEqual(RM.reproduction_diffs(produced, fwd, manifest), [])
+            # plus a later reservation appended at/above next_free, and 033 moved reserved→in_flight
+            edit_yaml(lp, lambda d: (d["allocations"].append({"key": "036-R0", "number": 36, "identity": "CORR-LEGO-PIPE-036", "type": "CORR",
+                                                              "thread": "cluster", "actor": "x", "allocated_by": "James", "date": "2026-09-22",
+                                                              "state": "reserved", "landed_version": None, "basis": "later"}),
+                                     [e.update(state="in_flight") for e in d["allocations"] if e["key"] == "033"], d.update(next_free=37)))
+            self.assertEqual(RM.reproduction_diffs(produced, fwd, manifest), [])
+            # (c) negative controls — each on a fresh copy of the forward tree
+            def mutated(fn):
+                root = os.path.join(tmp, f"m{len(os.listdir(tmp))}")
+                shutil.copytree(fwd, root)
+                fn(root)
+                return RM.reproduction_diffs(produced, root, manifest)
+            def flip_record(root):
+                edit_record(root, "2026-09-18.13", body=b"tampered")
+            def seeded_field(root):
+                edit_yaml(os.path.join(root, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"), lambda d: [e.update(allocated_by="nobody") for e in d["allocations"] if e["key"] == "031-R0"])
+            def backwards(root):
+                edit_yaml(os.path.join(root, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"), lambda d: [e.update(state="reserved", landed_version=None) for e in d["allocations"] if e["key"] == "031-R0"])
+            def dangling(root):
+                edit_yaml(os.path.join(root, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"), lambda d: [e.update(landed_version="2026-09-18.40") for e in d["allocations"] if e["key"] == "032-R1"])
+            def not_named(root):
+                edit_record(root, "2026-09-18.32", fn_fm=lambda fm: fm.update(allocations_consumed=[]))
+            def removed(root):
+                edit_yaml(os.path.join(root, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"), lambda d: d.update(allocations=[e for e in d["allocations"] if e["key"] != "013"]))
+            def low_number(root):
+                edit_yaml(os.path.join(root, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"), lambda d: d["allocations"].append(dict(d["allocations"][-1], key="009-X", number=9)))
+            def manifest_byte(root):
+                mp = manifest_path(root); RL.write_bytes(mp, RL.read_bytes(mp).replace(b"line_bytes: 39268", b"line_bytes: 39269"))
+            def anomalies(root):
+                ap = os.path.join(root, RL.REGISTER_DIR_REL, "KNOWN-ANOMALIES.yaml"); RL.write_bytes(ap, RL.read_bytes(ap) + b"\n# tampered\n")
+            def pointer_behind(root):
+                rp = os.path.join(root, RL.REGISTER_REL); RL.write_bytes(rp, RF.pointer_line(RL.read_bytes(rp).decode(), "2026-09-18.30").encode())
+            def pointer_template(root):
+                rp = os.path.join(root, RL.REGISTER_REL); RL.write_bytes(rp, RL.read_bytes(rp).replace(b"never claimed on a branch", b"claimed on a branch"))
+            def migrated_record_deleted(root):
+                os.remove(os.path.join(root, RL.REGISTER_DIR_REL, "versions", "2026-09-18.20.md"))
+            def stray_migrated_record(root):
+                write_record(root, {"register_version": "2026-09-18.33", "previous_version": "2026-09-18.32", "kind": "migrated", "slice": "s-31", "note_sha256": sha(b"x")}, b"x")
+            for name, fn, needle in (
+                ("record byte", flip_record, "differs: register/versions/2026-09-18.13.md"),
+                ("seeded field", seeded_field, "031-R0.allocated_by changed from seed"),
+                ("backwards", backwards, "moved backwards landed → reserved"),
+                ("dangling landed_version", dangling, "no finalized record with that version"),
+                ("record does not name the key", not_named, "allocations_consumed does not name it"),
+                ("seeded entry removed", removed, "seeded entry 013 is missing"),
+                ("new entry below next_free", low_number, "below the seeded next_free"),
+                ("manifest byte", manifest_byte, "differs: register/MIGRATION-"),
+                ("anomalies", anomalies, "differs: register/KNOWN-ANOMALIES.yaml"),
+                ("pointer behind", pointer_behind, "is behind the migrated version"),
+                ("pointer template", pointer_template, "pointer text differs from the migrated template"),
+                ("migrated record deleted", migrated_record_deleted, "missing in committed tree: register/versions/2026-09-18.20.md"),
+                ("stray migrated record", stray_migrated_record, "extra in committed tree: register/versions/2026-09-18.33.md"),
+            ):
+                diffs = mutated(fn)
+                self.assertTrue(any(needle in d for d in diffs), f"{name}: expected a difference containing {needle!r}, got {diffs}")
+
     @unittest.skipUnless(WITH_GIT, "--with-git: reads the manifest's base commit from the project's .git")
     def test_reproduction_from_the_base_commit_is_an_empty_diff(self):
         base = RL.Register(REPO).manifest["base_commit"]
@@ -1020,6 +1188,22 @@ class MigrationTool(unittest.TestCase):
         code, out = run_tool("register_migrate.py", "--base", base, "--check")
         self.assertEqual(code, 0, out)
         self.assertIn("0 differences", out)
+        # negative control against a real base commit, in a temporary repository: a landed
+        # forward state is accepted, then one migrated record byte flipped is a difference
+        with tempfile.TemporaryDirectory() as tmp:
+            T = TempRepo(tmp)
+            a = T.clone("a")
+            code, out = run_tool("register_migrate.py", "--repo", a, "--base", T.base, "--check")
+            self.assertEqual(code, 0, out)
+            T.reserve(a, "050-R0", 50); T.add_row(a, "050-R0", "x"); T.pending(a, "050.md", "CORR-LEGO-PIPE-050-R0", "050-R0", b"fwd")
+            T.commit(a, "memo 050")
+            self.assertEqual(T.finalize(a)[0], 0)
+            code, out = run_tool("register_migrate.py", "--repo", a, "--base", T.base, "--check")
+            self.assertEqual(code, 0, out + " — a legitimate finalized landing must not be a reproduction difference")
+            edit_record(a, "2026-09-18.19", body=b"tampered")
+            code, out = run_tool("register_migrate.py", "--repo", a, "--base", T.base, "--check")
+            self.assertEqual(code, 1, out)
+            self.assertIn("differs: register/versions/2026-09-18.19.md", out)
 
 
 # ======================================================================= corpus differential (G-12)
@@ -1151,16 +1335,19 @@ class TempRepo:
         self.base = self.head(self.work)
         if not push_migration:
             _git(self.work, "push", "-q", "origin", "main", env=GIT_ENV)
-        # migration commit: the migrated set, its manifest re-pinned to this repository's base
-        shutil.copytree(REG_DIR, os.path.join(self.work, RL.REGISTER_DIR_REL), ignore=shutil.ignore_patterns("pending"))
+        # migration commit: the BOOTSTRAP set (constructed, not copied from the live tree —
+        # F-08/H4), its manifest re-pinned to this repository's base
+        boot = bootstrap_tree(tmp, name="bootstrap-src")
+        shutil.copytree(os.path.join(boot, RL.REGISTER_DIR_REL), os.path.join(self.work, RL.REGISTER_DIR_REL))
+        os.makedirs(os.path.join(self.work, RL.REGISTER_DIR_REL, "pending"), exist_ok=True)
         if keep_file:
             RL.write_bytes(os.path.join(self.work, RL.REGISTER_DIR_REL, "pending", ".gitkeep"), b"")
         if with_pending:
-            RL.write_bytes(os.path.join(self.work, RL.REGISTER_DIR_REL, "pending", "032-register-migration.md"),
-                           RL.read_bytes(os.path.join(REG_DIR, "pending", "032-register-migration.md")))
-        shutil.copyfile(REGISTER, os.path.join(self.work, RL.REGISTER_REL))
+            RL.write_bytes(os.path.join(self.work, RL.REGISTER_DIR_REL, "pending", "032-register-migration.md"), migration_note_bytes())
+        shutil.copyfile(os.path.join(boot, RL.REGISTER_REL), os.path.join(self.work, RL.REGISTER_REL))
         mp = manifest_path(self.work)
-        edit_yaml(mp, lambda m: m.update(base_commit=self.base, source_sha256=sha(base_bytes), source_bytes=len(base_bytes), verbatim_as_of=self.base))
+        edit_yaml(mp, lambda m: m.update(base_commit=self.base, source_sha256=sha(base_bytes), source_bytes=len(base_bytes),
+                                         source_lines=base_bytes.count(b"\n"), verbatim_as_of=self.base))
         os.rename(mp, os.path.join(os.path.dirname(mp), f"MIGRATION-{self.base}.yaml"))
         self.commit(self.work, "migration: register split")
         self.migration = self.head(self.work)
@@ -1267,8 +1454,7 @@ class GitTier(unittest.TestCase):
             self.assertEqual(_git(w, "rev-parse", "origin/main", env=GIT_ENV), T.base)
             self.assertFalse(_git(w, "ls-tree", "--name-only", "origin/main", RL.REGISTER_DIR_REL.replace(os.sep, "/") + "/", check=False, env=GIT_ENV))
             # the committed pending note consumes 032-R1, which the seeded ledger holds in_flight
-            RL.write_bytes(os.path.join(w, RL.REGISTER_DIR_REL, "pending", "032-register-migration.md"),
-                           RL.read_bytes(os.path.join(REG_DIR, "pending", "032-register-migration.md")))
+            RL.write_bytes(os.path.join(w, RL.REGISTER_DIR_REL, "pending", "032-register-migration.md"), migration_note_bytes())
             T.commit(w, "pending note")
             code, out = T.finalize(w, "--check")
             self.assertEqual(code, 1, out)
@@ -1280,6 +1466,10 @@ class GitTier(unittest.TestCase):
             self.assertEqual(fm["finalized_from_main"], T.base)
             self.assertEqual(fm["allocations_consumed"], ["032-R1"])
             self.assertEqual(fm["kind"], "finalized")
+            # the rehearsal reproduces the REAL landing's note digest when the live tree carries it
+            live32 = RL.Register(REPO).records.get("2026-09-18.32")
+            if live32 and live32[0].get("kind") == "finalized":
+                self.assertEqual(fm["note_sha256"], live32[0]["note_sha256"], "temp-repo finalization of the derived note must reproduce the real .32 note_sha256")
             ledger = RL.load_yaml_file(os.path.join(w, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"))
             e = next(e for e in ledger["allocations"] if e["key"] == "032-R1")
             self.assertEqual((e["state"], e["landed_version"]), ("landed", "2026-09-18.32"))
@@ -1732,8 +1922,9 @@ class GitTier(unittest.TestCase):
             _git(work, "add", "-A", env=GIT_ENV); _git(work, "commit", "-q", "-m", "base", env=GIT_ENV)
             RL.write_bytes(os.path.join(work, "docs", "correspondence", "stray.md"), b"between")
             _git(work, "add", "-A", env=GIT_ENV); _git(work, "commit", "-q", "-m", "stray correspondence edit", env=GIT_ENV)
-            shutil.copytree(REG_DIR, os.path.join(work, RL.REGISTER_DIR_REL), ignore=shutil.ignore_patterns("pending"))
-            shutil.copyfile(REGISTER, os.path.join(work, RL.REGISTER_REL))
+            boot = bootstrap_tree(tmp, name="boot")
+            shutil.copytree(os.path.join(boot, RL.REGISTER_DIR_REL), os.path.join(work, RL.REGISTER_DIR_REL))
+            shutil.copyfile(os.path.join(boot, RL.REGISTER_REL), os.path.join(work, RL.REGISTER_REL))
             base = _git(work, "rev-parse", "HEAD~1", env=GIT_ENV)
             edit_yaml(manifest_path(work), lambda m: m.update(base_commit=base, source_sha256=sha(reconstruct_base_register(REPO))))
             _git(work, "add", "-A", env=GIT_ENV); _git(work, "commit", "-q", "-m", "migration", env=GIT_ENV)

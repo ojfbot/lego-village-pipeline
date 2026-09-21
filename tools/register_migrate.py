@@ -23,6 +23,25 @@ Usage:
   register_migrate.py --source REGISTER.md [--repo DIR] [--check]
 --check writes into a temporary directory and diffs against the committed tree (exit 1 on
 any difference) — the reviewer's "rerun to an empty diff" for the migration itself.
+
+What --check proves, and what it deliberately leaves to other tools (F-08, H4): the
+migration's OWN artifacts are immutable and are compared byte-for-byte — every `kind:
+migrated` record, the manifest, KNOWN-ANOMALIES.yaml. The three surfaces the migration
+seeded but later landings legitimately move are compared STRUCTURALLY against the seed:
+  * register/versions/: extra records are allowed only if `kind: finalized`/`bootstrap`
+    (finalization's products); any missing or altered migrated record is a difference;
+  * REGISTER.md's version line: must be the migrated pointer template with a version >=
+    the migrated one (later finalizations advance it); anything else is a difference;
+  * register/ALLOCATIONS.yaml: every seeded entry must still exist with every field
+    byte-equal except `state`/`landed_version`, whose only legal movement is forward along
+    reserved → in_flight → landed, a `landed` entry naming a `landed_version` whose finalized
+    record exists in the committed tree and lists the key in `allocations_consumed`; new
+    entries may be appended only at or above the seeded next_free, and the file must be the
+    fixed emitter's own serialisation. Anything else — a changed seeded field, a backwards
+    transition, a dangling landed_version, an entry removed, an out-of-order number — is a
+    difference. This is NOT "ignore the ledger": a corrupted seeded entry still fails.
+Whether the forward state itself is right (chain, pointer = newest record, landing facts)
+is register_lint's and register_finalize --check's job, run separately.
 Exit: 0 · 1 difference/refusal · 2 usage/IO
 """
 import os
@@ -322,6 +341,143 @@ def rewrite_register_in_place(repo, source_bytes, migrated_register_bytes):
     return "rewrote the version line (preamble + pointer); nothing else touched"
 
 
+LIFECYCLE = ("reserved", "in_flight", "landed")
+VERSION_LINE_RE = re.compile(rb"^\*\*Register version: (\d{4}-\d{2}-\d{2})\.(\d+)\*\* \xe2\x80\x94 one register version per accepted landing")
+
+
+def ledger_forward_diffs(seed, committed, committed_versions_dir):
+    """Differences between the migration's seeded ledger and the committed one, allowing only
+    legitimate forward lifecycle movement (see the module docstring). Returns a list of strings."""
+    diffs = []
+    if not isinstance(seed, dict) or not isinstance(committed, dict):
+        return ["ALLOCATIONS.yaml: not a mapping"]
+    seed_entries = {e["key"]: e for e in seed.get("allocations", [])}
+    committed_entries = {}
+    for e in committed.get("allocations", []):
+        if e.get("key") in committed_entries:
+            diffs.append(f"ALLOCATIONS.yaml: duplicate key {e.get('key')}")
+        committed_entries[e.get("key")] = e
+    # finalized records available to justify a landed_version
+    finalized = {}
+    if os.path.isdir(committed_versions_dir):
+        for name in os.listdir(committed_versions_dir):
+            if name.endswith(".md"):
+                try:
+                    fm, _ = parse_record(read_bytes(os.path.join(committed_versions_dir, name)))
+                except Exception:  # noqa: BLE001 — an unreadable record is reported by lint, not here
+                    continue
+                if fm.get("kind") in ("finalized", "bootstrap"):
+                    finalized[fm.get("register_version")] = fm
+    for key, se in seed_entries.items():
+        ce = committed_entries.get(key)
+        if ce is None:
+            diffs.append(f"ALLOCATIONS.yaml: seeded entry {key} is missing")
+            continue
+        for f in sorted(set(se) | set(ce)):
+            if f in ("state", "landed_version"):
+                continue
+            if se.get(f) != ce.get(f):
+                diffs.append(f"ALLOCATIONS.yaml: {key}.{f} changed from seed ({se.get(f)!r} → {ce.get(f)!r}); only state/landed_version may move")
+        s_state, c_state = se.get("state"), ce.get("state")
+        if c_state not in LIFECYCLE or s_state not in LIFECYCLE:
+            diffs.append(f"ALLOCATIONS.yaml: {key} state {c_state!r} (seed {s_state!r}) not in {LIFECYCLE}")
+        elif LIFECYCLE.index(c_state) < LIFECYCLE.index(s_state):
+            diffs.append(f"ALLOCATIONS.yaml: {key} moved backwards {s_state} → {c_state}")
+        if c_state == "landed":
+            lv = ce.get("landed_version")
+            if se.get("state") == "landed":
+                if lv != se.get("landed_version"):
+                    diffs.append(f"ALLOCATIONS.yaml: {key} was seeded landed at {se.get('landed_version')!r} but now names {lv!r}")
+            elif lv not in finalized:
+                diffs.append(f"ALLOCATIONS.yaml: {key} is landed at {lv!r} but no finalized record with that version exists in the committed tree")
+            elif key not in (finalized[lv].get("allocations_consumed") or []):
+                diffs.append(f"ALLOCATIONS.yaml: {key} is landed at {lv} but that record's allocations_consumed does not name it")
+        elif ce.get("landed_version") not in (None,):
+            diffs.append(f"ALLOCATIONS.yaml: {key} is {c_state} but carries landed_version {ce.get('landed_version')!r}")
+    seed_next = seed.get("next_free")
+    for key, ce in committed_entries.items():
+        if key in seed_entries:
+            continue
+        if not isinstance(ce.get("number"), int) or not isinstance(seed_next, int) or ce["number"] < seed_next:
+            diffs.append(f"ALLOCATIONS.yaml: new entry {key} carries number {ce.get('number')!r} below the seeded next_free {seed_next!r}")
+    if isinstance(seed_next, int) and isinstance(committed.get("next_free"), int) and committed["next_free"] < seed_next:
+        diffs.append(f"ALLOCATIONS.yaml: next_free went backwards {seed_next} → {committed['next_free']}")
+    for f in sorted(set(seed) | set(committed)):
+        if f in ("allocations", "next_free"):
+            continue
+        if seed.get(f) != committed.get(f):
+            diffs.append(f"ALLOCATIONS.yaml: top-level {f} changed from seed")
+    return diffs
+
+
+def reproduction_diffs(produced_root, repo, manifest):
+    """Compare a fresh migration (under produced_root) with the committed tree under repo.
+    Migration-owned artifacts byte-for-byte; the three forward-moving surfaces structurally."""
+    diffs = []
+    produced = os.path.join(produced_root, REGISTER_DIR_REL)
+    committed = os.path.join(repo, REGISTER_DIR_REL)
+    ledger_rel = "ALLOCATIONS.yaml"
+    for root, _, files in os.walk(produced):
+        for f in files:
+            p = os.path.join(root, f)
+            rel = os.path.relpath(p, produced)
+            q = os.path.join(committed, rel)
+            if not os.path.exists(q):
+                diffs.append(f"missing in committed tree: register/{rel}")
+            elif rel == ledger_rel:
+                try:
+                    seed = yaml_load(read_bytes(p))
+                    com_bytes = read_bytes(q)
+                    com = yaml_load(com_bytes)
+                except Exception as e:  # noqa: BLE001
+                    diffs.append(f"differs: register/{rel} (unparsable: {e})")
+                    continue
+                if dump_yaml(com).encode("utf-8") != com_bytes:
+                    diffs.append(f"differs: register/{rel} is not the fixed emitter's serialisation")
+                diffs.extend(ledger_forward_diffs(seed, com, os.path.join(committed, "versions")))
+            elif read_bytes(p) != read_bytes(q):
+                diffs.append(f"differs: register/{rel}")
+    for root, _, files in os.walk(committed):
+        if os.path.basename(root) == "pending":
+            continue
+        for f in files:
+            rel = os.path.relpath(os.path.join(root, f), committed)
+            if os.path.exists(os.path.join(produced, rel)) or rel.startswith("pending"):
+                continue
+            fm_kind = None
+            if rel.startswith("versions"):
+                try:
+                    fm_kind = parse_record(read_bytes(os.path.join(root, f)))[0].get("kind")
+                except Exception:  # noqa: BLE001
+                    fm_kind = None
+            if fm_kind in ("finalized", "bootstrap"):
+                continue  # produced by finalization, not by this tool; lint checks its chain
+            diffs.append(f"extra in committed tree: register/{rel}")
+    # version line: the migrated pointer template, at the migrated version or later
+    cur_lines = read_bytes(os.path.join(repo, REGISTER_REL)).split(b"\n")
+    mig_lines = read_bytes(os.path.join(produced_root, REGISTER_REL)).split(b"\n")
+    idx = manifest["line_number"] - 1
+    if idx >= len(cur_lines) or not cur_lines[idx].startswith(b"**Register version: ") or not mig_lines[idx].startswith(b"**Register version: "):
+        diffs.append("version line not found at the manifest's line_number")
+    elif cur_lines[idx] != mig_lines[idx]:
+        mc, mm = VERSION_LINE_RE.match(cur_lines[idx]), VERSION_LINE_RE.match(mig_lines[idx])
+        if not mc or not mm:
+            diffs.append("REGISTER.md version line is not the migrated pointer line")
+        elif (mc.group(1), int(mc.group(2))) < (mm.group(1), int(mm.group(2))):
+            diffs.append(f"REGISTER.md pointer {mc.group(1).decode()}.{mc.group(2).decode()} is behind the migrated version {mm.group(1).decode()}.{mm.group(2).decode()}")
+        elif cur_lines[idx][mc.end():] != mig_lines[idx][mm.end():]:
+            diffs.append("REGISTER.md version line's pointer text differs from the migrated template")
+    # REGISTER.md's other lines are the tables and rules: the migration landing changed exactly
+    # the ratified Q-13 rows, which RL-13 proves against B with the bound whitelist. This tool
+    # does not re-prove rows (it never did at H0–H2); it proves its own artifacts.
+    return diffs
+
+
+def yaml_load(data):
+    import yaml  # PyYAML, present via the tools venv (register_lint imports it)
+    return yaml.safe_load(data.decode("utf-8"))
+
+
 def main(argv):
     args = list(argv)
     repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -353,38 +509,7 @@ def main(argv):
         produced = os.path.join(tmp, REGISTER_DIR_REL)
         committed = os.path.join(repo, REGISTER_DIR_REL)
         if check:
-            diffs = []
-            for root, _, files in os.walk(produced):
-                for f in files:
-                    p = os.path.join(root, f)
-                    rel = os.path.relpath(p, produced)
-                    q = os.path.join(committed, rel)
-                    if not os.path.exists(q):
-                        diffs.append(f"missing in committed tree: register/{rel}")
-                    elif read_bytes(p) != read_bytes(q):
-                        diffs.append(f"differs: register/{rel}")
-            for root, _, files in os.walk(committed):
-                if os.path.basename(root) == "pending":
-                    continue
-                for f in files:
-                    rel = os.path.relpath(os.path.join(root, f), committed)
-                    if not os.path.exists(os.path.join(produced, rel)) and not rel.startswith("pending"):
-                        fm_kind = None
-                        if rel.startswith("versions"):
-                            fm_kind = parse_record(read_bytes(os.path.join(root, f)))[0].get("kind")
-                        if fm_kind in ("finalized", "bootstrap"):
-                            continue  # produced by finalization, not by this tool
-                        diffs.append(f"extra in committed tree: register/{rel}")
-            # version line of the checked-out register must equal the migrated line
-            cur_lines = read_bytes(os.path.join(repo, REGISTER_REL)).split(b"\n")
-            mig_lines = read_bytes(os.path.join(tmp, REGISTER_REL)).split(b"\n")
-            idx = manifest["line_number"] - 1
-            if not cur_lines[idx].startswith(b"**Register version: ") or not mig_lines[idx].startswith(b"**Register version: "):
-                diffs.append("version line not found at the manifest's line_number")
-            elif cur_lines[idx] != mig_lines[idx]:
-                # a finalized pointer is allowed to be newer than the migrated one
-                if not re.match("\\*\\*Register version: \\d{4}-\\d{2}-\\d{2}\\.\\d+\\*\\* — one register version per accepted landing".encode("utf-8"), cur_lines[idx]):
-                    diffs.append("REGISTER.md version line is not the migrated pointer line")
+            diffs = reproduction_diffs(tmp, repo, manifest)
             for d in diffs:
                 print("  " + d)
             print(f"register_migrate --check: {len(diffs)} differences against base {base[:12]}")
