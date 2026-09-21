@@ -425,9 +425,9 @@ allocations:
   date: '2026-09-20'
   identity: HANDOFF-LEGO-PIPE-032
   key: 032-R1
-  landed_version: null
+  landed_version: 2026-09-18.32
   number: 32
-  state: in_flight
+  state: landed
   thread: correspondence-governance
   type: HANDOFF
 - actor: Claude (Cowork)
