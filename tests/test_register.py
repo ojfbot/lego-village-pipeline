@@ -748,6 +748,58 @@ class ImmutabilityRowsRule18(unittest.TestCase):
             errs, _, _ = lint_errs(root, migration_base=basep)
             self.assertTrue(any("unratified keys ['rows_deleted']" in e for e in errs_for("RL-13", errs)), errs)
 
+    def test_mutation_rl13_narrowed_whitelist_is_rejected(self):
+        """H1-LEAD-02: the ratified Q-13 set is required, not merely an upper bound. (a) Remove
+        032-R1 from both the table and the manifest; (b) restore 030-R0's base cell and drop it
+        from the manifest; (c) next_free_row false. Each is an RL-13 error."""
+        def fresh(tmp):
+            root = copy_tree(tmp)
+            basep = os.path.join(tmp, "base-REGISTER.md")
+            RL.write_bytes(basep, pre_migration_rows(reconstruct_base_register(root)))
+            return root, basep
+        # (a) narrowing rows_added, table change removed too
+        with tempfile.TemporaryDirectory() as tmp:
+            root, basep = fresh(tmp)
+            regp = os.path.join(root, RL.REGISTER_REL)
+            lines = RL.read_bytes(regp).decode().split("\n")
+            kept = [l for l in lines if not l.startswith("| 032-R1 |")]
+            self.assertEqual(len(lines) - len(kept), 1, "fixture: exactly one 032-R1 row expected")
+            RL.write_bytes(regp, "\n".join(kept).encode())
+            edit_yaml(manifest_path(root), lambda m: m["table_baseline"]["permitted_changes"].update(rows_added=[]))
+            errs, _, _ = lint_errs(root, migration_base=basep)
+            rl13 = errs_for("RL-13", errs)
+            self.assertTrue(any("rows_added omits ['032-R1'], which Q-13 ratified" in e for e in rl13), rl13)
+            self.assertTrue(any("ratified addition 032-R1 is missing at HEAD" in e for e in rl13), rl13)
+        # (b) restore a ratified modified row to its base text and drop it from the manifest
+        with tempfile.TemporaryDirectory() as tmp:
+            root, basep = fresh(tmp)
+            base_rows = dict(RL.table_data_rows(RL.read_bytes(basep).decode())["correspondence"])
+            regp = os.path.join(root, RL.REGISTER_REL)
+            txt = RL.read_bytes(regp).decode()
+            head_rows = dict(RL.table_data_rows(txt)["correspondence"])
+            self.assertNotEqual(head_rows["030-R0"], base_rows["030-R0"], "fixture: 030-R0 must differ at HEAD")
+            RL.write_bytes(regp, txt.replace(head_rows["030-R0"], base_rows["030-R0"], 1).encode())
+            edit_yaml(manifest_path(root), lambda m: m["table_baseline"]["permitted_changes"].update(rows_modified=["031-R0"]))
+            errs, _, _ = lint_errs(root, migration_base=basep)
+            rl13 = errs_for("RL-13", errs)
+            self.assertTrue(any("rows_modified omits ['030-R0'], which Q-13 ratified" in e for e in rl13), rl13)
+            self.assertTrue(any("ratified modification 030-R0 is byte-identical to base at HEAD" in e for e in rl13), rl13)
+        # (c) next_free_row narrowed to false; and the manifest-only narrowing with the table intact
+        with tempfile.TemporaryDirectory() as tmp:
+            root, basep = fresh(tmp)
+            edit_yaml(manifest_path(root), lambda m: m["table_baseline"]["permitted_changes"].update(next_free_row=False))
+            errs, _, _ = lint_errs(root, migration_base=basep)
+            self.assertTrue(any("next_free_row must be exactly True" in e for e in errs_for("RL-13", errs)), errs)
+        with tempfile.TemporaryDirectory() as tmp:
+            root, basep = fresh(tmp)
+            edit_yaml(manifest_path(root), lambda m: m["table_baseline"]["permitted_changes"].update(rows_modified=["030-R0"]))
+            errs, _, _ = lint_errs(root, migration_base=basep)
+            self.assertTrue(any("rows_modified omits ['031-R0']" in e for e in errs_for("RL-13", errs)), errs)
+            # exact set restored → green again (control)
+            edit_yaml(manifest_path(root), lambda m: m["table_baseline"]["permitted_changes"].update(rows_modified=["030-R0", "031-R0"]))
+            errs, _, _ = lint_errs(root, migration_base=basep)
+            self.assertEqual(errs_for("RL-13", errs), [], errs)
+
     def test_mutation_rl14_instruments_row_changed(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = copy_tree(tmp)
@@ -842,6 +894,85 @@ class WorkflowShape(unittest.TestCase):
             for line in run.split("\n"):
                 if "register_finalize.py" in line:
                     self.assertIn("--repo", line, line)
+
+
+class SettingsEvaluation(unittest.TestCase):
+    """AO-14's two-state verdict is computed only from validated booleans (H1-LEAD-01). The
+    ordinary Actions token returns null for the three merge fields; that must read as
+    UNVERIFIED, never as an enforcing success, and must not fail the step."""
+    COMPLIANT = {"allow_merge_commit": True, "allow_squash_merge": False, "allow_rebase_merge": False}
+    PERMISSIVE = {"allow_merge_commit": True, "allow_squash_merge": True, "allow_rebase_merge": True}
+    NULLS = {"allow_merge_commit": None, "allow_squash_merge": None, "allow_rebase_merge": None}
+    PROTECTION_403 = "__API_FAILURE__"
+
+    def test_sentinel_present_compliant_is_enforcing_success(self):
+        status, lines, code = RL.evaluate_settings(True, self.COMPLIANT, {"required_linear_history": False, "required_checks": []})
+        self.assertEqual((status, code), ("enforcing", 0))
+        self.assertTrue(any(l.startswith("OK: settings step enforcing") for l in lines), lines)
+        self.assertTrue(any("reported, not evaluated" in l for l in lines), lines)
+
+    def test_sentinel_present_permissive_or_merge_commits_off_fails(self):
+        for st in (self.PERMISSIVE,
+                   dict(self.COMPLIANT, allow_squash_merge=True),
+                   dict(self.COMPLIANT, allow_rebase_merge=True),
+                   dict(self.COMPLIANT, allow_merge_commit=False)):
+            status, lines, code = RL.evaluate_settings(True, st, self.PROTECTION_403)
+            self.assertEqual((status, code), ("fail", 1), st)
+            self.assertTrue(any(l.startswith("::error::Rule 18 is ratified but") for l in lines), lines)
+            self.assertFalse(any("enforcing" in l and l.startswith("OK") for l in lines), lines)
+
+    def test_sentinel_absent_is_report_only_whatever_the_booleans(self):
+        for st in (self.COMPLIANT, self.PERMISSIVE):
+            status, lines, code = RL.evaluate_settings(False, st, self.PROTECTION_403)
+            self.assertEqual((status, code), ("report-only", 0), st)
+            self.assertTrue(any("report-only" in l for l in lines), lines)
+
+    def test_null_missing_malformed_and_api_failure_are_unverified_never_enforcing(self):
+        cases = {
+            "null (the H1 CI log)": self.NULLS,
+            "one null": dict(self.COMPLIANT, allow_squash_merge=None),
+            "missing key": {"allow_merge_commit": True, "allow_rebase_merge": False},
+            "empty dict": {},
+            "string instead of bool": dict(self.COMPLIANT, allow_squash_merge="false"),
+            "int instead of bool": dict(self.COMPLIANT, allow_rebase_merge=0),
+            "malformed (list)": [True, False, False],
+            "malformed (string)": "not json at all",
+            "API failure marker": "__API_FAILURE__",
+            "None (no read)": None,
+        }
+        for name, st in cases.items():
+            for sentinel in (True, False):
+                status, lines, code = RL.evaluate_settings(sentinel, st, self.PROTECTION_403)
+                self.assertEqual((status, code), ("unverified", 0), f"{name} / sentinel={sentinel}: {lines}")
+                self.assertTrue(any(RL.UNVERIFIED in l for l in lines), lines)
+                self.assertTrue(any("NOT AO-14 enforcement evidence" in l for l in lines), lines)
+                self.assertFalse(any(l.startswith("OK: settings step enforcing") for l in lines), f"{name}: fail-open: {lines}")
+                self.assertFalse(any(l.startswith("::error::") for l in lines), f"{name}: unverified must not fail the step: {lines}")
+                self.assertTrue(any("branch protection: unavailable to this token" in l for l in lines), lines)
+
+    def test_cli_round_trip_matches_the_function(self):
+        import json
+        for sentinel, st, prot, want_status, want_code in (
+            ("present", json.dumps(self.COMPLIANT), json.dumps({"required_linear_history": False}), "enforcing", 0),
+            ("present", json.dumps(self.PERMISSIVE), "__API_FAILURE__", "fail", 1),
+            ("present", json.dumps(self.NULLS), "__API_FAILURE__", "unverified", 0),
+            ("absent", json.dumps(self.PERMISSIVE), "__API_FAILURE__", "report-only", 0),
+            ("present", "__API_FAILURE__", "__API_FAILURE__", "unverified", 0),
+            ("present", "{not json", "__API_FAILURE__", "unverified", 0),
+        ):
+            code, out = run_tool("register_lint.py", "settings-eval", "--sentinel", sentinel, "--settings", st, "--protection", prot)
+            self.assertEqual(code, want_code, out)
+            self.assertIn(f"settings-eval: {want_status}", out)
+        code, out = run_tool("register_lint.py", "settings-eval", "--sentinel", "maybe", "--settings", "{}")
+        self.assertEqual(code, 2, out)
+
+    def test_workflow_uses_the_validated_evaluator_not_shell_comparison(self):
+        wf = RL.read_bytes(os.path.join(REPO, ".github", "workflows", "register-lint.yml")).decode("utf-8")
+        step = wf[wf.index("Settings read"):]
+        self.assertIn("register_lint.py settings-eval", step)
+        self.assertNotIn('[ "$squash" = "True" ]', step, "the H1 shell comparison fails open on null")
+        self.assertIn("__API_FAILURE__", step)
+        self.assertNotIn("secrets.", step, "no privileged repository secret is used or requested")
 
 
 class MigrationTool(unittest.TestCase):

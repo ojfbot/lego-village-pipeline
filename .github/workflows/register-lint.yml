@@ -62,21 +62,20 @@ jobs:
       # where the AO-19 step above intentionally fails (RF-05). `if: always()` makes this step
       # run regardless; the job stays red until both intentional gates are satisfied, but both
       # results are visible in the log (RR-32-R4-02: the read is posted before approval).
-      - name: Settings read — two-state (reports always; fails only with Rule 18 present)
+      # H1-LEAD-01: the ordinary Actions token returns null for the three admin-visible merge
+      # fields and 403 for branch protection. The shell comparison at H1 treated null as
+      # "not True" and printed an enforcing success — a fail-open. The evaluation now happens
+      # in `register_lint.py settings-eval`, which validates the response first: null, missing,
+      # malformed or unreadable values are reported as "UNVERIFIED in CI — authenticated AO-14
+      # lead read required" (non-failing, and explicitly NOT AO-14 evidence); real booleans get
+      # the ratified two-state verdict. No administrator token or privileged secret is used
+      # or requested — the lead's separately authenticated read is the AO-14 record.
+      - name: Settings read — two-state, validated (UNVERIFIED when the token cannot read the values)
         if: always()
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           sentinel=$(tools/.venv/bin/python tools/register_lint.py rule18)
-          settings=$(gh api "repos/${{ github.repository }}" --jq '{allow_merge_commit, allow_squash_merge, allow_rebase_merge}')
-          echo "Rule 18 sentinel: $sentinel"
-          echo "repository settings: $settings"
-          protection=$(gh api "repos/${{ github.repository }}/branches/main/protection" --jq '{required_linear_history: .required_linear_history.enabled, required_checks: [.required_status_checks.contexts[]?]}' 2>/dev/null || echo "branch protection not readable with this token (reported, not evaluated)")
-          echo "branch protection: $protection"
-          squash=$(echo "$settings" | tools/.venv/bin/python -c "import json,sys;print(json.load(sys.stdin)['allow_squash_merge'])")
-          rebase=$(echo "$settings" | tools/.venv/bin/python -c "import json,sys;print(json.load(sys.stdin)['allow_rebase_merge'])")
-          if [ "$sentinel" = "present" ] && { [ "$squash" = "True" ] || [ "$rebase" = "True" ]; }; then
-            echo "::error::Rule 18 is ratified but allow_squash_merge=$squash allow_rebase_merge=$rebase — James must disable squash and rebase merging (Q-06)."
-            exit 1
-          fi
-          echo "OK: settings step $( [ "$sentinel" = present ] && echo enforcing || echo report-only )"
+          settings=$(gh api "repos/${{ github.repository }}" --jq '{allow_merge_commit, allow_squash_merge, allow_rebase_merge}' 2>/dev/null) || settings='__API_FAILURE__'
+          protection=$(gh api "repos/${{ github.repository }}/branches/main/protection" --jq '{required_linear_history: .required_linear_history.enabled, required_checks: [.required_status_checks.contexts[]?]}' 2>/dev/null) || protection='__API_FAILURE__'
+          tools/.venv/bin/python tools/register_lint.py settings-eval --sentinel "$sentinel" --settings "$settings" --protection "$protection"

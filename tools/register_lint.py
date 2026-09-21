@@ -598,19 +598,39 @@ class Lint:
         permitted = m.get("table_baseline", {}).get("permitted_changes", {})
         added = set(permitted.get("rows_added", []))
         modified = set(permitted.get("rows_modified", []))
-        # bind the whitelist to the ratified set before using it (CW-33-I03)
+        # Bind the whitelist to the ratified set — EXACT equality, not an upper bound
+        # (CW-33-I03; H1-LEAD-02: a manifest that omits a ratified change, with the table change
+        # removed too, must fail — the ratified set is required, not merely permitted).
         for field, allowed in (("rows_added", RATIFIED_Q13["rows_added"]), ("rows_modified", RATIFIED_Q13["rows_modified"])):
-            extra = sorted(set(permitted.get(field, [])) - allowed)
+            declared = set(permitted.get(field, []) or [])
+            extra, missing = sorted(declared - allowed), sorted(allowed - declared)
             if extra:
                 self.err("RL-13", f"manifest permitted_changes.{field} names {extra}, which Q-13 did not ratify (ratified: {sorted(allowed)}) — the whitelist is bound, not self-declared")
-        if permitted.get("next_free_row") not in (None, False, True):
-            self.err("RL-13", "manifest permitted_changes.next_free_row must be a boolean")
+            if missing:
+                self.err("RL-13", f"manifest permitted_changes.{field} omits {missing}, which Q-13 ratified (ratified: {sorted(allowed)}) — the set is exact, not an upper bound")
+        if permitted.get("next_free_row") is not RATIFIED_Q13["next_free_row"]:
+            self.err("RL-13", f"manifest permitted_changes.next_free_row must be exactly {RATIFIED_Q13['next_free_row']} (Q-13: next-free replaced by the ledger-derived pointer); found {permitted.get('next_free_row')!r}")
         unknown = sorted(set(permitted) - {"basis", "rows_added", "rows_modified", "next_free_row"})
         if unknown:
             self.err("RL-13", f"manifest permitted_changes carries unratified keys {unknown}")
-        added &= RATIFIED_Q13["rows_added"]
-        modified &= RATIFIED_Q13["rows_modified"]
+        # from here on the RATIFIED set governs, whatever the manifest declared
+        added, modified = set(RATIFIED_Q13["rows_added"]), set(RATIFIED_Q13["rows_modified"])
         base_rows, head_rows = dict(base["correspondence"]), dict(head["correspondence"])
+        # the ratified changes are required to have happened, not only permitted
+        for key in sorted(added):
+            if key in base_rows:
+                self.err("RL-13", f"ratified addition {key} already exists at base — Q-13 names it as an addition")
+            elif key not in head_rows:
+                self.err("RL-13", f"ratified addition {key} is missing at HEAD — Q-13 requires it, the migration landing must add it")
+        for key in sorted(modified):
+            if key not in base_rows:
+                self.err("RL-13", f"ratified modification {key} does not exist at base")
+            elif key in head_rows and head_rows[key] == base_rows[key]:
+                self.err("RL-13", f"ratified modification {key} is byte-identical to base at HEAD — Q-13 requires its status cell updated")
+        nf_base = [k for k in base_rows if re.fullmatch(r"\d{3}\+", k)]
+        nf_head = [k for k in head_rows if re.fullmatch(r"\d{3}\+", k)]
+        if nf_base and nf_head and nf_base == nf_head and head_rows[nf_head[0]] == base_rows[nf_base[0]]:
+            self.err("RL-13", "ratified next-free replacement did not happen — the next-free row is byte-identical to base")
         if len(base["correspondence"]) != m["table_baseline"]["correspondence_rows"] or len(base["instruments"]) != m["table_baseline"]["instruments_rows"]:
             self.err("RL-13", f"base data rows {len(base['correspondence'])}+{len(base['instruments'])} != manifest baseline {m['table_baseline']['correspondence_rows']}+{m['table_baseline']['instruments_rows']}")
         for key, text in base_rows.items():
@@ -828,6 +848,86 @@ def resolve(reg, version):
     return fm.get("kind"), fm.get("finalized_from_main"), sha256(body), body
 
 
+SETTINGS_KEYS = ("allow_merge_commit", "allow_squash_merge", "allow_rebase_merge")
+UNVERIFIED = "UNVERIFIED in CI — authenticated AO-14 lead read required"
+
+
+def evaluate_settings(sentinel_present, settings, protection=None):
+    """AO-14's two-state verdict, computed from validated inputs only (H1-LEAD-01).
+
+    Returns (status, lines, exit_code). status ∈ {"unverified", "report-only", "fail",
+    "enforcing"}. `settings` is whatever the API read produced: a dict of the three merge
+    fields, or None / a non-dict / a dict with null, missing or non-boolean values when the
+    token could not obtain them (the ordinary Actions token demonstrably returns nulls for
+    these admin-visible fields). Such a read is never described as an enforcing success and
+    never fails the step: it is reported as UNVERIFIED, and the ratified record's separately
+    authenticated lead read is the AO-14 evidence. Branch-protection unavailability is
+    reported explicitly and never evaluated. No administrator token is requested."""
+    lines = [f"Rule 18 sentinel: {'present' if sentinel_present else 'absent'}"]
+    problems = []
+    if not isinstance(settings, dict):
+        problems.append(f"merge settings unreadable or malformed ({type(settings).__name__}: {str(settings)[:80]!r})")
+        values = {}
+    else:
+        values = {k: settings.get(k, "<missing>") for k in SETTINGS_KEYS}
+        for k in SETTINGS_KEYS:
+            if k not in settings:
+                problems.append(f"{k} missing from the API response")
+            elif not isinstance(settings[k], bool):
+                problems.append(f"{k} is {settings[k]!r}, not a boolean")
+        unknown = sorted(set(settings) - set(SETTINGS_KEYS))
+        if unknown:
+            lines.append(f"note: response carried extra keys {unknown} (ignored)")
+    lines.append(f"repository settings: {values if values else settings!r}")
+    if protection is None or not isinstance(protection, dict):
+        lines.append(f"branch protection: unavailable to this token — reported, not evaluated ({str(protection)[:80]!r})")
+    else:
+        lines.append(f"branch protection: {protection} — reported, not evaluated")
+    if problems:
+        lines.append(f"{UNVERIFIED}: " + "; ".join(problems))
+        lines.append("this step's result is NOT AO-14 enforcement evidence; the lead's authenticated read against the exact approval head is (RR-32-R4-02)")
+        return "unverified", lines, 0
+    if not sentinel_present:
+        lines.append("OK: settings step report-only (Rule 18 absent — Q-06 not ratified or not yet landed)")
+        return "report-only", lines, 0
+    squash, rebase, merge = settings["allow_squash_merge"], settings["allow_rebase_merge"], settings["allow_merge_commit"]
+    if squash or rebase or not merge:
+        lines.append(f"::error::Rule 18 is ratified but allow_squash_merge={squash} allow_rebase_merge={rebase} allow_merge_commit={merge} — James must disable squash and rebase merging and keep merge commits (Q-06)")
+        return "fail", lines, 1
+    lines.append("OK: settings step enforcing — Rule 18 present and merge settings compliant (squash off, rebase off, merge commits on)")
+    return "enforcing", lines, 0
+
+
+def settings_eval_cli(args):
+    """register_lint.py settings-eval --sentinel present|absent --settings JSON --protection JSON
+    JSON may be the literal string __API_FAILURE__ (or anything unparsable) to mean the read failed."""
+    import json
+    opts = {}
+    while args:
+        k = args.pop(0)
+        if k in ("--sentinel", "--settings", "--protection") and args:
+            opts[k] = args.pop(0)
+        else:
+            sys.stderr.write(settings_eval_cli.__doc__ + "\n")
+            return 2
+    if opts.get("--sentinel") not in ("present", "absent"):
+        sys.stderr.write("--sentinel must be present|absent\n")
+        return 2
+
+    def parse(raw):
+        if raw is None:
+            return None
+        try:
+            return json.loads(raw)
+        except ValueError:
+            return raw  # a non-JSON string: malformed / failure marker, evaluated as such
+    status, lines, code = evaluate_settings(opts["--sentinel"] == "present", parse(opts.get("--settings")), parse(opts.get("--protection")))
+    for l in lines:
+        print(l)
+    print(f"settings-eval: {status}")
+    return code
+
+
 def main(argv):
     args = list(argv)
     repo = DEFAULT_REPO
@@ -864,6 +964,8 @@ def main(argv):
             fm, body, _ = reg.records[v]
             sys.stdout.write(f"## {v}\n\n{body.decode('utf-8', errors='replace')}\n\n")
         return 0
+    if args and args[0] == "settings-eval":
+        return settings_eval_cli(args[1:])
     if args and args[0] == "rule18":
         reg = Register(repo)
         print("present" if RULE18_RE.search(reg.regtxt) else "absent")
