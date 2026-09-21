@@ -1,0 +1,469 @@
+allocations:
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: legacy-unnumbered-review
+  key: —
+  landed_version: null
+  number: null
+  revision: null
+  state: landed
+  thread: design
+  type: REVIEW
+- actor: Claude Design
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: HANDOFF-LEGO-PIPE-007
+  key: 007-R2
+  landed_version: null
+  number: 7
+  revision: R2
+  state: landed
+  thread: design
+  type: HANDOFF
+- actor: ChatGPT
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: CORR-LEGO-PIPE-008
+  key: 008
+  landed_version: null
+  number: 8
+  revision: null
+  state: landed
+  thread: design
+  type: CORR
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: CORR-LEGO-PIPE-009
+  key: 009
+  landed_version: null
+  number: 9
+  revision: null
+  state: landed
+  thread: design
+  type: CORR
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: HANDOFF-LEGO-PIPE-009
+  key: 009-R1
+  landed_version: null
+  number: 9
+  revision: R1
+  state: landed
+  thread: build-harness
+  type: HANDOFF
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: HANDOFF-LEGO-PIPE-010 (build-harness)
+  key: 010 *(build-harness)*
+  landed_version: null
+  number: 10
+  revision: null
+  state: landed
+  thread: build-harness
+  type: HANDOFF
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: HANDOFF-LEGO-PIPE-010 (design)
+  key: 010 *(design)*
+  landed_version: null
+  number: 10
+  revision: null
+  state: landed
+  thread: design
+  type: HANDOFF
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: HANDOFF-LEGO-PIPE-011
+  key: 011-R0
+  landed_version: null
+  number: 11
+  revision: R0
+  state: landed
+  thread: build-harness
+  type: HANDOFF
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: HANDOFF-LEGO-PIPE-011
+  key: 011-R1
+  landed_version: null
+  number: 11
+  revision: R1
+  state: landed
+  thread: build-harness
+  type: HANDOFF
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: HANDOFF-LEGO-PIPE-011
+  key: 011-R2
+  landed_version: null
+  number: 11
+  revision: R2
+  state: landed
+  thread: build-harness
+  type: HANDOFF
+- actor: ChatGPT
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: REVIEW-LEGO-PIPE-012
+  key: 012-R0
+  landed_version: null
+  number: 12
+  revision: R0
+  state: landed
+  thread: build-harness
+  type: REVIEW
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: CORR-LEGO-PIPE-013
+  key: '013'
+  landed_version: null
+  number: 13
+  revision: null
+  state: landed
+  thread: build-harness
+  type: CORR
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: HANDOFF-LEGO-PIPE-014
+  key: 014-R0
+  landed_version: null
+  number: 14
+  revision: R0
+  state: landed
+  thread: design
+  type: HANDOFF
+- actor: ChatGPT
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: CORR-LEGO-PIPE-015
+  key: '015'
+  landed_version: null
+  number: 15
+  revision: null
+  state: landed
+  thread: design
+  type: CORR
+- actor: ChatGPT
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: CORR-LEGO-PIPE-016
+  key: 016-R0
+  landed_version: null
+  number: 16
+  revision: R0
+  state: landed
+  thread: correspondence-governance
+  type: CORR
+- actor: ChatGPT
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: CORR-LEGO-PIPE-016
+  key: 016-R1
+  landed_version: 2026-09-18.13
+  number: 16
+  revision: R1
+  state: landed
+  thread: correspondence-governance
+  type: CORR
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: CORR-LEGO-PIPE-017
+  key: 017-R2
+  landed_version: null
+  number: 17
+  revision: R2
+  state: landed
+  thread: correspondence-governance
+  type: CORR
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: HANDOFF-LEGO-PIPE-018
+  key: 018-R0
+  landed_version: null
+  number: 18
+  revision: R0
+  state: landed
+  thread: build-harness
+  type: HANDOFF
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: row present at 2026-09-17.6, the first committed version; the version notes do not state a landing version for it
+  date: null
+  identity: HANDOFF-LEGO-PIPE-019
+  key: 019-R0
+  landed_version: null
+  number: 19
+  revision: R0
+  state: landed
+  thread: cluster
+  type: HANDOFF
+- actor: Claude Code
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: CORR-LEGO-PIPE-020
+  key: 020-R0
+  landed_version: 2026-09-17.10
+  number: 20
+  revision: R0
+  state: landed
+  thread: cluster
+  type: CORR
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: CORR-LEGO-PIPE-021
+  key: 021-R0
+  landed_version: 2026-09-18.12
+  number: 21
+  revision: R0
+  state: landed
+  thread: correspondence-governance
+  type: CORR
+- actor: ChatGPT
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: CORR-LEGO-PIPE-022
+  key: 022-R0
+  landed_version: 2026-09-18.13
+  number: 22
+  revision: R0
+  state: landed
+  thread: correspondence-governance
+  type: CORR
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: HANDOFF-LEGO-PIPE-023
+  key: 023-R0
+  landed_version: 2026-09-18.15
+  number: 23
+  revision: R0
+  state: landed
+  thread: app-stack
+  type: HANDOFF
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: HANDOFF-LEGO-PIPE-023
+  key: 023-R1
+  landed_version: 2026-09-18.16
+  number: 23
+  revision: R1
+  state: landed
+  thread: app-stack
+  type: HANDOFF
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: HANDOFF-LEGO-PIPE-023
+  key: 023-R2
+  landed_version: 2026-09-18.22
+  number: 23
+  revision: R2
+  state: landed
+  thread: drafting-table
+  type: HANDOFF
+- actor: Claude Code
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: HANDOFF-LEGO-PIPE-024
+  key: 024-R0
+  landed_version: 2026-09-18.23
+  number: 24
+  revision: R0
+  state: landed
+  thread: design
+  type: HANDOFF
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: REVIEW-LEGO-PIPE-025
+  key: 025-R0
+  landed_version: 2026-09-18.24
+  number: 25
+  revision: R0
+  state: landed
+  thread: design
+  type: REVIEW
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: REVIEW-LEGO-PIPE-025
+  key: 025-R1
+  landed_version: 2026-09-18.24
+  number: 25
+  revision: R1
+  state: landed
+  thread: design
+  type: REVIEW
+- actor: ChatGPT
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: REVIEW-LEGO-PIPE-026
+  key: 026-R0
+  landed_version: 2026-09-18.25
+  number: 26
+  revision: R0
+  state: landed
+  thread: design
+  type: REVIEW
+- actor: Claude Code
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: HANDOFF-LEGO-PIPE-024
+  key: 024-R1
+  landed_version: 2026-09-18.26
+  number: 24
+  revision: R1
+  state: landed
+  thread: design
+  type: HANDOFF
+- actor: ChatGPT
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: CORR-LEGO-PIPE-027
+  key: 027-R0
+  landed_version: 2026-09-18.27
+  number: 27
+  revision: R0
+  state: landed
+  thread: correspondence-governance
+  type: CORR
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: CORR-LEGO-PIPE-028
+  key: 028-R0
+  landed_version: 2026-09-18.28
+  number: 28
+  revision: R0
+  state: landed
+  thread: correspondence-governance
+  type: CORR
+- actor: Claude Code
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: CORR-LEGO-PIPE-029
+  key: 029-R0
+  landed_version: 2026-09-18.29
+  number: 29
+  revision: R0
+  state: landed
+  thread: correspondence-governance
+  type: CORR
+- actor: Claude (Cowork)
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: CORR-LEGO-PIPE-030
+  key: 030-R0
+  landed_version: 2026-09-18.30
+  number: 30
+  revision: R0
+  state: landed
+  thread: correspondence-governance
+  type: CORR
+- actor: ChatGPT
+  allocated_by: James (rule 1) — allocation notes, where recorded, are in the row's status cell
+  basis: landing version stated by the version note named in landed_version
+  date: null
+  identity: CORR-LEGO-PIPE-031
+  key: 031-R0
+  landed_version: 2026-09-18.31
+  number: 31
+  revision: R0
+  state: landed
+  thread: correspondence-governance
+  type: CORR
+- actor: Claude Code
+  allocated_by: 'James, 2026-09-20 — PR #21 decision docket (https://github.com/ojfbot/lego-village-pipeline/pull/21#issuecomment-5752476543), Q-01'
+  basis: 'R0 accepted at PR #21 head 48bcbf50 (sha256 d7980999…61ea), superseded by R1 (sha256 0ef0fe82…9438); consumed by the migration landing''s own finalization'
+  date: '2026-09-20'
+  identity: HANDOFF-LEGO-PIPE-032
+  key: 032-R1
+  landed_version: 2026-09-18.32
+  number: 32
+  state: landed
+  thread: correspondence-governance
+  type: HANDOFF
+- actor: Claude (Cowork)
+  allocated_by: 'James, 2026-09-20 — PR #21 decision docket (https://github.com/ojfbot/lego-village-pipeline/pull/21#issuecomment-5752476543), Q-01'
+  basis: independent review of the implementation PR, content-pinned (Q-14); no row until it lands
+  date: '2026-09-20'
+  identity: REVIEW-LEGO-PIPE-033
+  key: '033'
+  landed_version: null
+  number: 33
+  state: reserved
+  thread: correspondence-governance
+  type: REVIEW
+- actor: ChatGPT / Codex
+  allocated_by: 'James, 2026-09-20 — PR #21 decision docket (https://github.com/ojfbot/lego-village-pipeline/pull/21#issuecomment-5752476543), Q-01'
+  basis: independent review of the implementation PR, content-pinned (Q-14); no row until it lands
+  date: '2026-09-20'
+  identity: REVIEW-LEGO-PIPE-034
+  key: '034'
+  landed_version: null
+  number: 34
+  state: reserved
+  thread: correspondence-governance
+  type: REVIEW
+- actor: Claude Code
+  allocated_by: 'James, 2026-09-20 — PR #21 decision docket (https://github.com/ojfbot/lego-village-pipeline/pull/21#issuecomment-5752476543), Q-01'
+  basis: post-migration as-built and canary report; no row until it lands
+  date: '2026-09-20'
+  identity: CORR-LEGO-PIPE-035
+  key: '035'
+  landed_version: null
+  number: 35
+  state: reserved
+  thread: correspondence-governance
+  type: CORR
+next_free: 36
+purpose: every memo number ever allocated, with its lifecycle (reserved | in_flight | landed | withdrawn); numbers are never recycled (rules 2, 3); next_free is derived, never hand-maintained; no landing_pr field exists (RR-32-R2-03)
+schema: register-allocations/v1
+seeded_from: the correspondence table's first column at the migration base (R0 §4 item 4) plus the operator's Q-01 reservations

@@ -1,0 +1,59 @@
+anomalies:
+- affects: 2026-09-18.22
+  cited_by: the .22 note itself ("At `.22` `.22` adds the 023-R2 row"), reported by the .24 note (R-21) and left as written
+  frozen: true
+  id: A-01
+  kind: doubled_label
+  observed: At `.22` `.22`
+  permits: RL-07
+- affects: 2026-09-18.24
+  cited_by: the .24 note, which quotes the .22 label it reports ("the `.23` note reintroduced the doubled version label")
+  frozen: true
+  id: A-02
+  kind: doubled_label
+  observed: At `.22` `.22`
+  permits: RL-07
+- affects: 2026-09-17.7
+  cited_by: 'HANDOFF-LEGO-PIPE-032-R1 Q-11 (ratified option a: six resolution records into .8''s bytes, PR #21 comment 5752476543)'
+  frozen: true
+  id: A-03
+  kind: no_slice_of_its_own
+  observed: 'version .7 has no note of its own on the version line; it is named only inside the `.7` sub-clause inside the `.6` clause of the .8 note''s `Superseded versions:` enumeration (nested: .6''s parenthesis contains it)'
+  permits: RL-07
+- affects: 2026-09-17.6
+  cited_by: 'HANDOFF-LEGO-PIPE-032-R1 Q-11 (ratified option a: six resolution records into .8''s bytes, PR #21 comment 5752476543)'
+  frozen: true
+  id: A-04
+  kind: no_slice_of_its_own
+  observed: version .6 has no note of its own on the version line; it is named only inside the `.6` clause of the .8 note's `Superseded versions:` enumeration
+  permits: RL-07
+- affects: 2026-09-17.5
+  cited_by: 'HANDOFF-LEGO-PIPE-032-R1 Q-11 (ratified option a: six resolution records into .8''s bytes, PR #21 comment 5752476543)'
+  frozen: true
+  id: A-05
+  kind: no_slice_of_its_own
+  observed: version .5 has no note of its own on the version line; it is named only inside the `.5` clause of the .8 note's `Superseded versions:` enumeration
+  permits: RL-07
+- affects: 2026-09-17.4
+  cited_by: 'HANDOFF-LEGO-PIPE-032-R1 Q-11 (ratified option a: six resolution records into .8''s bytes, PR #21 comment 5752476543)'
+  frozen: true
+  id: A-06
+  kind: no_slice_of_its_own
+  observed: version .4 has no note of its own on the version line; it is named only inside the `.4` clause of the .8 note's `Superseded versions:` enumeration
+  permits: RL-07
+- affects: 2026-09-17.3
+  cited_by: 'HANDOFF-LEGO-PIPE-032-R1 Q-11 (ratified option a: six resolution records into .8''s bytes, PR #21 comment 5752476543)'
+  frozen: true
+  id: A-07
+  kind: no_slice_of_its_own
+  observed: version .3 has no note of its own on the version line; it is named only inside the `.3` clause of the .8 note's `Superseded versions:` enumeration
+  permits: RL-07
+- affects: 2026-09-17.2
+  cited_by: 'HANDOFF-LEGO-PIPE-032-R1 Q-11 (ratified option a: six resolution records into .8''s bytes, PR #21 comment 5752476543)'
+  frozen: true
+  id: A-08
+  kind: no_slice_of_its_own
+  observed: version .2 has no note of its own on the version line; it is named only inside the `.2` clause of the .8 note's `Superseded versions:` enumeration
+  permits: RL-07
+purpose: frozen historical irregularities the checker would otherwise flag, as data (031 §7.2, CW-18-03); RL-07 accepts a flagged shape only where an entry permits it for that version; RL-08 refuses any entry newer than the migration base — a new irregularity fails, it is not baselined; never a live policy lever (RR-32-R3-02)
+schema: register-anomalies/v1

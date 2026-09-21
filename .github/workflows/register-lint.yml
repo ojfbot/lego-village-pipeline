@@ -1,0 +1,81 @@
+name: register-lint
+# Structural register checks (HANDOFF-LEGO-PIPE-032-R1, R0 §4 item 10; Q-09 makes the
+# `register-lint` job a required check on main). Runs on every PR that touches the
+# correspondence directory or the register tools. No step calls a hosting API for a
+# canonical check (RR-32-R2-03); the settings-read step is the one API read, and it is
+# two-state: it always REPORTS allow_squash_merge / allow_rebase_merge and FAILS only
+# when REGISTER.md carries Rule 18's ratification sentinel and the settings still permit
+# squash or rebase (RR-32-R3-01, G-11/G-11a). The settings step runs with `if: always()` so
+# AO-14's two-state result is emitted even when the AO-19 finalization check fails on a
+# pre-finalization head (CW-33-I06). Every finalizer invocation names its target with --repo
+# (CW-33-I02).
+on:
+  pull_request:
+    paths:
+      - "docs/correspondence/**"
+      - "tools/register_*.py"
+      - "tools/schema_lint.py"
+      - "tools/schemas/register-version.v1.schema.json"
+      - "tests/test_register.py"
+      - ".github/workflows/register-lint.yml"
+  push:
+    branches: [main]
+    paths:
+      - "docs/correspondence/**"
+      - "tools/register_*.py"
+jobs:
+  register-lint:
+    name: register-lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch protected main
+        run: git fetch --no-tags origin main:refs/remotes/origin/main
+      - name: Set up the tools venv (PyYAML)
+        run: sh tools/setup-preflight.sh
+      - name: Register battery — offline mode
+        run: tools/.venv/bin/python tests/test_register.py
+      - name: Register battery — --with-git mode (temporary repositories, rehearsal)
+        run: tools/.venv/bin/python tests/test_register.py --with-git
+      - name: Design-package battery (corpus regression, 58 cases at the base)
+        run: tools/.venv/bin/python -m unittest tests.test_design_package
+      - name: register_lint --git
+        run: tools/.venv/bin/python tools/register_lint.py --git
+      - name: register_migrate --check (rerun from the manifest's base to an empty diff)
+        run: |
+          base=$(tools/.venv/bin/python -c "import glob,yaml;print(yaml.safe_load(open(glob.glob('docs/correspondence/register/MIGRATION-*.yaml')[0]))['base_commit'])")
+          tools/.venv/bin/python tools/register_migrate.py --base "$base" --check
+      - name: register_finalize --check against git merge-base origin/main HEAD (AO-19)
+        if: github.event_name == 'pull_request'
+        run: |
+          if git diff --quiet origin/main...HEAD -- docs/correspondence/; then
+            echo "no correspondence change on this PR; finalization not required"
+          else
+            tools/.venv/bin/python tools/register_finalize.py --repo "$GITHUB_WORKSPACE" --check
+          fi
+      # CW-33-I06: AO-14 must be obtainable on every head, including pre-finalization heads
+      # where the AO-19 step above intentionally fails (RF-05). `if: always()` makes this step
+      # run regardless; the job stays red until both intentional gates are satisfied, but both
+      # results are visible in the log (RR-32-R4-02: the read is posted before approval).
+      # H1-LEAD-01: the ordinary Actions token returns null for the three admin-visible merge
+      # fields and 403 for branch protection. The shell comparison at H1 treated null as
+      # "not True" and printed an enforcing success — a fail-open. The evaluation now happens
+      # in `register_lint.py settings-eval`, which validates the response first: null, missing,
+      # malformed or unreadable values are reported as "UNVERIFIED in CI — authenticated AO-14
+      # lead read required" (non-failing, and explicitly NOT AO-14 evidence); real booleans get
+      # the ratified two-state verdict. No administrator token or privileged secret is used
+      # or requested — the lead's separately authenticated read is the AO-14 record.
+      - name: Settings read — two-state, validated (UNVERIFIED when the token cannot read the values)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sentinel=$(tools/.venv/bin/python tools/register_lint.py rule18)
+          settings=$(gh api "repos/${{ github.repository }}" --jq '{allow_merge_commit, allow_squash_merge, allow_rebase_merge}' 2>/dev/null) || settings='__API_FAILURE__'
+          protection=$(gh api "repos/${{ github.repository }}/branches/main/protection" --jq '{required_linear_history: .required_linear_history.enabled, required_checks: [.required_status_checks.contexts[]?]}' 2>/dev/null) || protection='__API_FAILURE__'
+          tools/.venv/bin/python tools/register_lint.py settings-eval --sentinel "$sentinel" --settings "$settings" --protection "$protection"

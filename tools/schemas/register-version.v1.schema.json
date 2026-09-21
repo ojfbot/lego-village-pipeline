@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "register-version/v1",
+  "title": "Register version record frontmatter (HANDOFF-LEGO-PIPE-032-R1, R0 §4 items 3 and 8)",
+  "description": "One immutable record per landed register version under docs/correspondence/register/versions/<v>.md. The body after the second --- fence is the note bytes, byte-exact, digested by note_sha256. The oneOf below encodes R0 §4 item 3's per-kind table exactly: a record that satisfies none of the three branches, or carries a key its branch forbids, fails validation. Chain-boundary rule (previous_version null only on the manifest's lowest_version record) is RL-06's, not this schema's; this schema only forbids null on finalized and bootstrap records. No landing_pr, timestamp, author or landing-head field exists on any kind (RR-32-05, RR-32-R2-03).",
+  "type": "object",
+  "required": ["register_version", "previous_version", "kind", "note_sha256"],
+  "additionalProperties": false,
+  "properties": {
+    "register_version": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}\\.\\d+$"},
+    "previous_version": {"type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}\\.\\d+$"},
+    "kind": {"enum": ["migrated", "finalized", "bootstrap"]},
+    "note_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "slice": {"type": "string", "pattern": "^s-\\d+$"},
+    "resolution": {
+      "type": "object",
+      "required": ["in_slice", "range"],
+      "additionalProperties": false,
+      "properties": {
+        "in_slice": {"type": "string", "pattern": "^s-\\d+$"},
+        "range": {
+          "type": "object",
+          "required": ["start", "end"],
+          "additionalProperties": false,
+          "properties": {"start": {"type": "integer"}, "end": {"type": "integer"}}
+        }
+      }
+    },
+    "shared_slice": {"const": true},
+    "anomaly": {"type": "string", "pattern": "^A-\\d{2}$"},
+    "finalized_from_main": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "affected_memos": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "allocations_consumed": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "corrects": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}\\.\\d+$"},
+    "manifest_ref": {"type": "string", "minLength": 1}
+  },
+  "oneOf": [
+    {
+      "x-kind": "migrated — produced by register_migrate.py once against the base bytes; exactly one of slice/resolution; resolution-bearing records also carry shared_slice: true and an anomaly id, slice-bearing records may carry neither; never finalized_from_main / affected_memos / allocations_consumed / manifest_ref / corrects",
+      "properties": {"kind": {"const": "migrated"}},
+      "not": {"anyOf": [
+        {"required": ["finalized_from_main"]},
+        {"required": ["affected_memos"]},
+        {"required": ["allocations_consumed"]},
+        {"required": ["manifest_ref"]},
+        {"required": ["corrects"]}
+      ]},
+      "oneOf": [
+        {
+          "required": ["slice"],
+          "not": {"anyOf": [{"required": ["resolution"]}, {"required": ["shared_slice"]}, {"required": ["anomaly"]}]}
+        },
+        {
+          "required": ["resolution", "shared_slice", "anomaly"],
+          "not": {"required": ["slice"]}
+        }
+      ]
+    },
+    {
+      "x-kind": "finalized — produced by register_finalize.py on every ordinary landing; requires finalized_from_main, affected_memos, allocations_consumed; previous_version never null; never slice/resolution/shared_slice/anomaly/manifest_ref",
+      "properties": {"kind": {"const": "finalized"}, "previous_version": {"type": "string"}},
+      "required": ["finalized_from_main", "affected_memos", "allocations_consumed"],
+      "not": {"anyOf": [
+        {"required": ["slice"]},
+        {"required": ["resolution"]},
+        {"required": ["shared_slice"]},
+        {"required": ["anomaly"]},
+        {"required": ["manifest_ref"]}
+      ]}
+    },
+    {
+      "x-kind": "bootstrap — the Q-12 alternative James did not take; kept so RL-17 can reject one if it ever appears; requires manifest_ref; previous_version never null; never finalized_from_main/slice/resolution/shared_slice/anomaly/affected_memos/allocations_consumed/corrects",
+      "properties": {"kind": {"const": "bootstrap"}, "previous_version": {"type": "string"}},
+      "required": ["manifest_ref"],
+      "not": {"anyOf": [
+        {"required": ["finalized_from_main"]},
+        {"required": ["slice"]},
+        {"required": ["resolution"]},
+        {"required": ["shared_slice"]},
+        {"required": ["anomaly"]},
+        {"required": ["affected_memos"]},
+        {"required": ["allocations_consumed"]},
+        {"required": ["corrects"]}
+      ]}
+    }
+  ]
+}

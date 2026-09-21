@@ -1,0 +1,383 @@
+base_commit: 582fb63d63c3f9188516faade67fd6a8116287a3
+current_version: 2026-09-18.31
+encoding: utf-8
+known_in_place_repairs:
+- note: 'the .14 note: "`.14` also corrects a duplicated phrase in the `.11` note below"'
+  repaired_at: 2026-09-18.14
+  target: 2026-09-18.11
+- note: 'the .22 note: "`.22` also repairs doubled version labels (\"At `.n` `.n`\") left in the `.15`–`.19` notes by a bump script"'
+  repaired_at: 2026-09-18.22
+  target: 2026-09-18.15 … 2026-09-18.19
+line_bytes: 39268
+line_characters: 38985
+line_non_ascii_bytes: 444
+line_number: 7
+line_sha256: b7263dd2603e86e60cf5540f6775779b4bacab88f6c2efd06f39681b4ad5294d
+lowest_version: 2026-09-17.2
+offsets_are: byte offsets into the raw UTF-8 line, never character offsets (CW-33-P05, RR-32-07)
+preamble:
+  end: 70
+  sha256: 409ffad138316149b15053b8b1832bc4658a264381b2f10b0d9f1a795be7ec2e
+  start: 0
+  text: '**Register version: 2026-09-18.31** — bump this line on every edit. '
+resolution_count: 6
+resolutions:
+- in_slice: s-08
+  range:
+    end: 38929
+    start: 38885
+  reason: A-03
+  sha256: 082a79890e2352cd58b0fd926b04cbc8aaa3b91766cf5c40e0612257d3d2773f
+  version: 2026-09-17.7
+  where: 'the `.7` sub-clause inside the `.6` clause of the .8 note''s `Superseded versions:` enumeration (nested: .6''s parenthesis contains it)'
+- in_slice: s-08
+  range:
+    end: 38930
+    start: 38728
+  reason: A-04
+  sha256: 1dc4ae2ec3be32f2f317585f611bf7e9b7175a850f80f7ceac841639c906c023
+  version: 2026-09-17.6
+  where: the `.6` clause of the .8 note's `Superseded versions:` enumeration
+- in_slice: s-08
+  range:
+    end: 39001
+    start: 38932
+  reason: A-05
+  sha256: c17c80f6e2c38fa428314c4f41666d767a882fe8d1205a90d990ce44c4b1282e
+  version: 2026-09-17.5
+  where: the `.5` clause of the .8 note's `Superseded versions:` enumeration
+- in_slice: s-08
+  range:
+    end: 39061
+    start: 39003
+  reason: A-06
+  sha256: e09314f9170b1fd578cf6800b52f163367f13eadb70e6e865e53b43ff972ab6a
+  version: 2026-09-17.4
+  where: the `.4` clause of the .8 note's `Superseded versions:` enumeration
+- in_slice: s-08
+  range:
+    end: 39113
+    start: 39063
+  reason: A-07
+  sha256: 26754f74464296f8db556ce997f4f41b4181c3b9b13b93dadace42b88030df28
+  version: 2026-09-17.3
+  where: the `.3` clause of the .8 note's `Superseded versions:` enumeration
+- in_slice: s-08
+  range:
+    end: 39207
+    start: 39115
+  reason: A-08
+  sha256: 8f41f5267b5dc3e82efbc99fa17fd49f5d54390a67c3221a37bd108e94eb55ac
+  version: 2026-09-17.2
+  where: the `.2` clause of the .8 note's `Superseded versions:` enumeration
+schema: register-migration/v1
+seams:
+- accepted: true
+  byte_offset: 1536
+  context_after: ' adds the **CORR-LEGO-PIPE-030-R0 row (register '
+  context_before: 'memo_preflight.py` v2 at authoring and landing. '
+  matched: At `.30`
+  reason: 'introduces the .30 note: the next expected version in the descending scan'
+  version_named: 30
+- accepted: true
+  byte_offset: 3465
+  context_after: ' adds the **CORR-LEGO-PIPE-029-R0 row — Claude'
+  context_before: 'ht.py` (v2) exit 0 at authoring and at landing. '
+  matched: At `.29`
+  reason: 'introduces the .29 note: the next expected version in the descending scan'
+  version_named: 29
+- accepted: true
+  byte_offset: 7617
+  context_after: ' adds the **CORR-LEGO-PIPE-028-R0 row (debrief o'
+  context_before: 't `.26`, and no memo content or citation moved. '
+  matched: At `.28`
+  reason: 'introduces the .28 note: the next expected version in the descending scan'
+  version_named: 28
+- accepted: true
+  byte_offset: 10609
+  context_after: ' files **CORR-LEGO-PIPE-027-R0**, ChatGPT''s exte'
+  context_before: 's `memo_preflight.py` (v2) exit 0 at authoring. '
+  matched: At `.27`
+  reason: 'introduces the .27 note: the next expected version in the descending scan'
+  version_named: 27
+- accepted: true
+  byte_offset: 11998
+  context_after: ' lands the **design-package protocol as built �'
+  context_before: 'n allocated and in flight; next free is `032+`. '
+  matched: At `.26`
+  reason: 'introduces the .26 note: the next expected version in the descending scan'
+  version_named: 26
+- accepted: true
+  byte_offset: 20508
+  context_after: ' adds the **REVIEW-LEGO-PIPE-026-R0 row (ChatGPT'
+  context_before: ' no booklet exists yet. Next free stays `027+`. '
+  matched: At `.25`
+  reason: 'introduces the .25 note: the next expected version in the descending scan'
+  version_named: 25
+- accepted: true
+  byte_offset: 21565
+  context_after: ' adds **REVIEW-LEGO-PIPE-025-R0 and R1**, the **'
+  context_before: 'e to `027+`. No memo content or citation moved. '
+  matched: At `.24`
+  reason: 'introduces the .24 note: the next expected version in the descending scan'
+  version_named: 24
+- accepted: false
+  byte_offset: 26240
+  context_after: ' `.22`") that `.22` records repairing — left a'
+  context_before: '` note reintroduced the doubled version label ("'
+  matched: At `.22`
+  reason: names .22 where .23 was expected — a label quoted inside the .24 note describing a historical label, not introducing a new one
+  version_named: 22
+- accepted: true
+  byte_offset: 26323
+  context_after: ' adds the **HANDOFF-LEGO-PIPE-024-R0 row (design'
+  context_before: ' repairing — left as written, raised as R-21. '
+  matched: At `.23`
+  reason: 'introduces the .23 note: the next expected version in the descending scan'
+  version_named: 23
+- accepted: true
+  byte_offset: 27470
+  context_after: ' `.22` adds the 023-R2 row and marks R1 supersed'
+  context_before: '; it arrives with the protocol PR after review. '
+  matched: At `.22`
+  reason: 'introduces the .22 note: the next expected version in the descending scan'
+  version_named: 22
+- accepted: true
+  byte_offset: 28642
+  context_after: ' records an **operator ruling (2026-09-18) on me'
+  context_before: 'ft in the `.15`–`.19` notes by a bump script. '
+  matched: At `.21`
+  reason: 'introduces the .21 note: the next expected version in the descending scan'
+  version_named: 21
+- accepted: true
+  byte_offset: 29778
+  context_after: ' lands the **version-dispatching validator** (01'
+  context_before: 'numbers to the next free version when it lands. '
+  matched: At `.20`
+  reason: 'introduces the .20 note: the next expected version in the descending scan'
+  version_named: 20
+- accepted: true
+  byte_offset: 30959
+  context_after: ' it adds §1a to the ARCHITECTURE reference: the'
+  context_before: 'd by 023 at `.15` — the list lagged the rows. '
+  matched: At `.19`
+  reason: 'introduces the .19 note: the next expected version in the descending scan'
+  version_named: 19
+- accepted: true
+  byte_offset: 31564
+  context_after: ' lands `docs/correspondence/ARCHITECTURE-corresp'
+  context_before: 'sign before cut R2. Reference material, no row. '
+  matched: At `.18`
+  reason: 'introduces the .18 note: the next expected version in the descending scan'
+  version_named: 18
+- accepted: true
+  byte_offset: 32265
+  context_after: ' records an in-place repair of 023-R1 while unis'
+  context_before: 'Claude (Cowork) at operator request 2026-09-18. '
+  matched: At `.17`
+  reason: 'introduces the .17 note: the next expected version in the descending scan'
+  version_named: 17
+- accepted: true
+  byte_offset: 32558
+  context_after: ' adds the 023-R1 row and marks R0 superseded: R1'
+  context_before: 'n 2026-09-18; question 10 added; chart updated. '
+  matched: At `.16`
+  reason: 'introduces the .16 note: the next expected version in the descending scan'
+  version_named: 16
+- accepted: true
+  byte_offset: 32920
+  context_after: ' adds the 023-R0 row: HANDOFF-LEGO-PIPE-023, the'
+  context_before: 'ram/` board. Same branch as `.15`; lands by PR. '
+  matched: At `.15`
+  reason: 'introduces the .15 note: the next expected version in the descending scan'
+  version_named: 15
+- accepted: true
+  byte_offset: 33422
+  context_after: ' records a governance ruling (operator, 2026-09-'
+  context_before: 's by PR per `.14`, stacked on the `.14` branch. '
+  matched: At `.14`
+  reason: 'introduces the .14 note: the next expected version in the descending scan'
+  version_named: 14
+- accepted: true
+  byte_offset: 34703
+  context_after: ': it records James''s allocation of 022 and ratif'
+  context_before: 'ts a duplicated phrase in the `.11` note below. '
+  matched: At `.13`
+  reason: 'introduces the .13 note: the next expected version in the descending scan'
+  version_named: 13
+- accepted: true
+  byte_offset: 35073
+  context_after: ', the 021-R0 row was added and `docs/research/` '
+  context_before: 'ons; and corrects stale pre-authority language. '
+  matched: At `.12`
+  reason: 'introduces the .12 note: the next expected version in the descending scan'
+  version_named: 12
+- accepted: true
+  byte_offset: 36106
+  context_after: ' nine registered files landed on disk, migrated '
+  context_before: ' artifact) was removed after hash verification. '
+  matched: At `.11`
+  reason: 'introduces the .11 note: the next expected version in the descending scan'
+  version_named: 11
+- accepted: true
+  byte_offset: 37171
+  context_after: ' the 020-R0 row was added (founding-acts report,'
+  context_before: 'ive in `docs/architecture/` with pointers back. '
+  matched: At `.10`
+  reason: 'introduces the .10 note: the next expected version in the descending scan'
+  version_named: 10
+- accepted: true
+  byte_offset: 37246
+  context_after: ' the design package H-01 R1 was committed verbat'
+  context_before: ' added (founding-acts report, number proposed). '
+  matched: At `.9`
+  reason: 'introduces the .9 note: the next expected version in the descending scan'
+  version_named: 9
+- accepted: true
+  byte_offset: 37838
+  context_after: ' the on-disk correspondence files were committed'
+  context_before: '�15); a strict superset, nothing reviewed lost. '
+  matched: At `.8`
+  reason: 'introduces the .8 note: the next expected version in the descending scan'
+  version_named: 8
+slice_count: 24
+slices:
+- end: 1536
+  id: s-31
+  sha256: 631ea3cb55d9f4234d27012462e5ebf167ccd7137d37517688993d3319c7f23e
+  start: 70
+  version: 2026-09-18.31
+- end: 3465
+  id: s-30
+  sha256: 17cf87692e3f5888dbc9ba14f273853c2d1391c9676fcfd051cb295c838670ef
+  start: 1536
+  version: 2026-09-18.30
+- end: 7617
+  id: s-29
+  sha256: e6594ba3aa60a879611197b68dae9e6f91547583a0e6cd7081831422afbe197d
+  start: 3465
+  version: 2026-09-18.29
+- end: 10609
+  id: s-28
+  sha256: 164a66c2999d3c73eaf66c2077968628b15f308e369fa7180fc4139481a59d7e
+  start: 7617
+  version: 2026-09-18.28
+- end: 11998
+  id: s-27
+  sha256: 928fda0a181ebe497e81865698a3c1c8702967e58b9359027b5db8f439a62a37
+  start: 10609
+  version: 2026-09-18.27
+- end: 20508
+  id: s-26
+  sha256: 7ab4812afc41a1505cc98a260616f2e85882a93d1374c1b128fca698757d2489
+  start: 11998
+  version: 2026-09-18.26
+- end: 21565
+  id: s-25
+  sha256: ee1d8a0100b3224272be7d14a7579f68eda40b9da1dd65a7ac6cf22b47a74f56
+  start: 20508
+  version: 2026-09-18.25
+- end: 26323
+  id: s-24
+  sha256: cc99d6471d28a54ecfa585737a8e590b362c4000acfc51a5d9000bb59c2ef490
+  start: 21565
+  version: 2026-09-18.24
+- end: 27470
+  id: s-23
+  sha256: fc30e7245e4e64249bdbb57914a481430bee7c3be98bd040d7832c963179a69c
+  start: 26323
+  version: 2026-09-18.23
+- end: 28642
+  id: s-22
+  sha256: adb2ea450cd453ff8806b2d5449960ab5596cc04091680892c8862dc5917404d
+  start: 27470
+  version: 2026-09-18.22
+- end: 29778
+  id: s-21
+  sha256: 4ea268f637d18c03f848516b0e12ff4a847e75e946b6b3d15201e1e651e76b74
+  start: 28642
+  version: 2026-09-18.21
+- end: 30959
+  id: s-20
+  sha256: 99251d5a80a279fe81d87b63ecd7f13fe986ca9c3f3f633e93513f56ecd3529e
+  start: 29778
+  version: 2026-09-18.20
+- end: 31564
+  id: s-19
+  sha256: eb0750521a8f9997bdf399f6d74f306418468ac8abfe95b0ad001b5f8db07ea9
+  start: 30959
+  version: 2026-09-18.19
+- end: 32265
+  id: s-18
+  sha256: 9b8808684709ba3fe888f3ba0c4c0cb63052a23492b75dccbcc44d9a0ed717c4
+  start: 31564
+  version: 2026-09-18.18
+- end: 32558
+  id: s-17
+  sha256: cc7644c9c4870ad099f4ed06559c604a3b54e171383e5ce2279c1eebc341bcaa
+  start: 32265
+  version: 2026-09-18.17
+- end: 32920
+  id: s-16
+  sha256: abd89c038fb285c74c3bd3bd71095faa7bd996d3baff5e0a74d04367214177f2
+  start: 32558
+  version: 2026-09-18.16
+- end: 33422
+  id: s-15
+  sha256: 949e001d70cac2aa176c7985e76dd2d48d31419953c5d4d8eefc670bd747e622
+  start: 32920
+  version: 2026-09-18.15
+- end: 34703
+  id: s-14
+  sha256: 2ebbede92fea94a335c2f7069d6393c04fdf5dfc5fa0ca6765442620fbc51143
+  start: 33422
+  version: 2026-09-18.14
+- end: 35073
+  id: s-13
+  sha256: 114a99f56e0c5bbe0c1180ac6466e25d3a24d2924bdca9c868f5ef06546a54f2
+  start: 34703
+  version: 2026-09-18.13
+- end: 36106
+  id: s-12
+  sha256: 6b625e801f55a9e57a19be52586cd246bf3dbae7e429b6734da795386b4e8875
+  start: 35073
+  version: 2026-09-18.12
+- end: 37171
+  id: s-11
+  sha256: 40055a46e1839c4eb07c77a96fb3c9c383240e428bbc48aa82b4cdb2d0dfdc32
+  start: 36106
+  version: 2026-09-18.11
+- end: 37246
+  id: s-10
+  sha256: c3e84ec1a77eaa5d65e5995c55393d81c19ccf613e78b2d74e4e1863ddcb22a1
+  start: 37171
+  version: 2026-09-17.10
+- end: 37838
+  id: s-09
+  sha256: c550dffad7168a85a804c7fc5efcf4c70b5dbba6102048be76af2ce1afe8e823
+  start: 37246
+  version: 2026-09-17.9
+- end: 39268
+  id: s-08
+  sha256: 968f647d8cfcc6d7e6a7817ceb1d4988af9d97bd2a60f30fadd85bf48fd65f10
+  start: 37838
+  version: 2026-09-17.8
+source_bytes: 72260
+source_lines: 97
+source_path: docs/correspondence/REGISTER.md
+source_sha256: 032714205673455707d583e6fa5a8d53e932c730dcbeba31f0916e08ae4737b6
+table_baseline:
+  correspondence_rows: 36
+  definition: data rows only — header and separator lines excluded (RR-32-07)
+  instruments_rows: 1
+  permitted_changes:
+    basis: 'Q-13 and the lead''s carried condition 2 (PR #21 comment 5752637376): the 032-R1 row added, the 030-R0 and 031-R0 status cells updated, the next-free row replaced by the ledger-derived pointer; every other data row byte-identical (RL-13), instruments rows byte-identical (RL-14)'
+    next_free_row: true
+    rows_added:
+    - 032-R1
+    rows_modified:
+    - 030-R0
+    - 031-R0
+verbatim_as_of: 582fb63d63c3f9188516faade67fd6a8116287a3
+version_count: 30
+version_name_basis: 'date prefix per version: .2–.10 → 2026-09-17, .11–.31 → 2026-09-18; .6–.31 read from each landing''s version line in Git history at the base (5446e6e … 582fb63, first-parent); .2–.5 predate the committed register and take the date the register''s own text gives them'
