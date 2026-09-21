@@ -1125,6 +1125,10 @@ class MigrationTool(unittest.TestCase):
             lp = os.path.join(fwd, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml")
             edit_yaml(lp, lambda d: [e.update(state="landed", landed_version="2026-09-18.32") for e in d["allocations"] if e["key"] == "032-R1"])
             self.assertEqual(RM.reproduction_diffs(produced, fwd, manifest), [])
+            # plus withdrawals of unlanded allocations (CDX-34-H4-01): reserved→withdrawn (034),
+            # in_flight→withdrawn (033 after moving in_flight below is exercised separately)
+            edit_yaml(lp, lambda d: [e.update(state="withdrawn") for e in d["allocations"] if e["key"] == "034"])
+            self.assertEqual(RM.reproduction_diffs(produced, fwd, manifest), [])
             # plus a later reservation appended at/above next_free, and 033 moved reserved→in_flight
             edit_yaml(lp, lambda d: (d["allocations"].append({"key": "036-R0", "number": 36, "identity": "CORR-LEGO-PIPE-036", "type": "CORR",
                                                               "thread": "cluster", "actor": "x", "allocated_by": "James", "date": "2026-09-22",
@@ -1161,12 +1165,21 @@ class MigrationTool(unittest.TestCase):
                 rp = os.path.join(root, RL.REGISTER_REL); RL.write_bytes(rp, RL.read_bytes(rp).replace(b"never claimed on a branch", b"claimed on a branch"))
             def migrated_record_deleted(root):
                 os.remove(os.path.join(root, RL.REGISTER_DIR_REL, "versions", "2026-09-18.20.md"))
+            def withdrawn_with_landed_version(root):
+                edit_yaml(os.path.join(root, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"), lambda d: [e.update(state="withdrawn", landed_version="2026-09-18.32") for e in d["allocations"] if e["key"] == "035"])
+            def landed_to_withdrawn(root):
+                edit_yaml(os.path.join(root, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"), lambda d: [e.update(state="withdrawn", landed_version=None) for e in d["allocations"] if e["key"] == "031-R0"])
+            def in_flight_to_withdrawn_ok_then_revived(root):
+                # 033 was moved reserved→in_flight on the forward tree above; withdrawing it now
+                # is the legal in_flight→withdrawn edge. Terminality of withdrawn (no revival) is
+                # proved exhaustively in test_ledger_transition_graph_is_the_ratified_four_state_lifecycle.
+                edit_yaml(os.path.join(root, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"), lambda d: [e.update(state="withdrawn", landed_version=None) for e in d["allocations"] if e["key"] == "033"])
             def stray_migrated_record(root):
                 write_record(root, {"register_version": "2026-09-18.33", "previous_version": "2026-09-18.32", "kind": "migrated", "slice": "s-31", "note_sha256": sha(b"x")}, b"x")
             for name, fn, needle in (
                 ("record byte", flip_record, "differs: register/versions/2026-09-18.13.md"),
                 ("seeded field", seeded_field, "031-R0.allocated_by changed from seed"),
-                ("backwards", backwards, "moved backwards landed → reserved"),
+                ("backwards", backwards, "landed → reserved, which is not allowed (terminal"),
                 ("dangling landed_version", dangling, "no finalized record with that version"),
                 ("record does not name the key", not_named, "allocations_consumed does not name it"),
                 ("seeded entry removed", removed, "seeded entry 013 is missing"),
@@ -1177,9 +1190,69 @@ class MigrationTool(unittest.TestCase):
                 ("pointer template", pointer_template, "pointer text differs from the migrated template"),
                 ("migrated record deleted", migrated_record_deleted, "missing in committed tree: register/versions/2026-09-18.20.md"),
                 ("stray migrated record", stray_migrated_record, "extra in committed tree: register/versions/2026-09-18.33.md"),
+                ("withdrawn with landed_version", withdrawn_with_landed_version, "withdrawn but carries landed_version"),
+                ("landed → withdrawn", landed_to_withdrawn, "landed → withdrawn, which is not allowed (terminal"),
             ):
                 diffs = mutated(fn)
                 self.assertTrue(any(needle in d for d in diffs), f"{name}: expected a difference containing {needle!r}, got {diffs}")
+            # in_flight → withdrawn is accepted on the forward tree (033 was moved to in_flight above)
+            self.assertEqual(mutated(in_flight_to_withdrawn_ok_then_revived), [])
+
+    def test_ledger_transition_graph_is_the_ratified_four_state_lifecycle(self):
+        """CDX-34-H4-01: the states are reserved | in_flight | landed | withdrawn (R0 §3, the
+        ledger, register_lint.LEDGER_STATES); transitions are an explicit graph, landed and
+        withdrawn terminal. Asserted against the graph itself AND exhaustively against
+        ledger_forward_diffs over every ordered pair."""
+        self.assertEqual(RM.LEDGER_STATES, RL.LEDGER_STATES)
+        self.assertEqual(set(RM.ALLOWED_TRANSITIONS), set(RM.LEDGER_STATES))
+        self.assertEqual(RM.ALLOWED_TRANSITIONS, {
+            "reserved": {"reserved", "in_flight", "landed", "withdrawn"},
+            "in_flight": {"in_flight", "landed", "withdrawn"},
+            "landed": {"landed"},
+            "withdrawn": {"withdrawn"},
+        })
+        for terminal in ("landed", "withdrawn"):
+            self.assertEqual(RM.ALLOWED_TRANSITIONS[terminal], {terminal}, f"{terminal} must be terminal")
+        # exhaustive pairwise check through the comparison function, with a finalized record
+        # available so that legal landings are justified
+        with tempfile.TemporaryDirectory() as tmp:
+            vdir = os.path.join(tmp, "versions"); os.makedirs(vdir)
+            RL.write_bytes(os.path.join(vdir, "2026-09-18.32.md"), RL.record_bytes(
+                {"register_version": "2026-09-18.32", "previous_version": "2026-09-18.31", "kind": "finalized",
+                 "finalized_from_main": "b" * 40, "affected_memos": ["x"], "allocations_consumed": ["K"], "note_sha256": sha(b"n")}, b"n"))
+            def entry(state, lv=None):
+                return {"key": "K", "number": 50, "identity": "CORR-LEGO-PIPE-050", "type": "CORR", "thread": "cluster",
+                        "actor": "a", "allocated_by": "James", "date": "2026-09-21", "state": state, "landed_version": lv, "basis": "t"}
+            def diffs(seed_state, committed_state, lv=None, seed_lv=None):
+                seed = {"schema": "s", "next_free": 51, "allocations": [entry(seed_state, seed_lv)]}
+                com = {"schema": "s", "next_free": 51, "allocations": [entry(committed_state, lv)]}
+                return RM.ledger_forward_diffs(seed, com, vdir)
+            for src in RM.LEDGER_STATES:
+                for dst in RM.LEDGER_STATES:
+                    lv = "2026-09-18.32" if dst == "landed" else None
+                    seed_lv = "2026-09-18.32" if src == "landed" else None
+                    d = diffs(src, dst, lv=lv, seed_lv=seed_lv)
+                    if dst in RM.ALLOWED_TRANSITIONS[src]:
+                        self.assertEqual(d, [], f"{src} → {dst} should be accepted: {d}")
+                    else:
+                        self.assertTrue(any("is not allowed" in x for x in d), f"{src} → {dst} should be rejected: {d}")
+            # the named cases the review asked for
+            self.assertEqual(diffs("reserved", "withdrawn"), [])                                   # 1
+            self.assertEqual(diffs("in_flight", "withdrawn"), [])                                  # 2
+            self.assertTrue(any("withdrawn but carries landed_version" in x for x in diffs("in_flight", "withdrawn", lv="2026-09-18.32")))  # 3
+            self.assertTrue(any("landed → withdrawn, which is not allowed (terminal" in x for x in diffs("landed", "withdrawn", seed_lv="2026-09-18.32")))  # 4
+            for dst in ("reserved", "in_flight", "landed"):                                        # 5
+                lv = "2026-09-18.32" if dst == "landed" else None
+                self.assertTrue(any("withdrawn → " + dst in x and "terminal" in x for x in diffs("withdrawn", dst, lv=lv)), dst)
+            # landing evidence is still required across both landing edges
+            for src in ("reserved", "in_flight"):
+                self.assertTrue(any("no finalized record" in x for x in diffs(src, "landed", lv="2026-09-18.99")), src)
+                self.assertTrue(any("landed at" in x and "no finalized record" in x or "does not name it" in x for x in diffs(src, "landed", lv="2026-09-18.99")), src)
+            # a landed record that does not name the key is still rejected
+            RL.write_bytes(os.path.join(vdir, "2026-09-18.33.md"), RL.record_bytes(
+                {"register_version": "2026-09-18.33", "previous_version": "2026-09-18.32", "kind": "finalized",
+                 "finalized_from_main": "c" * 40, "affected_memos": ["x"], "allocations_consumed": ["OTHER"], "note_sha256": sha(b"m")}, b"m"))
+            self.assertTrue(any("does not name it" in x for x in diffs("in_flight", "landed", lv="2026-09-18.33")))
 
     @unittest.skipUnless(WITH_GIT, "--with-git: reads the manifest's base commit from the project's .git")
     def test_reproduction_from_the_base_commit_is_an_empty_diff(self):

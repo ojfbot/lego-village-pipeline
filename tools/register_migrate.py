@@ -37,9 +37,12 @@ seeded but later landings legitimately move are compared STRUCTURALLY against th
     reserved → in_flight → landed, a `landed` entry naming a `landed_version` whose finalized
     record exists in the committed tree and lists the key in `allocations_consumed`; new
     entries may be appended only at or above the seeded next_free, and the file must be the
-    fixed emitter's own serialisation. Anything else — a changed seeded field, a backwards
-    transition, a dangling landed_version, an entry removed, an out-of-order number — is a
-    difference. This is NOT "ignore the ledger": a corrupted seeded entry still fails.
+    fixed emitter's own serialisation. The lifecycle is the ratified four-state graph
+    (CDX-34-H4-01): reserved → {in_flight, landed, withdrawn}; in_flight → {landed, withdrawn};
+    landed and withdrawn are terminal; a withdrawn entry carries landed_version null. Anything
+    else — a changed seeded field, a transition out of a terminal state or not in the graph, a
+    dangling landed_version, an entry removed, an out-of-order number — is a difference. This is
+    NOT "ignore the ledger": a corrupted seeded entry still fails.
 Whether the forward state itself is right (chain, pointer = newest record, landing facts)
 is register_lint's and register_finalize --check's job, run separately.
 Exit: 0 · 1 difference/refusal · 2 usage/IO
@@ -341,7 +344,16 @@ def rewrite_register_in_place(repo, source_bytes, migrated_register_bytes):
     return "rewrote the version line (preamble + pointer); nothing else touched"
 
 
-LIFECYCLE = ("reserved", "in_flight", "landed")
+# Ratified allocation lifecycle (R0 §3 / R0 §4 item 4; the ledger's own states) as an explicit
+# transition graph, not a linear order (CDX-34-H4-01). Keys are the seeded state; values are
+# the states the committed entry may now be in. `landed` and `withdrawn` are terminal.
+LEDGER_STATES = ("reserved", "in_flight", "landed", "withdrawn")
+ALLOWED_TRANSITIONS = {
+    "reserved": {"reserved", "in_flight", "landed", "withdrawn"},
+    "in_flight": {"in_flight", "landed", "withdrawn"},
+    "landed": {"landed"},
+    "withdrawn": {"withdrawn"},
+}
 VERSION_LINE_RE = re.compile(rb"^\*\*Register version: (\d{4}-\d{2}-\d{2})\.(\d+)\*\* \xe2\x80\x94 one register version per accepted landing")
 
 
@@ -379,11 +391,15 @@ def ledger_forward_diffs(seed, committed, committed_versions_dir):
             if se.get(f) != ce.get(f):
                 diffs.append(f"ALLOCATIONS.yaml: {key}.{f} changed from seed ({se.get(f)!r} → {ce.get(f)!r}); only state/landed_version may move")
         s_state, c_state = se.get("state"), ce.get("state")
-        if c_state not in LIFECYCLE or s_state not in LIFECYCLE:
-            diffs.append(f"ALLOCATIONS.yaml: {key} state {c_state!r} (seed {s_state!r}) not in {LIFECYCLE}")
-        elif LIFECYCLE.index(c_state) < LIFECYCLE.index(s_state):
-            diffs.append(f"ALLOCATIONS.yaml: {key} moved backwards {s_state} → {c_state}")
-        if c_state == "landed":
+        if s_state not in LEDGER_STATES or c_state not in LEDGER_STATES:
+            diffs.append(f"ALLOCATIONS.yaml: {key} state {c_state!r} (seed {s_state!r}) not in {LEDGER_STATES}")
+        elif c_state not in ALLOWED_TRANSITIONS[s_state]:
+            why = "terminal" if s_state in ("landed", "withdrawn") else "not a ratified transition"
+            diffs.append(f"ALLOCATIONS.yaml: {key} moved {s_state} → {c_state}, which is not allowed ({why}; allowed from {s_state}: {sorted(ALLOWED_TRANSITIONS[s_state])})")
+        if c_state == "withdrawn":
+            if ce.get("landed_version") is not None:
+                diffs.append(f"ALLOCATIONS.yaml: {key} is withdrawn but carries landed_version {ce.get('landed_version')!r} — a withdrawn allocation never landed")
+        elif c_state == "landed":
             lv = ce.get("landed_version")
             if se.get("state") == "landed":
                 if lv != se.get("landed_version"):
