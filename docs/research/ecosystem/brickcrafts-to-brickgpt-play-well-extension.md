@@ -1,9 +1,9 @@
 # ecosystem — research: from Brickcrafts to BrickGPT, extended for play-well
 
-**Date:** 2026-09-20 · **Cluster:** play-well / ojfbot/lego-village-pipeline · **Status:** research, pre-ADR
+**Date:** 2026-09-20, revised 2026-09-23 · **Cluster:** play-well / ojfbot/lego-village-pipeline · **Status:** research, pre-ADR
 **Question:** Which parts of the open LEGO software ecosystem — creator tooling, LDraw/Blender bridges, connectivity data, sourcing, generative models, train firmware, play research — bear on play-well, and in what order?
 
-**Provenance.** Two passes. (1) A skeleton written by James in the Dia browser, starting from the Brickcrafts YouTube channel and walking the ecosystem (committed beside this file as `sources/brickcrafts-to-brickgpt-dia-skeleton-2026-09-20.pdf`, sha256 `37ab964f5e25eed3ca231c96ceb69a8a562517497607298a141f536caea5d1a9`). (2) A verification-and-extension pass by Claude Advanced Research (claude.ai, 2026-09-20), which checked the skeleton's claims against primary sources and re-framed each thread for play-well. Claims below carry their source URLs in the final section. **Nothing here was re-verified inside this repo**; where a claim becomes load-bearing for a decision, re-check it first. Figures marked *approximate* are third-party and time-varying.
+**Provenance.** Two passes. (1) A skeleton written by James in the Dia browser, starting from the Brickcrafts YouTube channel and walking the ecosystem, revised by him on 2026-09-23 with a much fuller account of the creator's operation (committed beside this file as `sources/brickcrafts-to-brickgpt-dia-skeleton-2026-09-23.pdf`, sha256 `8659c0bc79cb4262ba18e2cdabb6b4e1c8a9e45de2685591c7a8296724cdd7f8`). (2) A verification-and-extension pass by Claude Advanced Research (claude.ai, 2026-09-20), which checked the skeleton's claims against primary sources and re-framed each thread for play-well. Claims below carry their source URLs in the final section. **Nothing here was re-verified inside this repo**; where a claim becomes load-bearing for a decision, re-check it first. Figures marked *approximate* are third-party and time-varying.
 
 ## 1. Bottom line
 
@@ -15,7 +15,9 @@
 
 | Claim | Verdict | Notes |
 |---|---|---|
-| Brickcrafts = Marcus Ungermanns, Innsbruck; German sister channel "Bob Brickman"; City/trains speedbuilds and MOCs | confirmed | Subscribers *approximate*: SPEAKRJ ~571K, Feedspot 2026 list ~658K. Launch year differs by source (skeleton says 2020; other sources 2018). His LEGO-city museum moved to Rosenheim, DE (Galaxus). |
+| Brickcrafts = Marcus Ungermanns, Innsbruck; City/trains speedbuilds and MOCs | confirmed | Subscribers *approximate*: SPEAKRJ ~571K, Feedspot 2026 list ~658K. |
+| Not one channel but four: Brickcrafts (EN, 2020, ~660K), Bob Brickman (DE, 2018, ~335K), **Brickman Brothers** (the technical channel — light control, train control, button-pressers), Brickstory (museum vlogs) — skeleton revision 2026-09-23 | confirmed in substance | The two launch years reconcile the earlier date conflict: Bob Brickman 2018, Brickcrafts 2020. The Brickman Brothers channel exists and is cited as the source for museum walkthroughs. |
+| The physical anchor is the Bob Brickman & Brickstory Museum, Rosenheim (350 m²) with moving trains, lit houses, sound effects, button-press actions and a day/night simulation | confirmed | bobstory.de: Ellmaierstraße 18, 83022 Rosenheim; 350 m²; the English page lists exactly those effects. Caveat: the museum is a **joint** venture with the separate creator Brickstory, so not every effect is necessarily Ungermanns's own build. Opening month (March 2024) not independently checked — *approximate*. |
 | BrickGPT: CMU, ICCV 2025 Best Paper (Marr Prize); Llama-3.2-1B-Instruct; StableText2Brick 47k+ structures / 28k+ objects; 20×20×20 grid; 8 brick types; physics-aware rollback | confirmed | Pun, Deng, Liu, Ramanan, Liu, Zhu. arXiv 2505.05469. Renamed from LegoGPT. Stability analysis uses Gurobi. |
 | ldr_tools_blender ~7 s vs ~100 s on UCS Falcon | confirmed | MIT licence; Rust core + PyO3 bindings + thin addon; Blender 4.1+. Developer benchmark (forums.ldraw.org #27191, 10179-1): 7 s vs ImportLDraw 100 s vs ExportLDraw 68 s. Reads current Studio `.io` directly; old password-protected `.io` must be resaved. Geometry Nodes instancing recommended above ~10k parts. |
 | Brickrail: Godot GUI + Python BLE server + on-hub Pybricks; colored block markers | confirmed | Now runs on standard Pybricks firmware. The "~3 → ~7–8 hubs" figure is consistent with the architecture but not independently verified — *approximate*. |
@@ -64,7 +66,9 @@ No published procedural LEGO-snow work was found. Nearest ideas: mesh→brick an
 - Adjacent CAD-agent work: LLM-generated CAD programs with visual feedback (Cambridge, *Proceedings of the Design Society*); Text-to-CADQuery; CAD-MLLM. All use a verifier in the loop.
 - **Brickognize / brickscope** make photo → part ID callable by an agent — relevant to inventory later.
 
-### 3.8 Train control — medium now, high later
+### 3.8 Train control — medium now, high later, and no longer hypothetical
+
+The skeleton's 2026-09-23 revision changes the standing of this branch. A whole channel of the family, **Brickman Brothers**, is devoted to the museum's technical layer — train control (*Zugsteuerung*), light control (*Lichtsteuerung*) and physical button-pressers (*Knopfdrücker*) — and bobstory.de describes automated trains and a day/night simulation across 350 m². So a layout of roughly play-well's eventual ambition, run under program control, exists and is documented in public, in German, by its builder. Which stack he uses (Pybricks, MattzoBricks/Rocrail, or something bespoke) is not stated in English; that makes Brickman Brothers a **precedent corpus worth watching** for the mils-integrator retrieval work and for the later automation layer, with the language barrier as the cost of entry.
 
 10254 can be motorized; a modern conversion uses a Powered Up City hub and train motor, programmable with **Pybricks**. A constant-speed loop sensing ties or colored markers is a small program; **Brickrail** is the step up for blocks and schedules. Motorizing is a physical change the family should decide on.
 
@@ -126,7 +130,8 @@ What would change the plan: an open, permissively licensed, LDraw-native generat
 
 ## 8. Sources
 
-- Brickcrafts: youtube.com/@Brick_Crafts · galaxus.de/en/page/lego-city-youtuber-fulfils-dream-and-opens-museum-31244 · speakrj.com/audit/report/UCTGHqw41qk_WyK3wJK7nweg/youtube · videos.feedspot.com/lego_youtube_channels/
+- Brickcrafts and family: youtube.com/@Brick_Crafts · youtube.com/@BobBrickman · youtube.com/@BrickmanBrothers · youtube.com/@brickstoryofficial · bobstory.de/en/ (museum, effects, address)
+- Brickcrafts (stats) · galaxus.de/en/page/lego-city-youtuber-fulfils-dream-and-opens-museum-31244 · speakrj.com/audit/report/UCTGHqw41qk_WyK3wJK7nweg/youtube · videos.feedspot.com/lego_youtube_channels/
 - BrickGPT: avalovelace1.github.io/BrickGPT · github.com/AvaLovelace1/BrickGPT · arxiv.org/abs/2505.05469 · iccv.thecvf.com/virtual/2025/poster/390
 - BrickNet: arxiv.org/abs/2604.22984 · openaccess.thecvf.com (CVPR 2026)
 - BrickSim (related simulator): arxiv.org/abs/2603.16853

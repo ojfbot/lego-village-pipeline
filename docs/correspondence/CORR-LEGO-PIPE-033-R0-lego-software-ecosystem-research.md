@@ -28,7 +28,7 @@ argument: >
   drafting table for the operator.
 provenance:
   source_artifacts:
-    - {name: "docs/research/ecosystem/sources/brickcrafts-to-brickgpt-dia-skeleton-2026-09-20.pdf", role: "the operator's Dia-browser skeleton; sha256 37ab964f5e25eed3ca231c96ceb69a8a562517497607298a141f536caea5d1a9"}
+    - {name: "docs/research/ecosystem/sources/brickcrafts-to-brickgpt-dia-skeleton-2026-09-23.pdf", role: "the operator's Dia-browser skeleton, revision of 2026-09-23 (supersedes the 2026-09-20 draft that this branch first carried at commit 9a509b8); sha256 8659c0bc79cb4262ba18e2cdabb6b4e1c8a9e45de2685591c7a8296724cdd7f8"}
     - {name: "docs/research/ecosystem/brickcrafts-to-brickgpt-play-well-extension.md", role: "the research document this memo introduces"}
     - {name: "Claude Advanced Research run, claude.ai, 2026-09-20", role: "verification and extension pass; primary sources listed in the research document §8"}
     - {name: "docs/research/studio-bridge/research-bricklink-studio-agent-integration.md", role: "prior research this overlaps with (brick-mcp, ldr_tools_blender .io support, Studio connectivity data)"}
@@ -50,6 +50,7 @@ findings:
   - {id: N-03, summary: "The LDCad shadow library's SNAP metas are open connectivity data a deterministic fitment validator can read; Studio's is proprietary"}
   - {id: N-04, summary: "BrickLink has closed its marketplace in China, the Philippines and about 35 more countries since 2024; the purchase path should assume manual wanted-list upload"}
   - {id: N-05, summary: "ExportLDraw is the only common Blender importer that also exports LDraw — the return trip from brick_bench to Studio depends on it or on brick-mcp"}
+  - {id: N-06, summary: "The channel is four channels and a museum: Brickman Brothers documents train control, light control and button-pressers for a 350 sqm automated layout — a public precedent corpus for the automation layer, in German"}
   - {id: Q-01, summary: "Where should ecosystem research live — docs/research/ecosystem/ as proposed, or folded into an existing research folder?"}
   - {id: Q-02, summary: "Should the fitment-validator and purchase-path suggestions go to Claude Code as input to 018 S1 / S7, or wait for a separate work order?"}
   - {id: Q-03, summary: "Does the operator's Dia skeleton belong in the repo as a committed source PDF, or should only its hash be recorded?"}
@@ -93,7 +94,7 @@ act; OpenUSD is the planned canonical record.
 | Path | What |
 |---|---|
 | `docs/research/ecosystem/brickcrafts-to-brickgpt-play-well-extension.md` | The research document: verification table, ten threads re-framed, a component map, suggested spikes, sources |
-| `docs/research/ecosystem/sources/brickcrafts-to-brickgpt-dia-skeleton-2026-09-20.pdf` | The operator's skeleton, verbatim (sha256 `37ab964f…d1a9`) |
+| `docs/research/ecosystem/sources/brickcrafts-to-brickgpt-dia-skeleton-2026-09-23.pdf` | The operator's skeleton, verbatim (sha256 `8659c0bc…d7f8`) |
 
 ## §2 What held, what moved
 
@@ -107,6 +108,8 @@ sculptures from eight plain bricks on a small grid. BrickNet (CVPR 2026) builds 
 parts, each carrying typed connectors — stud, hinge, axle, ball, fixed — and writes a
 model as a tree over its connections. That is the shape play-well's own connection model
 is heading toward, which makes BrickNet the paper to study, though not yet a dependency.
+
+**N-06:** the skeleton's own 2026-09-23 revision moved something too. Brickcrafts is not one channel but four, and one of them — Brickman Brothers — exists to document the technical layer of a 350 m² museum layout in Rosenheim: train control, light control, button-pressers, a day/night simulation. The museum and the channel check out. What that means here is narrow but real: a working, programmed layout of roughly the ambition play-well grows toward is documented in public by the person who built it, in German. It is precedent to watch rather than a dependency, and it lands in the same folder the mils-integrator retrieval work will draw from.
 
 And the market moved. **N-04:** BrickLink's marketplace has closed country by country
 since 2024. The US is still open, but a purchase path built on a stable programmatic cart
@@ -125,6 +128,7 @@ The picture on the box for Christmas 2026 needs nothing invented. Each piece is 
 - **The round trip (N-05).** ldr_tools_blender brings models into Blender fast. Getting them
   back out as LDraw that Studio opens needs ExportLDraw or brick-mcp — the only two
   routes found.
+- **Precedent (N-06).** The automation layer play-well would reach years from now is already built and filmed by one creator; the corpus is in German, which is a cost the retrieval work should price in.
 - **The loop and the modules.** MILS and R40 geometry are fully documented; BlueBrick and
   LDCad both plan the loop.
 
