@@ -168,3 +168,11 @@
   allocates; blocker written on #24. (c) Plan assumed one broken Cowork worktree entry to
   prune; territory: nine `/sessions/…` entries, all `locked initializing`, which `git worktree
   prune` skips. Left untouched.
+- **2026-09-24 — the canary tripped the register battery (Claude Code).** Plan assumed
+  rebuilding #24 as CORR-036 on the post-032 rules was pure content; territory: it is the
+  first ordinary landing after the migration (the canary, 032-R0 §9), and `test_register.py`
+  pinned the migration-time state (bootstrap fixtures read the live table; G-12 pinned the
+  corpus), so any landing turned 10 tests red. Went conservative: a separate test-only PR
+  for James (fixture frozen from git history, post-migration memos excluded from G-12);
+  #28 stays content-only. Also: I drafted the 036 allocation comment with the wrong thread
+  and actor (copied from the 032–035 pattern); corrected on #24 by a follow-up comment.
