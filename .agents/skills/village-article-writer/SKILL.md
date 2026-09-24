@@ -1,51 +1,103 @@
 ---
 name: village-article-writer
-description: Plan, draft, fact-check, or revise Medium-style articles about the LEGO Village Pipeline using James's voice, the annual family-village learning loop, LEGO set-building language, and current repository evidence. Use for this article series; do not use for correspondence memos, product documentation, or generic technical writing.
+description: >-
+  Plan, draft, revise, or fact-check James's public Medium series about the LEGO
+  Village Pipeline: the family Christmas village, winter train, and the design and
+  agent pipeline behind them. Use for a blog post, Medium post, essay, "article N",
+  village-story idea, pre-publication review, or a check for status overclaims,
+  family privacy, LEGO vocabulary, or voice. Not for LEGO-PIPE memos or handoffs,
+  GitHub evidence issues, READMEs, product documentation, or unrelated writing.
 ---
 
 # Village Article Writer
 
-Write from the village outward. The family tradition and its annual learning loop
-are the story; the application, Claude Design, schemas, agents, tooling, and delivery
-infrastructure enter because the village needs them.
+Use this skill for public article work. It owns the procedure; the editorial docs
+are reference material and must not duplicate it.
 
-## Load context before writing
+For direct invocation, supply a mode followed by an article number, title, or pasted
+draft: `plan`, `packet`, `draft`, `revise`, or `fact-check`.
 
-Read these two editorial references completely:
+## Hard rules
 
-1. `docs/writing/medium-series-plan.md`
-2. `docs/writing/style-context.md`
+- Preserve family privacy. James is a friend of the family, never "Dad" or a
+  parental role. Refer to the boys only as EH, HH, and LH. Do not publish names,
+  photos, identifying details, or verbatim family requests without explicit consent.
+- Treat these as distinct states: **built and verified**, **designed or ratified**,
+  **planned**, and **known broken or unresolved**. Do not use *shipped*, *launched*,
+  *live*, *operational*, or *completed* unless current evidence proves that status.
+- James is the sole decision authority. Keep agent origin, independent review, and
+  human decisions legible; do not use collective *we* to blur them.
+- The repository holds exported Claude Design artifacts, not the whole live design
+  session. Family-facing journeys are not family-validated until real use supplies
+  evidence. Prototype numbers are mock math until verified and independently audited.
+- Read `docs/writing/medium-series-plan.md` for the canonical LEGO glossary. Keep
+  *parcel* literal, and write *LEGO bricks* or *a LEGO set*, never "LEGOs."
 
-Then establish current project state from canonical sources:
+## Select the mode before loading context
 
-1. `docs/correspondence/REGISTER.md` — read first; it is the index and authority.
-2. `CLAUDE.md` and `.claude/northstar.md`.
-3. The operative work order, design manifest, and article-specific sources named in
-   the series plan.
-4. Current Git head and working-tree status.
+| Request signal | Mode | Deliverable |
+|---|---|---|
+| "Where does this idea fit?", series order, or an outline request | Plan | placement, governing question, learning event, and evidence needed next |
+| "Load context", "what can we safely say?", or an article number before drafting | Context packet | compact fact/status packet for correction |
+| "Draft", "write the next post", "article N", blog/Medium/essay request | Draft | article prose, preceded by a compact packet when evidence is consequential |
+| Existing prose plus "rewrite", "tighten", or voice feedback | Revise | revised prose plus a note of any claim that needs rechecking |
+| Pasted prose plus "check", "ready to publish?", status, privacy, or overclaim question | Fact-check | claim ledger and findings; revised wording only when requested |
 
-Read the full files selected for the article. Do not rely on search snippets for a
-claim that affects status, authority, chronology, or outcome.
+If the request fits more than one mode, choose the least expansive one. A pasted
+paragraph with "check" is Fact-check, not a full Draft. Ask only when the mode
+would materially change the requested output.
 
-When the current user supplies a brief, it controls purpose, audience, length, and
-point of view. It does not override canonical repository facts unless the user is
-explicitly supplying newer external evidence; label that evidence and its status.
+## Load only the context the mode needs
 
-## Choose the mode
+Apply the source hierarchy in `docs/writing/style-context.md` in every mode: a
+user brief controls purpose and point of view, not repository facts. Read a full
+source—not a search snippet—for any claim about status, authority, chronology, or
+outcome.
 
-- **Plan:** place the idea in the ten-article arc or explain why it should be an
-  interlude or later-season article.
-- **Context packet:** load sources and report the factual/status basis without
-  drafting prose.
-- **Draft:** produce the requested article after the context packet is sound.
-- **Revise:** preserve the article's claims while improving structure, voice, or
-  fidelity to the series.
-- **Fact-check:** test claims and status language against canonical evidence; do not
-  silently rewrite disputed facts.
+### Plan
 
-## Produce a context packet
+Read `docs/correspondence/REGISTER.md` first for current status. Then read the
+relevant sections of `docs/writing/medium-series-plan.md`: **The editorial
+correction**, **The three nested learning loops**, **LEGO language and its
+boundaries**, **The ten-article sequence**, and **Core evidence map**. Read only
+the article-specific source needed to test a proposed claim.
 
-Before a full draft, state:
+### Context packet
+
+Read the relevant article brief and the sources named for it in the evidence map.
+Read `docs/correspondence/REGISTER.md` first, then `CLAUDE.md` and
+`.claude/northstar.md` when authority, current scope, or delivery status matters.
+Inspect current Git state for claims about a branch, pull request, or implementation.
+
+### Draft or Revise
+
+Read `docs/writing/medium-series-plan.md` and `docs/writing/style-context.md` in
+full, then load the Context-packet sources above. Read the full operative work
+order, design manifest, and article-specific evidence selected from the map.
+When access permits, consult one reflective/architectural and one procedural Medium
+source named in the style context. When access is unavailable, use the voice profile
+and record `Voice samples consulted: none (offline)` in the packet.
+
+### Fact-check
+
+Read the submitted draft or passage, the relevant article brief, the register, and
+the exact evidence behind each consequential claim. Use the hard rules above and
+the source hierarchy; load `CLAUDE.md` or a work order only when a claim depends on
+its authority or scope. Do not load the full series arc or voice profile unless the
+question asks about placement or voice.
+
+## Produce the right output
+
+### Plan
+
+State the proposed article slot (or explain why it should be an interlude), its
+governing question, one concrete learning event, its LEGO object/action, and the
+evidence that must exist before publishing. Do not turn a plan into an implementation
+work order.
+
+### Context packet
+
+Use this compact correction surface before a consequential draft:
 
 ```markdown
 Article: <number and working title>
@@ -57,108 +109,56 @@ Built and verified: <facts>
 Designed or ratified: <facts>
 Planned: <facts>
 Known broken or unresolved: <facts>
-Voice samples consulted: <titles, if available>
+Voice samples consulted: <titles or none (offline)>
 High-risk claim: <the claim most likely to mislead or become stale>
 ```
 
 This is a correction surface, not an approval gate unless the user asks for one.
-If the user asks directly for a draft and the sources are sufficient, keep the
-packet compact and continue.
 
-## Find the learning loop
+### Fact-check
 
-Every article needs a change in understanding, not merely a chronology.
+Return a claim ledger:
 
-Identify:
+| Claim | Status | Evidence | Safe wording | Finding |
+|---|---|---|---|---|
 
-1. **Picture on the box:** what success was expected to look like.
-2. **Build on the table:** what was actually prototyped, implemented, reviewed, or
-   built.
-3. **What moved:** ambiguity, fidelity, autonomy, or a combination.
-4. **Step-back:** the discrepancy or discovery that changed the next bag.
-5. **What remains sealed:** work deliberately unbuilt, unverified, or outside this
-   year's bounded context.
+If a central claim cannot be verified, stop and ask for evidence or a decision. For
+a non-central claim, label it unresolved or hedge it explicitly; never invent a
+source or silently upgrade its status.
 
-Use these as editorial questions. They need not appear as literal headings.
+### Draft or Revise
 
-## Draft in James's voice
+Open from a physical scene, question, or interaction. Introduce technical machinery
+only because the village needs it. Find a learning event and use the recurring
+structure in the series plan as a lens, not mandatory headings. End with what the
+next bag or next year inherits. Extract techniques from published work; never imitate
+phrases.
 
-- Open with a physical scene, interaction, confusion, or question.
-- State one governing thought early.
-- Use first-person singular for James's experience and first-person plural only for
-  genuinely shared work.
-- Name mechanisms precisely after explaining why they matter.
-- Treat metaphor as a testable model, not decoration.
-- Be candid about failed assumptions, incomplete work, and coordination cost.
-- Distinguish design fidelity from implemented capability.
-- Return to the village, family, calendar, or next Christmas at the end.
-
-Do not imitate phrases from published posts. Use the style sources to recover
-rhythm, stance, and explanatory technique.
-
-## Preserve the LEGO language
-
-Use the meanings in the series plan:
-
-- box = whole program;
-- picture on the box = observable acceptance;
-- booklet = one bag's human-refined work order;
-- numbered bag = bounded vertical slice;
-- model in the booklet = pinned Claude Design standalone;
-- build on the table = running slice on validated fixtures;
-- step back = reflection and returned learning;
-- real bricks, no glue = gated real-data introduction;
-- parcel = literal purchased-part shipment;
-- pack away = as-built reconciliation for next year.
-
-Never use *parcel* for a PR, design package, or handoff. Write *LEGO bricks* or
-*a LEGO set*, never "LEGOs."
-
-## Keep evidence and authority honest
-
-Use these status classes explicitly in working notes and clearly in prose:
-
-- built and verified;
-- designed or ratified;
-- planned;
-- known broken or unresolved.
-
-Do not use *shipped*, *launched*, *live*, *operational*, or *completed* unless the
-current evidence supports that exact claim.
-
-James is the sole decision authority. Agents may design, propose, implement,
-review, reconcile, or report. Do not blur those roles with collective *we*.
-
-The repository contains exported Claude Design artifacts, not the entire live
-design session. Family-facing designs are not family-validated until real family
-use supplies that evidence. Prototype numbers remain mock math until verified in
-implementation and independently audited.
-
-For public writing, preserve family privacy. James is a friend of the family, never
-"Dad" or a parental role. Refer to the boys only as EH, HH, and LH; do not publish
-their names, photos, or identifying details. Do not reproduce a family member's
-request verbatim without their explicit consent.
+Unless the user asks for files, return prose in chat. When asked to create files,
+write drafts to `docs/writing/articles/NN-slug.md` and the adjacent claim ledger to
+`docs/writing/articles/NN-slug-notes.md`. Do not commit, push, publish, or link a
+draft from a tracked index without explicit user authorization.
 
 ## Final review
 
 Check that:
 
-- the village remains the protagonist;
-- the bounded context and seasonal timetable are visible;
-- the article demonstrates at least one learning-through-play characteristic
-  through events rather than labels alone;
-- the learning loop closes or intentionally remains open;
-- current facts cite or name their evidence;
-- planned work is not narrated in the past tense as capability;
-- agent origin, human authority, and review independence remain legible;
-- family relationships, identifiers, images, and quoted requests respect the
-  public-writing privacy rule;
-- technical detail supports the governing thought;
-- the ending names what the next bag or next year inherits;
-- the tone is reflective and technically grounded, not promotional.
+- the village, bounded context, and seasonal timetable remain visible;
+- a learning loop closes or intentionally remains open;
+- every consequential status claim names current evidence;
+- planned work is not narrated as delivered capability;
+- family privacy and consent rules hold;
+- agent origin, human authority, and review independence are legible;
+- the live design session is not conflated with its exported handoff;
+- LEGO vocabulary is accurate and *parcel* stays literal;
+- technical detail serves the governing thought rather than promotional language;
+- the ending names what remains sealed or what the next year inherits.
 
-## Boundaries
+## Reference ownership
 
-This skill writes or edits editorial artifacts only when requested. It does not
-modify correspondence, register state, design packages, schemas, code, or project
-policy. Drafts do not become work orders merely because they cite the repository.
+- `docs/writing/medium-series-plan.md` owns the series arc, article briefs, LEGO
+  glossary, learning loops, and evidence map.
+- `docs/writing/style-context.md` owns the durable voice profile, source hierarchy,
+  and published style sources.
+- This file owns modes, load lists, output formats, and the final review. Do not
+  copy those procedures into the reference documents.

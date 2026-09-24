@@ -1,4 +1,4 @@
 interface:
   display_name: "Village Article Writer"
-  short_description: "Write the LEGO village Medium series"
-  default_prompt: "Use $village-article-writer to load the series, voice, and current project context before drafting the next article."
+  short_description: "Plan, write, or fact-check village posts"
+  default_prompt: "Use $village-article-writer to plan, draft, revise, or fact-check a public LEGO Village Pipeline article."

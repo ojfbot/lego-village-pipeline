@@ -37,6 +37,15 @@ This sharing arrangement requires the checkout to preserve symlinks. If
 example, on a platform or Git configuration with symlinks disabled), Claude will
 not discover the shared skill; restore symlink support before relying on it.
 
-The skill loads these editorial files first, then reads the canonical register and
-article-specific project evidence. Durable style belongs here; current status stays
-in the repository sources that own it.
+The skill selects only the references and canonical evidence needed for its mode.
+Durable style belongs here; current status stays in the repository sources that own
+it.
+
+The shared skill's trigger fixture is
+`.agents/skills/village-article-writer/evals/trigger-queries.json`. Run its prompts
+in fresh Codex and Claude Code sessions when changing the skill description; record
+whether the skill loaded before changing the fixture's expected result.
+
+This is a project skill. Claude Code loads it in this checkout, and repository-backed
+cloud sessions can load the committed Claude path. Cowork requires a separately
+published account skill; do not create a second copy without an explicit decision.

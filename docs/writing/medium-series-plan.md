@@ -437,40 +437,11 @@ The disagreement, block, or discovery that changed the next bag.
 
 What is deliberately unbuilt, unverified, or outside this year's bounded context.
 
-## Status language
+## Procedure ownership
 
-Every article must distinguish at least these states in plain language:
-
-- **Built and verified** — canonical implementation plus relevant evidence exists.
-- **Designed or ratified** — the interaction, schema, or plan has been accepted but
-  may not be implemented.
-- **Planned** — intended future work, with no claim of capability.
-- **Known broken or unresolved** — the discrepancy remains part of the honest state.
-
-Do not use *shipped*, *launched*, *live*, *operational*, or *completed* as stylistic
-synonyms. Each is a factual status claim.
-
-## Editorial guardrails
-
-- Start and finish in the village. Technical machinery should enter because the
-  family journey needs it.
-- Keep the five characteristics visible in events and choices; do not list them as
-  a branding exercise in every article.
-- Do not present agents as autonomous decision-makers. James is the sole decision
-  authority and merger for policy, schema, and tooling.
-- Preserve the difference between the live Claude Design session and the exported
-  package. The repository contains the handoff, not every discarded alternative or
-  conversational turn.
-- Keep family evidence honest. Family-facing surfaces exist at prototype fidelity;
-  family validation is future work until it actually occurs.
-- Explain an exact head once as the precise commit everyone reviewed.
-- Prefer concrete failure scenes over generic warnings about AI.
-- Avoid vendor boosterism, replacement narratives, and generalized claims about
-  engineering management.
-- All prototype numbers are mock math until replaced by verified implementation
-  and independent audit.
-- Purchase remains outside the app. A retroactive order with honest provenance is
-  supported, never framed as a workaround.
+The repo-local `village-article-writer` skill owns status definitions, publication
+guardrails, mode selection, evidence-loading procedure, and final review. This plan
+owns the article briefs, series arc, learning loops, LEGO glossary, and evidence map.
 
 ## Core evidence map
 

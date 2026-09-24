@@ -7,9 +7,8 @@ updated: 2026-09-24
 
 # Article-writing context
 
-This file captures durable writing preferences and a repeatable context-loading
-method for the LEGO Village Pipeline article series. It describes voice and method;
-it is not evidence for current project status.
+This file captures durable writing preferences and source hierarchy for the LEGO
+Village Pipeline article series. It is not evidence for current project status.
 
 ## Source hierarchy
 
@@ -169,113 +168,12 @@ is available; otherwise use the profile above.
 
 Profile: https://medium.com/@ojfbot
 
-## Repeatable context-loading pipeline
+## Procedure ownership
 
-### 1. Locate the article in the series
-
-Read `docs/writing/medium-series-plan.md` and record:
-
-- article number and working title;
-- position in the annual loop;
-- LEGO object or action carrying the article;
-- primary learning-through-play characteristics;
-- governing question;
-- facts that must be true before publication;
-- claims that must remain designed, planned, or unresolved.
-
-If the requested article does not fit the series, say why before forcing it into a
-slot. A useful article may be an interlude or a later-season piece.
-
-### 2. Load durable voice context
-
-Read this file completely. Then inspect two published articles:
-
-- one recent reflective/architectural article;
-- one procedural article if the requested piece explains a build or tool.
-
-Extract techniques, not phrases. Do not imitate distinctive sentences or reuse the
-same metaphor merely because it worked before.
-
-### 3. Establish canonical project state
-
-Read, in order:
-
-1. `docs/correspondence/REGISTER.md`;
-2. `CLAUDE.md`;
-3. `.claude/northstar.md`;
-4. the operative work order and relevant design-package manifest;
-5. article-specific specifications, reviews, and research named in the series plan.
-
-Also inspect the current Git head and working-tree status. Treat untracked files,
-draft PRs, pasted prompts, and live design sessions as separate evidence with their
-own status.
-
-For time-sensitive GitHub or Medium facts, verify against the live source when the
-user requests current accuracy or when the claim may have changed.
-
-### 4. Build a fact/status ledger before prose
-
-For every consequential claim, record:
-
-| Claim | Status | Evidence | Safe wording |
-|---|---|---|---|
-| Example: the design journey includes a release gate | designed | pinned design spec | "The prototype models..." |
-| Example: a capability named only in a work order | planned unless canonical evidence proves otherwise | work order + tree | "The ratified plan calls for..." |
-
-Use the states from the series plan: built and verified; designed or ratified;
-planned; known broken or unresolved.
-
-### 5. Find the learning event
-
-Identify the smallest concrete scene in which the team's understanding changed.
-Examples include a fit check returning BLOCK, a prototype revealing a missing
-lifecycle state, a reviewer finding proof of the wrong representation, or a parcel
-showing that ordered did not mean owned.
-
-The article needs a change in understanding, not merely a chronology of activity.
-
-### 6. Draft from the village outward
-
-Start with the village, family, table, calendar, prototype interaction, or physical
-constraint. Introduce schemas, agents, tools, and Git only when the scene requires
-them.
-
-Maintain one governing thought. Technical detail should either explain the learning
-event, establish credibility, or make the takeaway reusable.
-
-### 7. Run the status and voice review
-
-Before delivery, verify:
-
-- Every claim of implementation or completion is supported by current evidence.
-- The article distinguishes the live design experience from the exported bundle.
-- James's authority and each agent's role remain legible.
-- Family participation is not described as observed when it is only designed.
-- The LEGO vocabulary is consistent and *parcel* remains literal.
-- At least one learning loop closes or intentionally remains open.
-- The ending returns to the village and names what remains sealed.
-- The prose sounds like a reflective builder, not a vendor or governance manual.
-
-## Context packet to report before drafting
-
-The writer should provide a compact packet for James to correct:
-
-```markdown
-Article: <number and working title>
-Seasonal position: <where we are in the yearly loop>
-Governing question: <one question>
-Learning event: <the scene where understanding changed>
-Primary sources loaded: <short list>
-Built and verified: <facts>
-Designed or ratified: <facts>
-Planned: <facts>
-Known broken or unresolved: <facts>
-Voice samples consulted: <titles>
-High-risk claim: <the claim most likely to become false or misleading>
-```
-
-This packet is a context check, not a request for approval unless the brief requires
-James to make a decision.
+The repo-local `village-article-writer` skill owns mode selection, context load
+lists, the context packet, fact-check ledger, output locations, and final review.
+This file remains a durable reference for voice and source hierarchy; do not copy
+procedure back here.
 
 ## Maintaining this file
 
