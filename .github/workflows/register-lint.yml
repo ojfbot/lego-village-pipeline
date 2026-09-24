@@ -1,6 +1,6 @@
 name: register-lint
 # Structural register checks (HANDOFF-LEGO-PIPE-032-R1, R0 §4 item 10; Q-09 makes the
-# `register-lint` job a required check on main). Runs on every PR that touches the
+# `register-lint` job a required check on main). Lints every PR that touches the
 # correspondence directory or the register tools. No step calls a hosting API for a
 # canonical check (RR-32-R2-03); the settings-read step is the one API read, and it is
 # two-state: it always REPORTS allow_squash_merge / allow_rebase_merge and FAILS only
@@ -9,23 +9,54 @@ name: register-lint
 # AO-14's two-state result is emitted even when the AO-19 finalization check fails on a
 # pre-finalization head (CW-33-I06). Every finalizer invocation names its target with --repo
 # (CW-33-I02).
+# Scope: the check is required on main, so it must REPORT on every PR — a `paths:` trigger
+# filter left PRs outside the register surface with a required context that never arrived
+# (PRs #25/#26, first non-correspondence PRs after the 032 migration). The `scope` job now
+# decides applicability; when it positively finds no register-surface change, the
+# `register-lint` job is skipped, which GitHub reports as success to the required check.
+# Fail-closed: if `scope` does not succeed, the full battery runs.
 on:
   pull_request:
-    paths:
-      - "docs/correspondence/**"
-      - "tools/register_*.py"
-      - "tools/schema_lint.py"
-      - "tools/schemas/register-version.v1.schema.json"
-      - "tests/test_register.py"
-      - ".github/workflows/register-lint.yml"
   push:
     branches: [main]
     paths:
       - "docs/correspondence/**"
       - "tools/register_*.py"
 jobs:
+  scope:
+    name: register-lint scope
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      applies: ${{ steps.scope.outputs.applies }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Does this change touch the register surface?
+        id: scope
+        run: |
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "applies=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          git fetch --no-tags origin main:refs/remotes/origin/main
+          if git diff --quiet origin/main...HEAD -- \
+              docs/correspondence \
+              'tools/register_*.py' \
+              tools/schema_lint.py \
+              tools/schemas/register-version.v1.schema.json \
+              tests/test_register.py \
+              .github/workflows/register-lint.yml; then
+            echo "no register-surface change on this PR; register-lint not applicable"
+            echo "applies=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "applies=true" >> "$GITHUB_OUTPUT"
+          fi
   register-lint:
     name: register-lint
+    needs: scope
+    if: ${{ always() && !(needs.scope.result == 'success' && needs.scope.outputs.applies == 'false') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
