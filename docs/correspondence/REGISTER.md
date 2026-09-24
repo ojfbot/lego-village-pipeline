@@ -4,7 +4,7 @@
 
 **Scope: the play-well cluster, not one repo.** This register governs correspondence for `ojfbot/lego-village-pipeline` and `ojfbot/play-well-library` together, and any further play-well repo. It may later move to a repo of its own. **Moving the register's home is a copy plus an authority transfer recorded here — it never re-keys anything**: numbers, prefixes, revisions and citations are independent of where the register lives.
 
-**Register version: 2026-09-18.33** — one register version per accepted landing transaction, assigned only at finalization against protected `main` by `tools/register_finalize.py` (Q-02/Q-03, HANDOFF-LEGO-PIPE-032-R1); never claimed on a branch, never bumped by hand. The version history is one immutable record per version under `register/versions/` (`tools/register_lint.py render` reads it newest first); this line is the pointer, not the log.
+**Register version: 2026-09-18.32** — one register version per accepted landing transaction, assigned only at finalization against protected `main` by `tools/register_finalize.py` (Q-02/Q-03, HANDOFF-LEGO-PIPE-032-R1); never claimed on a branch, never bumped by hand. The version history is one immutable record per version under `register/versions/` (`tools/register_lint.py render` reads it newest first); this line is the pointer, not the log.
 
 Single monotonic register across threads and providers (instituted 2026-09-17, CORR-LEGO-PIPE-013 finding N-01). Type prefixes: `HANDOFF-` (work orders and design packages), `CORR-` (reconciliation and reply memos), `REVIEW-` (independent reviews). Revisions `R0, R1…` do not consume numbers. Historical collisions are kept, never silently renumbered.
 

@@ -469,9 +469,9 @@ allocations:
   date: '2026-09-24'
   identity: CORR-LEGO-PIPE-036
   key: 036-R0
-  landed_version: 2026-09-18.33
+  landed_version: null
   number: 36
-  state: landed
+  state: in_flight
   thread: cluster
   type: CORR
 next_free: 37
