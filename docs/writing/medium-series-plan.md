@@ -2,7 +2,7 @@
 title: "The Village That Learns — Medium article-series plan"
 status: editorial-plan
 owner: James
-updated: 2026-09-23
+updated: 2026-09-24
 audience: technical operators, engineering leads, product designers, and people experimenting with agentic application delivery
 authority: none
 ---
@@ -14,6 +14,8 @@ authority: none
 This is the editorial plan for a ten-article Medium series about the LEGO Village
 Pipeline. It is not a project work order and does not authorize implementation.
 Repository facts must be rechecked before each article is drafted.
+Dated source snapshots, draft links, and claim ledgers belong with the individual
+article, not in this durable series plan.
 
 ## Governing hypothesis — James's clarification, 2026-09-23
 
@@ -196,10 +198,8 @@ the next season without making this season's scene untouchable.
 **Governing question:** Can we grow a world together while keeping it a place to play?
 **Application strand:** family stories, proposals, practical planning, retained learning
 **Delivery strand:** test whether AI reduces the organizing burden of a growing tradition
-**Status:** origin supplied by James; draft ready for voice/story review; imagined market scenes remain possibilities
-
-**Delivery:** [article draft](articles/01-a-christmas-tree-a-train-and-room-to-play.md)
-and [sources and editorial notes](articles/01-a-christmas-tree-a-train-and-room-to-play-notes.md).
+**Status:** origin supplied by James; imagined market scenes remain possibilities.
+Establish a dated claim ledger before drafting.
 
 ### 2. The Picture on This Year's Box
 
@@ -221,14 +221,9 @@ be understood and extended by the family.
 **Governing question:** What are we trying to learn and deliver this Christmas?
 **Application strand:** one real village, bounded context, family outcomes
 **Delivery strand:** vertical scope and acceptance before architecture
-**Status:** publishable from the current program, while distinguishing the box from delivered software
-
-**Delivery:** [article draft](articles/02-the-picture-on-this-years-box.md) and
-[evidence and editorial notes](articles/02-the-picture-on-this-years-box-notes.md).
-**Editorial feedback:** James found this draft hard to read and too passive;
-rewrite deferred at his request while article 1 proceeds.
-Current source check: the register still marks 023-R2 for review; do not describe
-the whole bag program as accepted.
+**Status:** establish the current program status in the article's dated claim
+ledger; distinguish the box from delivered software and never describe the whole
+bag program as accepted unless canonical evidence supports it.
 
 ### 3. The Booklet Is a Conversation
 
@@ -265,7 +260,9 @@ morning hub; geometry; measurement and BOM; procurement; then real bricks.
 **Governing question:** What is the smallest slice that teaches us something complete?
 **Application strand:** recognizable capability in every slice
 **Delivery strand:** WIP limits, booklet preconditions, design pins, weekly cuts
-**Status:** distinguish the accepted program from bags actually implemented
+**Status:** distinguish the proposed program from bags actually implemented. Do
+not treat the bag program or its vocabulary as settled while its source remains
+under review.
 
 ### 5. The Bricks Tell Us the Schema Is Wrong
 
@@ -310,7 +307,9 @@ watches. Nothing needs to touch real shops, Studio, Blender, or the family yet.
 **Governing question:** Did the software help us know the village better?
 **Application strand:** shared fixtures, plan, 3D, measurements, BOM
 **Delivery strand:** `DataSource = fixtures` and later `DataSource = real` through one validated seam
-**Status:** publish after naming precisely which fixture-driven slice is running
+**Status:** publish after naming precisely which fixture-driven slice is running.
+Do not treat the bag program or its vocabulary as settled while its source remains
+under review.
 
 ### 7. Step Back and Look
 
@@ -330,7 +329,8 @@ earlier than peer review.
 **Governing question:** What did this bag change about the next booklet?
 **Application strand:** can the slice be understood and used?
 **Delivery strand:** review, drift, enforcement, preserved disagreement
-**Status:** publishable from the recorded review and debrief material
+**Status:** publishable from the recorded review and debrief material, while
+distinguishing those findings from the still-under-review bag program.
 
 ### 8. When the Model Does Not Match the Box
 
@@ -375,19 +375,17 @@ agents into decision authorities.
 on the same head → reconciliation → one human decision docket → ratified revision →
 implementation → exact-head review → merge → canary.
 
-**Status guardrail:** coordination infrastructure and a ratified plan may be
-delivered while migration tools remain planned. Never call the migration completed,
-launched, operational, or merged until canonical repository evidence says so.
-
-**Evidence refresh, 2026-09-23:** canonical `main` at `7f28a01` includes PR #23 and
-register `.32`, recording the migration landing. Refresh this article from 032-R1,
-the `.32` version record, implementation, and review evidence. Migration is now
-merged; the post-migration canary needs its own evidence before being called done.
+**Status guardrail:** create a dated, source-linked claim ledger when this article
+is drafted. Keep the plan free of point-in-time Git, pull-request, and register
+facts. Treat the migration and its post-migration canary as separate claims, and
+name neither as complete, launched, operational, or merged without current
+canonical evidence.
 
 **Required visuals:**
 
-1. Authority boundary: James above Codex; Claude Code and Cowork in separate lanes
-   beneath the single operator-facing conduit.
+1. Authority boundary: James above separately labelled Codex, Claude Code, and
+   Cowork lanes; arrows distinguish proposal, review, and implementation from
+   James's decision authority.
 2. Accepted landing transaction: pinned head through canary.
 3. Delivered now versus planned next.
 4. Superficial proof failure: quoted prose contains a lookalike seam; bytes and

@@ -2,7 +2,7 @@
 title: "James's article-writing context"
 status: maintained-editorial-reference
 owner: James
-updated: 2026-09-20
+updated: 2026-09-24
 ---
 
 # Article-writing context
@@ -15,8 +15,8 @@ it is not evidence for current project status.
 
 When sources disagree, use this order:
 
-1. The current user brief controls the article's purpose, audience, length, point
-   of view, and requested claims.
+1. The current user brief controls the article's purpose, audience, length, and
+   point of view.
 2. Canonical repository state controls project facts and implementation status.
 3. `docs/writing/medium-series-plan.md` controls the series arc, LEGO language,
    recurring learning loops, and placement of the article within the ten-part set.
@@ -26,6 +26,9 @@ When sources disagree, use this order:
 
 Do not let an old article, an unmerged branch, a design prototype, or a confident
 handoff sentence overrule canonical `main`.
+
+A brief may supply newer external evidence, but label its source and status before
+using it. A requested claim is not evidence and does not override canonical facts.
 
 ## What the writer can and cannot see
 
@@ -217,7 +220,7 @@ For every consequential claim, record:
 | Claim | Status | Evidence | Safe wording |
 |---|---|---|---|
 | Example: the design journey includes a release gate | designed | pinned design spec | "The prototype models..." |
-| Example: the migration tools exist | planned unless canonical evidence proves otherwise | register + tree | "The ratified plan calls for..." |
+| Example: a capability named only in a work order | planned unless canonical evidence proves otherwise | work order + tree | "The ratified plan calls for..." |
 
 Use the states from the series plan: built and verified; designed or ratified;
 planned; known broken or unresolved.

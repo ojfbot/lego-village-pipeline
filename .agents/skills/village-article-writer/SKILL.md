@@ -134,6 +134,11 @@ design session. Family-facing designs are not family-validated until real family
 use supplies that evidence. Prototype numbers remain mock math until verified in
 implementation and independently audited.
 
+For public writing, preserve family privacy. James is a friend of the family, never
+"Dad" or a parental role. Refer to the boys only as EH, HH, and LH; do not publish
+their names, photos, or identifying details. Do not reproduce a family member's
+request verbatim without their explicit consent.
+
 ## Final review
 
 Check that:
@@ -146,6 +151,8 @@ Check that:
 - current facts cite or name their evidence;
 - planned work is not narrated in the past tense as capability;
 - agent origin, human authority, and review independence remain legible;
+- family relationships, identifiers, images, and quoted requests respect the
+  public-writing privacy rule;
 - technical detail supports the governing thought;
 - the ending names what the next bag or next year inherits;
 - the tone is reflective and technically grounded, not promotional.
