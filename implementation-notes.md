@@ -157,3 +157,14 @@
   lint. No byte under `docs/correspondence/**` changed; no finalizer run; H3 unamended. Recorded
   because the class was named in advance (031 N-17, R0 §2a P07) and the batteries still shared
   the blind spot.
+- **2026-09-24 — play-well PR sweep (Claude Code).** (a) Plan assumed #26's missing
+  `register-lint` was a trigger fluke; territory: the check is required on `main` (strict,
+  admins enforced) but its `pull_request` trigger carried a `paths:` filter, so no PR outside
+  the register surface could ever merge (#25, #26 are the first since the 032 migration).
+  Went conservative: a workflow PR for James (scope job + job-level skip, fail-closed), no
+  settings change. (b) Plan assumed #24 needed only a version re-allocation; territory: its
+  number 033 is already reserved in `ALLOCATIONS.yaml` as REVIEW-LEGO-PIPE-033 (PR #21 docket),
+  and v.32 belongs to the migration landing. Went conservative: no renumbering — rule 1, James
+  allocates; blocker written on #24. (c) Plan assumed one broken Cowork worktree entry to
+  prune; territory: nine `/sessions/…` entries, all `locked initializing`, which `git worktree
+  prune` skips. Left untouched.
