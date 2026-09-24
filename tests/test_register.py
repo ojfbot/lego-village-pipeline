@@ -1298,14 +1298,30 @@ class MigrationTool(unittest.TestCase):
 
 # ======================================================================= corpus differential (G-12)
 
+def landed_after_migration():
+    """Memo identities landed (or pending) after the migration: named by a finalized record
+    other than the migration's own, or by a pending note. They were not in B's register, so
+    B-relative differentials exclude them rather than pin forward state."""
+    out = set()
+    for fm, _, _ in RL.Register(REPO).records.values():
+        if fm.get("kind") == "finalized" and "032-R1" not in fm.get("allocations_consumed", []):
+            out.update(fm.get("affected_memos", []))
+    pending = os.path.join(REG_DIR, "pending")
+    for name in sorted(os.listdir(pending)) if os.path.isdir(pending) else []:
+        if name.endswith(".md"):
+            out.update(RL.parse_record(RL.read_bytes(os.path.join(pending, name)))[0].get("affected_memos", []))
+    return out
+
+
 class CorpusDifferential(unittest.TestCase):
     def memos(self):
+        later = tuple(f"{m}-" for m in landed_after_migration())
         out = []
         for root, _, files in os.walk(CORR):
             if os.path.basename(root) in ("register", "versions", "pending", "attachments"):
                 continue
             for f in files:
-                if f.endswith(".md") and f != "REGISTER.md" and not f.startswith("HANDOFF-LEGO-PIPE-032-"):
+                if f.endswith(".md") and f != "REGISTER.md" and not f.startswith("HANDOFF-LEGO-PIPE-032-") and not f.startswith(later):
                     out.append(os.path.join(root, f))
         return sorted(out)
 
