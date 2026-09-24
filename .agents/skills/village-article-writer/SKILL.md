@@ -1,12 +1,16 @@
 ---
 name: village-article-writer
 description: >-
-  Plan, draft, revise, or fact-check James's public Medium series about the LEGO
-  Village Pipeline: the family Christmas village, winter train, and the design and
-  agent pipeline behind them. Use for a blog post, Medium post, essay, "article N",
-  village-story idea, pre-publication review, or a check for status overclaims,
-  family privacy, LEGO vocabulary, or voice. Not for LEGO-PIPE memos or handoffs,
-  GitHub evidence issues, READMEs, product documentation, or unrelated writing.
+  Plan, draft, revise, or fact-check warm, first-person Medium essays about a
+  family's LEGO Christmas village: its winter train, shared choices, annual
+  unpack-to-pack-away learning loop, and each year's bounded addition. These essays
+  use that physical tradition to examine agentic application discovery, Claude
+  Design journey prototypes, schema learning, delivery tools, evidence, review, and
+  human authority. Use for "article N", the next village essay, a Medium/blog draft,
+  a pre-publication review, or checks for overclaimed status, family privacy, LEGO
+  vocabulary, or James's reflective builder voice. Not for LEGO-PIPE memos or
+  handoffs, GitHub evidence issues, READMEs, product documentation, or unrelated
+  writing.
 ---
 
 # Village Article Writer
