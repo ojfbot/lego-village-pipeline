@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "skill": "village-article-writer",
+  "instructions": "Run each query in a fresh Codex and Claude Code session with the project skill available. Record whether the skill loaded before changing expected_trigger. This fixture evaluates discovery, not prose quality.",
+  "cases": [
+    {"id": "trigger-01", "expected_trigger": true, "query": "Draft article 3, the booklet one."},
+    {"id": "trigger-02", "expected_trigger": true, "query": "Write the next Medium post about the Christmas village."},
+    {"id": "trigger-03", "expected_trigger": true, "query": "Where does an essay about the winter train fit in the series?"},
+    {"id": "trigger-04", "expected_trigger": true, "query": "Check this paragraph before I publish it on Medium."},
+    {"id": "trigger-05", "expected_trigger": true, "query": "Does this merge-train paragraph overclaim what the agents built?"},
+    {"id": "trigger-06", "expected_trigger": true, "query": "Fact-check article 9 for status language and family privacy."},
+    {"id": "trigger-07", "expected_trigger": true, "query": "Revise this village blog post so it sounds like James without changing the claims."},
+    {"id": "trigger-08", "expected_trigger": true, "query": "Make a context packet for the parcel article."},
+    {"id": "trigger-09", "expected_trigger": true, "query": "Is it safe to say the family used the workbench in this draft?"},
+    {"id": "trigger-10", "expected_trigger": true, "query": "Outline a Medium essay about how Claude Design exposed a bad schema."},
+    {"id": "near-miss-01", "expected_trigger": false, "query": "Write the LEGO-PIPE-035 handoff memo."},
+    {"id": "near-miss-02", "expected_trigger": false, "query": "File the S4 spike evidence as a GitHub issue."},
+    {"id": "near-miss-03", "expected_trigger": false, "query": "Update the README for tools/."},
+    {"id": "near-miss-04", "expected_trigger": false, "query": "Write a Medium post about F1 strategy."},
+    {"id": "near-miss-05", "expected_trigger": false, "query": "Implement the R40 geometry validator."},
+    {"id": "near-miss-06", "expected_trigger": false, "query": "Review the accessibility tree on the family workbench."},
+    {"id": "near-miss-07", "expected_trigger": false, "query": "Summarize this purchase order for the record."},
+    {"id": "near-miss-08", "expected_trigger": false, "query": "Make a parts list for the train railbed."},
+    {"id": "near-miss-09", "expected_trigger": false, "query": "Draft a product requirements document for the morning hub."},
+    {"id": "near-miss-10", "expected_trigger": false, "query": "Plan a birthday party LEGO game for this weekend."}
+  ]
+}

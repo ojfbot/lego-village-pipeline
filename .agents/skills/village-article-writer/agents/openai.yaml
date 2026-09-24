@@ -1,0 +1,4 @@
+interface:
+  display_name: "Village Article Writer"
+  short_description: "First-person LEGO-village learning essays"
+  default_prompt: "Use $village-article-writer to draft a warm first-person Medium essay about this year's village and what its agentic delivery pipeline taught us."
