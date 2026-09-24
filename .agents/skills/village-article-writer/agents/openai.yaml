@@ -1,0 +1,4 @@
+interface:
+  display_name: "Village Article Writer"
+  short_description: "Write the LEGO village Medium series"
+  default_prompt: "Use $village-article-writer to load the series, voice, and current project context before drafting the next article."
