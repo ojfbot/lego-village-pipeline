@@ -463,7 +463,18 @@ allocations:
   state: reserved
   thread: correspondence-governance
   type: CORR
-next_free: 36
+- actor: Claude (claude.ai, Lego Village Pipeline project)
+  allocated_by: 'James, 2026-09-24 — PR #24 comment 5823753900 (https://github.com/ojfbot/lego-village-pipeline/pull/24#issuecomment-5823753900); thread/actor corrected by comment 5823884499'
+  basis: 'research intake first proposed as 033 on PR #24 (never allocated; 033 is reserved for REVIEW-LEGO-PIPE-033); rebuilt on corr/036-ecosystem-research-r2, landed by Claude Code in the relay lane'
+  date: '2026-09-24'
+  identity: CORR-LEGO-PIPE-036
+  key: 036-R0
+  landed_version: null
+  number: 36
+  state: in_flight
+  thread: cluster
+  type: CORR
+next_free: 37
 purpose: every memo number ever allocated, with its lifecycle (reserved | in_flight | landed | withdrawn); numbers are never recycled (rules 2, 3); next_free is derived, never hand-maintained; no landing_pr field exists (RR-32-R2-03)
 schema: register-allocations/v1
 seeded_from: the correspondence table's first column at the migration base (R0 §4 item 4) plus the operator's Q-01 reservations
