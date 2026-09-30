@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F6F2E9">
+  <title>Walk the pipeline | The Drafting Table</title>
+  <link rel="stylesheet" href="/tokens.css">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/pipeline.css">
+  <script type="module" src="/pipeline.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the pipeline</a>
+  <header class="masthead">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+      <div><p class="brand-name">The Drafting Table</p><p class="brand-subtitle">LEGO village · 2026</p></div>
+    </div>
+    <nav aria-label="Demo pages"><a href="/">Right now</a><a href="/pipeline" aria-current="page">Walk the pipeline</a></nav>
+  </header>
+  <main id="main">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="folio">One village · one recorded run</p>
+        <h1 id="page-title">From model<br>to build record</h1>
+        <p id="run-summary" class="pipeline-lede">Bring the real model and counted parts. Each step keeps its source attached.</p>
+      </div>
+      <div class="demo-note">
+        <strong>Local prototype</strong>
+        <p>Files stay in this browser. Importing a file saves its name, SHA-256 fingerprint, and parsed counts locally. Keep the original file. Nothing here places an order or releases a BOM.</p>
+      </div>
+    </section>
+    <nav class="step-nav" aria-label="Pipeline steps">
+      <a href="#model">1 · Model</a><a href="#fit">2 · Fit</a><a href="#inventory">3 · Count</a><a href="#gap">4 · Gap</a><a href="#orders">5 · Orders & receipts</a><a href="#built">6 · Built</a>
+    </nav>
+    <p id="pipeline-announcement" role="status" aria-live="polite" aria-atomic="true" class="announcement"></p>
+
+    <section id="model" class="pipeline-step" aria-labelledby="model-title">
+      <div class="step-heading"><span class="step-number">01</span><div><p class="folio">Design → demand</p><h2 id="model-title">Count the model</h2><p>Import a real Studio or LDraw model. The app counts every part, including parts inside MPD submodels. Then compare that count with an independent parts export.</p></div></div>
+      <div class="step-grid">
+        <div class="input-card">
+          <label for="model-file">Studio or LDraw model (.io, .ldr, .mpd)</label>
+          <input id="model-file" type="file" accept=".io,.ldr,.mpd">
+          <button id="load-model" type="button">Count model parts</button>
+          <p id="model-source" class="source-line">No model loaded.</p>
+          <p id="prior-runs" class="source-line">No earlier model run in this browser.</p>
+        </div>
+        <div class="input-card">
+          <label for="check-file">Independent parts count (.csv)</label>
+          <input id="check-file" type="file" accept=".csv,text/csv">
+          <button id="load-check" type="button">Compare counts</button>
+          <p class="help">Use three columns: <code>part,color,quantity</code>. Export or count independently; do not copy the model count into this file.</p>
+          <p id="check-source" class="source-line">No comparison loaded.</p>
+        </div>
+      </div>
+      <div id="bom-result" class="result-box" aria-live="polite"></div>
+    </section>
+
+    <section id="fit" class="pipeline-step" aria-labelledby="fit-title">
+      <div class="step-heading"><span class="step-number">02</span><div><p class="folio">Measurements → fit</p><h2 id="fit-title">Check the layout against the tree</h2><p>The tree dimensions come from DEC-016. The centered inner module corner has a recorded 8 × 8 stud overlap (Q13), so fit starts blocked.</p></div></div>
+      <div class="fit-facts"><span>Base <strong>16 × 16 studs</strong></span><span>Height <strong>40 bricks</strong></span><span>Branch reach <strong>r28 studs</strong></span><span>Clearance <strong>10 bricks</strong></span></div>
+      <form id="fit-form" class="input-card" novalidate>
+        <label for="fit-verdict">What did the fit check show?</label>
+        <select id="fit-verdict"><option value="block">Still blocked / not checked</option><option value="pass">Checked and fits</option></select>
+        <label for="fit-resolution">How was the Q13 overlap resolved?</label>
+        <textarea id="fit-resolution" rows="2" placeholder="Describe the notch, offset, or revised layout. Leave blank while unresolved."></textarea>
+        <label for="fit-evidence">Evidence reference</label>
+        <input id="fit-evidence" placeholder="Model revision, photo, test piece, or note path">
+        <label for="fit-checker">Checked by</label>
+        <input id="fit-checker" placeholder="Your name">
+        <button type="submit">Record fit finding</button>
+        <p class="help">A recorded pass is a human check with a traceable source. It does not claim that the geometry engine has passed.</p>
+      </form>
+      <p id="fit-result" class="result-box"></p>
+    </section>
+
+    <section id="inventory" class="pipeline-step" aria-labelledby="inventory-title">
+      <div class="step-heading"><span class="step-number">03</span><div><p class="folio">Physical stock → available</p><h2 id="inventory-title">Count usable parts</h2><p>Enter a count for every model part, including an explicit zero. “Counted” and “usable” are separate, so damaged or held parts do not quietly become available.</p></div></div>
+      <form id="inventory-form" class="input-card" novalidate>
+        <label for="inventory-counter">Counted by</label><input id="inventory-counter" placeholder="Your name">
+        <div id="inventory-rows" class="part-entry-list"></div>
+        <button type="submit">Record inventory counts</button>
+      </form>
+      <p id="inventory-result" class="result-box"></p>
+    </section>
+
+    <section id="gap" class="pipeline-step" aria-labelledby="gap-title">
+      <div class="step-heading"><span class="step-number">04</span><div><p class="folio">Demand − available → gap</p><h2 id="gap-title">See the shortage and blockers</h2><p>The shortage is calculated per part and colour. Missing counts stay unknown. This is a review packet, not a shop order.</p></div></div>
+      <div id="gap-result" class="result-box"></div>
+      <button id="download-packet" type="button">Download review packet (.json)</button>
+      <p class="help">The packet includes source fingerprints, entered evidence, calculations, and open blockers. It never contains a purchase approval.</p>
+    </section>
+
+    <section id="orders" class="pipeline-step" aria-labelledby="orders-title">
+      <div class="step-heading"><span class="step-number">05</span><div><p class="folio">Outside purchase → inspected receipt</p><h2 id="orders-title">Record what happened</h2><p>Record an order placed outside this app, including one made before the plan. An order is not owned stock. A received parcel is inspected separately; update the physical inventory count before treating accepted pieces as usable.</p></div></div>
+      <form id="order-form" class="input-card" novalidate>
+        <label for="order-shop">Shop</label><input id="order-shop" placeholder="Where the order was placed">
+        <label for="order-number">Order number</label><input id="order-number" placeholder="The shop's reference">
+        <label for="order-date">Placed on</label><input id="order-date" type="date">
+        <label for="order-recorder">Entered by</label><input id="order-recorder" placeholder="Your name">
+        <label for="order-evidence">Order evidence</label><input id="order-evidence" placeholder="Receipt, email, screenshot, or file reference">
+        <div id="order-rows" class="part-entry-list"></div>
+        <fieldset class="part-entry other-part"><legend>Other part · also works before a model exists</legend>
+          <div class="entry-field"><label for="other-part">Part ID</label><input id="other-part" placeholder="e.g. 53400.dat"></div>
+          <div class="entry-field"><label for="other-color">LDraw colour</label><input id="other-color" type="number" min="0" step="1"></div>
+          <div class="entry-field"><label for="other-qty">Ordered quantity</label><input id="other-qty" type="number" min="1" step="1"></div>
+        </fieldset>
+        <button type="submit">Record outside order</button>
+      </form>
+      <div id="order-result" class="result-box"></div>
+    </section>
+
+    <section id="built" class="pipeline-step" aria-labelledby="built-title">
+      <div class="step-heading"><span class="step-number">06</span><div><p class="folio">Physical build → reconciliation</p><h2 id="built-title">Record what was actually built</h2><p>After building, count installed parts. Differences remain visible beside the model demand; a receipt or order is never treated as a completed build.</p></div></div>
+      <form id="built-form" class="input-card" novalidate>
+        <div id="built-rows" class="part-entry-list"></div>
+        <button type="submit">Record built counts</button>
+      </form>
+      <div id="built-result" class="result-box"></div>
+    </section>
+  </main>
+  <footer><span>Drafting Table · local prototype</span><span>Design pin: H-01 R1 as-committed</span></footer>
+</body>
+</html>

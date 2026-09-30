@@ -186,3 +186,4 @@
   made its checker green; the territory is a 4.27:1 blueprint `--dt-block` text token against
   `--dt-sheet` (contract 4.5:1). Kept the pinned design cut unchanged, used `--dt-block-deep`
   for demo warning text, and left the original checker as a failing CI gate for review.
+- 2026-09-29 (full-run demo evidence): the plan assumed source files existed for a verified railbed BOM and counted loose-part inventory; neither play-well repo contains a model or physical count ledger. Built import and audit stages with unknown quantities kept unknown and the purchase review blocked until James supplies the sources.

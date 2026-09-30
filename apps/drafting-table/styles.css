@@ -73,3 +73,6 @@ footer { max-width: 1320px; margin: auto; padding: 1.2rem clamp(1rem, 4vw, 3rem)
 .photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 2px; }
 .photo figcaption { color: var(--dt-muted); font-size: .78rem; padding: .7rem .2rem .1rem; }
 @media (max-width: 650px) { .photo-grid { grid-template-columns: 1fr; } .photo img { aspect-ratio: 16 / 10; } }
+
+.masthead-actions { display: flex; align-items: center; gap: 1rem; }
+.walk-link { color: var(--dt-accent-deep); font-size: .84rem; font-weight: 750; }

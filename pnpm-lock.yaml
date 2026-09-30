@@ -10,4 +10,6 @@ importers:
 
   apps/drafting-table: {}
 
+  packages/pipeline: {}
+
   packages/schema: {}

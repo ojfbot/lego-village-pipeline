@@ -4,7 +4,8 @@ on:
     paths:
       - "apps/drafting-table/**"
       - "packages/schema/**"
-      - "tests/hub-demo.test.mjs"
+      - "packages/pipeline/**"
+      - "tests/*.test.mjs"
       - "package.json"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
