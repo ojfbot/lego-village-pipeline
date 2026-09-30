@@ -49,8 +49,14 @@
         <div class="input-card">
           <label for="check-file">Independent parts count (.csv)</label>
           <input id="check-file" type="file" accept=".csv,text/csv">
-          <button id="load-check" type="button">Compare counts</button>
           <p class="help">Use three columns: <code>part,color,quantity</code>. Export or count independently; do not copy the model count into this file.</p>
+          <label for="check-method">How was this count made?</label>
+          <input id="check-method" placeholder="For example, Studio parts export or a separate hand count">
+          <label for="check-evidence">Source or evidence reference</label>
+          <input id="check-evidence" placeholder="Export settings, source path, or count sheet">
+          <label for="check-person">Checked by</label>
+          <input id="check-person" placeholder="Your name">
+          <button id="load-check" type="button">Compare counts</button>
           <p id="check-source" class="source-line">No comparison loaded.</p>
         </div>
       </div>
@@ -93,7 +99,7 @@
     </section>
 
     <section id="orders" class="pipeline-step" aria-labelledby="orders-title">
-      <div class="step-heading"><span class="step-number">05</span><div><p class="folio">Outside purchase → inspected receipt</p><h2 id="orders-title">Record what happened</h2><p>Record an order placed outside this app, including one made before the plan. An order is not owned stock. A received parcel is inspected separately; update the physical inventory count before treating accepted pieces as usable.</p></div></div>
+      <div class="step-heading"><span class="step-number">05</span><div><p class="folio">Outside purchase → inspected receipt</p><h2 id="orders-title">Record what happened</h2><p>Record an order placed outside this app, including one made before the plan. An order is not owned stock. A received parcel is inspected separately; update the physical inventory count before treating accepted pieces as usable. Rejected pieces remain visible and do not close a shortage.</p></div></div>
       <form id="order-form" class="input-card" novalidate>
         <label for="order-shop">Shop</label><input id="order-shop" placeholder="Where the order was placed">
         <label for="order-number">Order number</label><input id="order-number" placeholder="The shop's reference">

@@ -81,8 +81,8 @@ function renderOrderRecord(status) {
   result.replaceChildren();
   if (!run.orders?.length) result.append(make("p", "No outside orders recorded. Recording one does not change usable inventory."));
   if (status.bom.length) {
-    appendTable(result, ["Part", "Colour", "Ordered", "Arrived", "Accepted", "Still to order"], status.orders.map((row) =>
-      [row.part, row.color, row.ordered, row.arrived, row.accepted, row.stillToOrder ?? "Unknown"]));
+    appendTable(result, ["Part", "Colour", "Ordered", "Awaiting", "Arrived", "Accepted", "Rejected"], status.orders.map((row) =>
+      [row.part, row.color, row.ordered, row.awaiting, row.arrived, row.accepted, row.rejected]));
   }
   for (const order of run.orders || []) {
     const article = make("article", undefined, "order-card");
@@ -143,7 +143,12 @@ function render() {
     ? `${modelRows.length} distinct part/colour ${modelRows.length === 1 ? "row" : "rows"} · ${status.blockers.length} open review blocker${status.blockers.length === 1 ? "" : "s"}.`
     : "Bring the real model and counted parts. Each step keeps its source attached.";
   $("#model-source").textContent = run.model ? sourceLine(run.model.source) : "No model loaded.";
-  $("#check-source").textContent = run.check ? sourceLine(run.check.source) : "No comparison loaded.";
+  $("#check-source").textContent = run.check
+    ? `${sourceLine(run.check.source)} · ${run.check.method || "Method missing"} · evidence ${run.check.evidence || "missing"} · checked by ${run.check.checkedBy || "unknown"} · ${run.checkHistory?.length || 0} earlier comparison(s) kept`
+    : "No comparison loaded.";
+  $("#check-method").value = run.check?.method || "";
+  $("#check-evidence").value = run.check?.evidence || "";
+  $("#check-person").value = run.check?.checkedBy || "";
   $("#prior-runs").textContent = run.priorRuns?.length ? `${run.priorRuns.length} earlier model run(s) are preserved in the downloaded packet.` : "No earlier model run in this browser.";
   const bom = $("#bom-result");
   bom.replaceChildren();
@@ -151,8 +156,13 @@ function render() {
   else {
     bom.append(make("h3", `${modelRows.length} part/colour ${modelRows.length === 1 ? "row" : "rows"} · ${modelRows.reduce((sum, row) => sum + row.quantity, 0)} pieces`));
     if (run.model.archiveTotalParts !== null && run.model.archiveTotalParts !== undefined) bom.append(make("p", `Studio archive reports ${run.model.archiveTotalParts} total parts; model parser counted ${modelRows.reduce((sum, row) => sum + row.quantity, 0)}. This is an internal consistency check.`));
-    bom.append(make("p", status.check.matches ? "Independent count agrees, row for row." :
-      run.check ? `Counts differ: ${status.check.differences.join("; ")}` : "Independent count still needed before this BOM can be called cross-checked."));
+    const countFinding = !run.check ? "A separate parts count is still needed to cross-check this BOM."
+      : !status.check.matches ? `Counts differ: ${status.check.differences.join("; ")}`
+      : !run.check.method?.trim() || !run.check.checkedBy?.trim() || !run.check.evidence?.trim() ||
+        run.check.modelSha256 !== run.model.source.sha256
+        ? "Counts match, but this comparison lacks a source method, evidence, or a checker tied to this model."
+        : "Separate sourced count agrees, row for row.";
+    bom.append(make("p", countFinding));
     appendTable(bom, ["Part", "Colour", "Model quantity"], modelRows.map((row) => [row.part, row.color, row.quantity]));
   }
   const inventoryRows = $("#inventory-rows");
@@ -177,7 +187,7 @@ function render() {
     : "Fit is blocked or unverified. Q13's centered inner-corner overlap remains open.";
   const known = status.gap.filter((row) => row.shortage !== null);
   $("#inventory-result").textContent = modelRows.length
-    ? `${known.length} of ${modelRows.length} part/colour rows have an evidenced physical count.`
+    ? `${known.length} of ${modelRows.length} part/colour rows have an evidenced physical count. ${run.inventoryHistory?.length || 0} earlier count(s) kept in the packet.`
     : "No part counts can be entered until a model is loaded.";
   const gap = $("#gap-result");
   gap.replaceChildren();
@@ -221,7 +231,8 @@ $("#load-model").addEventListener("click", async () => {
     const source = await fileSource(file);
     if (run.model?.source?.sha256 !== source.sha256 && run.model) {
       run.priorRuns = [...(run.priorRuns || []), { ...run, priorRuns: undefined }];
-      run.check = undefined; run.inventory = undefined; run.inventoryCounter = undefined; run.fit = undefined; run.built = undefined;
+      run.check = undefined; run.checkHistory = undefined; run.inventory = undefined;
+      run.inventoryHistory = undefined; run.inventoryCounter = undefined; run.fit = undefined; run.built = undefined;
     }
     if (!run.model) run.fit = undefined;
     run.model = { source, rows, archiveTotalParts };
@@ -234,12 +245,21 @@ $("#load-check").addEventListener("click", async () => {
   const file = $("#check-file").files[0];
   if (!run.model) { announce("Load a model before comparing its parts."); return; }
   if (!file) { announce("Choose a parts CSV to compare."); return; }
+  const method = $("#check-method").value.trim();
+  const evidence = $("#check-evidence").value.trim();
+  const checkedBy = $("#check-person").value.trim();
+  if (!method || !evidence || !checkedBy) {
+    announce("Record the separate count method, evidence, and checker before comparing."); return;
+  }
   try {
     const rows = parsePartCountCsv(await file.text());
-    run.check = { source: await fileSource(file), rows };
+    const nextCheck = { source: await fileSource(file), rows, method, evidence, checkedBy,
+      modelSha256: run.model.source.sha256, recordedAt: new Date().toISOString() };
+    if (run.check) run.checkHistory = [...(run.checkHistory || []), run.check];
+    run.check = nextCheck;
     save(); render();
     const status = pipelineStatus(run);
-    announce(status.check.matches ? "Independent parts count agrees with the model." :
+    announce(status.check.matches ? "Separate parts count matches the model rows; its recorded method is available for review." :
       `Parts count differs in ${status.check.differences.length} row(s). Read the differences before continuing.`);
   } catch (error) { announce(`Could not compare parts: ${error.message}`); }
 });
@@ -264,6 +284,7 @@ $("#inventory-form").addEventListener("submit", (event) => {
   const countedBy = $("#inventory-counter").value.trim();
   if (!countedBy) { announce("Enter who counted the parts."); return; }
   const next = { ...(run.inventory || {}) };
+  const previous = [];
   for (const [index, row] of run.model.rows.entries()) {
     const countedText = $(`#counted-${index}`).value.trim();
     const usableText = $(`#usable-${index}`).value.trim();
@@ -274,8 +295,13 @@ $("#inventory-form").addEventListener("submit", (event) => {
         counted < 0 || usable < 0 || usable > counted || !evidence) {
       announce(`Fix the physical count, usable count, and evidence for ${row.part} colour ${row.color}.`); return;
     }
-    next[keyForPart(row.part, row.color)] = { counted, usable, evidence, countedBy, recordedAt: new Date().toISOString() };
+    const key = keyForPart(row.part, row.color);
+    const old = next[key];
+    if (old?.counted === counted && old?.usable === usable && old?.evidence === evidence && old?.countedBy === countedBy) continue;
+    if (old) previous.push({ key, record: old, supersededAt: new Date().toISOString() });
+    next[key] = { counted, usable, evidence, countedBy, recordedAt: new Date().toISOString() };
   }
+  run.inventoryHistory = [...(run.inventoryHistory || []), ...previous];
   run.inventory = next; run.inventoryCounter = countedBy;
   save(); render(); announce("Physical inventory counts recorded. Missing rows remain unknown.");
 });

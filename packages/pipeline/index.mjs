@@ -129,11 +129,15 @@ export function pipelineStatus(run) {
   const check = compareBom(bom, run?.check?.rows || []);
   const gap = calculateGap(bom, run?.inventory);
   const built = reconcileBuilt(bom, run?.built);
-  const orders = orderSummary(bom, gap, run?.orders, run?.receipts);
+  const orders = orderSummary(bom, run?.orders, run?.receipts);
   const blockers = [];
   if (!bom.length) blockers.push("Import a model with countable parts.");
   if (bom.length && run.model.archiveTotalParts !== null && run.model.archiveTotalParts !== undefined && run.model.archiveTotalParts !== bom.reduce((sum, row) => sum + row.quantity, 0)) blockers.push("Studio archive total disagrees with the parsed model.");
   if (bom.length && !check.matches) blockers.push(`Cross-check the BOM: ${check.differences.length} difference(s).`);
+  if (bom.length && check.matches && (!run.check.method?.trim() || !run.check.checkedBy?.trim() ||
+      !run.check.evidence?.trim() || run.check.modelSha256 !== run.model?.source?.sha256)) {
+    blockers.push("Record how the separate parts count was made, who checked it, and its evidence for this model.");
+  }
   if (bom.length && gap.some((row) => row.shortage === null)) blockers.push("Count usable inventory for every model part, including explicit zeroes.");
   if (!run?.fit?.verdict || run.fit.verdict !== "pass" || !run.fit.evidence?.trim() || !run.fit.checkedBy?.trim() || !run.fit.resolution?.trim() || run.fit.modelSha256 !== run.model?.source?.sha256) {
     blockers.push("Record a fit check with a named checker and evidence; Q13 remains open until resolved.");
@@ -145,8 +149,8 @@ export function pipelineStatus(run) {
 
 export const keyForPart = partKey;
 
-export function orderSummary(bom, gap, orders = [], receipts = []) {
-  return bom.map((row, index) => {
+export function orderSummary(bom, orders = [], receipts = []) {
+  return bom.map((row) => {
     const key = partKey(row.part, row.color);
     const ordered = orders.flatMap((order) => order.lines || []).filter((line) => partKey(line.part, line.color) === key)
       .reduce((sum, line) => sum + line.quantity, 0);
@@ -154,9 +158,8 @@ export function orderSummary(bom, gap, orders = [], receipts = []) {
       .reduce((sum, line) => sum + line.arrived, 0);
     const accepted = receipts.flatMap((receipt) => receipt.lines || []).filter((line) => partKey(line.part, line.color) === key)
       .reduce((sum, line) => sum + line.accepted, 0);
-    return { part: row.part, color: row.color, ordered, arrived, accepted,
-      stillToOrder: gap[index].shortage === null ? null : Math.max(0, gap[index].shortage - ordered),
-      waitingOrRejected: ordered - accepted };
+    return { part: row.part, color: row.color, ordered, awaiting: ordered - arrived,
+      arrived, accepted, rejected: arrived - accepted };
   });
 }
 

@@ -34,7 +34,8 @@ test("unknown inventory never becomes zero and unusable parts do not cover deman
 });
 
 test("a review remains blocked without cross-check, complete count, and evidenced fit resolution", () => {
-  const check = { rows: parsePartCountCsv("part,color,quantity\n3001.dat,0,2\n53400.dat,4,2") };
+  const check = { rows: parsePartCountCsv("part,color,quantity\n3001.dat,0,2\n53400.dat,4,2"),
+    method: "separate Studio export", checkedBy: "James", evidence: "parts-list.csv", modelSha256: "abc" };
   const inventory = {
     "3001.dat|0": { counted: 2, usable: 2, evidence: "bin A", countedBy: "James" },
     "53400.dat|4": { counted: 2, usable: 2, evidence: "bin B", countedBy: "James" },
@@ -43,6 +44,7 @@ test("a review remains blocked without cross-check, complete count, and evidence
   const modelRecord = { rows: bom, source: { sha256: "abc" } };
   const fit = { verdict: "pass", resolution: "Notched the inner corner", evidence: "model r2", checkedBy: "James", modelSha256: "abc" };
   assert.deepEqual(pipelineStatus({ model: modelRecord, check, inventory, fit }).blockers, []);
+  assert.equal(pipelineStatus({ model: modelRecord, check: { ...check, method: "" }, inventory, fit }).reviewReady, false);
   assert.equal(pipelineStatus({ model: { ...modelRecord, source: { sha256: "changed" } }, check, inventory, fit }).reviewReady, false);
   assert.deepEqual(reconcileBuilt(bom, { "3001.dat|0": { quantity: 1, evidence: "built count" } }).map((row) => row.difference), [-1, null]);
 });
@@ -54,13 +56,12 @@ test("a retroactive order remains distinct from an inspected receipt and usable 
   let run = addRecordedOrder({}, order);
   assert.equal(run.orders[0].provenance, undefined);
   run.model = { rows: bom };
-  assert.equal(orderSummary(bom, calculateGap(bom, {}), run.orders, []).find((row) => row.part === "53400.dat").accepted, 0);
+  assert.equal(orderSummary(bom, run.orders, []).find((row) => row.part === "53400.dat").accepted, 0);
   const receipt = { id: "receipt-1", orderId: "order-1", receivedOn: "2026-10-01", inspectedBy: "James", evidence: "opened parcel photo",
     lines: [{ part: "53400.dat", color: 4, arrived: 2, accepted: 1 }] };
   run = addInspection(run, receipt);
-  const row = orderSummary(bom, calculateGap(bom, {}), run.orders, run.receipts).find((item) => item.part === "53400.dat");
-  assert.deepEqual({ ordered: row.ordered, arrived: row.arrived, accepted: row.accepted, stillToOrder: row.stillToOrder },
-    { ordered: 2, arrived: 2, accepted: 1, stillToOrder: null });
+  const row = orderSummary(bom, run.orders, run.receipts).find((item) => item.part === "53400.dat");
+  assert.deepEqual(row, { part: "53400.dat", color: 4, ordered: 2, awaiting: 0, arrived: 2, accepted: 1, rejected: 1 });
   assert.equal(calculateGap(bom, {})[1].shortage, null);
   assert.throws(() => addInspection(run, receipt), /exceeds the recorded order/);
   assert.throws(() => addInspection(run, { ...receipt, receivedOn: "2026-09-28" }), /precede/);
