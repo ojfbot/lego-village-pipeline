@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F6F2E9">
+  <title>Right now | The Drafting Table</title>
+  <link rel="stylesheet" href="/tokens.css">
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the priorities</a>
+  <header class="masthead">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+      <div>
+        <p class="brand-name">The Drafting Table</p>
+        <p class="brand-subtitle">LEGO village · 2026</p>
+      </div>
+    </div>
+    <button id="theme-toggle" type="button" aria-pressed="false">Blueprint view</button>
+  </header>
+  <main id="main">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="folio">H-01 / Hub demo</p>
+        <h1 id="page-title">Right now</h1>
+        <p id="lede">Loading the village priorities…</p>
+      </div>
+      <div class="demo-note">
+        <strong>Design fixture</strong>
+        <p>These priorities come from the H-01 R1 design. This demo saves only your done and parked choices in this browser. It does not change the village record or approve a purchase.</p>
+      </div>
+    </section>
+    <section aria-labelledby="priority-heading">
+      <div class="section-heading">
+        <h2 id="priority-heading">Three steps for the village</h2>
+        <p>In order, with the reason each one matters.</p>
+      </div>
+      <ol id="priority-list" class="priority-grid" aria-busy="true"></ol>
+      <p id="announcements" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+    </section>
+    <section id="village-state" class="record-panel" aria-labelledby="record-heading">
+      <div>
+        <p class="folio">The record behind the cards</p>
+        <h2 id="record-heading">What we know so far</h2>
+        <p>The tree was measured for DEC-016. The open priority is a practice recheck. Set 10254 still needs a current listing check, and the inner rail corner remains a fit question.</p>
+        <div id="tree-record" class="tree-record" aria-label="Recorded tree measurements"></div>
+      </div>
+      <div class="record-status">
+        <span class="status-dot" aria-hidden="true"></span>
+        <div>
+          <strong>Fit still open</strong>
+          <p>The six geometry checks are not part of this slice. Nothing here is a release decision.</p>
+        </div>
+      </div>
+    </section>
+    <section class="evidence-section" aria-labelledby="evidence-heading">
+      <div class="section-heading">
+        <h2 id="evidence-heading">First rough inventory photos</h2>
+        <p>Tree 41843 · supplied by James</p>
+      </div>
+      <p>These photos show the set and the measuring setup. They were captured after DEC-016 and do not independently prove its five recorded dimensions. A later photo set can sit beside them without replacing them.</p>
+      <div id="photo-gallery" class="photo-grid"></div>
+    </section>
+  </main>
+  <footer>
+    <span>Drafting Table · local demo</span>
+    <span>Design pin: H-01 R1 as-committed</span>
+  </footer>
+</body>
+</html>
