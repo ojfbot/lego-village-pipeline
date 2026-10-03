@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "design_pin": "H-01 R1 as-committed",
+  "data_kind": "demo_fixture",
+  "priorities": [
+    {
+      "id": "tree-base",
+      "title": "Recheck the Christmas tree's base",
+      "why": "DEC-016 already records a 16 × 16 stud base. Repeating the measurement lets us practice the M-01 flow without discarding that baseline.",
+      "effort_label": "On the table · 5 min",
+      "action_label": "See the recorded measurements",
+      "action_href": "#village-state",
+      "unlocks": "Use M-01 to compare a new reading with DEC-016 before changing the record.",
+      "source_ref": {
+        "kind": "fact",
+        "id": "DEC-016:tree-base"
+      }
+    },
+    {
+      "id": "train",
+      "title": "Check the Winter Holiday Train listing",
+      "why": "Set 10254 is the train in the design. Availability and price need a fresh check before any order.",
+      "effort_label": "Online · 10 min",
+      "action_label": "Open the LEGO listing",
+      "action_href": "https://www.lego.com/en-us/product/winter-holiday-train-10254",
+      "unlocks": "Record any order with its date and source in the future order workflow.",
+      "source_ref": {
+        "kind": "question",
+        "id": "TRAIN-10254:availability"
+      }
+    },
+    {
+      "id": "rail-fit",
+      "title": "Confirm the rails fit around the tree",
+      "why": "The inner corner overlaps the tree base in the design prototype. The measured geometry still needs a code check.",
+      "effort_label": "After the tree · A-01",
+      "action_label": "See the open fit question",
+      "action_href": "#village-state",
+      "unlocks": "Resolve the fit finding with measured geometry before buying module parts.",
+      "source_ref": {
+        "kind": "finding",
+        "id": "A-01:Q13"
+      }
+    }
+  ],
+  "tree_record": {
+    "set_id": "41843",
+    "source_ref": "DEC-016",
+    "recorded_on": "2026-09-17",
+    "epistemic_state": "measured",
+    "verification": "DEC-016 reports a measurement; these later context photos do not independently verify its numbers",
+    "base_studs": [
+      16,
+      16
+    ],
+    "height_bricks": 40,
+    "base_height_bricks": 8,
+    "branch_overhang_radius_studs": 28,
+    "clear_height_bricks": 10,
+    "photos": [
+      {
+        "id": "top",
+        "label": "Top view with stud gauges",
+        "alt": "Tree 41843 base viewed from above, with green and white LEGO stud gauges below it.",
+        "href": "/evidence/tree-41843/rough-2026-09-19/top.jpg",
+        "sha256": "78d1ae521c3f4a4177ac0cbd45e35693ec197ab5eacd7fa8fb7dbaab6ebef350"
+      },
+      {
+        "id": "side",
+        "label": "Side view with brick gauges",
+        "alt": "Side of the red tree base beside stacked LEGO bricks and a long white beam used as gauges.",
+        "href": "/evidence/tree-41843/rough-2026-09-19/side.jpg",
+        "sha256": "c9289c8ed619360fe769678ec4a0df9e51c981c78d887f3667200c73032d3318"
+      },
+      {
+        "id": "box",
+        "label": "Set identification: 41843",
+        "alt": "Front of the LEGO Family Christmas Tree 41843 box.",
+        "href": "/evidence/tree-41843/rough-2026-09-19/box.jpg",
+        "sha256": "6d76b513debb61649722938442e16747f0c351676ac9bdeaa24b5ae8a0347161"
+      }
+    ]
+  }
+}

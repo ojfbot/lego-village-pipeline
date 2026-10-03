@@ -1,0 +1,32 @@
+name: drafting-table-demo
+on:
+  pull_request:
+    paths:
+      - "apps/drafting-table/**"
+      - "packages/schema/**"
+      - "packages/tokens/**"
+      - "tests/hub-demo.test.mjs"
+      - "tests/browser/**"
+      - "playwright.config.mjs"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".github/workflows/drafting-table-demo.yml"
+jobs:
+  demo:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm validate:fixtures
+      - run: pnpm validate:contrast
+      - run: pnpm test
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:a11y

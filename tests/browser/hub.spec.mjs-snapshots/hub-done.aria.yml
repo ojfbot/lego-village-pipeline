@@ -1,0 +1,81 @@
+- link "Skip to the priorities":
+  - /url: "#main"
+- banner:
+  - paragraph: The Drafting Table
+  - paragraph: /LEGO village · \d+/
+  - button "Blueprint view"
+- main:
+  - region "Right now":
+    - paragraph: /H-\d+ \/ Hub demo/
+    - heading "Right now" [level=1]
+    - paragraph: 2 left. 1 done.
+    - strong: Design fixture
+    - paragraph: /These priorities come from the H-\d+ R1 design\. This demo saves only your done and parked choices in this browser\. It does not change the village record or approve a purchase\./
+  - region "Three steps for the village":
+    - heading "Three steps for the village" [level=2]
+    - paragraph: In order, with the reason each one matters.
+    - list:
+      - listitem:
+        - text: ✓
+        - paragraph: Done
+        - heading "Recheck the Christmas tree's base" [level=3]
+        - paragraph: "/Marked done in this demo only\\. Next: Use M-\\d+ to compare a new reading with DEC-\\d+ before changing the record\\./"
+        - button "Put Recheck the Christmas tree's base back on the list": Undo
+      - listitem:
+        - text: "2"
+        - paragraph: /Online · \d+ min/
+        - heading "Check the Winter Holiday Train listing" [level=3]
+        - paragraph: /Set \d+ is the train in the design\. Availability and price need a fresh check before any order\./
+        - link "Open the LEGO listing (opens a new tab)":
+          - /url: https://www.lego.com/en-us/product/winter-holiday-train-10254
+          - text: ""
+        - button "Mark Check the Winter Holiday Train listing done": Done
+        - button "Park Check the Winter Holiday Train listing for this session": Not today
+      - listitem:
+        - text: "3"
+        - paragraph: /After the tree · A-\d+/
+        - heading "Confirm the rails fit around the tree" [level=3]
+        - paragraph: The inner corner overlaps the tree base in the design prototype. The measured geometry still needs a code check.
+        - link "See the open fit question":
+          - /url: "#village-state"
+        - button "Mark Confirm the rails fit around the tree done": Done
+        - button "Park Confirm the rails fit around the tree for this session": Not today
+    - status: /Recheck the Christmas tree's base marked done in this demo only\. Use M-\d+ to compare a new reading with DEC-\d+ before changing the record\./
+  - region "What we know so far":
+    - paragraph: The record behind the cards
+    - heading "What we know so far" [level=2]
+    - paragraph: /The tree was measured for DEC-\d+\. The open priority is a practice recheck\. Set \d+ still needs a current listing check, and the inner rail corner remains a fit question\./
+    - paragraph: /Tree \d+ · measured in DEC-\d+ on \d+-\d+-\d+/
+    - term: Base
+    - definition: /\d+ × \d+ studs/
+    - term: Height
+    - definition: /\d+ bricks/
+    - term: Base height
+    - definition: 8 bricks
+    - term: Branch overhang
+    - definition: /radius \d+ studs/
+    - term: Clearance
+    - definition: /\d+ bricks/
+    - paragraph: "/Evidence here: DEC-\\d+ reports a measurement; these later context photos do not independently verify its numbers\\. A recheck in this demo does not revise DEC-\\d+\\./"
+    - strong: Fit still open
+    - paragraph: The six geometry checks are not part of this slice. Nothing here is a release decision.
+  - region "First rough inventory photos":
+    - heading "First rough inventory photos" [level=2]
+    - paragraph: /Tree \d+ · supplied by James/
+    - paragraph: /These photos show the set and the measuring setup\. They were captured after DEC-\d+ and do not independently prove its five recorded dimensions\. A later photo set can sit beside them without replacing them\./
+    - figure "Top view with stud gauges":
+      - 'link "Open original photo: Top view with stud gauges (new tab)"':
+        - /url: /evidence/tree-41843/rough-2026-09-19/top.jpg
+        - img /Tree \d+ base viewed from above, with green and white LEGO stud gauges below it\./
+      - text: ""
+    - figure "Side view with brick gauges":
+      - 'link "Open original photo: Side view with brick gauges (new tab)"':
+        - /url: /evidence/tree-41843/rough-2026-09-19/side.jpg
+        - img "Side of the red tree base beside stacked LEGO bricks and a long white beam used as gauges."
+      - text: ""
+    - 'figure /Set identification: \d+/':
+      - 'link /Open original photo: Set identification: \d+ \(new tab\)/':
+        - /url: /evidence/tree-41843/rough-2026-09-19/box.jpg
+        - img /Front of the LEGO Family Christmas Tree \d+ box\./
+      - text: ""
+- contentinfo: "/Drafting Table · local demo Design pin: H-\\d+ R1 as-committed/"

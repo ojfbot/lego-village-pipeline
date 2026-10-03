@@ -176,3 +176,21 @@
   for James (fixture frozen from git history, post-migration memos excluded from G-12);
   #28 stays content-only. Also: I drafted the 036 allocation comment with the wrong thread
   and actor (copied from the 032–035 pattern); corrected on #24 by a follow-up comment.
+- 2026-09-29 (narrow Drafting Table demo): the initial Hub fixture plan treated A1's "measure the tree
+  base" priority as an unmeasured fact; the territory was DEC-016's five accepted measurements
+  and James's deliberate choice to leave the task open for repeated dogfooding. Kept DEC-016
+  as the recorded baseline, changed the demo task to a recheck, and kept its local done/park
+  choices separate from measurement revisions. Three later rough photos are labelled as context,
+  not proof of DEC-016's dimensions.
+- 2026-09-29 (Drafting Table demo contrast): the plan assumed H-01 R1's D-1 contrast repair
+  made its checker green; the territory is a 4.27:1 blueprint `--dt-block` text token against
+  `--dt-sheet` (contract 4.5:1). Kept the pinned design cut unchanged, used `--dt-block-deep`
+  for demo warning text, and left the original checker as a failing CI gate for review.
+- 2026-10-02 (Hub-only candidate): the A1 fixture plan assumed its train priority could say
+  “Order the Winter Holiday Train from LEGO”; the local Hub can only open a listing, and no
+  purchasing authority was granted. Used “Check the Winter Holiday Train listing” in the
+  fixture, kept A1 unchanged, and recorded the wording deviation here.
+- 2026-10-02 (Hub-only contrast): the initial demo left the pinned D-1 contrast defect as a
+  failing CI gate; the Hub candidate needs a working gate without changing that design cut.
+  Added an app-owned token override and checked all effective text tokens at the same 4.5:1
+  threshold. The original source defect remains recorded in H-01 R1.
