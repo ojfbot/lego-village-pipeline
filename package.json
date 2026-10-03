@@ -7,7 +7,11 @@
   "scripts": {
     "dev": "node apps/drafting-table/server.mjs",
     "test": "node --test tests/*.test.mjs",
+    "test:a11y": "playwright test --config=playwright.config.mjs",
     "validate:fixtures": "node packages/schema/validate-fixtures.mjs",
-    "validate:contrast": "node docs/design/H-01-R1/dt/check-contrast.mjs"
+    "validate:contrast": "node packages/tokens/check-contrast.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
   }
 }

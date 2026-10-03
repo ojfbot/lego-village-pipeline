@@ -1,0 +1,6 @@
+@import url("/design-tokens.css");
+
+/* H-01 R1 D-1: the pinned blueprint block token is 4.27:1 on its sheet. */
+body.dt-blueprint {
+  --dt-block: #F08B7B;
+}

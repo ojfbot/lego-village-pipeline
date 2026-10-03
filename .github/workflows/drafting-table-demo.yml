@@ -4,7 +4,10 @@ on:
     paths:
       - "apps/drafting-table/**"
       - "packages/schema/**"
+      - "packages/tokens/**"
       - "tests/hub-demo.test.mjs"
+      - "tests/browser/**"
+      - "playwright.config.mjs"
       - "package.json"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
@@ -25,3 +28,5 @@ jobs:
       - run: pnpm validate:fixtures
       - run: pnpm validate:contrast
       - run: pnpm test
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:a11y
