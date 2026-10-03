@@ -4,6 +4,8 @@ This is one local, fixture-backed slice of the H-01 R1 Hub addendum. It gives Ja
 
 The fixture is hand-seeded from `docs/design/H-01-R1/ADDENDUM-A1-right-now.md` and validated at load by `packages/schema`. This validator covers the Hub demo fixture only. It is not the schema gate for C-01, procurement, inventory, or geometry. The app imports the committed Drafting Table token CSS through a small app-owned contrast correction in `packages/tokens`; it does not copy code from `standalone/`.
 
+The three priority `source_ref.id` strings are fixture-local pointers for this demo. They are not allocated correspondence identities or approved evidence IDs. The real tree measurement citation is DEC-016; its recorded values remain separate from these pointers.
+
 A1 says “Order the Winter Holiday Train from LEGO.” The Hub fixture says “Check the Winter Holiday Train listing” because this demo only opens the listing and cannot authorize or record an order. This is a deliberate prototype wording deviation, not a change to A1 or a purchasing decision.
 
 ## Run
@@ -32,4 +34,4 @@ The committed handoff records five tree dimensions but did not include the inven
 
 The inherited H-01 R1 blueprint `--dt-block` is 4.27:1 on `--dt-sheet`, below its 4.5:1 contract. The app-owned token layer sets that one effective value to `#F08B7B` (6.03:1), while importing the pinned design CSS unchanged. `pnpm validate:contrast` checks every effective text token in both themes against the same 4.5:1 threshold and fails CI on regression. The source design defect remains recorded as D-1.
 
-`pnpm test:a11y` compares the rendered Hub accessibility tree before and after marking a priority done. It also asserts the page title, language, one H1, landmarks, and live announcement. CI runs this gate in Chromium.
+`pnpm test:a11y` compares the rendered Hub accessibility tree before and after marking a priority done. It also asserts the page title, language, one H1, landmarks, load and failure announcements, and all computed text-token contrast values in both themes. CI runs this gate in Chromium.

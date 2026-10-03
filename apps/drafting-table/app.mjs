@@ -184,8 +184,10 @@ try {
   renderTreeRecord();
   renderPhotos();
   render();
+  announcements.textContent = `Village priorities loaded. ${prioritySummary(fixture.priorities, state)}`;
 } catch (error) {
   list.setAttribute("aria-busy", "false");
   list.replaceChildren(element("li", "error", `The demo could not load its village fixture. ${error.message}`));
   lede.textContent = "The village priorities are unavailable.";
+  announcements.textContent = "The village priorities could not load.";
 }
