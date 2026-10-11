@@ -480,10 +480,10 @@ allocations:
   date: '2026-10-11'
   identity: HANDOFF-LEGO-PIPE-037
   key: 037-R0
-  landed_version: null
+  landed_version: 2026-09-18.34
   number: 37
   revision: R0
-  state: in_flight
+  state: landed
   thread: drafting-table
   type: HANDOFF
 next_free: 38
