@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="dt/tokens.css">
+<style>
+html{--vt-dur:.55s;--vt-ease:cubic-bezier(0.4,0.14,0.3,1);--vt-fade:.24s}
+body{margin:0;background-color:var(--dt-bg);color:var(--dt-ink);font-family:'Libre Franklin',sans-serif;overflow:hidden}
+a{color:var(--dt-accent-deep)}a:hover{color:var(--dt-accent)}
+/* Carbon choreography: the box moves on the expressive curve; the old face leaves fast (exit), the new face arrives after it (entrance). Snapshots are pinned top-left and clipped, never stretched, so type doesn't smear. */
+::view-transition-group(*){animation-duration:var(--vt-dur);animation-timing-function:var(--vt-ease);z-index:1}
+::view-transition-group(*.lift){z-index:10}
+::view-transition-group(*.rail){z-index:2;animation-duration:calc(var(--vt-dur) * .8);animation-delay:70ms}
+::view-transition-group(*.rest){animation-duration:calc(var(--vt-dur) * .9);animation-delay:40ms}
+::view-transition-image-pair(*){overflow:clip;isolation:isolate;border-radius:4px 18px 4px 4px}
+::view-transition-old(*),::view-transition-new(*){width:100%;height:auto;object-fit:none;object-position:top left;mix-blend-mode:normal}
+::view-transition-old(*){animation:vt-out .12s cubic-bezier(0.2,0,1,0.9) forwards}
+::view-transition-new(*){animation:vt-in .26s cubic-bezier(0,0,0.38,0.9) .1s both}
+::view-transition-old(root),::view-transition-new(root){animation:none}
+@keyframes vt-out{to{opacity:0}}
+@keyframes vt-in{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none}}
+</style>
+</helmet>
+<div aria-hidden="true" style="position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(var(--dt-grid) 1px,transparent 1px),linear-gradient(90deg,var(--dt-grid) 1px,transparent 1px);background-size:{{ gridSize }};opacity:{{ gridOpacity }};transition:background-size .7s var(--vt-ease),opacity .7s var(--vt-ease)"></div>
+<div aria-hidden="true" style="position:fixed;inset:-25%;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,color-mix(in oklab,var(--dt-accent) 16%,transparent) 0%,transparent 52%);opacity:{{ washOpacity }};transform:{{ washTransform }};transition:opacity .8s var(--vt-ease),transform 1s var(--vt-ease)"></div>
+<div aria-hidden="true" style="position:fixed;inset:-25%;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,color-mix(in oklab,var(--dt-info) 12%,transparent) 0%,transparent 50%);opacity:{{ wash2Opacity }};transform:{{ wash2Transform }};transition:opacity .9s var(--vt-ease),transform 1.1s var(--vt-ease)"></div>
+<div style="position:relative;display:grid;grid-template-columns:{{ bennyCol }} minmax(0,1fr);height:100vh;transition:grid-template-columns .3s var(--vt-ease)">
+  <div role="button" tabIndex="0" aria-label="{{ bennyHandleAria }}" onMouseEnter="{{ bennyIn }}" onMouseLeave="{{ bennyOut }}" onClick="{{ bennyToggle }}" onKeyDown="{{ bennyKey }}" style="position:absolute;top:0;left:0;width:30px;height:100vh;cursor:pointer;outline:none;z-index:60;display:{{ bennyHandleDisplay }}">
+    <div style="position:absolute;top:50%;left:{{ bennyTabLeft }};transform:translateY(-50%);width:24px;padding:10px 0;background:var(--dt-plate);color:var(--dt-on-plate);border-radius:0 var(--dt-r-fillet) var(--dt-r-fillet) 0;display:grid;justify-items:center;gap:6px;opacity:{{ bennyTabOpacity }};transition:opacity .25s var(--vt-ease)"><span style="font-family:'Spectral',serif;font-size:14px;font-weight:700;font-style:italic">B</span><span style="font-family:'Azeret Mono',monospace;font-size:8px;letter-spacing:0.12em;writing-mode:vertical-rl">BENNY</span></div>
+  </div><aside aria-label="Benny, chief of staff" onMouseEnter="{{ bennyIn }}" onMouseLeave="{{ bennyOut }}" style="position:relative;height:100vh;box-sizing:border-box;min-width:0;overflow:hidden;view-transition-name:benny;view-transition-class:lift;background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border-right:2px solid var(--dt-ink);box-shadow:{{ bennyShadow }}">
+  <div style="width:min(340px,86vw);height:100%;box-sizing:border-box;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:12px;padding:16px 16px 14px;opacity:{{ bennyBodyOpacity }};transition:opacity .25s var(--vt-ease)">
+
+  <div style="display:flex;align-items:center;gap:10px;min-width:0">
+    <div style="width:34px;height:34px;flex:none;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);display:grid;place-items:center;font-family:'Spectral',serif;font-size:18px;font-weight:700;font-style:italic">B</div>
+    <div style="display:grid;gap:1px;min-width:0"><span style="font-family:'Spectral',serif;font-size:18px;font-weight:600;line-height:1.1">Benny</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">CHIEF OF STAFF · AI · KNOWS EVERY SHEET</span></div>
+    <button onClick="{{ bennyClose }}" aria-label="Tuck Benny away" style="margin-left:auto;flex:none;font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.06em;background:transparent;color:var(--dt-ink);border:1px solid var(--dt-ink);border-radius:var(--dt-r-btn);padding:4px 8px;cursor:pointer;white-space:nowrap" style-hover="background:var(--dt-plate);color:var(--dt-on-plate)">← TUCK</button>
+  </div>
+  <div style="display:grid;gap:10px;align-content:start;min-height:0;overflow:auto;padding-right:2px">
+    <sc-for list="{{ bennyMsgs }}" as="m" hint-placeholder-count="1">
+      <div style="display:grid;gap:6px;justify-items:{{ m.align }}">
+        <div style="max-width:92%;font-size:12.5px;line-height:1.45;text-wrap:pretty;padding:8px 11px;border-radius:var(--dt-r-card);background:{{ m.bg }};color:{{ m.fg }};border:1px solid {{ m.border }}">{{ m.text }}</div>
+        <sc-if value="{{ m.hasRoutes }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;gap:5px;width:100%">
+            <sc-for list="{{ m.routes }}" as="r" hint-placeholder-count="2">
+              <a href="{{ r.href }}" style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:baseline;text-decoration:none;color:var(--dt-ink);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:6px 9px;background:var(--dt-sheet)" style-hover="border-color:var(--dt-ink);background-color:var(--dt-bg)"><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:var(--dt-plate);color:var(--dt-on-plate);padding:2px 6px;border-radius:var(--dt-r-fillet)">{{ r.code }}</span><span style="display:grid;gap:1px;min-width:0"><span style="font-size:12px;font-weight:600;line-height:1.3">{{ r.title }}</span><span style="font-size:11px;color:var(--dt-muted);line-height:1.35">{{ r.why }}</span></span></a>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+  <form onSubmit="{{ bennySend }}" style="display:grid;gap:6px">
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <sc-for list="{{ bennyChips }}" as="c" hint-placeholder-count="3"><button type="button" onClick="{{ c.go }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.06em;background:transparent;color:var(--dt-ink);border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-pill);padding:3px 9px;cursor:pointer;white-space:nowrap" style-hover="border-color:var(--dt-ink)">{{ c.label }}</button></sc-for>
+    </div>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px">
+      <input type="text" value="{{ bennyDraft }}" onChange="{{ bennySetDraft }}" placeholder="Ask Benny, or say where you want to go" aria-label="Message Benny" style="font-family:'Libre Franklin';font-size:13px;padding:8px 10px;border:1px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-sheet);color:var(--dt-ink);min-width:0">
+      <button type="submit" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:var(--dt-plate);color:var(--dt-on-plate);border:0;border-radius:var(--dt-r-btn);padding:8px 12px;cursor:pointer;box-shadow:var(--dt-btn-shadow)" style-hover="background:var(--dt-accent-deep)">Send</button>
+    </div>
+    <div style="font-size:10.5px;color:var(--dt-muted);line-height:1.4">Tap, type, or talk. Benny routes you; he never changes a sheet without you.</div>
+  </form>
+  </div>
+</aside>
+<div style="position:relative;height:100vh;box-sizing:border-box;min-width:0;padding:18px 22px 22px;display:grid;grid-template-rows:auto minmax(0,1fr);gap:14px">
+  <header style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,auto);align-items:start;gap:18px">
+    <div style="display:grid;gap:3px;min-width:0">
+      <span style="font-family:'Spectral',serif;font-size:22px;font-weight:600;line-height:1.2">Every sheet opens the same way, so only the letter in the code tells them apart.</span>
+      <span style="font-size:12.5px;color:var(--dt-muted);line-height:1.4">Color is already taken by evidence states, so the kind of sheet has to be carried by form. Five ways, drawn on the same four sheets.</span>
+    </div>
+    <div style="display:flex;gap:14px;align-items:baseline;white-space:nowrap;min-width:0;flex-wrap:wrap;justify-content:flex-end"><div style="font-family:'Azeret Mono',monospace;font-size:10.5px;letter-spacing:0.08em;color:var(--dt-muted);min-width:0;overflow:hidden;text-overflow:ellipsis">{{ statusLine }}</div><a href="Workbench Frame.dc.html" style="font-family:'Azeret Mono',monospace;font-size:10.5px;letter-spacing:0.08em;text-decoration:none">WORKBENCH FRAME →</a><button onClick="{{ bennyToggle }}" aria-label="Open Benny, your chief of staff" style="font-family:'Azeret Mono',monospace;font-size:10.5px;letter-spacing:0.08em;background:var(--dt-plate);color:var(--dt-on-plate);border:0;border-radius:var(--dt-r-fillet);padding:4px 9px;cursor:pointer" style-hover="background:var(--dt-accent-deep)">B · BENNY</button></div>
+  </header>
+
+  <div style="display:grid;grid-template-columns:repeat(20,minmax(0,1fr));grid-template-rows:repeat(14,minmax(0,1fr));gap:12px;min-height:0">
+    <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="8">
+      <div role="button" tabIndex="0" aria-label="{{ t.aria }}" onClick="{{ t.pick }}" onKeyDown="{{ t.key }}" style="grid-area:{{ t.area }};view-transition-name:{{ t.vt }};view-transition-class:{{ t.vtClass }};cursor:{{ t.cursor }};box-shadow:{{ t.shadow }};container-type:inline-size;min-height:0;min-width:0;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);gap:clamp(6px,1.4cqi,14px);padding:clamp(9px,1.8cqi,20px) clamp(10px,2cqi,24px);background-color:var(--dt-sheet);background-image:{{ t.hatch }};border:1px solid var(--dt-ink);border-radius:var(--dt-r-card);outline:none" style-focus="box-shadow:0 0 0 2px var(--dt-accent)">
+        <div style="display:flex;align-items:{{ t.headAlign }};gap:clamp(6px,1.4cqi,12px);min-width:0">
+          <sc-if value="{{ t.showBadge }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Azeret Mono',monospace;font-size:clamp(9px,1.6cqi,12px);font-weight:600;background:var(--dt-plate);color:var(--dt-on-plate);padding:2px 7px;border-radius:var(--dt-r-fillet);flex:none">{{ t.badge }}</span></sc-if>
+          <svg style="flex:none;width:clamp(16px,3cqi,22px);height:clamp(16px,3cqi,22px)" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="{{ t.glyph }}"></path></svg>
+          <span style="font-family:'Spectral',serif;font-weight:600;font-size:clamp(13px,3.4cqi,24px);line-height:1.15;min-width:0;overflow:hidden;{{ t.titleWrap }}">{{ t.title }}</span>
+          <sc-if value="{{ t.isOpen }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.08em;color:var(--dt-muted);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-pill);padding:2px 8px;flex:none;white-space:nowrap">{{ t.lens }}</span></sc-if>
+          <sc-if value="{{ t.isOpen }}" hint-placeholder-val="{{ false }}"><button onClick="{{ close }}" aria-label="Back to all" style="margin-left:auto;flex:none;font-family:'Azeret Mono',monospace;font-size:10.5px;letter-spacing:0.06em;background:transparent;color:var(--dt-ink);border:1px solid var(--dt-ink);border-radius:var(--dt-r-btn);padding:5px 10px;cursor:pointer;white-space:nowrap" style-hover="background:var(--dt-plate);color:var(--dt-on-plate)">✕ ALL · ESC</button></sc-if>
+        </div>
+
+        <sc-if value="{{ t.isOver }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:8px;min-height:0;min-width:0">
+            <sc-if value="{{ t.summaryShow }}" hint-placeholder-val="{{ true }}"><p style="margin:0;font-size:clamp(11px,1.7cqi,14px);line-height:1.45;text-wrap:pretty;overflow:hidden;color:var(--dt-ink)">{{ t.summaryShown }}</p></sc-if>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.08em;color:var(--dt-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">{{ t.lens }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.08em;color:var(--dt-accent-deep);flex:none">TAP TO OPEN →</span></div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ t.openCensus }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:{{ censusCols }};grid-template-rows:{{ censusRows }};gap:10px;min-height:0">
+            <sc-for list="{{ census }}" as="k" hint-placeholder-count="10">
+              <div role="button" tabIndex="0" aria-label="{{ k.aria }}" title="{{ k.verb }}" onClick="{{ k.pick }}" onKeyDown="{{ k.key }}" style="grid-area:{{ k.area }};view-transition-name:{{ k.vt }};view-transition-class:{{ k.vtClass }};cursor:{{ k.cursor }};container-type:inline-size;min-height:0;min-width:0;overflow:hidden;background-color:var(--dt-sheet);background-image:{{ k.hatch }};border:1px solid {{ k.border }};border-radius:var(--dt-r-card);box-shadow:{{ k.shadow }};padding:{{ k.pad }};display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:{{ k.rows }};gap:8px;outline:none" style-focus="box-shadow:0 0 0 2px var(--dt-accent)">
+                <div style="display:flex;gap:9px;align-items:center;min-width:0;min-height:0;justify-content:{{ k.headJustify }}">
+                  <svg style="flex:none;width:clamp(16px,6cqi,22px);height:clamp(16px,6cqi,22px)" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="{{ k.glyph }}"></path></svg>
+                  <span style="font-family:'Spectral',serif;font-weight:600;line-height:1.1;min-width:0;overflow:hidden;{{ k.verbStyle }}">{{ k.verb }}</span>
+                  <sc-if value="{{ k.open }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.08em;color:var(--dt-muted);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-pill);padding:2px 8px;flex:none;white-space:nowrap">{{ k.kind }}</span><button onClick="{{ k.back }}" aria-label="Back to all ten" style="margin-left:auto;flex:none;font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.06em;background:transparent;color:var(--dt-ink);border:1px solid var(--dt-ink);border-radius:var(--dt-r-btn);padding:4px 9px;cursor:pointer;white-space:nowrap" style-hover="background:var(--dt-plate);color:var(--dt-on-plate)">✕ TEN</button></sc-if>
+                </div>
+                <sc-if value="{{ k.plain }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:grid;gap:4px;align-content:start;min-height:0;overflow:hidden">
+                    <div style="font-size:clamp(11px,4.5cqi,13.5px);line-height:1.4">{{ k.kind }}</div>
+                    <div style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);line-height:1.5">{{ k.sheets }}</div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ k.open }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:auto auto minmax(120px,1fr) auto;gap:8px 10px;min-height:0;min-width:0;overflow:auto">
+                    <div style="grid-column:1 / 4;display:flex;gap:10px;align-items:center;min-width:0;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:8px 10px">
+                      <svg style="flex:none;width:22px;height:22px" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="{{ k.glyph }}"></path></svg>
+                      <div style="display:grid;gap:1px;min-width:0"><span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ k.kind }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">1a · NAMEPLATE</span></div>
+                    </div>
+                    <div style="grid-column:4 / 10;display:flex;align-items:baseline;gap:12px;min-width:0;padding:4px 6px"><span style="font-family:'Spectral',serif;font-size:clamp(18px,3.2cqi,34px);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0"><span style="font-weight:700">{{ k.verbShown }}</span> <span style="font-weight:500;color:var(--dt-muted)">{{ k.objShown }}</span></span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);flex:none">1b</span></div>
+                    <div style="grid-column:10 / 13;border:1.5px solid var(--dt-ink);border-radius:2px;display:grid;grid-template-columns:1fr 1fr;font-size:10.5px;min-width:0;background:var(--dt-sheet)">
+                      <div style="grid-column:1 / -1;padding:4px 8px;border-bottom:1px solid var(--dt-ink);display:flex;justify-content:space-between;gap:6px"><span style="font-weight:600;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ k.trade }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">1d</span></div>
+                      <div style="padding:3px 8px;border-right:1px solid var(--dt-ink);display:grid;min-width:0"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;color:var(--dt-muted)">{{ k.tbKey }}</span><span style="font-size:10px;line-height:1.3">{{ k.tbVal }}</span></div>
+                      <div style="padding:3px 8px;display:grid"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;color:var(--dt-muted)">SHEETS</span><span style="font-family:'Azeret Mono',monospace;font-weight:600">{{ k.count }}</span></div>
+                    </div>
+                    <div style="grid-column:1 / 13;display:grid;grid-template-columns:subgrid;border:1px solid var(--dt-ink);border-radius:2px;min-width:0">
+                      <div style="grid-column:1 / 4;padding:7px 10px;display:grid;gap:2px;align-content:start;border-right:1px dashed var(--dt-grid-mid)"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;letter-spacing:0.08em;color:var(--dt-muted)">YOU CAME FROM</span><span style="font-size:11.5px;line-height:1.35">{{ k.came }}</span></div>
+                      <div style="grid-column:4 / 10;padding:7px 12px;display:grid;gap:2px;align-content:start;background-color:var(--dt-bg);background-image:var(--dt-hatch-tint)"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;letter-spacing:0.08em;color:var(--dt-accent-deep)">HERE YOU · 1e</span><span style="font-family:'Spectral',serif;font-size:15px;font-weight:600;line-height:1.25">{{ k.here }}</span></div>
+                      <div style="grid-column:10 / 13;padding:7px 10px;display:grid;gap:2px;align-content:start;border-left:1px dashed var(--dt-grid-mid)"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;letter-spacing:0.08em;color:var(--dt-muted)">WHEN YOU LEAVE</span><span style="font-size:11.5px;line-height:1.35">{{ k.after }}</span></div>
+                    </div>
+                    <div style="grid-column:1 / 13;display:grid;grid-template-columns:subgrid;grid-template-rows:repeat(4,minmax(24px,1fr));gap:4px 10px;background-image:var(--dt-hatch-draft);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:6px;min-height:0;min-width:0">
+                      <sc-for list="{{ k.zones }}" as="z" hint-placeholder-count="3">
+                        <div style="grid-area:{{ z.area }};background:{{ z.bg }};color:{{ z.fg }};border:1.5px solid var(--dt-ink);border-radius:2px;font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.04em;padding:4px 7px;overflow:hidden;text-transform:uppercase;min-height:0;display:flex;align-items:flex-start;justify-content:space-between;gap:6px"><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ z.label }}</span><span style="opacity:0.7;flex:none">1c</span></div>
+                      </sc-for>
+                    </div>
+                    <div style="grid-column:1 / 13;display:grid;grid-template-columns:subgrid;min-width:0">
+                      <sc-for list="{{ k.sheetList }}" as="s" hint-placeholder-count="3">
+                        <div style="grid-column:{{ s.col }};display:flex;gap:8px;align-items:baseline;min-width:0;border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:7px 10px;background:var(--dt-sheet)"><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:var(--dt-plate);color:var(--dt-on-plate);padding:2px 6px;border-radius:var(--dt-r-fillet);flex:none">{{ s.code }}</span><span style="font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ s.title }}</span></div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ t.openNow }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(200px,0.38fr);gap:16px;min-height:0;overflow:auto">
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(150px,1fr));gap:12px;min-height:0">
+              <sc-for list="{{ samples }}" as="s" hint-placeholder-count="4">
+                <div style="background:var(--dt-sheet);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-card);padding:16px;display:grid;gap:6px;align-content:start;overflow:hidden;min-height:0">
+                  <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600;line-height:1.2">{{ s.title }}</div>
+                  <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">{{ s.code }} · {{ s.oldKicker }} · ← HUB</div>
+                  <div style="font-size:12px;line-height:1.45;color:var(--dt-muted)">{{ s.oldLede }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <aside style="display:grid;gap:10px;align-content:start;font-size:13px;line-height:1.5;text-wrap:pretty"><p style="margin:0">Serif title, mono code line, ← HUB, a paragraph, the same 1180–1320px column. A workspace, a question, a register and an approval all wear the same clothes. You find out which one you're on by reading.</p><p style="margin:0;color:var(--dt-muted)">The letter in the code is doing all the work, and it's 9.5px.</p></aside>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ t.open1a }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(200px,0.38fr);gap:16px;min-height:0;overflow:auto">
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(150px,1fr));gap:12px;min-height:0">
+              <sc-for list="{{ samples }}" as="s" hint-placeholder-count="4">
+                <div style="background:var(--dt-sheet);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-card);padding:14px 16px;display:grid;gap:10px;align-content:start;overflow:hidden;min-height:0">
+                  <div style="display:flex;gap:10px;align-items:center">
+                    <div style="width:38px;height:38px;flex:none;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);display:grid;place-items:center"><svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="{{ s.glyph }}"></path></svg></div>
+                    <div style="display:grid;gap:2px"><span style="font-size:11.5px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase">{{ s.kind }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">{{ s.code }} · ← HUB</span></div>
+                  </div>
+                  <div style="font-family:'Spectral',serif;font-size:21px;font-weight:600;line-height:1.2">{{ s.title }}</div>
+                  <div style="font-size:12px;line-height:1.45;color:var(--dt-muted)">{{ s.lede }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <aside style="display:grid;gap:10px;align-content:start;font-size:13px;line-height:1.5;text-wrap:pretty"><p style="margin:0">{{ t.thesis }}</p><div style="border-top:1px dashed var(--dt-grid-mid);padding-top:10px"><b>Reads as:</b> {{ t.reads }}</div><div><b>Risk:</b> {{ t.risk }}</div></aside>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ t.open1b }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(200px,0.38fr);gap:16px;min-height:0;overflow:auto">
+            <div style="display:grid;grid-template-rows:repeat(4,minmax(64px,1fr));gap:12px;min-height:0">
+              <sc-for list="{{ samples1b }}" as="s" hint-placeholder-count="4">
+                <div ref="{{ s.ref }}" style="background:var(--dt-sheet);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-card);padding:12px 18px;display:flex;justify-content:space-between;align-items:baseline;gap:16px;overflow:hidden;min-height:0">
+                  <div style="font-family:'Spectral',serif;font-size:clamp(20px,4.6cqi,40px);line-height:1.4;white-space:nowrap;overflow:hidden;min-width:0"><span style="font-weight:700">{{ s.verbShown }}</span> <span style="font-weight:500;color:var(--dt-muted)">{{ s.objShown }}</span></div>
+                  <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);flex:none;white-space:nowrap">{{ s.code }} · {{ s.title }} · ← HUB</div>
+                </div>
+              </sc-for>
+            </div>
+            <aside style="display:grid;gap:10px;align-content:start;font-size:13px;line-height:1.5;text-wrap:pretty"><p style="margin:0">{{ t.thesis }}</p><p style="margin:0;color:var(--dt-muted)">Resize the window: each line keeps to one line by swapping to a shorter wording, never by wrapping.</p><div style="border-top:1px dashed var(--dt-grid-mid);padding-top:10px"><b>Reads as:</b> {{ t.reads }}</div><div><b>Risk:</b> {{ t.risk }}</div></aside>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ t.open1c }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(200px,0.38fr);gap:16px;min-height:0;overflow:auto">
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(150px,1fr));gap:12px;min-height:0">
+              <sc-for list="{{ samples }}" as="s" hint-placeholder-count="4">
+                <div style="background:var(--dt-sheet);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-card);padding:12px 14px;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:8px;overflow:hidden;min-height:0">
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-family:'Spectral',serif;font-size:16px;font-weight:600;line-height:1.2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ s.kind }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">{{ s.code }}</span></div>
+                  <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(5,minmax(16px,1fr));gap:3px;background-image:var(--dt-hatch-draft);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:4px;min-height:0">
+                    <sc-for list="{{ s.plan }}" as="z" hint-placeholder-count="3">
+                      <div style="grid-area:{{ z.area }};background:{{ z.bg }};color:{{ z.fg }};border:1.5px solid var(--dt-ink);border-radius:2px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.04em;padding:3px 5px;overflow:hidden;text-transform:uppercase;min-height:0">{{ z.label }}</div>
+                    </sc-for>
+                  </div>
+                  <div style="font-size:12px;line-height:1.4;color:var(--dt-muted)">{{ s.planNote }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <aside style="display:grid;gap:10px;align-content:start;font-size:13px;line-height:1.5;text-wrap:pretty"><p style="margin:0">{{ t.thesis }}</p><div style="border-top:1px dashed var(--dt-grid-mid);padding-top:10px"><b>Reads as:</b> {{ t.reads }}</div><div><b>Risk:</b> {{ t.risk }}</div></aside>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ t.open1d }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(200px,0.38fr);gap:16px;min-height:0;overflow:auto">
+            <div style="display:grid;grid-template-rows:repeat(4,minmax(64px,1fr));gap:12px;min-height:0">
+              <sc-for list="{{ samples }}" as="s" hint-placeholder-count="4">
+                <div style="background:var(--dt-sheet);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-card);padding:12px 16px;display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:14px;align-items:start;overflow:hidden;min-height:0">
+                  <div style="display:grid;gap:5px"><div style="font-family:'Spectral',serif;font-size:20px;font-weight:600;line-height:1.2">{{ s.title }}</div><div style="font-size:12px;line-height:1.45;color:var(--dt-muted)">{{ s.lede }}</div></div>
+                  <div style="border:1.5px solid var(--dt-ink);border-radius:2px;display:grid;font-size:10.5px;background:var(--dt-sheet)">
+                    <div style="padding:5px 8px;border-bottom:1px solid var(--dt-ink);display:grid;gap:1px"><span style="font-weight:600;font-size:12.5px">{{ s.kind }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">{{ s.trade }}</span></div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr">
+                      <div style="padding:4px 8px;border-right:1px solid var(--dt-ink);display:grid"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;color:var(--dt-muted)">{{ s.tbKey }}</span><span>{{ s.tbVal }}</span></div>
+                      <div style="padding:4px 8px;display:grid"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;color:var(--dt-muted)">SHEET</span><span style="font-family:'Azeret Mono',monospace;font-weight:600">{{ s.code }}</span></div>
+                    </div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <aside style="display:grid;gap:10px;align-content:start;font-size:13px;line-height:1.5;text-wrap:pretty"><p style="margin:0">{{ t.thesis }}</p><div style="border-top:1px dashed var(--dt-grid-mid);padding-top:10px"><b>Reads as:</b> {{ t.reads }}</div><div><b>Risk:</b> {{ t.risk }}</div></aside>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ t.open1e }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(200px,0.38fr);gap:16px;min-height:0;overflow:auto">
+            <div style="display:grid;grid-template-rows:repeat(4,minmax(64px,1fr));gap:12px;min-height:0">
+              <sc-for list="{{ samples }}" as="s" hint-placeholder-count="4">
+                <div style="background:var(--dt-sheet);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-card);padding:10px 14px 12px;display:grid;grid-template-rows:auto minmax(0,1fr);gap:8px;overflow:hidden;min-height:0">
+                  <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">{{ s.code }} · {{ s.title }}</div>
+                  <div style="display:grid;grid-template-columns:minmax(0,0.8fr) minmax(0,1.4fr) minmax(0,0.9fr);border:1px solid var(--dt-ink);border-radius:2px;min-height:0;overflow:hidden">
+                    <div style="padding:8px 10px;display:grid;gap:3px;align-content:start;border-right:1px dashed var(--dt-grid-mid)"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;letter-spacing:0.08em;color:var(--dt-muted)">YOU CAME FROM</span><span style="font-size:12px;line-height:1.35">{{ s.came }}</span></div>
+                    <div style="padding:8px 12px;display:grid;gap:3px;align-content:start;background-color:var(--dt-bg);background-image:var(--dt-hatch-tint)"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;letter-spacing:0.08em;color:var(--dt-accent-deep)">HERE YOU</span><span style="font-family:'Spectral',serif;font-size:17px;font-weight:600;line-height:1.25">{{ s.hereYou }}</span></div>
+                    <div style="padding:8px 10px;display:grid;gap:3px;align-content:start;border-left:1px dashed var(--dt-grid-mid)"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;letter-spacing:0.08em;color:var(--dt-muted)">WHEN YOU LEAVE</span><span style="font-size:12px;line-height:1.35">{{ s.after }}</span></div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <aside style="display:grid;gap:10px;align-content:start;font-size:13px;line-height:1.5;text-wrap:pretty"><p style="margin:0">{{ t.thesis }}</p><div style="border-top:1px dashed var(--dt-grid-mid);padding-top:10px"><b>Reads as:</b> {{ t.reads }}</div><div><b>Risk:</b> {{ t.risk }}</div></aside>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ t.openRead }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,0.5fr);gap:20px;min-height:0;overflow:auto">
+            <div style="display:grid;grid-template-rows:repeat(5,minmax(0,1fr));gap:10px;min-height:0">
+              <sc-for list="{{ layers }}" as="l" hint-placeholder-count="5">
+                <a href="{{ l.href }}" onClick="{{ l.go }}" style="text-decoration:none;color:var(--dt-ink);display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:14px;align-items:center;background:var(--dt-sheet);border:1px solid var(--dt-ink);border-radius:var(--dt-r-card);padding:10px 16px;overflow:hidden;min-height:0" style-hover="background-color:var(--dt-bg)">
+                  <span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.08em;color:var(--dt-muted)">{{ l.when }}</span>
+                  <span style="display:grid;gap:2px;min-width:0"><span style="font-family:'Spectral',serif;font-size:18px;font-weight:600;line-height:1.2">{{ l.what }}</span><span style="font-size:12px;color:var(--dt-muted);line-height:1.4">{{ l.how }}</span></span>
+                  <span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:var(--dt-plate);color:var(--dt-on-plate);padding:3px 8px;border-radius:var(--dt-r-fillet)">{{ l.id }}</span>
+                </a>
+              </sc-for>
+            </div>
+            <aside style="display:grid;gap:10px;align-content:start;font-size:13.5px;line-height:1.55;text-wrap:pretty"><p style="margin:0">Each approach solves a different moment, so don't average them; stack them. The silhouette works before you read. The verb works in the first second. The threshold works in the first ten seconds. The mark works away from the page, on links and chips. The title block stays available at the foot without leading.</p><p style="margin:0;color:var(--dt-muted)">Your own rule: never blend at the source, blend only in synthesis.</p></aside>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;blueprint&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Theme&quot;},&quot;motion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;expressive&quot;,&quot;options&quot;:[&quot;expressive&quot;,&quot;productive&quot;,&quot;off&quot;],&quot;tsType&quot;:&quot;'expressive'|'productive'|'off'&quot;,&quot;section&quot;:&quot;Motion&quot;}}">
+class Component extends DCLogic {
+  state = { sel: null, kind: null, fit: {}, benny: 'rest', bennyDraft: '', bennyMsgs: [{ from: 'benny', text: 'Morning, James. You’re on the ethos board. Say where you want to go, or what you’re trying to do, and I’ll take you to the right sheet.' }] };
+  index() {
+    return [
+      { code: 'HUB', title: 'The drafting table', href: 'Hub.dc.html', why: 'The three things next.', k: 'hub home today front start three' },
+      { code: 'A-01', title: 'Layout canvas', href: 'prototypes/Prototype A - Layout Canvas.dc.html', why: 'Arrange sections; does the ring fit?', k: 'layout arrange fit canvas table tree ring sections studs' },
+      { code: 'B-01', title: 'When the AI isn’t sure', href: 'prototypes/Prototype B - When the AI Isnt Sure.dc.html', why: 'One question, your answer becomes the record.', k: 'question answer ai unsure ambiguous curve trail' },
+      { code: 'C-01', title: 'The railbed parts list', href: 'prototypes/Prototype C - Measurement to Procurement.dc.html', why: 'Approve what to buy.', k: 'parts list approve railbed plan gate initial sign' },
+      { code: 'P-01', title: 'Buying the gap', href: 'prototypes/Prototype P - Procurement.dc.html', why: 'Which shops, in what order.', k: 'buy shop order bricklink price procurement money' },
+      { code: 'I-01', title: 'What we have', href: 'prototypes/Prototype I - What We Have.dc.html', why: 'Every set: have it, built, free.', k: 'sets have inventory own built free list' },
+      { code: 'I-02', title: 'Documenting the boxes', href: 'prototypes/Prototype I2 - Documenting the Boxes.dc.html', why: 'What’s actually in the boxes.', k: 'box boxes photo document contents' },
+      { code: 'I-03', title: 'One set', href: 'prototypes/Prototype I3 - One Set.dc.html', why: 'Everything we hold on one set.', k: 'one set dossier 41843 everything handle' },
+      { code: 'M-01', title: 'Measure and check', href: 'prototypes/Prototype M - Measure and Check.dc.html', why: 'The numbers the plan rests on.', k: 'measure measurement tape railhead height number check' },
+      { code: 'T-01', title: 'The queue', href: 'prototypes/Prototype T - The Queue.dc.html', why: 'Everything waiting, and what it’s waiting on.', k: 'queue waiting tasks todo next order' },
+      { code: 'R-01', title: 'Bringing things in', href: 'prototypes/Prototype R - Bringing Things In.dc.html', why: 'Receipts and parcels, confirmed.', k: 'receipt bring in parcel store bought confirm intake' },
+      { code: 'V-01', title: 'Reading the instructions', href: 'prototypes/Prototype V - Reading the Instructions.dc.html', why: 'Numbers the instructions already give.', k: 'instructions read footprint height pieces' },
+      { code: 'V-02', title: 'Replaying the build', href: 'prototypes/Prototype V2 - Deriving Fitment from the Build.dc.html', why: 'Fitment derived from the build.', k: 'replay build fitment shape derive' },
+      { code: 'J-01', title: 'The thirteen journeys', href: 'J-01 Journey Map.dc.html', why: 'How it all connects.', k: 'journey map loop connect find way' },
+      { code: 'F-01', title: 'Family workbench', href: 'F-01 Workbench Junior.dc.html', why: 'The same tools for the boys, on a tablet.', k: 'family boys tablet kids workbench' },
+      { code: 'H-01', title: 'The handoff', href: 'H-01 Handoff.dc.html', why: 'What was settled, packed for agents.', k: 'handoff hand over package claude code settled' },
+      { code: 'W-00', title: 'Workbench frame', href: 'Workbench Frame.dc.html', why: 'The frame study: bars, subgrids, the ripple.', k: 'frame workbench ripple sidebar subgrid' }
+    ];
+  }
+  route(q) {
+    const stop = new Set(['the', 'and', 'for', 'what', 'is', 'are', 'to', 'a', 'an', 'of', 'in', 'on', 'my', 'me', 'our', 'where', 'how', 'do', 'does', 'can', 'please', 'go', 'show', 'open', 'take']);
+    const stem = w => w.replace(/(ing|ed|es|s)$/, '');
+    const words = q.toLowerCase().split(/[^a-z0-9-]+/).filter(w => w.length > 1 && !stop.has(w)).map(stem);
+    // Whole-word hits in the keyword list weigh 3, title words 2, code 1; ties break on how many distinct words matched.
+    const hits = this.index().map(p => {
+      const kw = p.k.split(' ').map(stem), tw = p.title.toLowerCase().split(/[^a-z0-9-]+/).map(stem), code = p.code.toLowerCase();
+      let s = 0, d = 0;
+      words.forEach((w, i) => { let m = 0; if (kw.includes(w)) m += 3; if (tw.includes(w)) m += 2; if (code === w || code.replace('-', '') === w) m += 1; if (m) { s += m * (i === 0 ? 2 : 1); d++; } });
+      return { p, s, d };
+    }).filter(h => h.s > 0).sort((a, b) => b.s - a.s || b.d - a.d).slice(0, 3).map(h => h.p);
+    const you = { from: 'you', text: q };
+    const reply = hits.length ? { from: 'benny', text: hits.length === 1 ? 'That lives on one sheet:' : 'A few sheets could be it. Most likely first:', routes: hits } : { from: 'benny', text: 'I don’t have a sheet for that yet. Try a thing you’re doing, like “measure the tree”, “buy the curves”, or “what’s waiting”.', routes: this.index().slice(0, 3) };
+    this.setState(s => ({ bennyMsgs: s.bennyMsgs.concat([you, reply]), bennyDraft: '' }));
+  }
+  refs1b = {};
+  ref1b(c) { return this.refs1b[c] || (this.refs1b[c] = React.createRef()); }
+  ids() { return ['census', 'now', 'read', '1a', '1b', '1c', '1d', '1e']; }
+  componentDidMount() {
+    this.theme();
+    this.onHash = () => { const h = decodeURIComponent(location.hash.slice(1)); if (this.ids().includes(h)) this.go(h, true); else if (!h && this.state.sel) this.go(null, true); };
+    this.onKey = (e) => { if (e.key !== 'Escape') return; if (this.state.benny === 'open') this.swapState({ benny: 'rest' }); else if (this.state.kind) this.goKind(null); else if (this.state.sel) this.go(null); };
+    this.onRes = () => { this.fit(); this.forceUpdate(); };
+    addEventListener('hashchange', this.onHash); addEventListener('keydown', this.onKey); addEventListener('resize', this.onRes);
+    this.onHash();
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => this.fit());
+  }
+  componentWillUnmount() { removeEventListener('hashchange', this.onHash); removeEventListener('keydown', this.onKey); removeEventListener('resize', this.onRes); }
+  componentDidUpdate() { this.theme(); if (this.state.sel === '1b') this.fit(); }
+  theme() {
+    document.body.classList.toggle('dt-blueprint', !!this.props.blueprint);
+    const m = this.props.motion ?? 'expressive';
+    // Carbon motion tokens: expressive for the large shared-element move, productive for the content crossfade.
+    const d = { expressive: ['.55s', 'cubic-bezier(0.4,0.14,0.3,1)', '.24s'], productive: ['.3s', 'cubic-bezier(0.2,0,0.38,0.9)', '.15s'], off: ['0s', 'linear', '0s'] }[m] || ['.55s', 'cubic-bezier(0.4,0.14,0.3,1)', '.24s'];
+    const r = document.documentElement.style; r.setProperty('--vt-dur', d[0]); r.setProperty('--vt-ease', d[1]); r.setProperty('--vt-fade', d[2]);
+  }
+  swapState(patch) {
+    const run = () => new Promise(res => this.setState(patch, res));
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (document.startViewTransition && !reduced && (this.props.motion ?? 'expressive') !== 'off') document.startViewTransition(run); else run();
+  }
+  boardW() { return (typeof innerWidth === 'number' ? innerWidth : 1600) - (this.state.benny === 'open' ? 340 : 0); }
+  goKind(id) {
+    if (id === this.state.kind) return;
+    const run = () => new Promise(res => this.setState({ kind: id }, res));
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (document.startViewTransition && !reduced && (this.props.motion ?? 'expressive') !== 'off') document.startViewTransition(run); else run();
+  }
+  go(id, fromHash) {
+    if (id === this.state.sel) return;
+    const run = () => new Promise(res => this.setState({ sel: id, kind: null }, res));
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (document.startViewTransition && !reduced && (this.props.motion ?? 'expressive') !== 'off') document.startViewTransition(run); else run();
+    if (!fromHash) history.replaceState(null, '', id ? '#' + id : location.pathname + location.search);
+  }
+  fit() {
+    const c = this._c || (this._c = document.createElement('canvas').getContext('2d'));
+    const next = {};
+    this.variants().forEach(v => {
+      const el = this.refs1b[v.code] && this.refs1b[v.code].current; if (!el) return;
+      const text = el.firstElementChild, label = el.lastElementChild;
+      const px = parseFloat(getComputedStyle(text).fontSize) || 30;
+      const w = (wt, t) => { c.font = wt + ' ' + px + 'px Spectral'; return c.measureText(t).width; };
+      const cs = getComputedStyle(el);
+      const avail = el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - label.getBoundingClientRect().width - 16 - 2;
+      const vw = w(700, v.verb), sp = w(500, ' ');
+      let pick = v.objs.length;
+      for (let i = 0; i < v.objs.length; i++) { if (vw + sp + w(500, v.objs[i]) <= avail) { pick = i; break; } }
+      next[v.code] = pick;
+    });
+    if (Object.keys(next).length && JSON.stringify(next) !== JSON.stringify(this.state.fit)) this.setState({ fit: next });
+  }
+  variants() {
+    return [
+      { code: 'A-01', title: 'Layout Canvas', verb: 'Arrange', objs: ['the sections around the tree.', 'the sections.'] },
+      { code: 'B-01', title: 'When the AI isn’t sure', verb: 'Answer', objs: ['one question about a curve.', 'one question.'] },
+      { code: 'I-01', title: 'What we have', verb: 'Look up', objs: ['any set: have it, built, free to use.', 'any set.'] },
+      { code: 'C-01', title: 'The railbed parts list', verb: 'Approve', objs: ['what to buy for the railbed.', 'the parts list.'] }
+    ];
+  }
+  renderVals() {
+    const G = {
+      front: 'M3 9.5l7-6 7 6V17H3z', work: 'M3 3h14v14H3zM10 3v14M3 10h14', ask: 'M10 3a7 7 0 1 1-4.6 12.3L3 17l1.1-3.3A7 7 0 0 1 10 3z',
+      reg: 'M3 4.5h14M3 8.5h14M3 12.5h14M3 16.5h14', dossier: 'M4 2.5h12v15H4zM7 6h6v5H7z', intake: 'M10 2v9M6.5 7.5L10 11l3.5-3.5M3 12v5h14v-5',
+      approve: 'M7.5 3h5v5l3.5 3v3h-12v-3l3.5-3zM3 17h14', order: 'M3 5h14v3.5a1.5 1.5 0 0 0 0 3V15H3v-3.5a1.5 1.5 0 0 0 0-3z',
+      map: 'M2 15l5-9 5 6 6-9', record: 'M3 5h5l2 2h7v9H3z',
+      plate: 'M3 5h14v10H3zM6 10h8', verb: 'M4 16L10 4l6 12M6.5 11h7', plan: 'M3 3h14v14H3zM3 9h9M12 3v14', block: 'M3 3h14v14H3zM3 12h14M10 12v5', door: 'M5 3h10v14H5zM12 10h.01'
+    };
+    const ink = 'var(--dt-plate)', on = 'var(--dt-on-plate)', sheet = 'var(--dt-sheet)';
+    const z = (area, label, hot) => ({ area, label, bg: hot ? ink : sheet, fg: hot ? on : ink });
+    const Z = (area, label, hot) => ({ area, label, bg: hot ? ink : sheet, fg: hot ? on : ink });
+    const kinds = [
+      { id: 'today', verb: 'See today', kind: 'Front page: the three things next', sheets: 'HUB', glyph: G.front, obj: 'the three things next.', trade: 'COVER SHEET', tbKey: 'SCOPE', tbVal: 'Three tasks', came: 'The front door.', here: 'Pick one of three things, or look ahead.', after: 'You’re on the sheet that does it.', zones: [Z('1 / 1 / 2 / 13', 'the three things, one per row', true), Z('2 / 1 / 5 / 9', 'sheet cards'), Z('2 / 9 / 5 / 13', 'notes & decisions')], list: [['HUB', 'The drafting table']] },
+      { id: 'arrange', verb: 'Arrange', kind: 'A table you work on', sheets: 'A-01 · V-02 · F-01', glyph: G.work, obj: 'the sections around the tree.', trade: 'PLAN', tbKey: 'SCALE', tbVal: '1 stud = 8 mm', came: 'Hub, task 2: “does the ring fit?”', here: 'Move sections until the checks clear.', after: 'A saved layout C-01 can plan from.', zones: [Z('1 / 1 / 2 / 13', 'tools'), Z('2 / 1 / 5 / 10', 'the table — you work here', true), Z('2 / 10 / 5 / 13', 'checks')], list: [['A-01', 'Layout canvas'], ['V-02', 'Replaying the build'], ['F-01', 'Family workbench']] },
+      { id: 'answer', verb: 'Answer', kind: 'A question for you', sheets: 'B-01', glyph: G.ask, obj: 'one question about a curve.', trade: 'RFI · REQUEST FOR INFO', tbKey: 'ASKED BY', tbVal: 'AI · bl-741807', came: 'C-01, paused on this.', here: 'Pick the reading you mean, or say it your way.', after: 'C-01 resumes, your answer signed.', zones: [Z('1 / 4 / 2 / 10', 'the phrase'), Z('2 / 4 / 4 / 7', 'reading 1'), Z('2 / 7 / 4 / 10', 'reading 2'), Z('4 / 4 / 5 / 10', 'your answer', true)], list: [['B-01', 'When the AI isn’t sure']] },
+      { id: 'lookup', verb: 'Look up', kind: 'A list of one kind of thing', sheets: 'I-01 · M-01 · T-01', glyph: G.reg, obj: 'any set: have it, built, free.', trade: 'SCHEDULE', tbKey: 'ROWS', tbVal: '28 sets', came: 'Hub.', here: 'Find a row, change one fact.', after: 'Plans that use it re-check themselves.', zones: [Z('1 / 1 / 2 / 13', 'columns: have · built · free'), Z('2 / 1 / 3 / 13', 'row', true), Z('3 / 1 / 4 / 13', 'row'), Z('4 / 1 / 5 / 13', 'row')], list: [['I-01', 'What we have'], ['M-01', 'Measure and check'], ['T-01', 'The queue']] },
+      { id: 'closely', verb: 'Look closely', kind: 'Everything on one thing', sheets: 'I-03', glyph: G.dossier, obj: 'at one set: everything we hold.', trade: 'DOSSIER', tbKey: 'SUBJECT', tbVal: 'Set 41843', came: 'I-01, one row.', here: 'Read everything on it; record what you handle.', after: 'Its record is one entry longer.', zones: [Z('1 / 1 / 2 / 13', 'identity & facts fetched'), Z('2 / 1 / 5 / 5', 'state'), Z('2 / 5 / 5 / 9', 'measurements', true), Z('2 / 9 / 5 / 13', 'photos & handling')], list: [['I-03', 'One set']] },
+      { id: 'confirm', verb: 'Confirm', kind: 'The AI read it; you check it', sheets: 'R-01 · I-02 · V-01', glyph: G.intake, obj: 'what the AI read from the photo.', trade: 'RECEIVING REPORT', tbKey: 'READ BY', tbVal: 'AI · you check', came: 'A photo you took.', here: 'Say yes, fix, or no to each filled-in line.', after: 'Confirmed lines are facts; the rest stay drafts.', zones: [Z('1 / 1 / 5 / 6', 'the photo'), Z('1 / 6 / 4 / 13', 'the filled-in form'), Z('4 / 6 / 5 / 13', 'your ok', true)], list: [['R-01', 'Bringing things in'], ['I-02', 'Documenting the boxes'], ['V-01', 'Reading the instructions']] },
+      { id: 'approve', verb: 'Approve', kind: 'A list to sign off', sheets: 'C-01 (gate)', glyph: G.approve, obj: 'what to buy for the railbed.', trade: 'SUBMITTAL · FOR APPROVAL', tbKey: 'FOR', tbVal: 'Approval · @jfo', came: 'A-01, layout saved.', here: 'Settle each open finding, then initial.', after: 'P-01 may spend money on exactly this.', zones: [Z('1 / 1 / 2 / 13', 'evidence it rests on'), Z('2 / 1 / 4 / 13', 'the list'), Z('4 / 2 / 5 / 8', 'open findings'), Z('4 / 8 / 5 / 12', 'initials', true)], list: [['C-01', 'The railbed parts list']] },
+      { id: 'buy', verb: 'Buy', kind: 'Spending real money', sheets: 'P-01', glyph: G.order, obj: 'the approved gap from the fewest shops.', trade: 'PURCHASE ORDER', tbKey: 'LIMIT', tbVal: 'Approved list only', came: 'C-01, initialled.', here: 'Pick the shop combination; record orders after.', after: 'Orders exist; R-01 expects the parcels.', zones: [Z('1 / 1 / 5 / 5', 'shops'), Z('1 / 5 / 4 / 13', 'combinations', true), Z('4 / 5 / 5 / 13', 'totals')], list: [['P-01', 'Buying the gap']] },
+      { id: 'map', verb: 'Find your way', kind: 'How it all connects', sheets: 'J-01', glyph: G.map, obj: 'through thirteen journeys, one loop.', trade: 'KEY PLAN', tbKey: 'STOPS', tbVal: '13', came: 'Anywhere.', here: 'Tap a stop to see that journey.', after: 'You’re on that journey’s sheet.', zones: [Z('1 / 1 / 5 / 9', 'the loop', true), Z('1 / 9 / 5 / 13', 'legend')], list: [['J-01', 'The thirteen journeys']] },
+      { id: 'handover', verb: 'Hand over', kind: 'What was settled, packed up', sheets: 'H-01', glyph: G.record, obj: 'what was settled.', trade: 'TRANSMITTAL', tbKey: 'TO', tbVal: 'Claude Code · chat', came: 'The end of a session.', here: 'Read what was settled, asked, left open.', after: 'A folder any agent can read.', zones: [Z('1 / 1 / 2 / 13', 'readme first', true), Z('2 / 1 / 5 / 5', 'decisions'), Z('2 / 5 / 5 / 9', 'schema requests'), Z('2 / 9 / 5 / 13', 'left open')], list: [['H-01', 'The handoff']] }
+    ];
+    const K = this.state.kind;
+    let strip = 0;
+    const census = kinds.map((k, i) => {
+      const open = K === k.id, collapsed = !!K && !open;
+      let area = (1 + Math.floor(i / 5)) + ' / ' + (1 + i % 5) + ' / span 1 / span 1';
+      if (open) area = '1 / 1 / 10 / 17'; else if (collapsed) { area = (1 + strip) + ' / 17 / ' + (2 + strip) + ' / 21'; strip++; }
+      const n = k.list.length, span = 12 / n;
+      const shorts = {"today":"today.","arrange":"the sections.","answer":"one question.","lookup":"any set.","closely":"at one set.","confirm":"what was read.","approve":"the parts list.","buy":"the gap.","map":"the loop.","handover":"what settled."};
+      const W = this.boardW(), obj = W >= 1500 ? k.obj : (W >= 1100 ? shorts[k.id] : '');
+      return Object.assign({}, k, {
+        area, vt: 'kd-' + k.id, vtClass: open ? 'lift' : (collapsed ? 'rail' : 'rest'), open, collapsed, plain: !open && !collapsed, verbShown: obj ? k.verb : k.verb + '.', objShown: obj, cursor: open ? 'default' : 'pointer', count: String(n),
+        hatch: open ? 'var(--dt-hatch-tint)' : (collapsed ? 'var(--dt-hatch-draft)' : 'none'), border: open ? 'var(--dt-ink)' : 'var(--dt-grid-mid)', shadow: open ? 'var(--dt-shadow)' : 'none',
+        pad: collapsed ? '4px 10px' : '12px 14px', rows: collapsed ? 'minmax(0,1fr)' : 'auto minmax(0,1fr)',
+        showVerb: true, headJustify: 'flex-start', verbStyle: collapsed ? 'font-size:12px;white-space:nowrap;text-overflow:ellipsis;line-height:1.2' : 'font-size:clamp(13px,8cqi,24px);white-space:nowrap;text-overflow:ellipsis',
+        aria: (open ? 'Open: ' : 'Open ') + k.verb, pick: (e) => { e.stopPropagation(); if (!open) this.goKind(k.id); },
+        key: (e) => { if (!open && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); e.stopPropagation(); this.goKind(k.id); } },
+        back: (e) => { e.stopPropagation(); this.goKind(null); },
+        sheetList: k.list.map((s, j) => ({ code: s[0], title: s[1], col: (1 + j * span) + ' / ' + (1 + (j + 1) * span) }))
+      });
+    });
+    const censusCols = K ? 'repeat(20,minmax(0,1fr))' : 'repeat(5,minmax(0,1fr))', censusRows = K ? 'repeat(9,minmax(0,1fr))' : 'repeat(2,minmax(0,1fr))';
+    const samples = [
+      { code: 'A-01', title: 'Layout Canvas', kind: 'A table you work on', trade: 'PLAN', glyph: G.work,
+        oldKicker: 'SLICE A · SYNTHETIC QUADRANTS · MOCK', oldLede: 'Scene, foundation, transport, landscape. Plan / 3D. Branches overhang to here · 10 bricks clear below…',
+        lede: 'Move sections; the fit checks re-run as you go.', tbKey: 'SCALE', tbVal: '1 stud = 8 mm',
+        came: 'Hub, task 2: “does the ring fit?”', hereYou: 'Move sections until the checks clear.', after: 'A saved layout branch C-01 can plan from.',
+        plan: [z('1 / 1 / 2 / 7', 'tools'), z('2 / 1 / 6 / 6', 'the table — you work here', true), z('2 / 6 / 6 / 7', 'checks')], planNote: 'Full bleed. The field is the page.' },
+      { code: 'B-01', title: 'When the AI isn’t sure', kind: 'A question for you', trade: 'RFI · REQUEST FOR INFO', glyph: G.ask,
+        oldKicker: 'SLICE B · REFERENCE bl-741807 · MOCK', oldLede: 'The AI hit an ambiguous phrase while reading a builder’s page. It shows its work, asks once…',
+        lede: 'One phrase, two readings. Your answer becomes the record.', tbKey: 'ASKED BY', tbVal: 'AI · reading bl-741807',
+        came: 'C-01 parts list, paused on this.', hereYou: 'Pick the reading you mean, or say it in your own words.', after: 'C-01 resumes with your answer, signed.',
+        plan: [z('1 / 2 / 2 / 6', 'the phrase'), z('2 / 2 / 4 / 4', 'reading 1'), z('2 / 4 / 4 / 6', 'reading 2'), z('4 / 2 / 6 / 6', 'your answer', true)], planNote: 'Narrow column. One thing at a time.' },
+      { code: 'I-01', title: 'What we have', kind: 'A list of every set', trade: 'SCHEDULE', glyph: G.reg,
+        oldKicker: 'SETS · CANONICAL FOR DOGFOODING', oldLede: 'Every set the village can draw on. Three facts per set, kept apart on purpose…',
+        lede: 'Every set, three facts each. Tap a fact to change it.', tbKey: 'ROWS', tbVal: '28 sets',
+        came: 'Hub.', hereYou: 'Find a set and change one of its three facts.', after: 'Plans that use the set re-check themselves.',
+        plan: [z('1 / 1 / 2 / 7', 'columns: have · built · free'), z('2 / 1 / 3 / 7', 'row', true), z('3 / 1 / 4 / 7', 'row'), z('4 / 1 / 5 / 7', 'row'), z('5 / 1 / 6 / 7', 'row')], planNote: 'Ruled spine. Rows, all the same shape.' },
+      { code: 'C-01', title: 'The railbed parts list', kind: 'A list to sign off', trade: 'SUBMITTAL · FOR APPROVAL', glyph: G.approve,
+        oldKicker: 'SLICE C · SHEET C-01 · ONE FACET', oldLede: 'One plan sheet: the page a builder sees for one thing they’ve set out to build. It turns a design…',
+        lede: 'What the train brings, what to buy. Initial it and it goes to buying.', tbKey: 'FOR', tbVal: 'Approval · @jfo',
+        came: 'A-01, layout saved.', hereYou: 'Settle each open finding, then initial the list.', after: 'P-01 can spend money on exactly this list.',
+        plan: [z('1 / 1 / 2 / 7', 'evidence it rests on'), z('2 / 1 / 4 / 6', 'the list'), z('4 / 2 / 5 / 6', 'open findings'), z('5 / 3 / 6 / 5', 'initials', true)], planNote: 'Funnel. It narrows to your initials.' }
+    ];
+    const samples1b = this.variants().map(v => {
+      const i = this.state.fit[v.code] ?? 0, obj = v.objs[i];
+      return { code: v.code, title: v.title, ref: this.ref1b(v.code), verbShown: obj ? v.verb : v.verb + '.', objShown: obj || '' };
+    });
+    const defs = [
+      { id: 'census', badge: 'CENSUS', title: 'Ten kinds, one verb each', lens: 'THE INVENTORY', glyph: G.reg, short: 'Sixteen sheets, ten kinds of page, one verb each.', summary: 'Sixteen sheets fall into ten kinds of page. Each kind has one verb: See today, Arrange, Answer, Look up, Look closely, Confirm, Approve, Buy, Find your way, Hand over.' },
+      { id: 'now', badge: 'NOW', title: 'Four kinds, one silhouette', lens: 'THE PROBLEM', glyph: G.block, short: 'Four different kinds of page open identically.', summary: 'A workspace, a question, a register and an approval open identically. Only the 9.5px letter in the code tells them apart.' },
+      { id: 'read', badge: 'READ', title: 'Don’t blend. Layer.', lens: 'RECOMMENDATION', glyph: G.door, short: 'Each approach works at a different moment. Stack them.', summary: 'Each approach works at a different moment: before reading, first second, first ten seconds, away from the page. Stack them in that order.' },
+      { id: '1a', badge: '1a', title: 'The nameplate', lens: 'RAMS · RAND', glyph: G.plate, short: 'A fixed plate with a mark and a plain noun.', summary: 'One fixed plate, top-left of every sheet, holding a mark and a plain noun. The same mark on Hub cards, chips and links, so you know where a link goes before you click.',
+        thesis: 'Braun puts the model plate in the same place on every device. Rand’s point was that a mark identifies, and its meaning comes from use. So: one fixed plate, top-left of every sheet, holding a mark and a plain noun. The same mark shows up on Hub cards, CrossRef chips, links and the tab icon.', reads: 'calm and consistent, and it works at chip size.', risk: 'the plate is identical on every sheet, so it takes repetition before the marks mean anything. A first visit still needs the word.' },
+      { id: '1b', badge: '1b', title: 'The verb is the headline', lens: 'LOIS', glyph: G.verb, short: 'What you do here, in one loud line.', summary: 'The first thing you read is what you do here, in one line of big type. The sheet’s name drops to a caption. One loud element per page; everything under it stays quiet.',
+        thesis: 'Lois: the word comes first, and it should land in a nanosecond. The first thing you read is what you do here, as one sentence with the verb in bold. The sheet’s name drops to a caption. This is the one loud element per page (your “quiet machine with one shout”), and everything below it stays calm.', reads: 'instant, and it teaches. You know your job before you know the sheet’s name.', risk: 'a sheet with two jobs (C-01 both plans and approves) has to pick one verb. And sixteen shouting pages turn into noise unless everything under the verb is kept quiet.' },
+      { id: '1c', badge: '1c', title: 'The plan is the identity', lens: 'KOOLHAAS · OMA', glyph: G.plan, short: 'One page shape per kind.', summary: 'Each kind gets its own page skeleton, so you recognize it blurred. A workspace fills the screen. A question is a narrow column. A register is ruled. An approval narrows to your initials.',
+        thesis: 'Koolhaas: the diagram is the argument, and form follows program. Each kind gets its own page skeleton, so you can recognize it blurred, before you read a word. A workspace fills the screen. A question sits in a narrow column. A register is a ruled table. An approval narrows like a funnel toward the initials. A small program diagram at the top shows the zones and where you are.', reads: 'the strongest recognition. The shape of the sheet is the label, and it’s honest, because the layout really does follow the job.', risk: 'the most work. Every sheet is re-skeletoned to one of ten templates, and hybrid sheets (R-01, F-01) need a rule about which template wins.' },
+      { id: '1d', badge: '1d', title: 'The drawing set', lens: 'SACHS · CONSTRUCTION DOCS', glyph: G.block, short: 'A title block names the sheet.', summary: 'Architecture solved this long ago: plan, schedule, RFI, submittal, purchase order. A title block identifies the sheet, plain-word name first, trade name second.',
+        thesis: 'This is already a Drafting Table, and architecture’s document set solved this long ago. Each sheet type has a real-world form: plan, schedule, RFI, submittal, purchase order, receiving report, transmittal. The sheet identifies itself in a title block, right-aligned, plain-word name first and trade name second. The block’s fields change with the kind: scale for a plan, “for approval” for a submittal. In Sachs’s terms, you show the construction honestly, but loudly.', reads: 'it belongs to this system. The metaphor is already the brand, so the identity is earned, not added.', risk: 'the trade names are jargon (RFI, submittal) and have to stay second. A title block is something you scan, not something that jumps out.' },
+      { id: '1e', badge: '1e', title: 'The threshold', lens: 'PETER CARL · PRAXIS', glyph: G.door, short: 'Came from, here you, when you leave.', summary: 'A page is a room you enter partway through the work. Every sheet opens with where you came from, what this room is for, and what will have changed when you leave.',
+        thesis: 'Carl: a place is known by the action it hosts and the moment it hosts it in (ethos, kairos). A page is a room you enter partway through the work. So every sheet opens with a three-part threshold: where you came from, what this room is for, and what will have changed when you leave. The kind of sheet shows up as the kind of act and what it commits you to. This is your “frictionless teacher” principle in its purest form.', reads: 'it orients you and explains the consequences, so it teaches best.', risk: 'it’s prose, and you have to read it. Every strip has the same shape, so the kind comes through in the words, not at a glance.' }
+    ];
+    const narrow = this.boardW() < 900;
+    // Two overview layouts: 3-over-5 on a wide board; 2 × 4 (census spanning the first row) when Benny or a small window squeezes it.
+    const over = narrow
+      ? { census: '1 / 1 / 4 / 21', now: '4 / 1 / 7 / 11', read: '4 / 11 / 7 / 21', '1a': '7 / 1 / 10 / 11', '1b': '7 / 11 / 10 / 21', '1c': '10 / 1 / 13 / 11', '1d': '10 / 11 / 13 / 21', '1e': '13 / 1 / 15 / 21' }
+      : { census: '1 / 1 / 8 / 9', now: '1 / 9 / 8 / 15', read: '1 / 15 / 8 / 21', '1a': '8 / 1 / 15 / 5', '1b': '8 / 5 / 15 / 9', '1c': '8 / 9 / 15 / 13', '1d': '8 / 13 / 15 / 17', '1e': '8 / 17 / 15 / 21' };
+    const sel = this.state.sel;
+    let rail = 0;
+    const tiles = defs.map(d => {
+      const isOpen = sel === d.id, isRail = !!sel && !isOpen, isOver = !sel;
+      let area = over[d.id];
+      if (isOpen) area = '1 / 1 / 15 / 17'; else if (isRail) { area = (1 + 2 * rail) + ' / 17 / ' + (3 + 2 * rail) + ' / 21'; rail++; }
+      return Object.assign({}, d, {
+        area, vt: 'ti-' + d.id, vtClass: isOpen ? 'lift' : (isRail ? 'rail' : 'rest'), isOpen, isRail, isOver, notRail: !isRail, showBadge: isOpen || (!isRail && !narrow),
+        shadow: isRail ? 'none' : 'var(--dt-shadow)', cursor: isOpen ? 'default' : 'pointer',
+        hatch: isOpen ? 'var(--dt-hatch-tint)' : (isRail ? 'var(--dt-hatch-draft)' : 'var(--dt-hatch-card)'),
+        titleWrap: isOpen ? 'white-space:nowrap;text-overflow:ellipsis' : (narrow && !isRail ? 'white-space:nowrap;text-overflow:ellipsis;font-size:14px' : 'white-space:normal;text-wrap:balance'),
+        headAlign: isOpen ? 'center' : 'start',
+        summaryShown: (isOver && d.short && this.boardW() < 1500) ? d.short : d.summary, summaryShow: !(isOver && narrow && d.id !== 'census'),
+        aria: (isOpen ? 'Open: ' : 'Open ') + d.title,
+        pick: () => { if (!isOpen) this.go(d.id); },
+        key: (e) => { if (!isOpen && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); this.go(d.id); } },
+        openCensus: isOpen && d.id === 'census', openNow: isOpen && d.id === 'now', openRead: isOpen && d.id === 'read',
+        open1a: isOpen && d.id === '1a', open1b: isOpen && d.id === '1b', open1c: isOpen && d.id === '1c', open1d: isOpen && d.id === '1d', open1e: isOpen && d.id === '1e'
+      });
+    });
+    const layers = [
+      { id: '1c', when: 'BEFORE READING', what: 'The skeleton', how: 'One page shape per kind; recognizable blurred.' },
+      { id: '1b', when: 'FIRST SECOND', what: 'The verb, as the one shout', how: 'One line, verb bold, name as caption.' },
+      { id: '1e', when: 'FIRST TEN SECONDS', what: 'The threshold strip under it', how: 'Came from · here you · when you leave.' },
+      { id: '1a', when: 'AWAY FROM THE PAGE', what: 'The mark', how: 'On Hub cards, chips, links and the tab.' },
+      { id: '1d', when: 'AT THE FOOT', what: 'The title block', how: 'Sheet number and trade name, available, never leading.' }
+    ].map(l => Object.assign(l, { href: '#' + l.id, go: (e) => { e.preventDefault(); e.stopPropagation(); this.go(l.id); } }));
+    const open = defs.find(d => d.id === sel);
+    const kindOpen = kinds.find(k => k.id === K);
+    const wide = this.boardW() >= 1100;
+    const statusLine = kindOpen ? (wide ? 'CENSUS · ' + kindOpen.verb.toUpperCase() + ' · ESC FOR TEN' : kindOpen.verb.toUpperCase()) : open ? (wide ? open.badge + ' OPEN · ' + open.title.toUpperCase() + ' · ESC OR ✕ FOR ALL' : open.badge + ' OPEN') : (wide ? 'ALL EIGHT · TAP A CARD TO OPEN IT · ← HUB' : 'ALL EIGHT');
+    // The canvas breathes: grid lines loosen and a warm wash gathers behind the open card; a cooler one answers from the rail.
+    const depth = K ? 2 : (sel ? 1 : 0);
+    const breath = {
+      gridSize: ['24px 24px', '36px 36px', '48px 48px'][depth], gridOpacity: [1, 0.7, 0.45][depth],
+      washOpacity: [0, 0.75, 1][depth], washTransform: ['translate(-10%,10%) scale(0.8)', 'translate(-14%,-6%) scale(1)', 'translate(-18%,-10%) scale(1.25)'][depth],
+      wash2Opacity: [0, 0.5, 0.7][depth], wash2Transform: ['translate(20%,-10%) scale(0.8)', 'translate(28%,14%) scale(0.95)', 'translate(30%,18%) scale(1.1)'][depth]
+    };
+    const B = this.state.benny, bennyOpen = B === 'open';
+    const benny = {
+      bennyCol: bennyOpen ? 'min(340px,86vw)' : (B === 'peek' ? '8px' : '2px'),
+      bennyBodyOpacity: bennyOpen ? 1 : 0, bennyTabLeft: B === 'peek' ? '8px' : '2px',
+      bennyShadow: bennyOpen ? 'var(--dt-shadow)' : 'none',
+      bennyHandleDisplay: bennyOpen ? 'none' : 'block', bennyTabOpacity: B === 'peek' ? 1 : 0, bennyHandleAria: 'Open Benny, your chief of staff',
+      bennyIn: () => { if (B === 'rest') this.setState({ benny: 'peek' }); }, bennyOut: () => { if (B === 'peek') this.setState({ benny: 'rest' }); },
+      bennyToggle: () => this.swapState({ benny: 'open' }), bennyKey: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.swapState({ benny: 'open' }); } },
+      bennyClose: () => this.swapState({ benny: 'rest' }),
+      bennyMsgs: this.state.bennyMsgs.map(m => ({ text: m.text, align: m.from === 'you' ? 'end' : 'start', bg: m.from === 'you' ? 'var(--dt-plate)' : 'var(--dt-sheet)', fg: m.from === 'you' ? 'var(--dt-on-plate)' : 'var(--dt-ink)', border: m.from === 'you' ? 'var(--dt-plate)' : 'var(--dt-grid-mid)', hasRoutes: !!(m.routes && m.routes.length), routes: m.routes || [] })),
+      bennyChips: [['What’s waiting?', 'what is waiting queue'], ['Measure the tree', 'measure tree'], ['Buy the curves', 'buy curves shop']].map(c => ({ label: c[0].toUpperCase(), go: () => this.route(c[1]) })),
+      bennyDraft: this.state.bennyDraft, bennySetDraft: (e) => this.setState({ bennyDraft: e.target.value }),
+      bennySend: (e) => { e.preventDefault(); const q = this.state.bennyDraft.trim(); if (q) this.route(q); }
+    };
+    return Object.assign(benny, { tiles, census, censusCols, censusRows, samples, samples1b, layers, statusLine, gridSize: breath.gridSize, gridOpacity: breath.gridOpacity, washOpacity: breath.washOpacity, washTransform: breath.washTransform, wash2Opacity: breath.wash2Opacity, wash2Transform: breath.wash2Transform, close: (e) => { e.stopPropagation(); this.go(null); } });
+  }
+}
+</script>
+</body>
+</html>

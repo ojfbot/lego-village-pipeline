@@ -474,7 +474,19 @@ allocations:
   state: landed
   thread: cluster
   type: CORR
-next_free: 37
+- actor: ChatGPT (Codex)
+  allocated_by: James (@ojfbot), direct Codex instruction 2026-10-11
+  basis: Operator approved HANDOFF-LEGO-PIPE-037-R0, HOUSE-WORLD R0 as a separate experimental package, and package-local decision IDs.
+  date: '2026-10-11'
+  identity: HANDOFF-LEGO-PIPE-037
+  key: 037-R0
+  landed_version: null
+  number: 37
+  revision: R0
+  state: in_flight
+  thread: drafting-table
+  type: HANDOFF
+next_free: 38
 purpose: every memo number ever allocated, with its lifecycle (reserved | in_flight | landed | withdrawn); numbers are never recycled (rules 2, 3); next_free is derived, never hand-maintained; no landing_pr field exists (RR-32-R2-03)
 schema: register-allocations/v1
 seeded_from: the correspondence table's first column at the migration base (R0 §4 item 4) plus the operator's Q-01 reservations

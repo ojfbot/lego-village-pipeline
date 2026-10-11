@@ -1,0 +1,187 @@
+{
+  "design_package": "HOUSE-WORLD",
+  "revision": "R0",
+  "path_base": ".",
+  "sheets": [
+    {
+      "id": "HUB",
+      "title": "The drafting table",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#HUB"
+    },
+    {
+      "id": "A-01",
+      "title": "Layout canvas",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#A-01"
+    },
+    {
+      "id": "M-01",
+      "title": "Measure and check",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#M-01"
+    },
+    {
+      "id": "V-01",
+      "title": "Reading the instructions",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#V-01"
+    },
+    {
+      "id": "V-02",
+      "title": "Replaying the build",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#V-02"
+    },
+    {
+      "id": "B-01",
+      "title": "When the AI is not sure",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#B-01"
+    },
+    {
+      "id": "C-01",
+      "title": "The railbed parts list",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#C-01"
+    },
+    {
+      "id": "P-01",
+      "title": "Buying the gap",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#P-01"
+    },
+    {
+      "id": "I-01",
+      "title": "What we have",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#I-01"
+    },
+    {
+      "id": "I-02",
+      "title": "Documenting the boxes",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#I-02"
+    },
+    {
+      "id": "I-03",
+      "title": "One set",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#I-03"
+    },
+    {
+      "id": "T-01",
+      "title": "The queue",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#T-01"
+    },
+    {
+      "id": "R-01",
+      "title": "Bringing things in",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#R-01"
+    },
+    {
+      "id": "F-01",
+      "title": "Family workbench",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#F-01"
+    },
+    {
+      "id": "J-01",
+      "title": "The thirteen journeys",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#J-01"
+    },
+    {
+      "id": "H-01",
+      "title": "The handoff",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#H-01"
+    },
+    {
+      "id": "W-00",
+      "title": "Workbench frame",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#W-00"
+    },
+    {
+      "id": "F5",
+      "title": "Your model, your story",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#F5"
+    },
+    {
+      "id": "F6",
+      "title": "Compare ideas",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#F6"
+    },
+    {
+      "id": "F7",
+      "title": "What if",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#F7"
+    },
+    {
+      "id": "F8",
+      "title": "How agents work",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#F8"
+    },
+    {
+      "id": "BOX",
+      "title": "A box of work",
+      "spec": "specs/navigation.md",
+      "standalone": "prototype/index.html",
+      "source": "prototype/sheets.js",
+      "entry_fragment": "#BOX"
+    }
+  ],
+  "brief": [
+    "README.md"
+  ],
+  "overview": "overview.html"
+}

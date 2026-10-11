@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 40 40%27%3E%3Crect x=%274%27 y=%2712%27 width=%2732%27 height=%2724%27 fill=%27%23b84f2b%27/%3E%3Cpath d=%27M10 6h8v8h-8Zm12 0h8v8h-8Z%27 fill=%27%23b84f2b%27/%3E%3C/svg%3E" />
+    <meta name="theme-color" content="#172B40" />
+    <title>Play Well — a village in the making</title>
+    <link rel="stylesheet" href="/tokens.css" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/landing.css" />
+  </head>
+  <body class="dt-blueprint studio-landing">
+    <div class="app-shell">
+      <header class="app-header">
+        <a class="studio-mark" href="#" aria-label="Play Well, return to the start"><svg viewBox="0 0 36 36" aria-hidden="true"><rect x="2" y="10" width="32" height="23" rx="7" fill="currentColor"/><rect x="7" y="3" width="8" height="12" rx="4" fill="currentColor"/><rect x="21" y="3" width="8" height="12" rx="4" fill="currentColor"/></svg><span>The village<br>at the drafting table</span></a>
+        <div class="landing-nav">
+          <form id="room-finder" class="room-finder" role="search" aria-label="Find a room">
+            <label class="sr-only" for="module-search">Find a room</label>
+            <svg class="room-search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m15 15 5 5" stroke="currentColor" stroke-width="1.6"/></svg>
+            <input id="module-search" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="module-list" aria-describedby="room-help" autocomplete="off" spellcheck="false" placeholder="Find a room…" />
+            <div id="room-drawer" class="room-popup" hidden>
+              <div class="room-popup-heading"><span id="result-count" role="status" aria-live="polite" aria-atomic="true"></span><span aria-hidden="true">Rooms &amp; studies</span></div>
+              <ul id="module-list" role="listbox" aria-label="Matching rooms"></ul>
+              <p id="room-empty" hidden>No rooms match. Try “measure”, “box”, or a page code.</p>
+              <p id="room-help">↑↓ choose · Enter opens · Esc closes</p>
+            </div>
+          </form>
+          <button id="settings-toggle" type="button" aria-expanded="false" aria-controls="scene-settings" aria-label="View options"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="6" r="2.5" fill="currentColor"/><circle cx="16" cy="12" r="2.5" fill="currentColor"/><circle cx="10" cy="18" r="2.5" fill="currentColor"/></svg></button>
+        </div>
+        <div id="scene-settings" class="scene-settings" hidden>
+          <h2>View options</h2><p>Scroll controls the flight. Drag to look around.</p>
+          <div class="header-actions"><button id="motion-toggle" type="button" aria-pressed="false">Still view</button><button id="quality-toggle" type="button" aria-pressed="false">Lite house</button><button id="theme-toggle" type="button" aria-pressed="true">Paper</button></div>
+          <label for="view-mode">Starting composition</label><select id="view-mode"><option value="exploded">Exploded house</option><option value="house">Assembled house</option><option value="landscape">Builder landscape</option></select><button id="reset-view" type="button">Reset view</button>
+          <div class="flight-scrubber"><label for="flight-progress" id="flight-label">Flight position</label><input id="flight-progress" type="range" min="0" max="1000" step="1" value="0" aria-label="Flight through the house"/><span id="flight-percent" aria-hidden="true">0%</span></div><button id="restart-flight" type="button">Return to the start</button>
+          <p class="settings-note">Local prototype. All work is mock. Figures and Benny are sample activity.</p>
+        </div>
+      </header>
+
+      <div class="work-area">
+        <main class="world-main">
+          <div class="scene-scroll">
+            <div class="scene-sticky">
+              <figure class="world-figure">
+                <div id="house-stage" role="group" aria-label="Interactive LEGO House. Scroll to follow the flight, or use the Find a room text input for keyboard navigation.">
+                  <img id="stage-fallback" alt="LEGO House model with separate coloured roof blocks" />
+                  <div id="hover-label" aria-hidden="true"></div><div id="model-status" role="status">Preparing the house…</div>
+                </div>
+                <div id="landscape" hidden></div>
+                <figcaption class="sr-only">Supplied LEGO House model. Roof colours are architectural, not evidence or authority.</figcaption>
+              </figure>
+              <div class="landing-poster">
+                <h1 aria-label="Play Well"><span>PLAY</span><span>WELL</span></h1>
+              </div>
+              <div class="flight-caption" aria-hidden="true"><p id="chapter-title">Pieces at dawn</p><p id="world-instruction">Loose bricks greet the dawn</p></div>
+
+            </div>
+          </div>
+        </main>
+      </div>
+
+      <section id="dashboard" class="dashboard" role="dialog" aria-modal="true" aria-labelledby="dashboard-title" hidden>
+        <div class="dashboard-sheet">
+          <div class="dashboard-top">
+            <button id="dashboard-back" type="button">← Back to the house</button>
+            <div class="sheet-tools"><span id="dashboard-state">Design page</span><button id="benny-toggle" type="button" aria-expanded="false" aria-controls="benny-panel">Ask Benny · AI</button></div>
+          </div>
+          <div class="dashboard-title-row">
+            <div>
+              <p id="dashboard-code" class="dashboard-code"></p>
+              <h2 id="dashboard-title" tabindex="-1"></h2>
+            </div>
+            <p id="dashboard-verb" class="dashboard-verb"></p>
+          </div>
+          <p id="dashboard-description" class="dashboard-description"></p>
+          <div id="dashboard-content" class="dashboard-content"></div>
+          <div class="dashboard-footer">
+            <p>This 2D view is an interaction sketch. Sample work stays in this tab until reload. No real records, agents, purchases, or publications are changed.</p>
+            <a id="research-link" href="#" target="_blank" rel="noopener noreferrer" hidden>Read the open research question ↗</a>
+          </div>
+        </div>
+        <aside id="benny-panel" class="benny-panel" aria-label="Benny scripted AI assistant" hidden><span class="origin-label">AI · scripted demo</span><h3>Benny at the table</h3><p>I can suggest a question or a page. I cannot change the sheet or decide what your model means.</p><form id="benny-form"><label for="benny-input">Ask about the work</label><textarea id="benny-input" rows="3" placeholder="Where do I start the numbered bag?"></textarea><button type="submit">Suggest a next step</button></form><div id="benny-response" aria-live="polite"></div></aside>
+      </section>
+    </div>
+    <div id="announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

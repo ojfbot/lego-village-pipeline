@@ -1,0 +1,79 @@
+[
+  {
+    "path": "references/claude-r4/notes/N-01-wireframe-not-implementation.md",
+    "source_path": "docs/design/review/DT-DESIGN-R4-overlay/notes/N-01-wireframe-not-implementation.md",
+    "source_commit": "b9867797e9c9b3ae869b0bd8d70698c0d9a12cab",
+    "sha256": "db976aeb5e07b266e635e3020ff04c94fa54c59d48a5bd1d7e1dbfb24595ed25",
+    "use": "read-only source reference; not the complete R4 union"
+  },
+  {
+    "path": "references/claude-r4/notes/N-02-open-tonality-gradients-icons-copy.md",
+    "source_path": "docs/design/review/DT-DESIGN-R4-overlay/notes/N-02-open-tonality-gradients-icons-copy.md",
+    "source_commit": "b9867797e9c9b3ae869b0bd8d70698c0d9a12cab",
+    "sha256": "85428a1635418e5c193fd8d35147d77220001a90b0b51c602778143687092374",
+    "use": "read-only source reference; not the complete R4 union"
+  },
+  {
+    "path": "references/claude-r4/specs/X-01-typology-identity.md",
+    "source_path": "docs/design/review/DT-DESIGN-R4-overlay/specs/X-01-typology-identity.md",
+    "source_commit": "b9867797e9c9b3ae869b0bd8d70698c0d9a12cab",
+    "sha256": "5b456fcc4154f1745cb0f1c92795deb310758bda1a74a22c2a01f2be906c0486",
+    "use": "read-only source reference; not the complete R4 union"
+  },
+  {
+    "path": "references/claude-r4/specs/W-00-workbench-frame.md",
+    "source_path": "docs/design/review/DT-DESIGN-R4-overlay/specs/W-00-workbench-frame.md",
+    "source_commit": "b9867797e9c9b3ae869b0bd8d70698c0d9a12cab",
+    "sha256": "84a37232d3491e2969754833335baae17045069f8b6f0726a193c85c8be7973b",
+    "use": "read-only source reference; not the complete R4 union"
+  },
+  {
+    "path": "references/claude-r4/sources/Typology Identity v2.dc.html",
+    "source_path": "docs/design/review/DT-DESIGN-R4-overlay/sources/Typology Identity v2.dc.html",
+    "source_commit": "b9867797e9c9b3ae869b0bd8d70698c0d9a12cab",
+    "sha256": "b8bb50afdf6b4dd41881e1e1834b591655a6127f6c0afb7659ade6745b561287",
+    "use": "read-only source reference; not the complete R4 union"
+  },
+  {
+    "path": "references/claude-r4/sources/Workbench Frame.dc.html",
+    "source_path": "docs/design/review/DT-DESIGN-R4-overlay/sources/Workbench Frame.dc.html",
+    "source_commit": "b9867797e9c9b3ae869b0bd8d70698c0d9a12cab",
+    "sha256": "60d4a22239c0452961024ef2cdba8afaaaa78f3d56f591c5eeed55fe0cf9ee33",
+    "use": "read-only source reference; not the complete R4 union"
+  },
+  {
+    "path": "references/claude-r4/data/pages-index.json",
+    "source_path": "docs/design/review/DT-DESIGN-R4-overlay/data/pages-index.json",
+    "source_commit": "b9867797e9c9b3ae869b0bd8d70698c0d9a12cab",
+    "sha256": "8862ad40c7921ac9b8f6688db16bba3f87b8b17aed2a388a7e43581ebd12d343",
+    "use": "read-only source reference; not the complete R4 union"
+  },
+  {
+    "path": "references/h-01/responsive.md",
+    "source_path": "docs/design/H-01-R1/responsive.md",
+    "source_commit": "8aae0d658b0d8ba458f3adcc7ae79d041aaf2298",
+    "sha256": "8c08c88eb7c9cb878ede0d71b26090afcde2526ade5d93cee088b5b58df88efd",
+    "use": "frozen spec reference; source unchanged"
+  },
+  {
+    "path": "references/h-01/specs/A-01-layout-canvas.md",
+    "source_path": "docs/design/H-01-R1/specs/A-01-layout-canvas.md",
+    "source_commit": "8aae0d658b0d8ba458f3adcc7ae79d041aaf2298",
+    "sha256": "7c6608a60f5e916d86bd68a622406020587994dbf4d69e73ef138d2600199af4",
+    "use": "frozen spec reference; source unchanged"
+  },
+  {
+    "path": "references/h-01/specs/B-01-when-the-ai-isnt-sure.md",
+    "source_path": "docs/design/H-01-R1/specs/B-01-when-the-ai-isnt-sure.md",
+    "source_commit": "8aae0d658b0d8ba458f3adcc7ae79d041aaf2298",
+    "sha256": "4af47303cd16318af81c0cfb55917a484e53b8c2bd02121928536e5cb3dc5658",
+    "use": "frozen spec reference; source unchanged"
+  },
+  {
+    "path": "references/h-01/specs/Hub-J-01-D-01.md",
+    "source_path": "docs/design/H-01-R1/specs/Hub-J-01-D-01.md",
+    "source_commit": "8aae0d658b0d8ba458f3adcc7ae79d041aaf2298",
+    "sha256": "f8e306987108c3bbdf68544dc33f1f60aaec84299fbe716d6dcf24685fe5c91f",
+    "use": "frozen spec reference; source unchanged"
+  }
+]

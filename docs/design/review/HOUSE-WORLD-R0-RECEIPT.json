@@ -1,0 +1,17 @@
+{
+  "design_package": "HOUSE-WORLD",
+  "revision": "R0",
+  "cut_state": "as-exported",
+  "path": "docs/design/review/HOUSE-WORLD-R0",
+  "tree_sha256": "6a983a886553b9c88b649ad804a7972bf783f7f5ede77e776d103ea225dba27f",
+  "bytes": 52958551,
+  "file_count": 78,
+  "source_main": "8aae0d658b0d8ba458f3adcc7ae79d041aaf2298",
+  "governing_brief": "HANDOFF-LEGO-PIPE-037-R0",
+  "disposition": "review only; not an operative design-cut import",
+  "method": "Normative design_pkg.tree_sha256 over staged regular source files; generated/ignored dependencies and builds are not received bytes.",
+  "verified_source_assets": [
+    "assets/blender/legoHouse.blend",
+    "assets/blender/legoHouse.blend1"
+  ]
+}
