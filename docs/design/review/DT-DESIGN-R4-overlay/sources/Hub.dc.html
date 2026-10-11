@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#F6F2E9"/><rect x="30" y="30" width="140" height="140" rx="8" fill="#22303C"/><text x="100" y="118" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="40" fill="#FDFBF5">HUB</text></svg></template>
+<x-dc>
+<helmet>
+<title>The Drafting Table — sheet index & decision log — LEGO Village</title>
+<script>document.documentElement.lang="en"</script>
+<script src="dt/landing.js"></script>
+<script src="dt/overlay.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="dt/tokens.css">
+<script src="dt/ledger.js"></script>
+<style>@media (max-width:640px){.dt-now-row{grid-template-columns:auto minmax(0,1fr) !important}.dt-now-row>.dt-now-actions{grid-column:1 / -1;justify-content:flex-end}}</style>
+</helmet>
+<div style="max-width:1080px;margin:0 auto;padding:40px 32px 56px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;border-bottom:2px solid var(--dt-ink);padding-bottom:16px">
+    <div>
+      <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted)">LEGO VILLAGE PIPELINE · DESIGN SESSION</div>
+      <div style="font-family:'Spectral',serif;font-size:34px;font-weight:700;font-style:italic;line-height:1.1;margin-top:6px">The Drafting Table</div>
+      <div style="font-size:14px;color:var(--dt-muted);margin-top:6px;max-width:560px;text-wrap:pretty">Planner UX &amp; design library — every artifact of LEGO-PIPE-007-R2, indexed like a plan set. Sheets appear here as they are drawn.</div>
+    </div>
+    <div style="border:1.5px solid var(--dt-ink);padding:10px 14px;font-family:'Azeret Mono',monospace;font-size:10.5px;display:grid;gap:3px;background:var(--dt-sheet)">
+      <span>HANDOFF LEGO-PIPE-007-R2 → H-01</span>
+      <span>FROM claude-chat → claude-design</span>
+      <span>DATE 2026-09-16</span>
+      <span style="color:var(--dt-accent-deep)">MOCK DATA THROUGHOUT · ILLUSTRATIVE</span>
+      <button onClick="{{ resetDemo }}" title="Clears every demo gate and set record in this browser. The handoff files and decision ledger are untouched." style="margin-top:6px;justify-self:start;font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.06em;background:transparent;color:var(--dt-muted);border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:4px 9px;cursor:pointer;white-space:nowrap" style-hover="color:var(--dt-ink);border-color:var(--dt-ink)">↺ reset demo to blank</button>
+    </div>
+  </div>
+  <section id="now" aria-labelledby="h-now" style="margin-top:26px">
+    <div style="display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;margin-bottom:10px">
+      <h2 id="h-now" style="font-family:'Spectral',serif;font-size:17px;font-weight:600;font-style:italic;margin:0;white-space:nowrap">{{ nowHeading }}</h2>
+      <span style="font-size:11.5px;color:var(--dt-muted);text-wrap:pretty;flex:1 1 180px;min-width:0;align-self:center">{{ nowLede }}</span>
+      <div style="display:flex;gap:7px;align-items:center;flex:none;margin-left:auto">
+        <button onClick="{{ prevBatch }}" disabled="{{ atFirst }}" aria-label="The three before these" title="Back to the previous three" style="font-family:'Azeret Mono',monospace;font-size:11px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-grid-mid);cursor:{{ prevCursor }};opacity:{{ prevOpacity }}">◀</button>
+        <span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.08em;color:var(--dt-muted);white-space:nowrap">{{ batchLabel }}</span>
+        <button onClick="{{ nextBatch }}" disabled="{{ atLast }}" aria-label="Look ahead at the next three" title="Look ahead — the next three, no commitment" style="font-family:'Azeret Mono',monospace;font-size:11px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-grid-mid);cursor:{{ nextCursor }};opacity:{{ nextOpacity }}">▶</button>
+        <a href="prototypes/Prototype T - The Queue.dc.html" aria-label="{{ queueAria }}" title="{{ queueAria }}" style="font-family:'Azeret Mono',monospace;font-size:12px;text-decoration:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--dt-ink);border:1.5px solid var(--dt-grid-mid)">☰</a>
+        <a href="prototypes/Prototype T - The Queue.dc.html#add" aria-label="Add something to the queue" title="Add something — one line is enough" style="font-family:'Azeret Mono',monospace;font-size:14px;text-decoration:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--dt-accent-deep);border:1.5px solid var(--dt-accent)">＋</a>
+      </div>
+    </div>
+    <div style="display:grid;gap:8px">
+      <sc-for list="{{ priorities }}" as="p" hint-placeholder-count="3">
+        <div class="dt-now-row" style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;min-height:56px;background:{{ p.bg }};border:1.5px {{ p.border }} {{ p.stroke }};border-radius:32px;padding:9px 12px 9px 10px;box-shadow:{{ p.shadow }};opacity:{{ p.opacity }};transition:opacity .25s, box-shadow .25s, transform .25s">
+          <div aria-hidden="true" style="width:42px;height:42px;border-radius:50%;background:{{ p.dotBg }};color:{{ p.dotFg }};display:grid;place-items:center;font-family:'Azeret Mono',monospace;font-size:14px;font-weight:600;flex:none;box-shadow:inset 0 0 0 2px var(--dt-sheet)">{{ p.glyph }}</div>
+          <div style="display:flex;flex-direction:column;gap:3px;min-width:0;padding:2px 0">
+            <div style="font-family:'Spectral',serif;font-size:15.5px;font-weight:600;line-height:1.3;text-decoration:{{ p.strike }}">{{ p.title }} <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:{{ p.tagColor }};font-weight:600;margin-left:6px;white-space:nowrap;text-decoration:none;display:inline-block">{{ p.tag }}</span></div>
+            <div style="font-size:12px;color:var(--dt-muted);line-height:1.45;display:flex;flex-wrap:wrap;align-items:baseline;column-gap:0.28em"><sc-if value="{{ p.hasRef }}" hint-placeholder-val="{{ false }}"><dc-import name="SetRef" num="{{ p.refNum }}" kind="set" label="{{ p.refLabel }}" hint-size="auto,1em"></dc-import></sc-if><sc-for list="{{ p.whyWords }}" as="w" hint-placeholder-count="12"><span>{{ w }}</span></sc-for></div>
+          </div>
+          <div class="dt-now-actions" style="display:flex;gap:6px;align-items:center;flex:none">
+            <sc-if value="{{ p.isOpen }}" hint-placeholder-val="{{ true }}">
+              <div onMouseEnter="{{ p.popOn }}" onMouseLeave="{{ p.popOff }}" style="position:relative;display:flex">
+                <a href="{{ p.href }}" onFocus="{{ p.popOn }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;text-decoration:none;background:var(--dt-ink);color:var(--dt-on-ink);padding:8px 14px;border-radius:999px;box-shadow:var(--dt-btn-shadow);white-space:nowrap">{{ p.action }}</a>
+                <sc-if value="{{ p.popOpen }}" hint-placeholder-val="{{ false }}">
+                  <div data-pop="{{ p.id }}" onMouseDown="{{ pinPop }}" onFocusCapture="{{ pinPop }}" style="position:absolute;top:100%;right:0;padding-top:8px;z-index:30;width:392px;max-width:88vw;text-align:left;cursor:default">
+                    <sc-if value="{{ p.isTrain }}" hint-placeholder-val="{{ false }}">
+                      <div style="background:var(--dt-sheet);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);box-shadow:var(--dt-shadow);padding:14px 16px;display:grid;gap:10px">
+                        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)"><span>10361 — HOLIDAY EXPRESS TRAIN</span><span style="color:var(--dt-pass)">◆ IN PRODUCTION</span></div>
+                        <div style="font-size:12.5px;color:var(--dt-ink);line-height:1.5;text-wrap:pretty">LEGO still makes this one, so the button goes straight to lego.com — new in box, at list price. Resale shops only make sense once a set is retired.</div>
+                        <div style="display:grid;gap:7px;border-top:1px dashed var(--dt-grid-mid);padding-top:9px">
+                          <div style="display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--dt-muted)"><span>lego.com · official</span><span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:var(--dt-ink)">$129.99 · LIMIT 3</span></div>
+                          <div style="display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--dt-muted)"><span>In the box</span><span style="font-family:'Azeret Mono',monospace;font-size:11px;color:var(--dt-ink)">16-PC CIRCLE + ENGINE</span></div>
+                          <div style="display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--dt-muted)"><span>BrickLink resale</span><span style="font-family:'Azeret Mono',monospace;font-size:11px;color:var(--dt-unres)">◇ ~$165 · NOT NEEDED YET</span></div>
+                        </div>
+                        <div style="font-size:11.5px;color:var(--dt-accent-deep);line-height:1.45;text-wrap:pretty;border-top:1px dashed var(--dt-grid-mid);padding-top:9px">Bought in store 10-10 — R-01 brings it in off the receipt, with the gingerbread house and baseplates from the same trip. Then the confirmation — the track fit, the ballast count and the boys' siding all stop waiting.</div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap">
+                          <a href="prototypes/Prototype R - Bringing Things In.dc.html?flow=planned" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;text-decoration:none;color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:999px;padding:7px 13px">Bring in today's receipt →</a>
+                        </div>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ p.isFit }}" hint-placeholder-val="{{ false }}">
+                      <div style="background:var(--dt-sheet);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);box-shadow:var(--dt-shadow);padding:14px 16px;display:grid;gap:10px">
+                        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)"><span>RAIL VS. MILS — WHERE TO LOOK</span><span style="color:var(--dt-unres)">◇ NEEDS REAL DIMENSIONS</span></div>
+                        <div style="font-size:12.5px;color:var(--dt-ink);line-height:1.5;text-wrap:pretty">Three places can answer this. Start flat and in studs; only open a 3D editor if the corner still looks wrong.</div>
+                        <div style="display:grid;gap:7px;border-top:1px dashed var(--dt-grid-mid);padding-top:9px">
+                          <a href="prototypes/Prototype A - Layout Canvas.dc.html#fit" style="display:grid;gap:2px;text-decoration:none;border:1.5px solid var(--dt-accent);border-radius:var(--dt-r-fillet);padding:8px 10px;background:var(--dt-bg)">
+                            <span style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;color:var(--dt-ink)">A-01 Layout Canvas — here on the table →</span>
+                            <span style="font-size:11.5px;color:var(--dt-muted);line-height:1.4">Top-down, in studs. Shows the corner conflict and re-runs the moment the tree base is measured.</span>
+                          </a>
+                          <a href="prototypes/Prototype A - Layout Canvas.dc.html#export-studio" style="display:grid;gap:2px;text-decoration:none;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:8px 10px">
+                            <span style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;color:var(--dt-ink)">Open it in LEGO Studio →</span>
+                            <span style="font-size:11.5px;color:var(--dt-muted);line-height:1.4">Exports the railbed, tree base and track loop as a .io file. Brick-accurate, catches clutch and clearance.</span>
+                          </a>
+                          <a href="prototypes/Prototype A - Layout Canvas.dc.html#export-blender" style="display:grid;gap:2px;text-decoration:none;border:1.5px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:8px 10px">
+                            <span style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;color:var(--dt-ink)">Send to Blender →</span>
+                            <span style="font-size:11.5px;color:var(--dt-muted);line-height:1.4">Only for the sloped approach and collision checks. Heavier, and nothing here needs it yet.</span>
+                          </a>
+                        </div>
+                        <div style="font-size:11.5px;color:var(--dt-accent-deep);line-height:1.45;text-wrap:pretty;border-top:1px dashed var(--dt-grid-mid);padding-top:9px">Whichever you pick, the answer comes back to A-01 — and the release gate on C-01 loses its biggest finding.</div>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ p.isTree }}" hint-placeholder-val="{{ true }}">
+                    <div style="background:var(--dt-sheet);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);box-shadow:var(--dt-shadow);padding:14px 16px;display:grid;gap:10px">
+                      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)"><span>TREE 41843 — BASE: ROOM IT NEEDS, HOW TALL</span><span style="color:var(--dt-prov-deep)">◇ 16 × 16 × 8 · REMEMBERED</span></div>
+                      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+                        <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted);min-width:0">ACROSS · STUDS
+                          <input type="number" step="1" value="{{ popW }}" onChange="{{ setPopW }}" aria-label="Tree base width in studs" style="font-family:'Azeret Mono',monospace;font-size:15px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:7px 9px;width:100%;box-sizing:border-box">
+                        </label>
+                        <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted);min-width:0">FRONT TO BACK · STUDS
+                          <input type="number" step="1" value="{{ popD }}" onChange="{{ setPopD }}" aria-label="Tree base depth in studs" style="font-family:'Azeret Mono',monospace;font-size:15px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:7px 9px;width:100%;box-sizing:border-box">
+                        </label>
+                      </div>
+                      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+                        <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted);min-width:0">WHOLE BRICKS
+                          <input type="number" step="1" min="0" value="{{ popH }}" onChange="{{ setPopH }}" aria-label="Tree base height, whole bricks" style="font-family:'Azeret Mono',monospace;font-size:15px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:7px 9px;width:100%;box-sizing:border-box">
+                        </label>
+                        <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted);min-width:0">PLATES ON TOP · 0–2
+                          <input type="number" step="1" min="0" max="2" value="{{ popP }}" onChange="{{ setPopP }}" aria-label="Tree base height, extra plates" style="font-family:'Azeret Mono',monospace;font-size:15px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:7px 9px;width:100%;box-sizing:border-box">
+                        </label>
+                      </div>
+                      <div style="font-size:11px;color:var(--dt-muted);line-height:1.45;text-wrap:pretty">Studs out to whatever sticks out furthest — decoration, knobs — not just the solid block. Height in whole bricks, then any plates left over (3 plates = 1 brick).</div>
+                      <div style="display:grid;gap:10px">
+                        <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted);min-width:0">MEASURED WITH
+                          <select value="{{ popTool }}" onChange="{{ setPopTool }}" style="font-family:'Libre Franklin';font-size:12.5px;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:8px 9px;width:100%;box-sizing:border-box">
+                            <option value="studs">Counted studs / bricks</option>
+                            <option value="tape">Tape measure</option>
+                            <option value="calipers">Calipers</option>
+                            <option value="photo">Photo with overlay</option>
+                          </select>
+                        </label>
+                      </div>
+                      <div style="display:grid;gap:6px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted);min-width:0">PHOTOS OF IT (OPTIONAL)
+                        <sc-for list="{{ popPhotos }}" as="ph" hint-placeholder-count="0">
+                          <div style="display:flex;align-items:center;gap:8px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-bg);padding:5px 7px;min-width:0">
+                            <div role="img" aria-label="Thumbnail of the attached photo" style="width:26px;height:26px;border-radius:3px;border:1px solid var(--dt-grid-mid);flex:none;background-color:var(--dt-grid-mid);background-size:cover;background-position:center;background-image:url({{ ph.url }})"></div>
+                            <span style="font-family:'Libre Franklin';font-size:11.5px;letter-spacing:0;color:var(--dt-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 auto;min-width:0">{{ ph.name }}</span>
+                            <button onClick="{{ ph.drop }}" aria-label="{{ ph.dropAria }}" style="font-family:'Azeret Mono',monospace;font-size:11px;background:transparent;border:0;color:var(--dt-muted);cursor:pointer;padding:0 2px;flex:none">✕</button>
+                          </div>
+                        </sc-for>
+                        <label style="position:relative;display:flex;align-items:center;justify-content:center;font-family:'Libre Franklin';font-size:12px;font-weight:600;letter-spacing:0;color:var(--dt-ink);border:1.5px dashed var(--dt-ink);border-radius:var(--dt-r-fillet);padding:8px 10px;cursor:pointer">{{ popPickLabel }}
+                          <input type="file" accept="image/*" multiple="{{ true }}" onChange="{{ pickPopPhoto }}" onClick="{{ pinPop }}" aria-label="Choose photos of the tree base" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer">
+                        </label>
+                      </div>
+                      <div style="font-size:11.5px;color:var(--dt-accent-deep);line-height:1.45;text-wrap:pretty;border-top:1px dashed var(--dt-grid-mid);padding-top:9px">{{ popPreview }}</div>
+                      <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap">
+                        <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">SIGN IT
+                          <input type="text" value="{{ popSig }}" onChange="{{ setPopSig }}" placeholder="jfo" maxlength="5" aria-label="Your initials — signs this measurement" style="font-family:'Azeret Mono',monospace;font-size:13px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:7px 9px;width:76px;box-sizing:border-box">
+                        </label>
+                        <a href="prototypes/Prototype I3 - One Set.dc.html?set=41843&amp;why=measure-base&amp;from=Hub%20%231&amp;task=hub-1" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;text-decoration:none;color:var(--dt-ink);border:1.5px dashed var(--dt-ink);border-radius:999px;padding:8px 14px;white-space:nowrap">Do it on the set page →</a>
+                        <button onClick="{{ popCommit }}" disabled="{{ popUnsigned }}" title="{{ popCommitTitle }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;border-radius:999px;padding:9px 16px;cursor:{{ popCursor }};opacity:{{ popOpacity }};box-shadow:var(--dt-btn-shadow)">Record it</button>
+                      </div>
+                    </div>
+                    </sc-if>
+                  </div>
+                </sc-if>
+              </div>
+              <span role="img" aria-label="{{ p.gateTitle }}" title="{{ p.gateTitle }}" style="font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;width:34px;height:34px;border-radius:50%;background:transparent;color:var(--dt-pass);border:1.5px solid var(--dt-pass);display:grid;place-items:center;flex:none;cursor:default">■</span>
+              <button onClick="{{ p.later }}" aria-label="{{ p.laterAria }}" title="Not today — step aside, keep it" style="font-family:'Azeret Mono',monospace;font-size:12px;width:34px;height:34px;border-radius:50%;background:transparent;color:var(--dt-muted);border:1.5px dashed var(--dt-unres);cursor:pointer">○</button>
+            </sc-if>
+            <sc-if value="{{ p.isDone }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);padding:3px 10px;border-radius:999px;transform:rotate(-2deg);white-space:nowrap">■ DONE · {{ p.when }}</span><button onClick="{{ p.undo }}" aria-label="Undo — not done after all" style="font-family:'Azeret Mono',monospace;font-size:10px;background:transparent;color:var(--dt-muted);border:0;cursor:pointer;padding:0 6px">↺</button></sc-if>
+            <sc-if value="{{ p.isLater }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);white-space:nowrap">○ STEPPED ASIDE · BACK {{ p.when }}</span><button onClick="{{ p.undo }}" aria-label="Bring it back now" style="font-family:'Azeret Mono',monospace;font-size:10px;background:transparent;color:var(--dt-accent-deep);border:0;cursor:pointer;padding:0 6px;text-decoration:underline dotted">now</button></sc-if>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div aria-live="polite" style="font-size:11px;color:var(--dt-muted);margin-top:8px;min-height:15px;text-wrap:pretty">{{ nowNote }}</div>
+  </section>
+  <div style="display:flex;align-items:baseline;gap:12px;margin:28px 0 12px;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted)">SHEET INDEX</span><span style="font-size:11.5px;color:var(--dt-muted);text-wrap:pretty">Each sheet is one instance of a slice or type. They are forkable prototypes with known bugs and "good enough for now" calls — take the pattern and the decisions, not the code.</span></div>
+  <sc-if value="{{ tracing }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;gap:12px;align-items:center;border:1.5px solid var(--dt-accent);border-radius:var(--dt-r-fillet);background:var(--dt-sheet);padding:9px 14px;margin-bottom:12px;font-size:12.5px;flex-wrap:wrap">
+      <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-accent-deep)">⌕ TRACING</span>
+      <span>{{ traceLabel }} — highlighted sheets were touched by this decision; the rest are dimmed.</span>
+      <button onClick="{{ clearTrace }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:transparent;color:var(--dt-ink);border:1px solid var(--dt-ink);border-radius:var(--dt-r-btn);padding:3px 9px;cursor:pointer;margin-left:auto">✕ CLEAR</button>
+    </div>
+  </sc-if>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">
+    <a href="prototypes/Prototype A - Layout Canvas.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start;opacity:{{ oA01 }};outline:{{ tA01 }}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">A-01 · PROTOTYPE</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);padding:2px 7px;transform:rotate(-2deg)">DRAWN</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">Layout Canvas</div>
+      <div style="font-size:12.5px;color:var(--dt-muted)">Slice A — place, rotate, mate two R40 quadrants by drag AND exact numeric entry; live endpoint validation, layers, versioned save, train run, 3D massing.</div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Slice A instance — <strong>component → validated layout</strong> (J3 J4), on two R40 quadrants.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">Any spatial editor where exact geometry and direct manipulation must agree: layer rig, peel, proposals-on-plan, synced 3D view. Pattern for every future canvas (theme diff on a plan, year compare, story places).</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">FIDELITY</span><span style="color:var(--dt-muted)">Rough. Mock math; viewer + canvas still fused (split pending). Fork and rebuild — do not copy.</span></div>
+      </div>
+    </a>
+    <a href="candidates/Drafting Table.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start;opacity:{{ oD00 }};outline:{{ tD00 }}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">D-00 · DIRECTION</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);padding:2px 7px;transform:rotate(-2deg)">CHOSEN</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">Drafting Table specimen</div>
+      <div style="font-size:12.5px;color:var(--dt-muted)">The winning direction — paper by day, blueprint by night. Evidence grammar, readouts, twin parity.</div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Direction decision — the winning specimen of three candidates.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">The reference the library was extracted from; kept as history. Nothing here is canonical — D-01 is.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">FIDELITY</span><span style="color:var(--dt-muted)">Specimen. Read for tone; build from D-01.</span></div>
+      </div>
+    </a>
+    <a href="library/Design Library.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start;opacity:{{ oD01 }};outline:{{ tD01 }}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">D-01 · FOUNDATIONS</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);padding:2px 7px;transform:rotate(-2deg)">DRAWN</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">Design library &amp; token grammar</div>
+      <div style="font-size:12.5px;color:var(--dt-muted)">Living source of truth — one shared token file drives every page; canonical markup for all elements, states, and the three motion moves.</div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Design library — <strong>the canonical source</strong> for tokens, primitives, domain components, states, motion.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">Every sheet is an instance of what this defines. Extend here first, then fork sheets.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">FIDELITY</span><span style="color:var(--dt-muted)">Living. Card behaviour and iconography still open sessions.</span></div>
+      </div>
+    </a>
+    <a href="prototypes/Prototype B - When the AI Isnt Sure.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start;opacity:{{ oB01 }};outline:{{ tB01 }}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">B-01 · PROTOTYPE</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);padding:2px 7px;border-radius:var(--dt-r-fillet);transform:rotate(-2deg)">DRAWN</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">When the AI isn't sure</div>
+      <div style="font-size:12.5px;color:var(--dt-muted)">Slice B — the AI reads a builder's page, hits an ambiguous phrase ("for 4 tracks"), shows its work, and asks you — tap, type, or talk. Your answer becomes the record; it never asks twice.</div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Slice B instance — <strong>evidence → operator decision</strong> (J1 J2), on one ambiguous phrase in bl-741807.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">Any moment the AI must ask a human: clarification as conversation (tap / type / talk), paper trail, files & links, listing visibility. Reuse for J12 handoff review and any provisional value.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">FIDELITY</span><span style="color:var(--dt-muted)">Rough. Keyword interpretation is a mock; real call goes through Claude. Fork and rebuild.</span></div>
+      </div>
+    </a>
+    <a href="prototypes/Prototype C - Measurement to Procurement.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start;opacity:{{ oC01 }};outline:{{ tC01 }}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">C-01 · PROTOTYPE</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);padding:2px 7px;border-radius:var(--dt-r-fillet);transform:rotate(-2deg)">DRAWN</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">Railbed: what the train brings, what to buy</div>
+      <div style="font-size:12.5px;color:var(--dt-muted);display:flex;flex-wrap:wrap;column-gap:0.28em;align-items:baseline"><sc-for list="{{ c01Pre }}" as="w" hint-placeholder-count="6"><span>{{ w }}</span></sc-for><dc-import name="SetRef" num="10361" kind="set" label="Holiday Express Train" hint-size="auto,1em"></dc-import><sc-for list="{{ c01Words }}" as="w" hint-placeholder-count="20"><span>{{ w }}</span></sc-for></div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Slice C instance — <strong>measurement → procurement consequence</strong> (J5 J6 J7 J8 J11), on one facet: train track ↔ MILS railbed.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">Any "before you commit" sheet: sources by basis, choices with worked-out state, requests first-class, parts by basis with popovers, approval ladder with @tags, chain back to the story. Same shape for the tree well, a building, a whole year.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">FIDELITY</span><span style="color:var(--dt-muted)">Rough but landed. Quantities, ids, colours, prices are mocks. Card reflow is a first pass. Fork and rebuild.</span></div>
+      </div>
+    </a>
+    <a id="P-01" href="prototypes/Prototype P - Procurement.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start;opacity:{{ oP01 }};outline:{{ tP01 }}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">P-01 · PROTOTYPE</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);padding:2px 7px;border-radius:var(--dt-r-fillet);transform:rotate(-2deg)">DRAWN</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">Buying the gap: which shops, in what order</div>
+      <div style="font-size:12.5px;color:var(--dt-muted)">Takes C-01's list; prices every combination of the shops that stock it (postage + minimums counted), lets you pick lowest total / fewest parcels / soonest, shows what dropping any shop costs. Purchase stays on BrickLink; you record the order number after.</div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Slice C continuation — <strong>procurement release</strong> (J7), the vendor-smart half.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">Any multi-vendor ordering problem with lot minimums and shipping — also reusable for LEGO Pick-a-Brick vs BrickLink splits.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">FIDELITY</span><span style="color:var(--dt-muted)">Rough. Five mock shops; search is exhaustive but tiny. Fork and rebuild.</span></div>
+      </div>
+    </a>
+    <a id="I-01" href="prototypes/Prototype I - What We Have.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start;opacity:{{ oI01 }};outline:{{ tI01 }}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">I-01 · PROTOTYPE</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);padding:2px 7px;border-radius:var(--dt-r-fillet);transform:rotate(-2deg)">DRAWN</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">What we have, and what shape it's in</div>
+      <div style="font-size:12.5px;color:var(--dt-muted)">Every set, two facts kept apart: do we have it (in the house · approved · planned · idea) and is it built (standing · taken apart · in the box). Tap to change; the sheet says what that frees or holds on C-01 and A-01 before you commit. Seeded with James's canonical inventory, 09-18.</div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Inventory — <strong>have-state × build-state per set</strong> (J6, J9 as-built), the two vectors the parts list and fit checks read.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">Any “what do we own and in what state” surface: two orthogonal state axes with provenance, consequence shown before the change, append-only trail.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">FIDELITY</span><span style="color:var(--dt-muted)">Rough. Three real sets, states as stated by James; 40776 facts uncached. Consequences are copy, not live links into C-01 yet.</span></div>
+      </div>
+    </a>
+    <a id="I-02" href="prototypes/Prototype I2 - Documenting the Boxes.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start;opacity:{{ oI02 }};outline:{{ tI02 }}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">I-02 · PROTOTYPE</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);padding:2px 7px;border-radius:var(--dt-r-fillet);transform:rotate(-2deg)">DRAWN</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">What's actually in the boxes</div>
+      <div style="font-size:12.5px;color:var(--dt-muted)">How I-01 finds out. Photograph a box at the shelf with a phone or drop one in at the desk; the set number is read off it as a guess with its reason, and you confirm or correct. Then the few things a photo can't tell — built or boxed, bags sealed, where it lives. Also bins of loose parts, and what came up short after a rebuild.</div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Capture loop — <strong>photo → AI read → your confirmation → signed row</strong> (J6, J9 as-built), feeding I-01.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">Any documenting surface where a machine read and a human confirmation must stay two separate facts, and the same sheet has to work standing up and sitting down.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">FIDELITY</span><span style="color:var(--dt-muted)">Rough. The read is a mock keyed to whatever photo you attach; photos never leave the tab. Fork and rebuild.</span></div>
+      </div>
+    </a>
+    <a id="I-03" href="prototypes/Prototype I3 - One Set.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start;opacity:{{ oI03 }};outline:{{ tI03 }}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">I-03 · PROTOTYPE</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);padding:2px 7px;border-radius:var(--dt-r-fillet);transform:rotate(-2deg)">DRAWN</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">One set, everything we hold on it</div>
+      <div style="font-size:12.5px;color:var(--dt-muted)">The full page behind an I-01 card: fetched facts, the three state axes, measurements, photos, which sub-assemblies are still together, and a history that is never edited. Handling the set is a <em>touch</em> — one signed session that carries where it lives, how it sits, a measurement and anything noticed. Opens with Hub #1: measure the tree base while it's out.</div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Catalog entry + capture — <strong>one set's record, grown by touches</strong> (J6, J9, J10), on 41843.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">Any physical-thing detail page where handling the object is itself the data-entry moment: one parent event, many child facts, each sheet reading its own.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">FIDELITY</span><span style="color:var(--dt-muted)">Rough. Component list is a guess from the instructions; facts are mocks; the recorded touch does not yet write back to M-01 / I-01 live. Fork and rebuild.</span></div>
+      </div>
+    </a>
+    <a id="M-01" href="prototypes/Prototype M - Measure and Check.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start;opacity:{{ oM01 }};outline:{{ tM01 }}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">M-01 · PROTOTYPE</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);padding:2px 7px;border-radius:var(--dt-r-fillet);transform:rotate(-2deg)">DRAWN</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">Measure and check</div>
+      <div style="font-size:12.5px;color:var(--dt-muted)">Every number the parts list rests on, with how we know it. Measure a real thing and type what the tape says; check a claim and attach proof. New values mark stale what depended on the old one, and you go back to exactly where you were.</div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Two control loops — <strong>capture a measurement</strong> and <strong>verify a claim</strong> (J9); entered from A-01 / C-01 chips, returns to the caller.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">Any “how do we know this number” surface: field revisions with tool, author, time and kept history; claims with evidence.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">FIDELITY</span><span style="color:var(--dt-muted)">Rough. Tree values are real (DEC-016); dependency map and photo capture are mocks.</span></div>
+      </div>
+    </a>
+    <a id="T-01" href="prototypes/Prototype T - The Queue.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start;opacity:{{ oT01 }};outline:{{ tT01 }}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">T-01 · PROTOTYPE</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);padding:2px 7px;border-radius:var(--dt-r-fillet);transform:rotate(-2deg)">DRAWN</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">Everything waiting, and what it's waiting on</div>
+      <div style="font-size:12.5px;color:var(--dt-muted)">The queue behind the front page's three. Drag to reorder — the top three <em>are</em> the three on the Drafting Table. Quick list or cards, grouped by what each one unblocks, filtered by who it waits on, with blocked-by chains and a kept history. Adding something is two steps: say the line, then confirm what I read into it.</div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Work queue — <strong>rank, gate, origin and crosslinks per task</strong>; the Hub's “Right now” is this list's first three.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">Any “what should I do next” surface where tasks carry evidence: AI-proposed items admit it forever, gates close tasks instead of checkboxes, two densities for the same list.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">FIDELITY</span><span style="color:var(--dt-muted)">Rough. The step-two reading is a keyword mock; seeded history does not move. Fork and rebuild.</span></div>
+      </div>
+    </a>
+    <a href="prototypes/Prototype R - Bringing Things In.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px dashed var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">R-01 · PROTOTYPE</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-prov-deep);border:1.5px dashed var(--dt-prov);padding:2px 7px;border-radius:var(--dt-r-fillet);transform:rotate(-2deg)">DRAFT CARD</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">Bringing things into the house</div>
+      <div style="font-size:12.5px;color:var(--dt-muted)">Three ways in — a planned buy (the Holiday Express Train), an unplanned buy (today's gingerbread house), loose parts to count (10 white 16×16 baseplates). Each skips the steps it doesn't need; all end signed into I-01.</div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Inventory intake — <strong>order → here → counted → in the house</strong>, one shared ending.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">Any intake where things arrive by plan, by surprise, or already on hand.</span></div>
+      </div>
+    </a>
+    <a href="prototypes/Prototype V - Reading the Instructions.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px dashed var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">V-01 · PROTOTYPE</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-prov-deep);border:1.5px dashed var(--dt-prov);padding:2px 7px;border-radius:var(--dt-r-fillet);transform:rotate(-2deg)">DRAFT CARD</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">What the instructions already tell us</div>
+      <div style="font-size:12.5px;color:var(--dt-muted)">Pick a set; read the numbers its instruction booklet already gives — footprint, height, where it attaches — before anyone gets a ruler out.</div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Set → instructions → numbers, feeding M-01 and I-03.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">Any “the manual already knows this” lookup before measuring.</span></div>
+      </div>
+    </a>
+    <a href="prototypes/Prototype V2 - Deriving Fitment from the Build.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px dashed var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">V-02 · PROTOTYPE</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-prov-deep);border:1.5px dashed var(--dt-prov);padding:2px 7px;border-radius:var(--dt-r-fillet);transform:rotate(-2deg)">DRAFT CARD</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">Replaying the build to get the shape</div>
+      <div style="font-size:12.5px;color:var(--dt-muted)">Steps through the build sequence to reconstruct the finished shape, so fit can be checked from the instructions alone.</div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Sequence reconstruction → fitment, continues V-01.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">Deriving final geometry from ordered assembly steps.</span></div>
+      </div>
+    </a>
+    <a href="J-01 Journey Map.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start;opacity:{{ oJ01 }};outline:{{ tJ01 }}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">J-01 · MAP</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);padding:2px 7px;border-radius:var(--dt-r-fillet);transform:rotate(-2deg)">DRAWN</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">The thirteen journeys</div>
+      <div style="font-size:12.5px;color:var(--dt-muted)">J1–J13 in plain words — steps, who, gate, what must stay visible, and which sheet already shows it (3 built · 7 partial · 3 planned). Filter by person or by status.</div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Map — <strong>J1–J13 with screen assignments</strong>.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">The index that says which sheet instantiates which journey; grows as sheets land.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">FIDELITY</span><span style="color:var(--dt-muted)">Complete for R2; statuses will move.</span></div>
+      </div>
+    </a>
+    <a href="F-01 Workbench Junior.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start;opacity:{{ oF01 }};outline:{{ tF01 }}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">F-01 · STUDY</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);padding:2px 7px;border-radius:var(--dt-r-fillet);transform:rotate(-2deg)">DRAWN</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">Family Workbench</div>
+      <div style="font-size:12.5px;color:var(--dt-muted)">Family posture — pick a sticker, tap a snow square, name the place, say what happens there (type or talk), see what it would need, send it to James. Arrives as the same request card C-01 answers.</div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Posture study — <strong>family viewer / story participant</strong> (J11, O4 Dream it).</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">Same tools at low density: propose-a-scene as a layout branch with worked-out consequences. Pattern for any second posture.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">FIDELITY</span><span style="color:var(--dt-muted)">Rough. Brick estimates are mocks; sticker set is illustrative. Fork and rebuild.</span></div>
+      </div>
+    </a>
+    <a href="H-01 Handoff.dc.html" style="text-decoration:none;color:var(--dt-ink);background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:8px;align-content:start;opacity:{{ oH01 }};outline:{{ tH01 }}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">H-01 · RECORD</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);padding:2px 7px;border-radius:var(--dt-r-fillet);transform:rotate(-2deg)">DRAWN</span></div>
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600">The handoff</div>
+      <div style="font-size:12.5px;color:var(--dt-muted)">handoff/ — plain-Markdown ledgers (decisions, schema requests, seam, open questions, responsive intent, repo structure), per-sheet specs, index.json, screenshots and offline copies of every sheet. For Claude Code, Claude chat and ChatGPT alike.</div>
+      <div style="display:grid;gap:4px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;margin-top:auto;font-size:11px;line-height:1.45">
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">TYPE</span><span style="color:var(--dt-ink)">Record — <strong>seam, schema requests, decisions, handoff</strong> (J12).</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">GENERIC</span><span style="color:var(--dt-muted)">The bundle’s contract with the host and with Claude Code; consolidates every sheet’s footer.</span></div>
+        <div style="display:flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);width:64px;flex:none">FIDELITY</span><span style="color:var(--dt-muted)">Complete for R2. Append-only from here; responsive for iPhone/iPad explicitly not designed.</span></div>
+      </div>
+    </a>
+  </div>
+  <div style="display:flex;align-items:baseline;gap:12px;margin:32px 0 12px"><span style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted)">DECISION LOG</span><span style="font-size:11px;color:var(--dt-muted)">newest first · click a row to see why, its inputs, and everything it touched</span></div>
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:8px 14px;max-height:360px;overflow:auto">
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px" open="{{ true }}">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-18 eve</span><strong>Each set gets a page; handling it is a record (“touch”)</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div><strong>I-03</strong> is the page behind every I-01 card: fetched facts kept apart from what we observe, the three state axes with provenance, measurements, photos, which sub-assemblies are still together, and an append-only history. I-02 remains the way a set gets <em>in</em> (photo → read → confirm); it does not describe a set once it is in. The new idea is the <strong>touch</strong>: taking the physical set off the shelf is one signed event, and every fact captured while it is in hand — where it lives, how it sits, a measurement, a missing piece — is a child of that event. Hub #1 (measure the tree base) now opens a touch on the tree, so the base gets measured <em>and</em> the set gets its first record beyond James's words in the same five minutes. M-01 and I-01 keep their own records; they are written through the touch and cite it.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">operator brief 09-18 eve · I-01 cards · I-02 · M-01 tree-base row · Hub #1</span></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trI03 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ I-03 · I-01 · M-01 · Hub #1</button><button onClick="{{ trH01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ schema: Touch{}, Photo{}, Set.location, Set.components[], SetFacts{}</button><button onClick="{{ pvSchema }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-accent-deep);border:1px solid var(--dt-accent);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">▤ handoff/schema-requests.md ↗</button></div>
+      </div>
+    </details>
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-18 later</span><strong>The three on the front page are a queue, not a list; documenting gets its own sheet</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>“Right now” keeps showing exactly three, and you can now swipe the batch forward to look ahead without promoting anything. <strong>T-01</strong> holds the rest: rank is the only thing drag changes, and the front page is just <code>rank &lt;= 3</code>. Adding something is two steps — say the line as you'd say it aloud, then confirm or drop what the AI read into it, each guess carrying its reason. Tasks carry origin permanently (you · AI · family · gate finding · order landing), a machine-checkable gate instead of a checkbox, and blocked-by chains. Two densities on the same list: a quick condensed line each, or cards with the links and the chain. <strong>I-02</strong> is how I-01 stops being hearsay: a photo of the box, the number read off it as a guess with its reason, your confirm or correction kept as two separate facts — plus bins of loose parts and rebuild shortfalls. Phone at the shelf and desktop drop-in are the same sheet.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">operator form 09-18 · I-01 · the three seeded priorities</span></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trT01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ T-01 · Hub “Right now”</button><button onClick="{{ trI02 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ I-02 · I-01 · C-01</button><button onClick="{{ trH01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ schema: Task{}, Documentation{}</button></div>
+      </div>
+    </details>
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-18</span><strong>Inventory and build state are first-class; I-01 drawn</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>Operator gave the canonical dogfooding inventory: <strong>41843 Family Christmas Tree</strong> — in the house, taken apart into components (its DEC-016 measurements stand); <strong>10361 Holiday Express Train</strong> — approved to buy, not yet ordered; <strong>40776 Hot Chocolate Stand</strong> — in the house, in the box, not built. Two axes, never one enum: <em>have</em> (in the house · approved · planned · idea) and <em>built</em> (standing · taken apart · in the box). A third axis says whether the pieces are actually free: the tree is apart but <strong>kept for itself</strong> — it goes back up as itself, so C-01 may not raid it. Holding a set back is rare by policy; I-01 counts the held-back sets so the cost stays visible. Every SetRef card now shows both lines.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">operator statement 09-18 · DEC-016 · DEC-037</span></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trI01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ I-01 · C-01 · A-01</button><button onClick="{{ trH01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ schema: Set.have_state, build_state, pieces_available</button></div>
+      </div>
+    </details>
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-17 16:30</span><strong>H-01 drawn: the handoff bundle</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>handoff/ holds the ledgers (decisions · schema requests · seam · open questions · responsive intent · repo structure), a spec per sheet, index.json, screenshots and standalone offline copies. Fresh repo proposed for Claude Code. Responsive design for iPhone and iPad is recorded as <strong>not done</strong> — further design cycles needed. A-01 split is specced, not built.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">operator form 09-17 · every sheet footer</span></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trH01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ H-01</button><button onClick="{{ trAll }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ every sheet</button><button onClick="{{ pvReadme }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-accent-deep);border:1px solid var(--dt-accent);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">▤ handoff/README.md ↗</button></div>
+      </div>
+    </details>
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-17 14:05</span><strong>Research note filed: decomposition vocabulary (parts · pieces · elements · modules · sections)</strong><span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:var(--dt-accent-deep);border:1.5px dashed var(--dt-accent);padding:1px 6px;border-radius:var(--dt-r-fillet)">FOLLOW-UP · RESEARCH AGENT</span></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>"8 parts, 288 pieces" exposed that our scale words are placeholders. A research agent (not design) is to establish and enforce the exact LEGO / AFOL / BrickLink / MILS vocabulary for decomposition at every scale and axis, matched to audience — glossary + lint rules + calls on "Rail vs Ring" and "unit vs module vs quadrant". P-01's opener now states its distinction: it only buys what C-01 approved, and recorded orders flow back to inventory.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><a href="prototypes/Prototype P - Procurement.dc.html" style="font-size:12px">operator comment on P-01 ↗</a></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trAll }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ every sheet (copy)</button><button onClick="{{ trH01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ schema naming</button><button onClick="{{ pvResearch }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-accent-deep);border:1px solid var(--dt-accent);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">▤ brief/RESEARCH-01 ↗</button></div>
+      </div>
+    </details>
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-17 12:10</span><strong>Schema: sticker → envelope → model</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>Named on F-01 by the operator. A <strong>sticker</strong> is the idea; it claims an <strong>envelope</strong> — footprint in studs × the height actually clear at that spot (less under the tree's branches, none on the base or ring) — and a <strong>model</strong> is whatever fills the envelope and must fit it. Same vocabulary applies to James's sheets: every component has an envelope; fit checks compare model to envelope. <strong>Surfaces:</strong> a neumorphic "soft paper" pass was tried on F-01 and rejected by the operator (too glossy, out of place) — reverted to flat sheet + hairline + vapor shadow; tokens removed. Keep the layout gains (air, one-row cards, real buttons, tinted papers), not the gradients. <strong>Open naming:</strong> F-01's layer toggle now says “Rail” (was “Ring”) as a placeholder — the namespace rail · railbed · right-of-way (clear studs beside the track) · rail infrastructure (stops, signals) still needs settling; track it with the layer taxonomy schema request.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><a href="F-01 Workbench Junior.dc.html" style="font-size:12px">F-01 Family Workbench ↗</a><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">operator note 09-17</span></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trF01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ F-01</button><button onClick="{{ trA01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ A-01 component envelope</button><button onClick="{{ trH01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ schema: Envelope {footprint, clear_height}, Model.fits(envelope)</button></div>
+      </div>
+    </details>
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-17 09:20</span><strong>P-01 drawn; F-01 pinned for rework</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div><strong>A-01:</strong> layer rig (scene + separation) can now be scoped to one MILS unit — the other module stays whole and dimmed. <strong>F-01:</strong> stickers claim real studs on a 112×112 table (zoom to every stud, resize/turn, overlap and ring checks), "Something else" makes a sticker from a description, and step 4 "Model it" attaches Studio files, photos, or a mock magic-wand proposal. Procurement prices every shop combination (parts + postage + minimum shortfall), offers three priorities with their outcome shown before picking, and explains what dropping each shop costs. Marking an order freezes the plan. Family Workbench (renamed from “Junior” — no talking-down) is in rework: to-scale map, layer toggles, one story step.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><a href="prototypes/Prototype C - Measurement to Procurement.dc.html" style="font-size:12px">C-01 parts list ↗</a><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">operator note 09-17</span></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trP01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ P-01</button><button onClick="{{ trF01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ F-01 (rework pinned)</button><button onClick="{{ trH01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ 2 schema requests</button></div>
+      </div>
+    </details>
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-16 11:36</span><strong>Principle: every UI is a frictionless teacher</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>Plain words first; controls explain their consequences; AI questions arrive as conversation (tap / type / talk); no prepositional jargon in titles.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><a href="prototypes/Prototype B - When the AI Isnt Sure.dc.html" style="font-size:12px">operator comment on Prototype B ↗</a></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trB01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ B-01 rebuilt + renamed</button><button onClick="{{ trAll }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ all future sheets</button><button onClick="{{ pvClaude }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-accent-deep);border:1px solid var(--dt-accent);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">▤ CLAUDE.md ↗</button></div>
+      </div>
+    </details>
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-16 11:14</span><strong>Vapor shadows + LEGO radius grammar</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>Two-layer offset shadows (terracotta ghost + blue echo); cards get three fillets and one stud corner; circles reserved for gauges.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><a href="library/Design Library.dc.html" style="font-size:12px">library §02 ↗</a><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">dt/tokens.css</span></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trAll }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ every sheet (token-level)</button><button onClick="{{ pvTokens }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-accent-deep);border:1px solid var(--dt-accent);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">▤ dt/tokens.css ↗</button></div>
+      </div>
+    </details>
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-16 10:48</span><strong>Z axis: whole/fraction modes, plate/brick units</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>All axes adjustable in fractions behind a mode toggle (default whole); Z entered in plates or bricks, labels follow; LDU is the integer base.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><a href="prototypes/Prototype A - Layout Canvas.dc.html" style="font-size:12px">Prototype A ↗</a></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trA01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ A-01 transform card</button><button onClick="{{ trD01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ library §03 units</button><button onClick="{{ trH01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ 2 schema requests</button></div>
+      </div>
+    </details>
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-16 10:26</span><strong>Layer rig: scene tree + separation peel, brick-level accordion planned</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>Two axes kept separate: semantic scene layers (with sub-layers) and physical separation depth. Both must accordion to brick level; separation strata become the substrate for derived build order.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><a href="prototypes/Prototype A - Layout Canvas.dc.html" style="font-size:12px">Prototype A ↗</a></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trA01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ A-01 canvas + 3D viewer</button><button onClick="{{ trH01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ 3 schema requests</button><button onClick="{{ trFuture }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ future build-order flow</button></div>
+      </div>
+    </details>
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-16 10:05</span><strong>Gates: stamps for the record, quiet modals for the act</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>Friction ladder: no gate → reviewed diff → typed initials + stamp → purchase stays outside the app. Set by design; operator may override.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><a href="library/Design Library.dc.html" style="font-size:12px">library §05 ApprovalGate ↗</a></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trC01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ C-01 (upcoming)</button><button onClick="{{ trA01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ A-01 save vs freeze copy</button></div>
+      </div>
+    </details>
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-16 09:41</span><strong>Family posture: Family Workbench; stories fork the twin</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>The boys get the real drafting tools at tablet density — same words, bigger targets. A proposed scene (stickers, names, lore) = a layout branch with <span style="font-family:'Azeret Mono',monospace;font-size:11px">origin:user · workflow:proposed</span> and deterministic consequences.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">scoping rounds 3–4 · operator chat note</span></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trF01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ F-01 study (upcoming)</button><button onClick="{{ trJ01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ story-graph journey J11</button><button onClick="{{ trD01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ evidence model</button></div>
+      </div>
+    </details>
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-16 13:41</span><strong>C-01 landed · follow-up: split A-01, add source facets to the model viewer</strong><span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:var(--dt-accent-deep);border:1.5px dashed var(--dt-accent);padding:1px 6px;border-radius:var(--dt-r-fillet)">FOLLOW-UP</span></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>A-01 is doing double duty: (1) the model-component interface and (2) the layout-canvas prototype. For (1), exploding by scene / separation layers is not enough — the viewer must also inspect by <strong>design source</strong> (a BrickLink design, our own design, official LEGO instructions) and by <strong>brick source</strong> (in inventory now · arrives with a set to buy · buy individually). Same basis vocabulary as C-01's parts list.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">operator note at C-01 sign-off</span><a href="prototypes/Prototype C - Measurement to Procurement.dc.html" style="font-size:12px">C-01 basis model ↗</a></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trA01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ A-01 viewer + layer rig</button><button onClick="{{ trD01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ library — basis vocabulary</button><button onClick="{{ trH01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ schema: Part.basis, Design.source</button></div>
+      </div>
+    </details>
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-16 13:24</span><strong>C-01 corrected to the real sources; basis is first-class</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>Train (LEGO direct) = full circle of 16 curves, owned on arrival. bl-741807 = MILS module frame + track attachment, bought with colours adapted to the winter palette. Ballast = research choice, not in either source. Every part row, diagram element and link carries its basis and vendor; part names open a popover; options show modeled / fit-checked / stances; requests show attached work. All numbers are mocks pending Claude Code + independent audit.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><a href="prototypes/Prototype C - Measurement to Procurement.dc.html" style="font-size:12px">6 operator comments on C-01 ↗</a><a href="prototypes/Prototype A - Layout Canvas.dc.html" style="font-size:12px">1 on A-01 ↗</a></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trC01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ C-01</button><button onClick="{{ trA01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ A-01 mock-math note</button><button onClick="{{ trH01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ 5 schema requests</button></div>
+      </div>
+    </details>
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-16 12:58</span><strong>C-01 landed; prices are ranges; procurement is its own sheet</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>Prototype C signed off as the first pass for the railbed slice. Parts list gives low–high estimates across available BrickLink lots; vendor-smart ordering (lot grouping, shipping, minimums) becomes P-01. Every change on the sheet pulses once, uniformly; choices show cost deltas and stakeholder stances.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><a href="prototypes/Prototype C - Measurement to Procurement.dc.html" style="font-size:12px">operator sign-off on C-01 ↗</a></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trC01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ C-01 + P-01</button><button onClick="{{ pvTokens }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-accent-deep);border:1px solid var(--dt-accent);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">▤ dt/tokens.css (change pulse) ↗</button></div>
+      </div>
+    </details>
+    <details style="border-bottom:1px dashed var(--dt-grid-mid);padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-16 12:31</span><strong>Requests are first-class; cards are fixed-height with expand</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>Any request (a story "+1", an AI suggestion) surfaces in the summary card as an open, traceable item until answered — decline / park / accept, each with reasons and a reply in the requester's words; nothing is deleted. Cards fill their row, scroll inside, and expand on demand while neighbours collapse.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><a href="prototypes/Prototype C - Measurement to Procurement.dc.html" style="font-size:12px">operator comment on C-01 ↗</a></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trC01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ C-01</button><button onClick="{{ trD01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ library §02 card behaviour</button><button onClick="{{ trAll }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ all future sheets</button></div>
+      </div>
+    </details>
+    <details style="padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-16 12:04</span><strong>Approval ladder: stamps for the record, quiet modals for the act</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>Four-rung friction: no gate (save draft) → review diff (passive check) → initials + stamp (active approval) → purchase (outside app). Configurable per-list; operator may override.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><a href="prototypes/Prototype C - Measurement to Procurement.dc.html" style="font-size:12px">Prototype C ↗</a></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trC01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ C-01</button><button onClick="{{ trH01 }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ H-01 schema requests</button><button onClick="{{ trAll }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ all future</button></div>
+      </div>
+    </details>
+    <details style="padding:8px 4px">
+      <summary style="cursor:pointer;display:flex;gap:12px;align-items:baseline;font-size:13px"><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);flex:none">09-16 09:12</span><strong>Direction: Drafting Table (paper / blueprint); Organic scrapped</strong></summary>
+      <div style="padding:8px 4px 4px;font-size:12.5px;display:grid;gap:6px">
+        <div>Chosen from three built candidates; dark mode is the blueprint. All tokens live in one shared file.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">INPUTS</span><a href="candidates/Drafting Table.dc.html" style="font-size:12px">winning candidate ↗</a><a href="candidates/Morning Cockpit.dc.html" style="font-size:12px">1A ↗</a><a href="candidates/Night Shift.dc.html" style="font-size:12px">1B ↗</a></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">BLAST RADIUS</span><button onClick="{{ trAll }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-ink);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">⌕ every sheet</button><button onClick="{{ pvTokens }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-accent-deep);border:1px solid var(--dt-accent);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer">▤ dt/tokens.css ↗</button></div>
+      </div>
+    </details>
+  </div>
+  <sc-if value="{{ previewOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="background:var(--dt-sheet);border:1.5px solid var(--dt-accent);border-radius:var(--dt-r-card);box-shadow:var(--dt-shadow);padding:14px 18px;margin-top:12px">
+      <div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap">
+        <span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600">▤ {{ previewName }}</span>
+        <a href="{{ previewHref }}" target="_blank" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600">OPEN FULL FILE ↗</a>
+        <button onClick="{{ closePreview }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:transparent;color:var(--dt-ink);border:1px solid var(--dt-ink);border-radius:var(--dt-r-btn);padding:3px 9px;cursor:pointer;margin-left:auto">✕ CLOSE</button>
+      </div>
+      <pre style="font-family:'Azeret Mono',monospace;font-size:11px;line-height:1.55;background:var(--dt-bg);border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:10px 12px;margin:10px 0 0;max-height:240px;overflow:auto;white-space:pre-wrap">{{ previewText }}</pre>
+    </div>
+  </sc-if>
+  <div style="font-size:11px;color:var(--dt-muted);margin-top:8px;text-wrap:pretty">Dashed chips (⌕) trace a decision's reach across the sheet index; solid chips (▤) preview the file right here. In the real app each entry also links the exact conversation and every value touched.</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { trace: null, preview: null, now: {}, nowNote: '', batch: 0, pop: null, popW: 16, popD: 16, popH: 8, popP: 0, popTool: 'studs', popSig: '', popPhotos: [], popPinned: false };
+  PRIORITIES = [
+    { id: 'tree', glyph: '1', title: 'Measure the Christmas tree’s base', tag: 'ON THE TABLE · 5 MIN', whyPre: '', ref: ['41843', 'Set 41843'], whyPost: ' is in the house, taken apart into components but kept for itself (I-01). Its 16×16 base is the one fact every layout check leans on — three sheets are waiting on it being real, not remembered.', action: 'Get it out →', href: 'prototypes/Prototype I3 - One Set.dc.html?set=41843&why=measure-base&from=Hub%20%231&task=hub-1#touch', unlocks: 'A-01 fit checks stop saying “from memory”, and the tree has its first record beyond words.', gate: '↩ CLOSES WHEN THE MEASUREMENT IS RECORDED', gateWhy: 'the tree base is recorded as measured (quick entry on hover, or the touch on I-03)' },
+    { id: 'train', glyph: '2', title: 'Order the Holiday Express Train from LEGO', tag: 'ONLINE · 10 MIN', whyPre: '', ref: ['10361', 'Set 10361'], whyPost: ' (2025, $129.99, limit 3) brings the 16-piece circular track and the engine. Nothing downstream — track fit, ballast, the boys’ siding — can be tested until it’s on its way.', action: 'Open the listing →', href: 'https://www.lego.com/en-us/product/holiday-express-train-10361', unlocks: 'P-01 can record it as ORDERED the moment you’re back.', gate: '↩ CLOSES WHEN P-01 SEES THE ORDER', gateWhy: 'P-01 carries an order confirmation for 10361' },
+    { id: 'fit', glyph: '3', title: 'Confirm the train’s rails fit the MILS modules around the tree', tag: 'AFTER 1 + 2 · A-01', whyPre: 'Right now the plan shows the inner corner of each section under the tree base (Q13). Notch or shift — either is fine, but it’s your call before any module parts get bought.', whyPost: '', action: 'See the fit →', href: 'prototypes/Prototype A - Layout Canvas.dc.html#fit', unlocks: 'The release gate on C-01 loses its biggest finding.', gate: '↩ CLOSES WHEN THE FIT CHECK PASSES', gateWhy: 'A-01’s fit check runs clean on the real measurements' }
+  ];
+  LOOKAHEAD = [
+    { id: 'stand-fit', glyph: '4', title: 'Re-check where the hot chocolate stand sits', tag: 'AFTER 1 · 5 MIN', whyPre: 'Its footprint was placed against the remembered tree base. When the real measurement lands, this placement is stale until someone looks at it.', whyPost: '', action: 'See the spot →', href: 'prototypes/Prototype A - Layout Canvas.dc.html', unlocks: 'A-01 stops carrying a stale placement.', gate: '↩ CLOSES WHEN THE PLACEMENT IS RE-CHECKED', gateWhy: 'the stand is re-placed against the measured base' },
+    { id: 'box-photos', glyph: '5', title: 'Photograph the boxes on the shelf', tag: 'IN THE HOUSE · 10 MIN', whyPre: 'Three sets have no cached facts — no piece count, no inventory, no image. One photo of each box front is enough to read the number and pull the rest.', whyPost: '', action: 'Document them →', href: 'prototypes/Prototype I2 - Documenting the Boxes.dc.html', unlocks: 'I-01 stops guessing what those sets contain.', gate: '↩ CLOSES WHEN EVERY I-01 SET HAS A PHOTO', gateWhy: 'each set in I-01 carries a documented photo' },
+    { id: 'ballast', glyph: '6', title: 'Pick the ballast colour with the boys', tag: 'WITH ELI + HUGO · AN EVENING', whyPre: 'Eli asked for “the grey stones like a real train”. Two candidates cost the same, so the choice is theirs — and it is the last open thing on the railbed list.', whyPost: '', action: 'See the options →', href: 'prototypes/Prototype C - Measurement to Procurement.dc.html', unlocks: 'C-01 loses its last undecided choice.', gate: '↩ CLOSES WHEN C-01 RECORDS WHO CHOSE', gateWhy: 'the ballast choice is recorded with who made it' },
+    { id: 'gate-lots', glyph: '7', title: 'Two lots sit under their shop’s minimum', tag: 'ONLINE · 10 MIN', whyPre: 'The release gate on C-01 will not pass while two lots each sit $1.40 under a shop minimum. Add to those carts, or move the lots to a shop already in the order.', whyPost: '', action: 'Price both ways →', href: 'prototypes/Prototype P - Procurement.dc.html', unlocks: 'The release gate on C-01 runs clean.', gate: '↩ CLOSES WHEN THE GATE RUNS CLEAN', gateWhy: 'C-01’s release gate passes' },
+    { id: 'siding', glyph: '8', title: 'Draw the boys’ siding as a layout branch', tag: 'AFTER 2 · AN EVENING', whyPre: 'Hugo’s sticker claims eight studs beside the track. As a branch it costs nothing to try — and it is the first thing either of them asked for that is not already in the plan.', whyPost: '', action: 'Open the branch →', href: 'prototypes/Prototype A - Layout Canvas.dc.html', unlocks: 'Hugo gets an answer in his own words.', gate: '↩ CLOSES WHEN THE BRANCH EXISTS, EITHER WAY', gateWhy: 'the branch is accepted or declined with a reason' },
+    { id: 'vocab', glyph: '9', title: 'Settle what we call rail, railbed and right-of-way', tag: 'NOT URGENT · AN EVENING', whyPre: 'Four sheets use these three words differently. Nothing breaks, but every future sheet inherits whichever one we write down first.', whyPost: '', action: 'Read the note →', href: 'brief/RESEARCH-01-nomenclature.md', unlocks: 'Every later sheet gets cheaper to write.', gate: '↩ CLOSES WHEN THE GLOSSARY ENTRY EXISTS', gateWhy: 'the glossary entry exists and the sheets agree' }
+  ];
+  CODES = ['A01', 'B01', 'C01', 'P01', 'I01', 'I02', 'I03', 'M01', 'T01', 'D00', 'D01', 'J01', 'F01', 'H01'];
+  POPS = ['tree', 'train', 'fit'];
+  openPop = (id) => { clearTimeout(this._popT); this.setState({ pop: id }); };
+  closePopSoon = () => { clearTimeout(this._popT); this._popT = setTimeout(() => { if (!this.state.popPinned) this.setState({ pop: null }); }, 220); };
+  pinPop = () => { clearTimeout(this._popT); this.setState({ popPinned: true }); };
+  closePop = () => { clearTimeout(this._popT); this.setState({ pop: null, popPinned: false }); };
+  componentWillUnmount() { clearTimeout(this._popT); document.removeEventListener('mousedown', this._outside, true); document.removeEventListener('keydown', this._esc, true); }
+  componentDidMount() {
+    this._outside = (e) => { if (!this.state.pop) return; const t = e.target; if (t.closest && (t.closest('[data-pop]') || t.closest('.dt-now-actions'))) return; this.closePop(); };
+    this._esc = (e) => { if (e.key === 'Escape' && this.state.pop) this.closePop(); };
+    document.addEventListener('mousedown', this._outside, true);
+    document.addEventListener('keydown', this._esc, true);
+    const dark = typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches;
+    document.body.classList.toggle('dt-blueprint', dark);
+    this.syncLedger();
+    if (window.DTLedger) this._unsub = window.DTLedger.subscribe(() => this.syncLedger(true));
+  }
+  GATE_OF = { tree: 'hub-1', train: 'hub-2' };
+  syncLedger(live) {
+    const L = window.DTLedger; if (!L) return;
+    const v = L.get(), now = Object.assign({}, this.state.now); let note = this.state.nowNote, changed = false;
+    Object.keys(this.GATE_OF).forEach(id => { const g = v.gates[this.GATE_OF[id]]; if (g && !(now[id] && now[id].k === 'done')) { now[id] = { k: 'done', when: 'today', via: g.evidence || 'ledger' }; changed = true; note = '■ ' + (g.summary || id) + ' — closed from ' + (g.evidence || 'another sheet') + ', signed ' + (g.by || '—') + '. ' + (L.UNBLOCKS[this.GATE_OF[id]] || []).map(x => '#' + x).join(', ') + ' unblocked.'; } if (!g && now[id] && now[id].via) { delete now[id]; changed = true; } });
+    if (changed || !live) this.setState({ now, nowNote: changed ? note : this.state.nowNote, ledger: v });
+  }
+  resetDemo() {
+    if (!window.DTLedger) return;
+    window.DTLedger.reset();
+    this.setState({ now: {}, nowNote: 'Demo reset — every gate is open again and the set records are blank. Nothing in the handoff or the decision ledger was touched.', ledger: window.DTLedger.get() });
+  }
+  setTrace(label, codes) {
+    this.setState(s => (s.trace && s.trace.label === label) ? { trace: null } : { trace: { label, codes } });
+  }
+  openPreview(name, href) {
+    this.setState({ preview: { name, href, text: 'Loading…' } });
+    fetch(href).then(r => r.text()).then(t => {
+      if (this.state.preview && this.state.preview.name === name) this.setState({ preview: { name, href, text: t.slice(0, 4000) } });
+    }).catch(() => this.setState({ preview: { name, href, text: '(could not load preview — use OPEN FULL FILE)' } }));
+  }
+  renderVals() {
+    const tr = this.state.trace, pv = this.state.preview;
+    const now = this.state.now, ALL = this.PRIORITIES.concat(this.LOOKAHEAD), nBatches = Math.ceil(ALL.length / 3), batch = Math.min(this.state.batch, nBatches - 1), N = ALL.slice(batch * 3, batch * 3 + 3);
+    const nOpen = N.filter(p => !now[p.id]).length, nDone = N.filter(p => now[p.id] && now[p.id].k === 'done').length;
+    const set = (id, k, note) => () => this.setState(s => { const n = Object.assign({}, s.now); if (k) n[id] = { k, when: k === 'later' ? 'tomorrow' : 'today' }; else delete n[id]; return { now: n, nowNote: note }; });
+    const L = window.DTLedger, unblockedBy = (id) => L ? L.unblocked(id) : [];
+    const priorities = N.map(p => { const st = now[p.id], k = st ? st.k : 'open', first = N.find(q => !now[q.id]) === p; const ub = k === 'open' ? unblockedBy(p.id) : []; return {
+      glyph: k === 'done' ? '■' : k === 'later' ? '○' : p.glyph, title: p.title, tag: k === 'open' ? (ub.length ? p.tag.replace(/^AFTER [^·]+·\s*/, '').replace(/^/, 'UNBLOCKED · ') : p.tag) : k === 'done' ? 'CLOSED THE LOOP' + (st && st.via ? ' · VIA ' + st.via.toUpperCase() : '') : 'PARKED · NO GUILT', tagColor: k === 'done' ? 'var(--dt-pass)' : 'var(--dt-muted)',
+      whyWords: (k === 'open' ? (p.whyPre + p.whyPost).trim() : k === 'done' ? p.unlocks : 'Still here when you want it. Nothing else is waiting on you for this today.').split(' '), hasRef: k === 'open' && !!p.ref, refNum: p.ref ? p.ref[0] : '', refLabel: p.ref ? p.ref[1] : '',
+      action: p.action, href: p.href, isOpen: k === 'open', isDone: k === 'done', isLater: k === 'later', when: st ? st.when : '',
+      bg: k === 'open' ? 'var(--dt-sheet)' : 'transparent', border: k === 'open' ? 'solid' : 'dashed', stroke: k === 'done' ? 'var(--dt-pass)' : k === 'later' ? 'var(--dt-grid-mid)' : first ? 'var(--dt-accent)' : 'var(--dt-ink)',
+      shadow: k === 'open' && first ? 'var(--dt-shadow)' : 'none', opacity: k === 'later' ? 0.6 : 1, strike: k === 'done' ? 'line-through' : 'none',
+      dotBg: k === 'done' ? 'var(--dt-pass)' : k === 'later' ? 'transparent' : first ? 'var(--dt-accent)' : 'var(--dt-ink)', dotFg: k === 'later' ? 'var(--dt-muted)' : 'var(--dt-on-ink)',
+      done: set(p.id, 'done', '■ ' + p.title + ' — done. ' + p.unlocks), later: set(p.id, 'later', '○ Parked “' + p.title + '” until tomorrow. It won’t pester you before then.'), undo: set(p.id, null, 'Back on the list: ' + p.title + '.'),
+      gate: p.gate, gateTitle: 'Do this — ' + p.gate.replace('↩ CLOSES WHEN ', 'it closes itself when ').toLowerCase() + ': ' + p.gateWhy + '. Not a checkbox. (Admin override comes later.)', laterAria: 'Step aside — park “' + p.title + '” until tomorrow',
+      id: p.id, hasPop: this.POPS.includes(p.id), isTree: p.id === 'tree', isTrain: p.id === 'train', isFit: p.id === 'fit',
+      popOpen: this.POPS.includes(p.id) && this.state.pop === p.id, popOn: this.POPS.includes(p.id) ? (() => this.openPop(p.id)) : (() => {}), popOff: this.POPS.includes(p.id) ? this.closePopSoon : (() => {}) }; });
+    const firstBatch = batch === 0;
+    const nowLede = !firstBatch ? 'Looking ahead — these are not asking for you tonight. The first three are the ones that matter.' : nOpen === 0 ? (nDone === N.length ? 'All three closed. The village is unblocked — nothing here needs you.' : 'Nothing open today. Parked items come back tomorrow, quietly.') : nOpen === N.length ? 'Small, concrete, in order. Each one unblocks the next; none of them are urgent tonight.' : nOpen + ' left. ' + (nDone ? nDone + ' closed — thank you.' : '');
+    const c01Pre = 'Slice C, one facet — match the'.split(' '), c01Words = '’s track to the MILS railbed segment by segment, buy only the gap + embed parts, check fit in Studio/Blender, and clear @jfo / EH·HH·LH asks before the release gate.'.split(' ');
+    const vals = { c01Pre, c01Words,
+      nowHeading: firstBatch ? 'Right now — three things that move the village' : 'Further down the list — ' + (batch * 3 + 1) + ' to ' + Math.min(ALL.length, batch * 3 + N.length),
+      batchLabel: (batch * 3 + 1) + '–' + (batch * 3 + N.length) + ' of ' + ALL.length,
+      queueLabel: 'see all ' + ALL.length + ' →', queueAria: 'See all ' + ALL.length + ' — the full queue',
+      atFirst: batch === 0, atLast: batch >= nBatches - 1,
+      prevCursor: batch === 0 ? 'not-allowed' : 'pointer', prevOpacity: batch === 0 ? 0.35 : 1,
+      nextCursor: batch >= nBatches - 1 ? 'not-allowed' : 'pointer', nextOpacity: batch >= nBatches - 1 ? 0.35 : 1,
+      prevBatch: () => this.setState({ batch: Math.max(0, batch - 1), nowNote: '' }),
+      nextBatch: () => this.setState({ batch: Math.min(nBatches - 1, batch + 1), nowNote: '' }), tracing: !!tr, traceLabel: tr ? tr.label : '', previewOpen: !!pv, previewName: pv ? pv.name : '', previewHref: pv ? pv.href : '#', previewText: pv ? pv.text : '', priorities, nowLede, nowNote: this.state.nowNote };
+    this.CODES.forEach(c => {
+      const hit = !tr || tr.codes.includes(c);
+      vals['o' + c] = tr ? (hit ? 1 : 0.3) : 1;
+      vals['t' + c] = tr && hit ? '2.5px solid var(--dt-accent)' : 'none';
+    });
+    const W = Number(this.state.popW), D = Number(this.state.popD), H = Number(this.state.popH), P = this.state.popP === '' ? 0 : Number(this.state.popP), phs = this.state.popPhotos, sig = (this.state.popSig || '').trim().toLowerCase();
+    const tall = H + ' brick' + (H === 1 ? '' : 's') + (P ? ' and ' + P + ' plate' + (P === 1 ? '' : 's') : '');
+    const platesOk = P >= 0 && P <= 2;
+    const dims = W + ' × ' + D + ' studs of room, ' + tall + ' tall', allDims = W > 0 && D > 0 && (H > 0 || P > 0) && platesOk, changed = !(W === 16 && D === 16 && H === 8 && P === 0);
+    const toolWord = { studs: 'counted studs', tape: 'a tape measure', calipers: 'calipers', photo: 'a photo with overlay' }[this.state.popTool];
+    vals.popW = this.state.popW; vals.popD = this.state.popD; vals.popH = this.state.popH; vals.popP = this.state.popP;
+    vals.setPopP = e => this.setState({ popP: e.target.value });
+    vals.setPopW = e => this.setState({ popW: e.target.value });
+    vals.setPopD = e => this.setState({ popD: e.target.value });
+    vals.setPopH = e => this.setState({ popH: e.target.value });
+    vals.popTool = this.state.popTool;
+    vals.popSig = this.state.popSig || '';
+    vals.setPopTool = e => this.setState({ popTool: e.target.value });
+    vals.setPopSig = e => this.setState({ popSig: e.target.value });
+    vals.pinPop = this.pinPop;
+    vals.popPhotos = phs.map((x, i) => ({ url: x.url, name: x.name, dropAria: 'Remove ' + x.name, drop: () => this.setState(st => ({ popPhotos: st.popPhotos.filter((_, j) => j !== i), popPinned: true })) }));
+    vals.popPickLabel = phs.length ? '＋ Add another photo' : '▢ Choose a photo…';
+    vals.pickPopPhoto = e => { const fs = Array.from(e.target.files || []); if (!fs.length) return; const add = fs.map(f => ({ name: f.name, url: URL.createObjectURL(f) })); e.target.value = ''; this.setState(st => ({ popPhotos: st.popPhotos.concat(add), pop: 'tree', popPinned: true })); };
+    const ready = sig && allDims;
+    vals.popUnsigned = !ready; vals.popCursor = ready ? 'pointer' : 'not-allowed'; vals.popOpacity = ready ? 1 : 0.45;
+    vals.popCommitTitle = !platesOk ? '3 plates make a whole brick — leave 0, 1 or 2 here' : !allDims ? 'The room it needs and how tall it is, first' : sig ? 'Record it under ' + sig : 'Initials first — a measurement is signed by whoever took it';
+    vals.popPreview = !platesOk ? '▲ 3 plates make a whole brick — put those in the bricks box and leave 0, 1 or 2 here.' : !allDims ? 'How far across, how far front to back, and how tall — the fit check needs all of it.'
+      : dims + ', ' + toolWord + (phs.length ? ', ' + phs.length + ' photo' + (phs.length > 1 ? 's' : '') + ' attached' : '') + ' → measured, not remembered. A-01, C-01 and the parts list re-run against it.'
+        + ' (' + (W * 20) + ' × ' + (D * 20) + ' × ' + (H * 24 + P * 8) + ' LDU)'
+        + (changed ? ' The remembered 16 × 16 × 8 stays on record, struck through.' : '');
+    vals.popCommit = () => { if (!ready) return;
+      if (window.DTLedger) { window.DTLedger.setFact('treeBase', { reservedStuds: { w: W, d: D }, height: { bricks: H, plates: P }, ldu: { w: W * 20, d: D * 20, h: H * 24 + P * 8 }, tool: toolWord, by: sig, photos: phs.length, summary: 'Tree 41843 base: ' + dims + ' · ' + toolWord + ' · ' + sig }); window.DTLedger.close('hub-1', { by: sig, evidence: 'Hub popover', summary: 'Tree base measured — ' + dims }); }
+      this.setState({
+      now: Object.assign({}, this.state.now, { tree: { k: 'done', when: 'today' } }), pop: null, popPinned: false,
+      nowNote: '■ Tree base recorded: ' + dims + ', ' + toolWord + (phs.length ? ', photos ' + phs.map(x => x.name).join(', ') : '') + ', signed ' + sig + ', today. A-01 fit checks stop saying “from memory”.'
+    }); };
+    vals.resetDemo = () => this.resetDemo();
+    vals.clearTrace = () => this.setState({ trace: null });
+    vals.closePreview = () => this.setState({ preview: null });
+    vals.trAll = () => this.setTrace('every sheet', this.CODES);
+    vals.trA01 = () => this.setTrace('A-01 Layout Canvas', ['A01']);
+    vals.trB01 = () => this.setTrace('B-01 When the AI isn\u2019t sure', ['B01']);
+    vals.trC01 = () => this.setTrace('C-01 Railbed + P-01 Procurement', ['C01', 'P01']);
+    vals.trD01 = () => this.setTrace('D-01 Design library', ['D01']);
+    vals.trP01 = () => this.setTrace('P-01 Procurement', ['P01']);
+    vals.trF01 = () => this.setTrace('F-01 Family Workbench (in rework)', ['F01']);
+    vals.trJ01 = () => this.setTrace('J-01 Journey map (planned)', ['J01']);
+    vals.trH01 = () => this.setTrace('H-01 The handoff', ['H01']);
+    vals.trI01 = () => this.setTrace('I-01 What we have + SetRef + C-01', ['I01', 'C01', 'A01']);
+    vals.trI02 = () => this.setTrace('I-02 Documenting the boxes → I-01 · C-01', ['I02', 'I01', 'C01']);
+    vals.trI03 = () => this.setTrace('I-03 One set → I-01 · M-01 · Hub #1', ['I03', 'I01', 'M01']);
+    vals.pvSchema = () => this.openPreview('handoff/schema-requests.md', 'handoff/schema-requests.md');
+    vals.trT01 = () => this.setTrace('T-01 The queue — and the Hub’s three', ['T01']);
+    vals.trFuture = () => this.setTrace('future build-order flow — no sheet yet; lands with H-01', ['H01']);
+    vals.pvClaude = () => this.openPreview('CLAUDE.md', 'CLAUDE.md');
+    vals.pvTokens = () => this.openPreview('dt/tokens.css', 'dt/tokens.css');
+    vals.pvReadme = () => this.openPreview('handoff/README.md', 'handoff/README.md');
+    vals.pvResearch = () => this.openPreview('brief/RESEARCH-01-nomenclature.md', 'brief/RESEARCH-01-nomenclature.md');
+    return vals;
+  }
+}
+</script>
+</body>
+</html>

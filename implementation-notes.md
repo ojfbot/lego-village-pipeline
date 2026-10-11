@@ -194,3 +194,7 @@
   failing CI gate; the Hub candidate needs a working gate without changing that design cut.
   Added an app-owned token override and checked all effective text tokens at the same 4.5:1
   threshold. The original source defect remains recorded in H-01 R1.
+- 2026-10-10 (DT-DESIGN R4 review staging): the plan assumed a normal `git fetch --prune`
+  before opening the review PR; the shared repository contained three zero-byte remote-ref
+  lock files left since 2026-09-20. Removed only those stale locks after checking their age,
+  then retried the fetch. No refs or working-tree files were discarded.

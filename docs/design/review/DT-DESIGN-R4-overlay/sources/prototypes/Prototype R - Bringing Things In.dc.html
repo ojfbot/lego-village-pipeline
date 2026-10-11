@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Bringing things into the house — LEGO Village</title>
+<script>document.documentElement.lang="en"</script>
+<script src="../dt/landing.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../dt/tokens.css">
+<style>button:disabled{opacity:.45;cursor:not-allowed} a{color:var(--dt-info-deep)} a:hover{color:var(--dt-accent-deep)} input{font:inherit;color:var(--dt-ink)} input:focus-visible,button:focus-visible{outline:2px solid var(--dt-accent);outline-offset:2px} @media (max-width:960px){.r-main{grid-template-columns:minmax(0,1fr) !important}.r-photos{grid-template-columns:repeat(auto-fill,minmax(150px,1fr)) !important}aside[aria-label="Photos"]{position:static !important}} @media (max-width:640px){.r-pop{position:fixed !important;left:12px !important;right:12px !important;bottom:12px !important;top:auto !important;width:auto !important;max-height:calc(100vh - 24px) !important}.r-field{grid-template-columns:minmax(0,1fr) !important}.r-field>span:last-child{text-align:left !important}}</style>
+</helmet>
+<div role="main" style="max-width:1240px;margin:0 auto;padding:28px 28px 48px;display:grid;gap:18px;font-family:'Libre Franklin',sans-serif;color:var(--dt-ink)">
+  <header style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--dt-ink);padding-bottom:10px;gap:16px;flex-wrap:wrap">
+    <div style="display:grid;gap:3px;min-width:0;flex:1 1 320px">
+      <h1 style="font-family:'Spectral',serif;font-size:19px;font-weight:700;font-style:italic;margin:0">Bringing things into the house</h1>
+      <div style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);letter-spacing:0.08em">R-01 · SAT 10 OCT 2026 · PHOTOS → FILLED-IN FORMS → YOUR OK · DRAFT</div>
+    </div>
+    <nav aria-label="Sheet" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <a href="../Hub.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">← HUB</a>
+      <a href="Prototype I - What We Have.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">I-01 WHAT WE HAVE</a>
+      <a href="Prototype P - Procurement.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">P-01 MILS ORDER</a>
+      <a href="Prototype R - Bringing Things In (stepwise).dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">STEP-BY-STEP VERSION</a>
+      <button onClick="{{ toggleTheme }}" aria-pressed="{{ dark }}" style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn)">{{ themeLabel }}</button>
+    </nav>
+  </header>
+
+  <div style="display:flex;align-items:baseline;gap:6px 16px;flex-wrap:wrap">
+    <span style="font-family:'Spectral',serif;font-size:28px;font-weight:700;line-height:1.1">Saturday 10 October 2026</span>
+    <span style="font-size:13px;color:var(--dt-muted)">One trip · LEGO Store, Stonebriar · 11:28 AM · everything on this page came home that day</span>
+  </div>
+  <div style="background:var(--dt-info-bg);border:1.5px solid var(--dt-info);border-radius:var(--dt-r-fillet);padding:11px 15px;font-size:13px;line-height:1.5;text-wrap:pretty;max-width:880px;display:grid;gap:6px">
+    <div>You photographed the receipt and the things on it. The AI cropped and straightened the photos, read them, filled in a form for each thing, and matched each form to whatever was already waiting for it. <strong>Nothing counts as in the house until you look it over and OK it.</strong></div>
+    <div style="font-size:12px;color:var(--dt-muted)">◆ means the AI read it straight off a photo or the catalog. ◇ means the AI worked it out or guessed — give those a second look. Type over any value to fix it.</div>
+  </div>
+
+  <ol aria-label="What already happened" style="list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 0;font-family:'Azeret Mono',monospace;font-size:10.5px;letter-spacing:0.04em">
+    <sc-for list="{{ pipeline }}" as="p" hint-placeholder-count="6">
+      <li style="display:flex;align-items:center;gap:6px;white-space:nowrap;flex:none"><span style="color:{{ p.color }};font-weight:600">{{ p.glyph }}</span><span style="color:{{ p.color }}">{{ p.label }}</span><span aria-hidden="true" style="padding:0 8px;color:var(--dt-muted)">{{ p.arrow }}</span></li>
+    </sc-for>
+  </ol>
+
+  <div class="r-main" style="display:grid;grid-template-columns:250px minmax(0,1fr);gap:20px;align-items:start">
+    <aside aria-label="Photos" style="position:sticky;top:16px;background-color:var(--dt-bg);background-image:var(--dt-hatch-draft);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);box-shadow:var(--dt-shadow);padding:12px;display:grid;gap:10px;align-self:start">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:0 2px"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">PHOTOS · 6</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">SOURCE · SAT 10 OCT</span></div>
+      <div class="r-photos" style="display:grid;gap:14px;align-items:start">
+      <sc-for list="{{ photos }}" as="ph" hint-placeholder-count="6">
+        <figure style="margin:0;display:grid;gap:6px;background-color:var(--dt-sheet);border:1px solid {{ ph.border }};box-shadow:3px 3px 0 var(--dt-grid-mid);border-radius:var(--dt-r-card);padding:12px 12px 10px;gap:8px;position:relative;align-content:start;align-self:start">
+          <div style="position:relative;border-radius:var(--dt-r-fillet);overflow:hidden;background:var(--dt-bg);border:1px solid var(--dt-grid-mid);box-shadow:0 0 0 3px var(--dt-bg)">
+            <button onClick="{{ ph.expand }}" aria-label="{{ ph.expandAria }}" style="display:block;width:100%;padding:0;border:none;background:transparent;cursor:zoom-in"><img src="{{ ph.src }}" alt="{{ ph.alt }}" style="width:100%;display:block;max-height:220px;object-fit:cover;object-position:top"></button>
+            <sc-if value="{{ ph.tall }}" hint-placeholder-val="{{ false }}">
+              <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:44px;background:linear-gradient(transparent,var(--dt-sheet));pointer-events:none"></div>
+            </sc-if>
+            <button onClick="{{ ph.expand }}" aria-label="{{ ph.expandAria }}" title="See the whole photo" style="position:absolute;top:6px;right:6px;width:26px;height:26px;padding:0;display:grid;place-items:center;border-radius:50%;border:1.5px solid var(--dt-ink);background:var(--dt-sheet);color:var(--dt-ink);cursor:pointer;box-shadow:var(--dt-btn-shadow)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M9 21H3v-6"></path><path d="M21 3l-7 7"></path><path d="M3 21l7-7"></path></svg></button>
+          </div>
+          <figcaption style="display:flex;align-items:center;gap:5px;padding:0 2px;font-family:'Azeret Mono',monospace;font-size:9.5px;line-height:1;letter-spacing:0.1em;color:var(--dt-muted)">
+            <span>{{ ph.code }}</span>
+            <button onClick="{{ ph.toggleInfo }}" aria-expanded="{{ ph.infoOpen }}" aria-label="What the AI did to this photo" title="What the AI did to this photo" style="width:11px;height:11px;padding:0;border-radius:50%;border:1px solid {{ ph.infoBorder }};background:{{ ph.infoBg }};color:{{ ph.infoFg }};font-family:'Spectral',serif;font-style:italic;font-weight:700;font-size:8px;line-height:1;cursor:pointer;display:inline-grid;place-items:center;flex:none">i</button>
+          </figcaption>
+          <sc-if value="{{ ph.infoOpen }}" hint-placeholder-val="{{ false }}">
+            <div role="dialog" aria-label="What the AI did to this photo" style="position:absolute;left:12px;right:12px;top:100%;margin-top:-4px;z-index:20;background:var(--dt-sheet);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);box-shadow:var(--dt-shadow);padding:10px 12px;display:grid;gap:6px">
+              <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)">WHAT THE AI DID TO IT</span>
+              <span style="font-size:12px;line-height:1.45">{{ ph.what }}</span>
+              <button onClick="{{ ph.toggle }}" style="justify-self:start;font-family:'Libre Franklin';font-size:11.5px;background:transparent;border:none;padding:0;color:var(--dt-info-deep);text-decoration:underline;cursor:pointer">{{ ph.toggleLabel }}</button>
+            </div>
+          </sc-if>
+        </figure>
+      </sc-for>
+      </div>
+    </aside>
+
+    <div style="display:grid;gap:16px;min-width:0">
+      <section aria-label="The receipt" style="background-color:var(--dt-sheet);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);padding:14px 18px;display:grid;gap:10px">
+        <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline">
+          <h2 style="font-family:'Spectral',serif;font-size:17px;font-weight:600;margin:0">LEGO Store, Stonebriar · Frisco TX</h2>
+          <span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600">SAT 10 OCT 2026 · 11:28 · $227.20 VISA</span>
+        </div>
+        <div style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);display:flex;gap:4px 16px;flex-wrap:wrap"><span>◆ LEGO0067208499</span><span>◆ 12 ITEMS = 1 + 1 + 10</span><span>◆ $249.88 − $40.00 + $17.32 TAX</span></div>
+        <sc-if value="{{ discSettled }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ reopenDisc }}" aria-expanded="false" title="Reopen this decision" style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;width:100%;cursor:pointer;background:var(--dt-pass-bg);border:none;border-top:1px dashed var(--dt-grid-mid);border-radius:0 0 var(--dt-r-fillet) var(--dt-r-fillet);padding:9px 10px;margin:0 -2px;color:var(--dt-ink)">
+            <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:0.1em;color:var(--dt-on-ink);background:var(--dt-pass);border-radius:var(--dt-r-fillet);padding:2px 7px">✓ DECIDED</span>
+            <span style="display:grid;gap:1px;min-width:0"><span style="font-size:12.5px;font-weight:600">{{ discSummary }}</span><span style="font-size:11px;color:var(--dt-muted)">{{ discWho }}</span></span>
+            <span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);white-space:nowrap">REOPEN ▾</span>
+          </button>
+        </sc-if>
+        <sc-if value="{{ discOpenView }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;gap:8px;border-top:1px dashed var(--dt-grid-mid);padding-top:10px;position:relative">
+          <div style="display:flex;gap:8px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:{{ discTagColor }};border:1px solid {{ discTagColor }};border-radius:var(--dt-r-fillet);padding:1px 5px;flex:none">{{ discTag }}</span><span style="font-size:13px;line-height:1.5;text-wrap:pretty">The $40.00 Insiders discount is almost exactly the gingerbread house's $39.99. What was it?</span></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <sc-for list="{{ discOpts }}" as="o" hint-placeholder-count="3">
+              <button onClick="{{ o.pick }}" aria-pressed="{{ o.on }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;cursor:pointer;padding:7px 13px;border-radius:999px;border:1.5px solid var(--dt-ink);background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+            </sc-for>
+          </div>
+
+          <div style="font-size:12px;color:var(--dt-muted);line-height:1.45">{{ discNote }}</div>
+          <sc-if value="{{ discCanSettle }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ settleDisc }}" style="justify-self:start;font-family:'Libre Franklin';font-size:12px;font-weight:600;cursor:pointer;padding:6px 12px;border-radius:999px;border:1.5px solid var(--dt-pass);background:transparent;color:var(--dt-pass)">That's settled — fold it away ▴</button>
+          </sc-if>
+        </div>
+        </sc-if>
+      </section>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px dashed var(--dt-grid-mid);padding-bottom:10px">
+        <div style="display:grid;gap:2px">
+          <span style="font-family:'Spectral',serif;font-size:17px;font-weight:600">{{ summaryTitle }}</span>
+          <span style="font-size:12px;color:var(--dt-muted)">{{ summarySub }}</span>
+        </div>
+        
+      </div>
+
+      <sc-for list="{{ drafts }}" as="d" hint-placeholder-count="3">
+        <article aria-label="{{ d.title }}" style="background-color:var(--dt-sheet);background-image:{{ d.hatch }};border:{{ d.border }};border-radius:var(--dt-r-card);box-shadow:{{ d.shadow }};padding:16px 18px;display:grid;gap:12px">
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap">
+            <div style="display:grid;gap:3px;min-width:0">
+              <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">{{ d.kind }}</span>
+              <h3 style="font-family:'Spectral',serif;font-size:18px;font-weight:600;margin:0;line-height:1.25">{{ d.title }}</h3>
+            </div>
+            <sc-if value="{{ d.open }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:{{ d.stampColor }};border:1.5px {{ d.stampStroke }} {{ d.stampColor }};padding:3px 8px;border-radius:var(--dt-r-fillet);transform:rotate(-2deg);white-space:nowrap">{{ d.stamp }}</span></sc-if>
+          </div>
+          <sc-if value="{{ d.locked }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ d.undo }}" aria-expanded="false" title="Reopen this form" style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;width:100%;cursor:pointer;background:var(--dt-pass-bg);border:none;border-top:1px dashed var(--dt-grid-mid);border-radius:0 0 var(--dt-r-fillet) var(--dt-r-fillet);padding:9px 10px;color:var(--dt-ink)">
+              <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:0.1em;color:var(--dt-on-ink);background:var(--dt-pass);border-radius:var(--dt-r-fillet);padding:2px 7px;white-space:nowrap">✓ OK'D</span>
+              <span style="display:grid;gap:1px;min-width:0"><span style="font-size:12.5px;font-weight:600">{{ d.okSummary }}</span><span style="font-size:11px;color:var(--dt-muted)">{{ d.okSub }}</span></span>
+              <span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);white-space:nowrap">REOPEN ▾</span>
+            </button>
+          </sc-if>
+          <sc-if value="{{ d.open }}" hint-placeholder-val="{{ true }}">
+
+          <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:baseline;background:{{ d.matchBg }};border:1px solid {{ d.matchBorder }};border-radius:var(--dt-r-fillet);padding:9px 12px">
+            <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)">{{ d.matchLabel }}</span>
+            <span style="font-size:13px;font-weight:600">{{ d.match }}</span>
+            <span></span>
+            <span style="font-size:11.5px;color:var(--dt-muted);line-height:1.4">{{ d.matchWhy }}</span>
+          </div>
+
+          <div style="display:grid">
+            <sc-for list="{{ d.fields }}" as="f" hint-placeholder-count="6">
+              <div class="r-field" style="display:grid;grid-template-columns:130px minmax(0,1fr) 190px;gap:2px 12px;align-items:center;padding:4px 0;border-top:1px dashed var(--dt-grid-mid)">
+                <span style="font-size:11.5px;color:var(--dt-muted)">{{ f.label }}</span>
+                <input value="{{ f.value }}" onChange="{{ f.set }}" readOnly="{{ d.locked }}" aria-label="{{ f.label }}" style="padding:4px 6px;border:none;border-bottom:1.5px {{ f.stroke }} {{ f.line }};background:transparent;font-size:13px;font-weight:500;min-width:0;border-radius:0">
+                <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.05em;color:{{ f.srcColor }};text-align:right">{{ f.src }}</span>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;gap:6px;font-family:'Azeret Mono',monospace;font-size:10px">
+            <sc-for list="{{ d.path }}" as="s" hint-placeholder-count="4">
+              <span style="padding:3px 8px;border-radius:999px;border:1px {{ s.stroke }} {{ s.color }};color:{{ s.color }}">{{ s.label }}</span>
+            </sc-for>
+          </div>
+
+          </sc-if>
+          <sc-for list="{{ d.shownQuestions }}" as="q" hint-placeholder-count="1">
+            <div style="display:grid;gap:7px;border-top:1px dashed var(--dt-grid-mid);padding-top:10px;position:relative">
+              <div style="display:flex;gap:8px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:{{ q.tagColor }};border:1px solid {{ q.tagColor }};border-radius:var(--dt-r-fillet);padding:1px 5px;flex:none">{{ q.tag }}</span><span style="font-size:13px;line-height:1.5;text-wrap:pretty">{{ q.ask }}</span></div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <sc-for list="{{ q.opts }}" as="o" hint-placeholder-count="2">
+                  <button onClick="{{ o.pick }}" aria-pressed="{{ o.on }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;cursor:pointer;padding:6px 12px;border-radius:999px;border:1.5px solid var(--dt-ink);background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+                </sc-for>
+              </div>
+
+              <sc-if value="{{ q.hasNote }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:var(--dt-accent-deep);line-height:1.45">{{ q.note }}</div></sc-if>
+            </div>
+          </sc-for>
+
+          <sc-if value="{{ d.open }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;gap:8px;border-top:1.5px solid var(--dt-ink);padding-top:12px">
+            <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">{{ d.effectsLabel }}</div>
+            <sc-for list="{{ d.effects }}" as="e" hint-placeholder-count="3">
+              <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:baseline;font-size:12.5px;line-height:1.45">
+                <span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:{{ e.color }}">{{ e.glyph }}</span>
+                <span><strong>{{ e.where }}</strong> {{ e.text }}</span>
+              </div>
+            </sc-for>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px">
+              <sc-if value="{{ d.open }}" hint-placeholder-val="{{ true }}">
+                <label style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--dt-muted)">Your initials
+                  <input value="{{ d.sig }}" onChange="{{ d.setSig }}" placeholder="jfo" maxlength="5" aria-label="Your initials for this form" style="width:64px;padding:6px 8px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);background:var(--dt-sheet);font-family:'Azeret Mono',monospace;font-size:12.5px">
+                </label>
+                <button onClick="{{ d.approve }}" disabled="{{ d.noSig }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;cursor:pointer;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:9px 16px;border-radius:999px;box-shadow:var(--dt-btn-shadow)">{{ d.okLabel }}</button>
+                <span style="font-size:11.5px;color:var(--dt-muted)">{{ d.okWhy }}</span>
+              </sc-if>
+            </div>
+          </div>
+          </sc-if>
+        </article>
+      </sc-for>
+    </div>
+  </div>
+  <sc-if value="{{ viewerOpen }}" hint-placeholder-val="{{ false }}">
+    <div role="dialog" aria-modal="true" aria-label="{{ viewerAlt }}" onClick="{{ closeViewer }}" style="position:fixed;inset:0;z-index:100;background:rgba(19,32,46,0.72);display:grid;place-items:center;padding:24px">
+      <div onClick="{{ stop }}" style="background:var(--dt-sheet);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);box-shadow:var(--dt-shadow);max-width:min(560px,100%);max-height:100%;display:grid;grid-template-rows:auto minmax(0,1fr);overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px dashed var(--dt-grid-mid)">
+          <span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--dt-muted)">{{ viewerCode }} · SCROLL TO SEE IT ALL</span>
+          <button onClick="{{ closeViewer }}" aria-label="Close" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;cursor:pointer;padding:5px 12px;border-radius:999px;border:1.5px solid var(--dt-ink);background:transparent;color:var(--dt-ink)">Close ✕</button>
+        </div>
+        <div style="overflow:auto;background:var(--dt-bg)"><img src="{{ viewerSrc }}" alt="{{ viewerAlt }}" style="width:100%;display:block"></div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ popOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closePop }}" aria-hidden="true" style="position:fixed;inset:0;z-index:60;background:{{ popScrim }};transition:background .18s ease"></div>
+    <div role="dialog" aria-label="{{ popTitle }}" style="position:fixed;z-index:61;top:{{ popTop }};bottom:{{ popBottom }};left:{{ popLeft }};width:{{ popWidth }};max-height:{{ popMaxH }};overflow:auto;display:grid;grid-template-rows:auto minmax(64px,1fr) auto;gap:10px;background:var(--dt-sheet);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);box-shadow:var(--dt-shadow);padding:14px 16px;opacity:{{ popOpacity }};transform:{{ popTransform }};transform-origin:{{ popOrigin }};transition:opacity .16s ease,transform .2s cubic-bezier(.2,.8,.3,1)">
+      <sc-if value="{{ popCaretTop }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="position:absolute;top:-7px;left:{{ popCaret }};width:12px;height:12px;background:var(--dt-sheet);border-left:1.5px solid var(--dt-ink);border-top:1.5px solid var(--dt-ink);transform:translateX(-50%) rotate(45deg)"></span></sc-if>
+      <sc-if value="{{ popCaretBottom }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="position:absolute;bottom:-7px;left:{{ popCaret }};width:12px;height:12px;background:var(--dt-sheet);border-right:1.5px solid var(--dt-ink);border-bottom:1.5px solid var(--dt-ink);transform:translateX(-50%) rotate(45deg)"></span></sc-if>
+      <div style="display:grid;gap:4px">
+        <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)">IN YOUR OWN WORDS</span>
+        <span style="font-size:12.5px;font-weight:600;line-height:1.4;text-wrap:pretty">{{ popAsk }}</span>
+        <span style="font-size:11.5px;color:var(--dt-muted);line-height:1.45">For when none of the choices fit. The form shows exactly what you write, and nothing downstream assumes more than it says.</span>
+      </div>
+      <textarea value="{{ popText }}" onChange="{{ setPopText }}" autoFocus="{{ true }}" aria-label="{{ popTitle }}" placeholder="What actually happened…" style="font:inherit;font-size:13.5px;line-height:1.5;color:var(--dt-ink);padding:10px 12px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);background:var(--dt-bg);resize:none;height:100%;min-height:64px;max-height:{{ popTaMax }};width:100%;box-sizing:border-box"></textarea>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+        <button onClick="{{ closePop }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;cursor:pointer;padding:7px 14px;border-radius:999px;border:1.5px solid var(--dt-ink);background:transparent;color:var(--dt-ink)">Cancel</button>
+        <button onClick="{{ popSave }}" disabled="{{ popCantSave }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;cursor:pointer;padding:7px 14px;border-radius:999px;border:none;background:var(--dt-ink);color:var(--dt-on-ink);box-shadow:var(--dt-btn-shadow)">Use this answer</button>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  PHOTOS = [
+    ['receipt', 'RECEIPT', 'r01-receipt-crop.png', 'r01-receipt.png', 'The AI cropped it to the receipt and kept a little floor round the edge.', 'The LEGO Store receipt'],
+    ['train', '10361 BOX', 'r01-10361-box-crop.png', 'r01-10361-box.png', 'The AI cropped it and turned it upright — you shot it sideways. The box looks closed.', 'The 10361 Holiday Express Train box'],
+    ['pack', '11026 PACK', 'r01-11026-pack-crop.png', 'r01-11026-pack.png', 'The AI cropped it and flipped it the right way up. One plate per pack.', 'A 11026 White Baseplate pack'],
+    ['house', '40809 BOX', 'r01-40809-box-crop.png', 'r01-40809-box.png', 'The AI cropped it to the box and turned it upright — you shot it sideways. Still sealed.', 'The 40809 Festive Gingerbread House box'],
+    ['circle', 'TRACK + PACKS', 'r01-circle-packs-crop.png', 'r01-circle-packs.png', 'The track circle on the floor, with the baseplate packs inside the ring.', 'Track circle around a fan of baseplate packs'],
+    ['plates', 'TRACK ON PLATES', 'r01-track-crop.png', 'r01-track-on-plates.png', 'The same circle sitting on nine plates in a 3 × 3 square.', 'Track circle laid on nine white baseplates']
+  ];
+  state = { dark: false, sig: '', orig: {}, info: null, viewer: null, disc: 'points', discOther: '', discOpen: false, ok: {}, edits: {}, sigs: {}, notes: {}, pop: null, popText: '', popShown: false, popPos: null, ans: { box: null, size: null, tenth: null, cond: null, village: null } };
+  componentDidMount() {
+    const dark = typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches;
+    document.body.classList.toggle('dt-blueprint', dark); this.setState({ dark });
+    this.onKey = e => { if (e.key === 'Escape') { this.setState({ viewer: null, info: null }); if (this.state.pop) this.closePop(); } };
+    window.addEventListener('keydown', this.onKey);
+    this.onReflow = () => { if (this.state.pop && this.anchorEl && document.contains(this.anchorEl)) this.setState({ popPos: this.place(this.anchorEl) }); };
+    window.addEventListener('scroll', this.onReflow, true); window.addEventListener('resize', this.onReflow);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this.onKey); window.removeEventListener('scroll', this.onReflow, true); window.removeEventListener('resize', this.onReflow); }
+  place(el) {
+    const r = el.getBoundingClientRect(), vw = window.innerWidth, vh = window.innerHeight, M = 12, GAP = 10, want = 320;
+    if (vw < 640) return { sheet: true, left: M, width: vw - 2 * M, top: null, bottom: M, maxH: vh - 2 * M };
+    const width = Math.min(440, vw - 2 * M), left = Math.max(M, Math.min(r.left, vw - width - M));
+    const below = vh - r.bottom - GAP - M, above = r.top - GAP - M;
+    if (below < want && above < want) return { sheet: true, left: Math.max(M, (vw - 520) / 2), width: Math.min(520, vw - 2 * M), top: null, bottom: M, maxH: vh - 2 * M };
+    const down = below >= want || below >= above;
+    const caret = Math.max(18, Math.min(width - 18, r.left + r.width / 2 - left));
+    return { sheet: false, left, width, down, caret, top: down ? r.bottom + GAP : null, bottom: down ? null : vh - r.top + GAP, maxH: Math.max(200, down ? below : above) };
+  }
+  openPop(id, text, el) {
+    this.anchorEl = el; clearTimeout(this.popT);
+    this.setState({ pop: id, popText: text || '', popShown: false, popPos: this.place(el) }, () => { const show = () => { if (!this.state.popShown) this.setState({ popShown: true }); }; requestAnimationFrame(() => requestAnimationFrame(show)); setTimeout(show, 60); });
+  }
+  closePop() { this.setState({ popShown: false }); clearTimeout(this.popT); this.popT = setTimeout(() => this.setState({ pop: null }), 170); }
+  pills(opts, cur, onPick) {
+    return opts.map(([k, label]) => { const on = cur === k; return { label, on, bg: on ? 'var(--dt-ink)' : 'transparent', fg: on ? 'var(--dt-on-ink)' : 'var(--dt-ink)', pick: () => onPick(k) }; });
+  }
+  answer(k, v) { this.setState(s => ({ ans: { ...s.ans, [k]: v } })); }
+  short(t) { t = (t || '').trim(); return t.length > 28 ? t.slice(0, 27) + '…' : t; }
+  withOther(pills, id, isOther, text) {
+    const open = this.state.pop === id, on = isOther || open;
+    return [...pills, { label: isOther ? '✎ ' + this.short(text) : 'Something else…', on, bg: isOther ? 'var(--dt-ink)' : open ? 'var(--dt-bg)' : 'transparent', fg: isOther ? 'var(--dt-on-ink)' : 'var(--dt-ink)', pick: e => this.openPop(id, isOther ? text : '', e.currentTarget) }];
+  }
+  renderVals() {
+    const s = this.state, money = n => '$' + n.toFixed(2);
+    const SRC = { read: ['var(--dt-pass)', 'solid', 'var(--dt-grid-mid)'], guess: ['var(--dt-prov-deep)', 'dashed', 'var(--dt-prov)'], you: ['var(--dt-info-deep)', 'solid', 'var(--dt-info)'] };
+    const share = s.disc === 'gift' ? { train: 140.72, plates: 86.48, house: 0 } : { train: 118.19, plates: 72.65, house: 36.36 };
+    const shareSrc = s.disc === 'points' ? '◇ POINTS + TAX, BY PRICE' : s.disc === 'gift' ? '◇ HOUSE FREE · TAX ON THE REST' : '◇ BY PRICE FOR NOW';
+    const a = s.ans, n = s.notes, said = t => '“' + this.short(t) + '”';
+    const photos = this.PHOTOS.map(([k, code, crop, orig, what, alt]) => ({ code, what: s.orig[k] ? 'Showing it as you took it — before cropping and straightening.' : what, alt, src: 'assets/' + (s.orig[k] ? orig : crop),
+      tall: k === 'receipt' && !s.orig[k], expand: () => this.setState({ viewer: k, info: null }), expandAria: 'Open ' + alt + ' larger',
+      infoOpen: s.info === k, toggleInfo: () => this.setState({ info: s.info === k ? null : k }),
+      infoBg: s.info === k ? 'var(--dt-ink)' : 'transparent', infoFg: s.info === k ? 'var(--dt-on-ink)' : 'var(--dt-muted)', infoBorder: s.info === k ? 'var(--dt-ink)' : 'var(--dt-grid-mid)',
+      border: s.orig[k] ? 'var(--dt-prov)' : 'var(--dt-ink)', toggleLabel: s.orig[k] ? 'Show the cropped version' : 'Show the photo as taken', toggle: () => this.setState({ orig: { ...s.orig, [k]: !s.orig[k] } }) }));
+    const discOpts = this.withOther(this.pills([['gift', 'The house was free'], ['points', 'Points on the whole bag']], s.disc, k => this.setState({ disc: k, discOpen: false })), 'disc', s.disc === 'other', s.discOther);
+    const discNote = s.disc === 'points' ? "James, 10-10: Insiders points he didn't know he had, used on the whole bag. Matching the house's price was a happy accident — so R-01 spreads the $40 and the tax over everything by price."
+      : s.disc === 'gift' ? 'Then the house cost nothing, and the train and baseplates carry all the tax.' : (s.discOther ? 'R-01 keeps your words. Until they name which items took the $40, R-01 spreads costs by price and marks them ◇.' : 'Say what it was. Until then, R-01 spreads costs by price.');
+    const answered = s.disc !== 'other' || !!s.discOther.trim();
+    // draft definitions
+    const D = [
+      { key: 'train', kind: 'PROCUREMENT · PLANNED BUY', title: '10361 Holiday Express Train',
+        matchLabel: 'FILLS REQUEST', match: 'Buy the Holiday Express Train — on the Hub since the railbed plan', matchWhy: 'Same set number, 10361, on the receipt, the box and the request.', matched: true,
+        fields: [['Set', '10361 Holiday Express Train', 'read', '◆ RECEIPT + BOX'], ['Pieces', '956 · ages 18+ · Icons, Winter Village', 'read', '◆ BOX'], ['Bought', 'Sat 10 Oct 2026, 11:28 · LEGO Store Stonebriar', 'read', '◆ RECEIPT'], ['Receipt no.', 'LEGO0067208499', 'read', '◆ RECEIPT'], ['List price', '$129.99', 'read', '◆ RECEIPT'], ['Paid (its share)', money(share.train), 'guess', shareSrc], ['Box', a.box === 'other' ? n.box : a.box === 'open' ? 'Opened — track is out' : a.box === 'sealed' ? 'Still sealed' : 'Not sure yet', a.box ? 'you' : 'guess', a.box === 'other' ? '◆ YOU WROTE' : a.box ? '◆ YOU SAID' : '◇ PHOTOS DISAGREE']],
+        questions: [{ id: 'box', tag: 'AI ASKS', ask: 'The box looks closed in its photo, but a track circle is out on the floor in two others. Did that track come out of this box?', opts: [['open', 'Yes — we opened it'], ['sealed', 'No — the box is still sealed; the track came from elsewhere']],
+          note: a.box === 'other' ? 'R-01 keeps your words. I-02 gets a task to look at the box, with your note on it.' : a.box === 'open' ? 'Then I-02 gets a task to check the rest of the box against its 956-piece list.' : a.box === 'sealed' ? "Then the track is loose track we already owned — it gets its own line in I-01, and the circle photo still counts for A-01." : '' }],
+        path: [['Ordered', 'done', 'receipt'], ['Here', 'done', 'receipt'], ['Counted', a.box ? 'done' : 'open', a.box === 'sealed' ? 'sealed' : a.box === 'open' ? 'I-02 checks' : ''], ['In the house', 'ok', '']],
+        effects: [['◆', 'pass', 'Hub', '— the "buy the train" request closes.'], ['◐', 'prov', 'A-01', '— your photo shows the circle on the plates: a rough footprint for the corner fit check. Nobody has measured it yet.'], ['◐', 'prov', 'C-01', '— the ballast count can use what this box brought.'], ['◐', 'prov', "Boys' siding", '— stops waiting on the purchase.'], ['·', 'muted', 'P-01', '— no change; it stays the MILS parts order.']] },
+      { key: 'plates', kind: 'INVENTORY · FOR PLANNED WORK', title: '10 × 11026 White Baseplate',
+        matchLabel: 'FEEDS PLANNED WORK', match: 'MILS module bases — P-01’s draft order, which nobody has placed yet', matchWhy: "Baseplates are what the open MILS question is weighing. Nothing else was asking for them.", matched: true,
+        fields: [['Part', '11026 White Baseplate · 1 per pack', 'read', '◆ PACK'], ['Size', a.size === 'other' ? n.size : a.size === 'count' ? 'You’ll count them' : '32 × 32 studs', a.size === 'yes' || a.size === 'other' ? 'you' : a.size === 'count' ? 'guess' : 'read', a.size === 'other' ? '◆ YOU WROTE' : a.size === 'yes' ? '◆ YOU CONFIRMED' : a.size === 'count' ? '◇ YOU’LL COUNT' : '◆ CATALOG FOR 11026'], ['Quantity', a.tenth === 'other' ? '10 — ' + n.tenth : a.tenth === 'nine' ? '9' : '10', a.tenth ? 'you' : 'read', a.tenth === 'other' ? '◆ YOU WROTE' : a.tenth ? '◆ YOU SAID' : '◆ RECEIPT, 10 LINES'], ['List price', '$79.90 · $7.99 each', 'read', '◆ RECEIPT'], ['Paid (its share)', money(share.plates), 'guess', shareSrc], ['Condition', a.cond === 'other' ? n.cond : a.cond === 'flat' ? 'All lie flat' : a.cond === 'warped' ? 'Some warped' : 'Not checked', a.cond && a.cond !== 'later' ? 'you' : 'guess', a.cond && a.cond !== 'later' ? '◆ YOU CHECKED' : '◇ NEEDS A LOOK']],
+        questions: [
+          { id: 'size', tag: 'AI CORRECTED', ask: 'You first called these 16 × 16. The pack says 11026, which is LEGO’s 32 × 32 baseplate — and the track circle fitting inside nine of them agrees. OK to use 32 × 32?', opts: [['yes', 'Yes, 32 × 32'], ['count', "I'll count the studs first"]],
+            note: a.size === 'other' ? "R-01 keeps your words. Until the size is a number, nothing downstream uses these plates." : a.size === 'count' ? "Fine — they sign in as 'size to count', and nothing downstream uses them until you do." : 'At 32 × 32, each plate is one MILS module base on its own — not a quarter of one.' },
+          { id: 'tenth', tag: 'AI ASKS', ask: 'The receipt says 10. One photo shows 9 laid out. Is the tenth just somewhere else?', opts: [['ten', 'Yes, all 10 are here'], ['nine', 'Only 9']], note: a.tenth === 'other' ? 'R-01 keeps your words; the receipt’s 10 stands until you change the quantity.' : a.tenth === 'nine' ? 'Then one is missing from the bag — worth a call to the store with the receipt number.' : '' },
+          { id: 'cond', tag: 'AI ASKS', ask: "Do they all lie flat? A warped baseplate rocks, and MILS modules need to butt together level.", opts: [['flat', 'All flat'], ['warped', 'Some warped'], ['later', 'Check later']], note: a.cond === 'other' ? 'R-01 keeps your words. Only plates you call flat count toward modules.' : a.cond === 'warped' ? 'Only the flat ones will count toward modules.' : '' }],
+        path: [['Ordered', 'done', 'receipt'], ['Here', 'done', 'receipt'], ['Counted', a.size && a.tenth ? 'done' : 'open', ''], ['In the house', 'ok', '']],
+        effects: (() => { const n = a.tenth === 'nine' ? 9 : 10; return [['◇', 'unres', 'MILS question', a.size === 'count' || a.size === 'other' ? "— still open; these can't count toward it until the size is a number." : `— still open, but if the answer is baseplates, these are bases for ${n} modules.`], ['◐', 'prov', 'P-01', a.size === 'count' || a.size === 'other' ? '— nothing changes yet.' : `— the MILS order could drop ${n} baseplates once James answers the MILS question.`], [a.cond === 'warped' ? '!' : a.cond === 'flat' ? '◆' : '◇', a.cond === 'warped' ? 'block' : a.cond === 'flat' ? 'pass' : 'unres', 'Condition', a.cond === 'other' ? '— as you described: ' + said(n.cond) : a.cond === 'flat' ? '— all usable.' : a.cond === 'warped' ? '— R-01 holds back the warped ones.' : '— nobody has checked yet; T-01 gets a reminder.']]; })() },
+      { key: 'house', kind: 'PROCUREMENT · UNPLANNED EXTRA', title: '40809 Festive Gingerbread House',
+        matchLabel: 'NO REQUEST', match: 'Nothing was waiting for this — it signs in as an extra purchase', matchWhy: 'No plan, sheet or queue item names it or anything like it.', matched: false,
+        fields: [['Set', '40809 Festive Gingerbread House', 'read', '◆ RECEIPT + BOX'], ['Pieces', '498 · ages 10+', 'read', '◆ BOX'], ['Size', 'about 16 × 15 studs, 15 cm tall', 'guess', '◇ FROM LEGO.COM CM'], ['Bought', 'Sat 10 Oct 2026, 11:28 · LEGO Store Stonebriar', 'read', '◆ RECEIPT'], ['List price', '$39.99', 'read', '◆ RECEIPT'], ['Paid (its share)', s.disc === 'gift' ? '$0.00' : money(share.house), 'guess', shareSrc], ['Box', 'Still sealed', 'read', '◆ BOX PHOTO']],
+        questions: [{ id: 'village', tag: 'AI ASKS', ask: 'This wasn’t on any plan. Is it for the village, or its own thing on the table at Christmas?', opts: [['for', 'For the village'], ['own', 'Its own thing'], ['later', 'Ask James later']],
+          note: a.village === 'other' ? 'R-01 keeps your words; James sees them on T-01 so the village plan can catch up.' : { for: 'It becomes a sticker idea on F-01. At about 16 × 15 studs it fits on half of one 32 × 32 plate — it still needs a spot.', own: 'I-01 lists it as ours; no layout sheet shows it.', later: 'One question for James goes on the T-01 queue.' }[a.village] || '' }],
+        path: [['Ordered', 'skip', 'not planned'], ['Here', 'done', 'receipt'], ['Counted', 'done', 'sealed'], ['In the house', 'ok', '']],
+        effects: [['◆', 'pass', 'I-01', '— a new row: in the house, in the box, not planned for anything.'], [a.village ? '◐' : '◇', a.village ? 'prov' : 'unres', a.village === 'for' ? 'F-01' : a.village === 'later' || a.village === 'other' ? 'T-01' : 'Village', a.village === 'for' ? '— a sticker idea, no spot yet.' : a.village === 'later' ? '— one question for James.' : a.village === 'own' ? '— nothing changes.' : a.village === 'other' ? '— ' + said(n.village) : '— waits on your answer.'], ['·', 'muted', 'Spending', s.disc === 'gift' ? '— cost nothing.' : `— ${money(share.house)}, outside any plan’s budget.`]] }
+    ];
+    const C = { pass: 'var(--dt-pass)', prov: 'var(--dt-prov-deep)', unres: 'var(--dt-unres)', block: 'var(--dt-block)', muted: 'var(--dt-muted)' };
+    const popText = s.popText, popCantSave = !popText.trim(), popCancel = () => this.closePop(), setPopText = e => this.setState({ popText: e.target.value });
+    const drafts = D.map(d => {
+      const locked = !!s.ok[d.key], ed = s.edits[d.key] || {}, sig = (s.sigs[d.key] || '').trim().toUpperCase();
+      const openQs = d.questions.filter(q => !a[q.id]).length;
+      return {
+        kind: d.kind, title: d.title, locked, open: !locked,
+        hatch: locked ? 'none' : 'var(--dt-hatch-card)', border: locked ? '1.5px solid var(--dt-pass)' : '1.5px solid var(--dt-ink)', shadow: locked ? 'none' : 'var(--dt-shadow)',
+        stamp: locked ? `✓ OK'D · ${s.ok[d.key]}` : openQs ? `◇ ${openQs} TO LOOK AT` : '◆ READY FOR YOUR OK', stampColor: locked ? 'var(--dt-pass)' : openQs ? 'var(--dt-prov-deep)' : 'var(--dt-ink)', stampStroke: locked ? 'solid' : 'dashed',
+        matchLabel: d.matchLabel, match: d.match, matchWhy: d.matchWhy, matchBg: d.matched ? 'var(--dt-info-bg)' : 'var(--dt-bg)', matchBorder: d.matched ? 'var(--dt-info)' : 'var(--dt-grid-mid)',
+        fields: d.fields.map(([label, value, kind, src], i) => { const typed = ed[i] != null, k = typed ? 'you' : kind, [col, stroke, line] = SRC[k];
+          return { label, value: typed ? ed[i] : value, src: typed ? '◆ YOU TYPED IT' : src, srcColor: col, stroke, line, set: e => this.setState({ edits: { ...s.edits, [d.key]: { ...ed, [i]: e.target.value } } }) }; }),
+        path: d.path.map(([label, st, note]) => { const okd = st === 'ok' && locked; const col = st === 'done' || okd ? 'var(--dt-pass)' : st === 'skip' ? 'var(--dt-muted)' : 'var(--dt-prov-deep)';
+          return { label: (st === 'done' || okd ? '✓ ' : st === 'skip' ? '– ' : '◇ ') + label + (note ? ' · ' + note : st === 'ok' && !locked ? ' · your OK' : ''), color: col, stroke: st === 'skip' || st === 'open' || (st === 'ok' && !locked) ? 'dashed' : 'solid' }; }),
+        shownQuestions: d.questions.filter(q => !locked || !a[q.id]).map(q => ({ ...q, hasNote: !!q.note, tagColor: a[q.id] ? 'var(--dt-pass)' : 'var(--dt-prov-deep)', tag: a[q.id] ? 'ANSWERED' : locked ? 'STILL OPEN · ON T-01' : q.tag,
+          opts: this.withOther(this.pills(q.opts, a[q.id], v => this.answer(q.id, v)), q.id, a[q.id] === 'other', n[q.id]),
+        })),
+        sig: s.sigs[d.key] || '', setSig: e => this.setState({ sigs: { ...s.sigs, [d.key]: e.target.value } }), noSig: !sig,
+        effectsLabel: locked ? 'WHAT CHANGED' : 'WHAT YOUR OK WILL CHANGE',
+        effects: d.effects.map(([glyph, c, where, text]) => ({ glyph, color: C[c], where, text })),
+        okSummary: 'In the house · Sat 10 Oct · ' + (s.ok[d.key] || ''), okSub: openQs ? (openQs === 1 ? '1 question still open — it waits below and on T-01' : openQs + ' questions still open — they wait below and on T-01') : 'Nothing left open',
+        okLabel: openQs ? `OK it — ${openQs} left open` : 'Looks right — OK it',
+        okWhy: !sig ? 'Your initials first — they say you checked this one.' : openQs ? 'Open questions go to T-01 so nobody loses them.' : 'Signs it into I-01.',
+        approve: () => this.setState({ ok: { ...s.ok, [d.key]: sig } }), undo: () => this.setState({ ok: { ...s.ok, [d.key]: null } })
+      };
+    });
+    const nOk = D.filter(d => s.ok[d.key]).length, nMatched = D.filter(d => d.matched).length;
+    const pipeline = [['◆', 'pass', 'you took 6 photos'], ['◆', 'pass', 'AI cropped & straightened'], ['◆', 'pass', 'AI read receipt + 3 boxes'], ['◆', 'pass', `AI matched ${nMatched} of 3 to requests`], [nOk === 3 ? '◆' : '◇', nOk === 3 ? 'pass' : 'prov', `your OK · ${nOk} of 3`], [nOk === 3 ? '◆' : '·', nOk === 3 ? 'pass' : 'muted', 'in the house']]
+      .map(([glyph, c, label], i, arr) => ({ glyph, color: C[c], label: label.toUpperCase(), arrow: i < arr.length - 1 ? '→' : '' }));
+    return {
+      dark: s.dark, themeLabel: s.dark ? '◐ BLUEPRINT' : '◑ PAPER', toggleTheme: () => { const d = !s.dark; document.body.classList.toggle('dt-blueprint', d); this.setState({ dark: d }); },
+      pipeline, photos, discOpts,
+      discSettled: answered && !s.discOpen, discOpenView: !answered || s.discOpen, discCanSettle: answered && s.discOpen,
+      reopenDisc: () => this.setState({ discOpen: true }), settleDisc: () => this.setState({ discOpen: false }),
+      discSummary: s.disc === 'points' ? 'The $40 was Insiders points on the whole bag' : s.disc === 'gift' ? 'The $40 made the gingerbread house free' : '“' + s.discOther.trim() + '”',
+      discWho: s.disc === 'points' ? 'James, Sat 10 Oct · R-01 spreads it over everything by price; the match with the house was coincidence' : s.disc === 'gift' ? 'James · train and baseplates carry the tax' : 'James, in his words · R-01 spreads costs by price until he names the items',
+      viewerOpen: !!s.viewer, closeViewer: () => this.setState({ viewer: null }), stop: e => e.stopPropagation(),
+      ...(() => { const p = this.PHOTOS.find(x => x[0] === s.viewer); return p ? { viewerSrc: 'assets/' + (s.orig[p[0]] ? p[3] : p[2]), viewerAlt: p[5], viewerCode: p[1] } : { viewerSrc: '', viewerAlt: '', viewerCode: '' }; })(), discNote, discIsOther: s.disc === 'other', discOther: s.discOther, setDiscOther: e => this.setState({ discOther: e.target.value }),
+      discTag: answered ? 'YOU SAID' : 'AI ASKS', discTagColor: answered ? 'var(--dt-pass)' : 'var(--dt-prov-deep)',
+      summaryTitle: nOk === 3 ? 'All three are in the house' : `The AI filled in three forms · you've OK'd ${nOk}`,
+      summarySub: nOk === 3 ? 'I-01 shows them; the requests they matched have moved on.' : 'Check each against the photos on the left, then initial and OK it.',
+      drafts, popText, setPopText, popCantSave, closePop: () => this.closePop(),
+      ...(() => { const P = s.popPos || {}, px = v => v == null ? 'auto' : Math.round(v) + 'px', allQ = D.flatMap(d => d.questions);
+        const q = allQ.find(x => x.id === s.pop), sheet = !!P.sheet, shown = s.popShown;
+        return { popOpen: !!s.pop, popTitle: s.pop === 'disc' ? 'What the $40 was, in your words' : 'Your answer, in your words',
+          popAsk: s.pop === 'disc' ? 'What was the $40.00 Insiders discount?' : q ? q.ask : '',
+          popTaMax: '200px', popTop: px(P.top), popBottom: px(P.bottom), popLeft: px(P.left), popWidth: px(P.width), popMaxH: px(P.maxH),
+          popOpacity: shown ? 1 : 0, popTransform: shown ? 'none' : sheet ? 'translateY(18px)' : P.down ? 'translateY(-6px) scale(.98)' : 'translateY(6px) scale(.98)',
+          popOrigin: sheet ? 'center bottom' : (Math.round(P.caret || 0) + 'px ' + (P.down ? 'top' : 'bottom')),
+          popCaretTop: !sheet && !!P.down, popCaretBottom: !sheet && P.down === false, popCaret: Math.round(P.caret || 0) + 'px',
+          popScrim: sheet && shown ? 'rgba(19,32,46,0.35)' : 'transparent', popSheet: sheet,
+          popSave: () => { const t = popText.trim(); if (s.pop === 'disc') this.setState({ disc: 'other', discOther: t, discOpen: false }); else this.setState({ ans: { ...a, [s.pop]: 'other' }, notes: { ...n, [s.pop]: t } }); this.closePop(); } }; })()
+    };
+  }
+}
+</script>
+</body>
+</html>
