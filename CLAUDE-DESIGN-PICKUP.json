@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-13",
+  "repository": "ojfbot/lego-village-pipeline",
+  "branch": "corr/review-dt-design-r6",
+  "pull_request": 46,
+  "source_commit": "4bf12c8370d341a2bd8d1094491e281ebd6637ec",
+  "working_prototype": "docs/design/review/DT-DESIGN-R6-addendum/prototype",
+  "received_overlay": "docs/design/review/DT-DESIGN-R6-overlay",
+  "guide": "CLAUDE-DESIGN-PICKUP.md",
+  "review_file": "docs/design/review/DT-DESIGN-R6-addendum/review.md",
+  "task_file": "docs/design/review/DT-DESIGN-R6-addendum/follow-up-tasks.json",
+  "posted_review": "https://github.com/ojfbot/lego-village-pipeline/pull/46#pullrequestreview-5498479017",
+  "source_receipt": "docs/design/review/DT-DESIGN-R6-addendum-RECEIPT.json",
+  "source_tree_sha256": "a47c4ecd9c98188b0a47158366928a0602a2c08c904818351a826567f316cafa",
+  "model_pair": [
+    "docs/design/review/DT-DESIGN-R6-addendum/prototype/prototypes/house/house.glb",
+    "docs/design/review/DT-DESIGN-R6-addendum/prototype/prototypes/house/house-metadata.json"
+  ],
+  "missing_source_implementations": [
+    "V-01",
+    "V-02"
+  ],
+  "next_design_priorities": [
+    "R6-NEXT-GRID",
+    "R6-NEXT-NAV",
+    "R6-NEXT-MOTION"
+  ],
+  "separate_research_task": "R6-NEXT-RENDER",
+  "archive_preview_root": "browser-preview",
+  "archive_source_root": "lego-village-r6-pickup",
+  "authority": "Operator-requested design continuation; supplemental review artifacts remain non-operative"
+}
