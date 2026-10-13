@@ -1,0 +1,95 @@
+# package.yaml — designer manifest, at the archive root. Schema: design-package/v1
+# Canonical schema: tools/schemas/design-package.v1.schema.json (ojfbot/lego-village-pipeline).
+# Authored by Claude Design. R6 is an OVERLAY on R5 (R5 on R4, R4 on R3, R3 on R2 rev-b). Authoring kit version 1.0.
+manifest_schema: design-package/v1
+design_package: DT-DESIGN
+revision: R6
+cut_state: as-exported
+cut: "2026-10-12"
+manifest_origin: designer
+path_base: "."
+
+governing_brief: HANDOFF-LEGO-PIPE-037-R0
+answers:
+  - {brief: HANDOFF-LEGO-PIPE-037-R0, part: "2", note: "Room flight, dashboard space, hover/finder wayfinding, reduced-motion and no-WebGL equivalents demonstrated with the real sheets. Depth layers and background comparison not attempted."}
+  - {brief: HANDOFF-LEGO-PIPE-037-R0, part: "3", note: "Room → sheet map and dashboard tabs (HW-02) settle how many pages one room holds."}
+
+supersedes:
+  design_package: DT-DESIGN
+  revision: R5
+  cut_state: as-exported
+  note: "R6 replaces HW-01's spec with four specs over the same study (fly-through, rooms & sheets, ask bar, graphic text), adds dt/theme.js, two notes and four proposals. No sheet, token or ledger row changed; decisions.last_id stays DEC-043."
+
+maturity: prototype
+tier_coverage: tier-1
+mock_math: true
+
+index: handoff/index.json
+sheets: []   # unchanged from R4 — see handoff-r4/package.yaml
+studies:
+  - {id: HW-01, title: "Fly-through — tour, hover, room flight, return, equivalents", status: prototype, spec: specs/HW-01-fly-through.md}
+  - {id: HW-02, title: "Rooms as kinds of work — block → room → sheet map, finder, tabs, Switch room", status: prototype, spec: specs/HW-02-rooms-and-sheets.md}
+  - {id: HW-03, title: "The ask bar — plain-language prompt (type / talk) that routes today", status: prototype, spec: specs/HW-03-ask-bar.md}
+  - {id: HW-04, title: "Graphic text — layered-stroke wordmark, captions, bubbles, gradient sweep", status: prototype, spec: specs/HW-04-graphic-text.md}
+
+decisions:
+  ledger: handoff/decisions.md
+  last_id: DEC-043
+  count: 43
+  proposed: decisions-proposed.md
+
+notes:
+  - {id: N-03, path: ../handoff-r5/notes/N-03-house-stage-is-a-stand-in.md, title: "The 3D house is a stand-in; swap in house.glb"}
+  - {id: N-04, path: ../handoff-r5/notes/N-04-wordmark-needs-vector.md, title: "PLAY WELL should become a vector graphic"}
+  - {id: N-05, path: notes/N-05-shared-theme-preference.md, title: "Blueprint/paper is one shared preference across the house and every sheet"}
+  - {id: N-06, path: notes/N-06-ask-bar-is-a-router.md, title: "The ask bar routes; it does not draft"}
+
+known_defects:
+  - id: D-14
+    rule_id: asset-provenance
+    paths: [sources/prototypes/house/house-stage.js]
+    expected_failure: "Geometry is schematic boxes from house-metadata.json, not the supplied legoHouse.blend / house.glb."
+    evidence: "house.glb absent from the PR #45 tree at bbaeec06ef09; see N-03. Adoption path written and exercised with a local copy only."
+    status: open
+  - id: D-15
+    rule_id: font-flash
+    paths: ["sources/prototypes/House World.dc.html"]
+    expected_failure: "PLAY WELL wordmark may flash on first paint while DynaPuff loads."
+    evidence: "Observed by the operator 2026-10-12; see N-04 / HW-04 §6."
+    status: open
+  - id: D-16
+    rule_id: screenshot-fidelity
+    paths: [sources/prototypes/house]
+    expected_failure: "Design-tool captures cannot read the WebGL canvas; reference PNGs are R0's own captures."
+    evidence: "Carried capture limit (D-7)."
+    status: open
+  - id: D-17
+    rule_id: coverage
+    paths: ["sources/prototypes/House World.dc.html"]
+    expected_failure: "Block 8 of the R0 map belongs to no room; pointing at it shows no card and clicking it does nothing."
+    evidence: "rooms[].blocks in the source omits 8 (HW-02 §2)."
+    status: open
+  - id: D-18
+    rule_id: honesty-of-affordance
+    paths: ["sources/prototypes/House World.dc.html"]
+    expected_failure: "Ask bar matching is literal substring, case-folded; a sentence that does not contain a room/sheet word falls through to the finder."
+    evidence: "HW-03 §3; see N-06."
+    status: open
+
+debts:
+  - "Depth-layer parallax and background comparison (037 §2.3) not attempted."
+  - "Browser history, lost WebGL context mid-flight and rapid repeated activation are unspecified."
+  - "Benny is not present inside the dashboard."
+  - "Phone layout untested; the dashboard is desktop-first per the inherited responsive note. The poster hides its camera offset below 740px."
+  - "Talk button is a labelled stub (HW-03 §4)."
+  - "Vector wordmark not produced (HW-04 §7)."
+
+authoring_kit_version: "1.0"
+extensions:
+  dt:
+    theme: "Drafting Table — paper/blueprint dual theme; blueprint default for the house; preference shared via dt/theme.js (N-05)"
+    tokens: ../handoff-r4/sources/dt/tokens.css
+    theme_script: sources/dt/theme.js
+    studio_palette: specs/HW-04-graphic-text.md#3-studio-palette
+    exported_by: "Claude Design"
+    export_note: "Bundled for operator download and repository upload; no repository write was performed by the designer. Third-party: DynaPuff (OFL, licence included); three.js r128 + examples (RoundedBoxGeometry, RoomEnvironment, GLTFLoader, DRACOLoader) from CDN; Draco decoders from gstatic."
