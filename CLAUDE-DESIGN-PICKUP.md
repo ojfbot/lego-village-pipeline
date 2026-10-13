@@ -2,7 +2,7 @@
 
 The latest Codex/Claude integration and responsive follow-up are on **PR #46**, branch **`corr/review-dt-design-r6`** in `ojfbot/lego-village-pipeline`.
 
-Read the [structured Claude Design pickup guide](https://github.com/ojfbot/lego-village-pipeline/blob/58056fae97116a58e35fb2248a4e49208f8d304f/CLAUDE-DESIGN-PICKUP.md) or its [raw Markdown](https://raw.githubusercontent.com/ojfbot/lego-village-pipeline/58056fae97116a58e35fb2248a4e49208f8d304f/CLAUDE-DESIGN-PICKUP.md). If your GitHub connector reads branches by name, explicitly select `corr/review-dt-design-r6`.
+Read the [structured Claude Design pickup guide](https://github.com/ojfbot/lego-village-pipeline/blob/435f7efbabccb577a953fcd3cdb741400c632e0d/CLAUDE-DESIGN-PICKUP.md) or its [raw Markdown](https://raw.githubusercontent.com/ojfbot/lego-village-pipeline/435f7efbabccb577a953fcd3cdb741400c632e0d/CLAUDE-DESIGN-PICKUP.md). If your GitHub connector reads branches by name, explicitly select `corr/review-dt-design-r6`.
 
 The working prototype is `docs/design/review/DT-DESIGN-R6-addendum/prototype/`, pinned at `4bf12c8370d341a2bd8d1094491e281ebd6637ec`. It combines the R6 interface with the GPT-quality renderer, corrected model pair, responsive sheets/dashboard and navigation fixes. Both Blender revisions and verification are included.
 
