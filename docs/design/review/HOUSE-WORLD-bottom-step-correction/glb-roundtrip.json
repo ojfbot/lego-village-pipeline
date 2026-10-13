@@ -1,0 +1,34 @@
+{
+  "imported_meshes": 102,
+  "triangles": 232433,
+  "block_1_meshes": [
+    {
+      "name": "Block_01_course_00",
+      "vertices": 3293,
+      "faces": 2833,
+      "materials": [
+        "Material_15_c",
+        "Material_47_c",
+        "Material_191_c"
+      ]
+    },
+    {
+      "name": "Block_01_course_01",
+      "vertices": 605,
+      "faces": 460,
+      "materials": [
+        "Material_15_c",
+        "Material_191_c"
+      ]
+    },
+    {
+      "name": "Block_01_course_02",
+      "vertices": 2233,
+      "faces": 1884,
+      "materials": [
+        "Material_15_c",
+        "Material_191_c"
+      ]
+    }
+  ]
+}

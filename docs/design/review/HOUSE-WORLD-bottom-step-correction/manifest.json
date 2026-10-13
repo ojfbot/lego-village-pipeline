@@ -1,0 +1,59 @@
+{
+  "source_commit": "bbaeec06ef09d60a39c7fdfa8163054667ac17ee",
+  "source_package": "HOUSE-WORLD R0 as-exported",
+  "source_sha256": "6c0f6f3bb757370979df0a7d6c5951df1f0ef51716f56412b9d2e55338cc0541",
+  "correction": "Keep Block 1 bottom step tile with its adjoining lower course",
+  "source_geometry_changed": false,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3399,
+      "sha256": "d7508b89794482c8464398ae66d5fa24cd9d81e4fc9dc4e6633d24cab8bafa9c"
+    },
+    {
+      "path": "block-1-highlight.png",
+      "bytes": 944778,
+      "sha256": "3ff025f228afb2958728f02076b8571c5dbe525b90d00232653820cb878e0773"
+    },
+    {
+      "path": "block-1-source.png",
+      "bytes": 940570,
+      "sha256": "883601bc5271ad16b6b356b1835bb78fcffbbb065a8f127d181086bdff58abcf"
+    },
+    {
+      "path": "export_house.py",
+      "bytes": 10742,
+      "sha256": "285dab08c572c67bca1b5dfbd77d32d2ae4ae9215d01d10d884fb301c2a0aa5b"
+    },
+    {
+      "path": "glb-roundtrip.json",
+      "bytes": 620,
+      "sha256": "0aa30837985f3d4578b0abe863a588e92ba6ae91498f573e25b123bd6f66dfea"
+    },
+    {
+      "path": "house-metadata.json",
+      "bytes": 40082,
+      "sha256": "a4fcf44231688102eceade279f490c216decc101061bcf88c5e108c519423a75"
+    },
+    {
+      "path": "house.glb",
+      "bytes": 755960,
+      "sha256": "7932e86c69229f78eed135163161e12ebf158f8d07c7eb57f527ae4f357bb140"
+    },
+    {
+      "path": "verification.json",
+      "bytes": 1187,
+      "sha256": "2cf970762751d8989f6c7f032b55c44e169424691cf09b00be6daf71ff84342d"
+    },
+    {
+      "path": "verify_assets.py",
+      "bytes": 1834,
+      "sha256": "845add584b5602501b320ae48be0919615d807f7bf0878aa28eaa9ab78aebcb8"
+    },
+    {
+      "path": "verify_glb.py",
+      "bytes": 782,
+      "sha256": "6661263ce115808f11aaaac57ebf809970c8d3251d1fd5ca375a664ede00da68"
+    }
+  ]
+}

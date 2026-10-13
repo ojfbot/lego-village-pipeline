@@ -1,0 +1,44 @@
+{
+  "glb_bytes": 755960,
+  "sha256": "7932e86c69229f78eed135163161e12ebf158f8d07c7eb57f527ae4f357bb140",
+  "source_unchanged": true,
+  "source_sha256": "6c0f6f3bb757370979df0a7d6c5951df1f0ef51716f56412b9d2e55338cc0541",
+  "block_1_nodes": [
+    "Block_01_course_00",
+    "Block_01_course_01",
+    "Block_01_course_02"
+  ],
+  "building_courses": 76,
+  "corrected_course": {
+    "name": "Block_01_course_00",
+    "block": 1,
+    "order": 0,
+    "center": [
+      -179.99999618530273,
+      69.99999809265137,
+      33.99999952316284
+    ],
+    "size": [
+      120.00000762939453,
+      100.00000381469727,
+      36.00000858306885
+    ],
+    "faces": 1706,
+    "bricks_joined": 18
+  },
+  "geometry": {
+    "source": {
+      "vertices": 152029,
+      "faces": 137413,
+      "world_positions_sha256": "bb2a6baf371471f25a8783cb0137d18d89ce8a9f9f5544bf954127735817d85e"
+    },
+    "derived": {
+      "vertices": 152029,
+      "faces": 137413,
+      "world_positions_sha256": "b6c4c8da78799a1b6eeffca611a7abc6e32743ee7f7e167a35c81607ea438e20"
+    },
+    "bidirectional_maximum_vertex_error": 4.31583721365314e-05,
+    "tolerance_blender_units": 0.001,
+    "matches_within_tolerance": true
+  }
+}

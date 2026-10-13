@@ -197,3 +197,6 @@
   failing CI gate; the Hub candidate needs a working gate without changing that design cut.
   Added an app-owned token override and checked all effective text tokens at the same 4.5:1
   threshold. The original source defect remains recorded in H-01 R1.
+
+- 2026-10-12: The suspected extra source brick is the valid lowest exterior step tile in Block 1; preserve the frozen Blender source and correct course grouping in a separate export study rather than delete geometry.
+- 2026-10-12: The published R0 cut is already hash-pinned; publish the corrected GLB, JSON, exporter, and asset verification as a sibling correction rather than mutate the received cut.
