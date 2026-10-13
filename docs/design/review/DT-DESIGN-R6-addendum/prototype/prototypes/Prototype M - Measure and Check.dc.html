@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="ext-resource-dependency" content="../dt/tokens.css">
+<meta name="ext-resource-dependency" content="../dt/overlay.js">
+<meta name="ext-resource-dependency" content="../dt/landing.js">
+<meta name="ext-resource-dependency" content="./image-slot.js">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#F6F2E9"/><rect x="30" y="30" width="140" height="140" rx="8" fill="#8F660E"/><text x="100" y="118" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="72" fill="#FDFBF5">M</text></svg></template>
+<x-dc>
+<helmet>
+<title>Measure and check — LEGO Village</title>
+<script>document.documentElement.lang="en"</script>
+<script src="../dt/landing.js"></script>
+<script src="../dt/ledger.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../dt/tokens.css">
+<link rel="stylesheet" href="../dt/responsive.css">
+</helmet>
+<div class="dt-responsive-page" style="max-width:1180px;margin:0 auto;padding:28px 28px 48px;font-family:'Libre Franklin',sans-serif">
+  <header role="banner" style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--dt-ink);padding-bottom:10px;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;min-width:0;flex:1 1 320px">
+      <h1 style="font-family:'Spectral',serif;font-size:19px;font-weight:700;font-style:italic;white-space:nowrap;margin:0">Measure and check</h1>
+      <div style="font-size:11px;color:var(--dt-muted);letter-spacing:0.08em">M-01 · THE NUMBERS THE PARTS LIST RESTS ON · MOCK VALUES</div>
+    </div>
+    <nav aria-label="Sheet" style="display:flex;align-items:center;gap:12px">
+      <a href="../Hub.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">← HUB</a>
+      <button onClick="{{ toggleTheme }}" aria-pressed="{{ dark }}" style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn)">{{ themeLabel }}</button>
+    </nav>
+  </header>
+
+  <sc-if value="{{ hasCaller }}" hint-placeholder-val="{{ true }}">
+    <div role="status" style="margin-top:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;border:1.5px dashed var(--dt-accent);background:var(--dt-bg);border-radius:var(--dt-r-fillet);padding:9px 14px">
+      <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:0.08em;color:var(--dt-accent-deep)">YOU CAME FROM</span>
+      <span style="font-size:12.5px;flex:1;min-width:200px;text-wrap:pretty">{{ callerText }}</span>
+      <a href="{{ callerHref }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:7px 13px;box-shadow:var(--dt-btn-shadow);border-radius:var(--dt-r-btn);text-decoration:none;white-space:nowrap">{{ callerBtn }}</a>
+    </div>
+  </sc-if>
+
+  <div style="margin-top:16px;font-size:13.5px;line-height:1.6;max-width:70ch;text-wrap:pretty">Every number the plan leans on lives here with <strong>how we know it</strong>. Measure a real thing and type what the tape says; or check a claim someone made and attach what proves it. When you finish, you go back to exactly where you were.</div>
+
+  <main style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:16px;margin-top:18px;align-items:start">
+    <section aria-labelledby="h-measure" style="min-width:0;display:grid;gap:14px">
+      <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px">
+          <h2 id="h-measure" style="font-family:'Spectral',serif;font-size:15px;font-weight:600;margin:0;white-space:nowrap">Things to measure</h2>
+          <span aria-live="polite" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">{{ measSummary }}</span>
+        </div>
+        <div style="font-size:11.5px;color:var(--dt-muted);line-height:1.5;margin-bottom:10px;text-wrap:pretty">Each row is one physical fact. ■ measured values are trusted by every sheet; ◇ guesses and ○ unknowns hold the fit checks open.</div>
+        <div style="display:grid;gap:6px">
+          <sc-for list="{{ measures }}" as="m" hint-placeholder-count="6">
+            <div id="{{ m.id }}" style="border:1px {{ m.border }} {{ m.stroke }};border-radius:var(--dt-r-fillet);background:{{ m.bg }};animation:{{ m.anim }}">
+              <button class="dt-measure-row" onClick="{{ m.open }}" aria-expanded="{{ m.isOpen }}" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(120px,auto);gap:3px 12px;align-items:start;width:100%;text-align:left;background:transparent;border:0;padding:9px 12px;cursor:pointer;font-family:'Libre Franklin';color:var(--dt-ink)">
+                <span style="display:grid;gap:3px;min-width:0"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:{{ m.color }}">{{ m.badge }}</span><span style="display:flex;flex-wrap:wrap;align-items:baseline;gap:0 5px;font-size:12.5px;font-weight:600;line-height:1.3;white-space:nowrap"><sc-if value="{{ m.hasRef }}" hint-placeholder-val="{{ false }}"><dc-import name="SetRef" num="{{ m.refNum }}" kind="{{ m.refKind }}" label="{{ m.refLabel }}" hint-size="auto,1em"></dc-import></sc-if><span style="white-space:normal;flex:1 1 auto;min-width:0">{{ m.nameRest }}</span></span><span style="font-size:11px;color:var(--dt-muted);line-height:1.4;text-wrap:pretty">{{ m.why }}</span></span>
+                <span style="display:grid;gap:2px;justify-items:end;text-align:right"><span style="font-family:'Azeret Mono',monospace;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap">{{ m.valueText }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted);line-height:1.5;max-width:150px;text-wrap:pretty">{{ m.meta }}</span></span>
+              </button>
+              <sc-if value="{{ m.isOpen }}" hint-placeholder-val="{{ false }}">
+                <div style="border-top:1px dashed var(--dt-grid-mid);padding:10px 12px 12px;display:grid;gap:10px">
+                  <div style="font-size:12px;line-height:1.5;text-wrap:pretty">{{ m.howTo }}</div>
+                  <div style="display:grid;gap:5px;justify-items:start;font-family:'Azeret Mono',monospace;font-size:9.5px">
+                    <span style="letter-spacing:0.08em;color:var(--dt-muted)">LEANS ON IT</span>
+                    <sc-for list="{{ m.depLinks }}" as="dp" hint-placeholder-count="2"><dc-import name="CrossRef" sheet="{{ dp.sheet }}" card="{{ dp.card }}" label="{{ dp.label }}" hint-size="auto,1em"></dc-import></sc-for>
+                  </div>
+                  <div style="display:grid;gap:10px">
+                    <sc-for list="{{ m.axisGroups }}" as="g" hint-placeholder-count="1">
+                      <div style="display:grid;gap:5px">
+                        <sc-if value="{{ g.hasLabel }}" hint-placeholder-val="{{ false }}"><div style="font-size:11.5px;font-weight:600;line-height:1.4;text-wrap:pretty">{{ g.label }}</div></sc-if>
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr));gap:8px">
+                          <sc-for list="{{ g.axes }}" as="ax" hint-placeholder-count="2">
+                            <label style="display:grid;gap:4px;font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.08em;color:var(--dt-muted);min-width:0">{{ ax.label }}
+                              <input type="number" step="{{ ax.step }}" value="{{ ax.value }}" onChange="{{ ax.set }}" aria-label="{{ ax.aria }}" style="font-family:'Azeret Mono',monospace;font-size:15px;font-variant-numeric:tabular-nums;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:7px 9px;border-radius:var(--dt-r-fillet);width:100%;box-sizing:border-box">
+                            </label>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px;align-items:end">
+                    <label style="display:grid;gap:4px;font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.08em;color:var(--dt-muted)">MEASURED WITH
+                      <select value="{{ m.tool }}" onChange="{{ m.setTool }}" style="font-family:'Libre Franklin';font-size:12.5px;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:7px 9px;border-radius:var(--dt-r-fillet);width:100%;box-sizing:border-box">
+                        <option value="tape">Tape measure</option><option value="calipers">Calipers</option><option value="studs">Counted studs / bricks</option><option value="photo">Photo with overlay</option>
+                      </select>
+                    </label>
+                    <div style="display:grid;gap:6px;font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.08em;color:var(--dt-muted);min-width:0;grid-column:1 / -1">PHOTOS OF IT (OPTIONAL)
+                      <sc-for list="{{ m.photoList }}" as="ph" hint-placeholder-count="0">
+                        <div style="display:flex;align-items:center;gap:8px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-bg);padding:5px 7px;min-width:0">
+                          <div role="img" aria-label="Thumbnail of the attached photo" style="width:28px;height:28px;border-radius:3px;border:1px solid var(--dt-grid-mid);flex:none;background-color:var(--dt-grid-mid);background-size:cover;background-position:center;background-image:url({{ ph.url }})"></div>
+                          <span style="font-family:'Libre Franklin';font-size:11.5px;letter-spacing:0;color:var(--dt-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 auto;min-width:0">{{ ph.name }}</span>
+                          <button onClick="{{ ph.drop }}" aria-label="{{ ph.dropAria }}" style="font-family:'Azeret Mono',monospace;font-size:11px;background:transparent;border:0;color:var(--dt-muted);cursor:pointer;padding:0 2px;flex:none">✕</button>
+                        </div>
+                      </sc-for>
+                      <label style="position:relative;display:flex;align-items:center;justify-content:center;font-family:'Libre Franklin';font-size:12px;font-weight:600;letter-spacing:0;color:var(--dt-ink);background:transparent;border:1.5px dashed var(--dt-ink);padding:8px 12px;cursor:pointer;border-radius:var(--dt-r-fillet);white-space:nowrap">{{ m.pickLabel }}
+                        <input type="file" accept="image/*" multiple="{{ true }}" onChange="{{ m.pickPhoto }}" aria-label="{{ m.photoAria }}" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer">
+                      </label>
+                    </div>
+                  </div>
+                  <sc-if value="{{ m.hasPreview }}" hint-placeholder-val="{{ false }}">
+                    <div role="status" aria-live="assertive" style="border:1.5px dashed var(--dt-accent);background:var(--dt-bg);border-radius:var(--dt-r-fillet);padding:9px 11px;display:grid;gap:8px">
+                      <span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.08em;color:var(--dt-accent-deep)">{{ m.confirmKicker }}</span>
+                      <span style="font-size:12.5px;line-height:1.5;text-wrap:pretty">{{ m.preview }}</span>
+                      <span style="display:grid;gap:4px;justify-items:start">
+                        <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">SIGN IT · YOUR INITIALS</span>
+                        <span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                          <input type="text" value="{{ m.initials }}" onChange="{{ m.setInitials }}" placeholder="jfo" maxlength="5" size="5" aria-label="Your initials — signs this measurement" style="font-family:'Azeret Mono',monospace;font-size:13px;font-weight:600;text-transform:lowercase;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:0 8px;height:32px;width:74px;box-sizing:border-box">
+                          <button onClick="{{ m.commit }}" disabled="{{ m.unsigned }}" title="{{ m.commitTitle }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:0 15px;height:32px;cursor:{{ m.commitCursor }};box-shadow:var(--dt-btn-shadow);border-radius:var(--dt-r-btn);opacity:{{ m.commitOpacity }}">Record it</button>
+                        </span>
+                      </span>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ m.hasHistory }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:grid;gap:3px;font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">
+                      <span style="letter-spacing:0.08em">EARLIER VALUES · KEPT, NEVER EDITED</span>
+                      <sc-for list="{{ m.history }}" as="h" hint-placeholder-count="1"><span style="text-decoration:line-through;opacity:0.8">{{ h }}</span></sc-for>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div aria-live="polite" style="font-family:'Azeret Mono',monospace;font-size:11px;color:var(--dt-muted);min-height:16px">{{ narration }}</div>
+    </section>
+
+    <section aria-labelledby="h-claims" style="min-width:0;display:grid;gap:14px">
+      <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px">
+          <h2 id="h-claims" style="font-family:'Spectral',serif;font-size:15px;font-weight:600;margin:0">Claims to check</h2>
+          <span aria-live="polite" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">{{ claimSummary }}</span>
+        </div>
+        <div style="font-size:11.5px;color:var(--dt-muted);line-height:1.5;margin-bottom:10px;text-wrap:pretty">Someone — a source, an agent, a memo — said something the plan now depends on. Check it and attach what proves it. An unchecked claim stays visibly a claim.</div>
+        <div style="display:grid;gap:6px">
+          <sc-for list="{{ claims }}" as="k" hint-placeholder-count="4">
+            <div style="border:1px {{ k.border }} {{ k.stroke }};border-radius:var(--dt-r-fillet);padding:10px 12px;display:grid;gap:7px;animation:{{ k.anim }}">
+              <div style="display:grid;gap:3px"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:{{ k.color }}">{{ k.badge }}</span><span style="display:flex;flex-wrap:wrap;align-items:baseline;gap:0 5px;font-size:12.5px;font-weight:600;line-height:1.3"><sc-if value="{{ k.hasRef }}" hint-placeholder-val="{{ false }}"><dc-import name="SetRef" num="{{ k.refNum }}" kind="{{ k.refKind }}" label="{{ k.refLabel }}" hint-size="auto,1em"></dc-import></sc-if><span style="flex:1 1 auto;min-width:0;text-wrap:pretty">{{ k.textRest }}</span></span></div>
+              <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 10px;align-items:baseline;font-family:'Azeret Mono',monospace;font-size:9.5px;line-height:1.6">
+                <span style="color:var(--dt-muted);white-space:nowrap">SAID BY</span><span style="display:flex;gap:6px;flex-wrap:wrap;align-items:baseline"><sc-if value="{{ k.srcExternal }}" hint-placeholder-val="{{ true }}"><a href="{{ k.srcHref }}" target="_blank" rel="noopener" style="font-weight:600">{{ k.who }} ↗</a></sc-if><sc-if value="{{ k.srcInternal }}" hint-placeholder-val="{{ false }}"><dc-import name="CrossRef" sheet="{{ k.srcSheet }}" card="{{ k.srcCard }}" label="{{ k.who }} ↖" dir="back" hint-size="auto,1em"></dc-import></sc-if><span style="color:var(--dt-muted)">{{ k.srcNote }}</span></span>
+                <span style="color:var(--dt-muted);white-space:nowrap">LEANS ON IT</span><span style="display:flex;gap:5px;flex-wrap:wrap"><sc-for list="{{ k.deps }}" as="dp" hint-placeholder-count="2"><dc-import name="CrossRef" sheet="{{ dp.sheet }}" card="{{ dp.card }}" label="{{ dp.label }}" hint-size="auto,1em"></dc-import></sc-for></span>
+              </div>
+              <sc-if value="{{ k.hasEvidence }}" hint-placeholder-val="{{ false }}"><div style="font-size:11.5px;line-height:1.5;border-left:2px solid {{ k.color }};padding:2px 8px;text-wrap:pretty">{{ k.evidence }}</div></sc-if>
+              <sc-if value="{{ k.isOpen }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;gap:6px;flex-wrap:wrap">
+                  <button onClick="{{ k.startHolds }}" aria-pressed="{{ k.draftingHolds }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;background:{{ k.holdsBg }};color:{{ k.holdsFg }};border:1px solid var(--dt-ink);padding:4px 9px;cursor:pointer;border-radius:var(--dt-r-btn);white-space:nowrap">■ HOLDS · ATTACH PROOF</button>
+                  <button onClick="{{ k.startWrong }}" aria-pressed="{{ k.draftingWrong }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;background:{{ k.wrongBg }};color:{{ k.wrongFg }};border:1px solid var(--dt-block);padding:4px 9px;cursor:pointer;border-radius:var(--dt-r-btn);white-space:nowrap">▲ WRONG · SAY WHY</button>
+                  <button onClick="{{ k.startPark }}" aria-pressed="{{ k.draftingPark }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;background:{{ k.parkBg }};color:{{ k.parkFg }};border:1px dashed var(--dt-unres);padding:4px 9px;cursor:pointer;border-radius:var(--dt-r-btn);white-space:nowrap">○ CAN’T CHECK YET</button>
+                </div>
+                <sc-if value="{{ k.drafting }}" hint-placeholder-val="{{ false }}">
+                  <div style="border:1.5px solid var(--dt-accent);border-radius:var(--dt-r-fillet);padding:10px 12px;display:grid;gap:8px;background:var(--dt-bg)">
+                    <div style="font-size:12px;line-height:1.5;text-wrap:pretty">{{ k.draftLede }}</div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:8px;align-items:end">
+                      <label style="display:grid;gap:3px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">{{ k.methodLabel }}
+                        <select value="{{ k.method }}" onChange="{{ k.setMethod }}" style="font-family:'Libre Franklin';font-size:12.5px;background:var(--dt-sheet);color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:7px 9px;border-radius:var(--dt-r-fillet)">
+                          <sc-for list="{{ k.methods }}" as="mo" hint-placeholder-count="4"><option value="{{ mo.v }}">{{ mo.t }}</option></sc-for>
+                        </select>
+                      </label>
+                      <sc-if value="{{ k.wantsProof }}" hint-placeholder-val="{{ true }}"><button onClick="{{ k.attach }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px dashed var(--dt-ink);padding:8px 12px;cursor:pointer;border-radius:var(--dt-r-btn);white-space:nowrap">{{ k.attachLabel }}</button></sc-if>
+                      <sc-if value="{{ k.wantsOwner }}" hint-placeholder-val="{{ false }}"><label style="display:grid;gap:3px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">CHECK IT WHEN<select value="{{ k.trigger }}" onChange="{{ k.setTrigger }}" style="font-family:'Libre Franklin';font-size:12.5px;background:var(--dt-sheet);color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:7px 9px;border-radius:var(--dt-r-fillet)"><option value="receiving">the first parcel arrives</option><option value="model">the model exists</option><option value="build">the build starts</option><option value="date">a date I set</option></select></label></sc-if>
+                    </div>
+                    <label style="display:grid;gap:3px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">{{ k.whyLabel }}<textarea value="{{ k.why }}" onChange="{{ k.setWhy }}" rows="2" placeholder="{{ k.whyPlaceholder }}" style="font-family:'Libre Franklin';font-size:12.5px;padding:7px 9px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-sheet);color:var(--dt-ink);resize:vertical"></textarea></label>
+                    <sc-if value="{{ k.canRestate }}" hint-placeholder-val="{{ false }}">
+                      <div role="status" aria-live="assertive" style="border:1.5px dashed var(--dt-accent);border-radius:var(--dt-r-fillet);padding:9px 11px;display:grid;gap:8px;background:var(--dt-sheet)">
+                        <span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.08em;color:var(--dt-accent-deep)">◇ BEFORE IT’S RECORDED</span>
+                        <span style="font-size:12.5px;line-height:1.5;text-wrap:pretty">{{ k.restatement }}</span>
+                        <span style="display:flex;gap:8px;flex-wrap:wrap"><button onClick="{{ k.commit }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:7px 13px;cursor:pointer;box-shadow:var(--dt-btn-shadow);border-radius:var(--dt-r-btn)">Yes, record it</button><button onClick="{{ k.cancelDraft }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:7px 13px;cursor:pointer;border-radius:var(--dt-r-btn)">Not yet</button></span>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ k.cannotRestate }}" hint-placeholder-val="{{ true }}"><div style="font-size:11px;color:var(--dt-muted)">{{ k.missing }}</div></sc-if>
+                  </div>
+                </sc-if>
+              </sc-if>
+              <sc-if value="{{ k.isDone }}" hint-placeholder-val="{{ false }}"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)"><span style="line-height:1.5;white-space:nowrap">{{ k.stamp }}</span><button onClick="{{ k.reopen }}" style="font-family:'Azeret Mono',monospace;font-size:9px;background:transparent;color:var(--dt-muted);border:1px dashed var(--dt-unres);padding:1px 7px;cursor:pointer;border-radius:var(--dt-r-btn);white-space:nowrap">↺ new evidence</button></div></sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px">
+        <h2 style="font-family:'Spectral',serif;font-size:15px;font-weight:600;margin:0 0 8px">What changed because of this</h2>
+        <div style="font-size:11.5px;color:var(--dt-muted);line-height:1.5;margin-bottom:8px;text-wrap:pretty">A new number or a checked claim doesn’t just sit here — it marks stale what depended on the old one, so the next sheet reopens the right checks.</div>
+        <div style="display:grid;gap:5px">
+          <sc-for list="{{ ripples }}" as="r" hint-placeholder-count="3">
+            <div style="display:flex;gap:10px;align-items:baseline;font-size:12px;border-bottom:1px dashed var(--dt-grid-mid);padding:5px 0"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:{{ r.color }};white-space:nowrap">{{ r.tag }}</span><span style="flex:1;min-width:0;text-wrap:pretty">{{ r.text }}</span><a href="{{ r.href }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;white-space:nowrap">{{ r.sheet }} ↗</a></div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ noRipples }}" hint-placeholder-val="{{ true }}"><div style="font-size:11.5px;color:var(--dt-muted)">Nothing yet this visit.</div></sc-if>
+      </div>
+      <div style="background:var(--dt-sheet);border:1px dashed var(--dt-unres);padding:14px 18px;font-size:11.5px;color:var(--dt-muted)">
+        <span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.1em">PROTOTYPE ASSUMPTIONS</span>
+        <ul style="margin:8px 0 0;padding-left:16px;display:grid;gap:4px">
+          <li>Two control loops (014 §3.3): <em>capture a measurement</em> and <em>verify a claim</em>. Both must return the user to the interrupted work — the YOU CAME FROM bar reads <span style="font-family:'Azeret Mono',monospace">?from=</span> and carries a return link; on a real sheet it restores scroll and selection.</li>
+          <li>A measurement is a new field revision with tool, unit, author and time; the old value is kept and struck through, never edited. schema_request: <span style="font-family:'Azeret Mono',monospace">Measurement { subject, field, value_ldu, display_unit, tool, by, at, supersedes, evidence_ref }</span> (014 §7.8).</li>
+          <li>Tree values below are the operator’s 2026-09-17 measurements (DEC-016). Values are entered in the unit the tape gives; stored as integer LDU (014 §7.1).</li>
+          <li>Verified claims carry method + evidence; AI stance is never authority (014 §8). “Can’t check yet” parks with an owner and due trigger.</li>
+          <li>Photo attachment is real in the prototype — the picker takes one or more files from the device, each becomes a chip with thumbnail and filename, and the filenames ride along on the recorded value. Nothing is uploaded; the overlay/measure-from-photo step is still mocked. Blast-radius list is mocked from a fixed dependency map.</li>
+          <li>A measurement can have more than one axis: the tree base is recorded as width × depth × height in one commit, so the fit check never gets two of three. Single-axis rows are unchanged.</li>
+          <li>Every recording is <strong>signed</strong>: the confirm block asks for initials (e.g. <span style="font-family:'Azeret Mono',monospace">jfo</span>) and “Yes, record it” stays disabled until they’re typed — authorship is part of the value, not metadata added later.</li>
+          <li><strong>SetRef</strong> (operator ask 2026-09-17): every set / MOC / part number is a hover-or-focus reference card — image, name, the facts we hold, BrickLink + Rebrickable links. Reference comes from BrickLink, never LEGO.com. Drop the set image onto the card once; it persists.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;paper&quot;,&quot;blueprint&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto'|'paper'|'blueprint'&quot;},&quot;from&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;A-01&quot;,&quot;C-01&quot;,&quot;F-01&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Return loop (simulates ?from=)&quot;},&quot;what&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Return loop (simulates ?from=)&quot;}}">
+class Component extends DCLogic {
+  state = { dark: null, open: null, drafts: {}, tools: {}, preview: null, photos: {}, initials: {}, narration: '', ripples: [], claimState: {}, claimEvidence: {}, claimDraft: null,
+    measures: [
+      { id: 'tree-base', name: 'Tree 41843 — base footprint and height', why: 'Every fit check runs against this box — and a model can need more room than it is solid, so the room it reserves and the bulk it fills are recorded apart.',
+        axes: [
+          { k: 'rw', label: 'ACROSS', unit: 'studs', group: 'Room it needs — out to whatever sticks out furthest' },
+          { k: 'rd', label: 'FRONT TO BACK', unit: 'studs', group: 'Room it needs — out to whatever sticks out furthest' },
+          { k: 'bw', label: 'ACROSS', unit: 'studs', group: 'Solid part — same numbers if nothing sticks out' },
+          { k: 'bd', label: 'FRONT TO BACK', unit: 'studs', group: 'Solid part — same numbers if nothing sticks out' },
+          { k: 'hb', label: 'WHOLE BRICKS', unit: 'bricks', group: 'How tall — bricks, then leftover plates (3 plates = 1 brick)' },
+          { k: 'hp', label: 'PLATES ON TOP · 0–2', unit: 'plates', group: 'How tall — bricks, then leftover plates (3 plates = 1 brick)' }
+        ],
+        values: { rw: 16, rd: 16, bw: 16, bd: 16, hb: 8, hp: 0 }, unit: 'studs', step: 1, value: 16, status: 'measured', tool: 'studs', by: 'James', at: '09-17 15:56', ldu: 320,
+        dependents: [['A-01', 'Nothing sits under the tree base'], ['F-01', 'Studs the tree takes'], ['C-01', 'Section notch / ring centre (Q13)']],
+        howTo: 'Two footprints, one height. For the room it needs, count studs to the furthest thing that sticks out on each side — decoration, knobs, anything a neighbour would hit. For the solid part, count the block itself. For height, count whole bricks, then any plates left over on top (3 plates = 1 brick, so 0–2 here).' },
+      { id: 'tree-h', name: 'Tree 41843 — height', why: 'Sets what “tall” means on the side view.', unit: 'bricks', step: 1, value: 40, status: 'measured', tool: 'studs', by: 'James', at: '09-17 15:56', ldu: 960, dependents: [['F-01', 'Side view scale'], ['A-01', '3D massing']], howTo: 'Count courses from the table to the tip, or measure in mm and divide by 9.6.' },
+      { id: 'tree-overhang', name: 'Tree 41843 — branch overhang radius', why: 'Anything inside this circle lives under the branches.', unit: 'studs', step: 1, value: 28, status: 'measured', tool: 'tape', by: 'James', at: '09-17 15:56', ldu: 560, dependents: [['A-01', 'Everything under the branches ≤ 10 bricks'], ['F-01', 'Headroom flag'], ['C-01', 'Ballast under the branches']], howTo: 'From the trunk centre to the tip of the lowest, longest branch, along the table. Round up.' },
+      { id: 'tree-clear', name: 'Tree 41843 — clear height under lowest branches', why: 'The ceiling for buildings and trees near the tree.', unit: 'bricks', step: 1, value: 10, status: 'measured', tool: 'tape', by: 'James', at: '09-17 15:56', ldu: 240, dependents: [['A-01', 'Everything under the branches ≤ 10 bricks'], ['F-01', 'Too-tall flag']], howTo: 'Table to the underside of the lowest branch, at the overhang edge.' },
+      { id: 'railhead-z', name: 'Railhead height above module top', why: 'Grade, banking and the flush check all wait on this.', unit: 'plates', step: 1, value: null, status: 'unknown', tool: null, by: null, at: null, ldu: null, dependents: [['A-01', 'Grade and banking — NOT RUN'], ['C-01', 'Ballast keeps railhead flush']], howTo: 'Put one curve on one module with the chosen ballast. Measure from the module top to the top of the rail, in plates.' },
+      { id: 'table', name: 'Table — usable top', why: 'The 112 × 112 stud assumption every plan draws on.', unit: 'studs', step: 1, value: 112, status: 'guess', tool: null, by: 'AI', at: '09-16', ldu: 2240, dependents: [['F-01', 'Free studs'], ['A-01', 'The ring fits the table']], howTo: 'Measure the usable top in mm, divide by 8 and round down. Note any lip or edge you cannot build on.' }
+    ],
+    claims: [
+      { id: 'c1', text: '16 × 53400 curves make a full circle at R40', ref: ['53400', 'part', '53400'], textRest: '× 16 make a full circle at R40', who: 'LEGO set inventory (10361)', src: 'https://www.bricklink.com/v2/catalog/catalogitem.page?S=10361-1#T=I', srcNote: 'BrickLink inventory · snapshot 09-16', usedBy: 'C-01 own rows · A-01 ring', deps: [['C-01', 'Own rows: 16 curves', 'parts'], ['A-01', 'The ring fits the table', 'fit']], status: 'holds', evidence: 'Set inventory lists 16 × 53400; 16 × 22.5° = 360°. Checked against the parts bag 09-16.' },
+      { id: 'c2', text: 'bl-741807 needs 4 modules to carry the circle', ref: ['741807', 'moc', 'bl-741807'], textRest: 'needs 4 modules to carry the circle', who: 'BrickLink Studio listing', src: 'https://www.bricklink.com/v3/studio/design.page?idModel=741807', srcNote: 'stable gallery URL · our snapshot in B-01', usedBy: 'C-01 adapted rows · A-01 sections', deps: [['C-01', 'Adapted rows ×4', 'parts'], ['A-01', 'Sections NE / NW', 'rig']], status: 'open', evidence: '' },
+      { id: 'c3', text: 'Recoloured tan → white plates exist in the needed quantities', who: 'AI recolour pass', src: 'B-01', srcCard: '', srcNote: 'B-01 decision trail · 09-16 13:24', usedBy: 'C-01 adapted rows · P-01 lots', deps: [['C-01', 'Recoloured rows', 'parts'], ['P-01', 'Lots per shop', '']], status: 'open', evidence: '' },
+      { id: 'c4', text: 'Single ballast keeps the railhead flush with the module top', who: 'AI · ballast research', src: '../brief/RESEARCH-01-nomenclature.md', srcNote: 'research note · unconfirmed', usedBy: 'C-01 fit · A-01 grade', deps: [['C-01', 'Fit: railhead flush', 'fit'], ['A-01', 'Grade and banking', 'fit'], ['M-01', 'Railhead height (unknown)', 'railhead-z']], status: 'open', evidence: '' }
+    ]
+  };
+  HREF = { 'A-01': 'Prototype A - Layout Canvas.dc.html', 'C-01': 'Prototype C - Measurement to Procurement.dc.html', 'F-01': '../F-01 Workbench Junior.dc.html', 'P-01': 'Prototype P - Procurement.dc.html' };
+  applyLedger() {
+    const L = window.DTLedger; if (!L) return; const fb = L.fact('treeBase'); if (!fb) return;
+    this.setState(st => ({ measures: st.measures.map(x => x.id !== 'tree-base' ? x : (x.at === 'ledger' ? x : Object.assign({}, x, {
+      values: { rw: fb.reservedStuds.w, rd: fb.reservedStuds.d, bw: x.values.bw, bd: x.values.bd, hb: fb.height.bricks, hp: fb.height.plates }, value: fb.reservedStuds.w, ldu: fb.ldu.w, status: 'measured', tool: 'studs', by: fb.by || 'jfo', at: 'ledger',
+      history: (x.history || []).concat(['16 × 16 st of room, 8 br tall · counted studs / bricks · James · 09-17 15:56 (from memory)'])
+    }))), narration: 'Tree base picked up from the ledger: ' + (fb.summary || '') + '.' }));
+  }
+  componentDidMount() {
+    this.forceUpdate();
+    this.applyLedger(); if (window.DTLedger) this._unsub = window.DTLedger.subscribe(() => this.applyLedger());
+    const id = (location.hash || '').replace('#', '');
+    const m = this.state.measures.find(x => x.id === id);
+    if (!m) return;
+    this.setState({ open: id, narration: m.name + ' — opened from the hub. ' + m.howTo });
+    let tries = 0;
+    const settle = () => {
+      const card = document.getElementById(id);
+      const input = card && card.querySelector('input[type="number"]');
+      if (input) {
+        const y = card.getBoundingClientRect().top + window.scrollY - 24;
+        window.scrollTo({ top: y < 0 ? 0 : y, behavior: 'smooth' });
+        input.focus({ preventScroll: true });
+        input.select && input.select();
+        if (document.activeElement === input || tries > 24) return;
+      }
+      if (tries++ < 25) setTimeout(settle, 80);
+    };
+    settle();
+  }
+  componentDidUpdate() { document.body.classList.toggle('dt-blueprint', this.isDark()); }
+  isDark() { if (this.state.dark !== null) return this.state.dark; if (this.props.theme === 'blueprint') return true; if (this.props.theme === 'paper') return false; return typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches; }
+  pulse(key, val) { this._p = this._p || {}; this._t = this._t || {}; this._f = this._f || {}; const v = JSON.stringify(val), now = Date.now(); if (key in this._p && this._p[key] !== v) { this._t[key] = now; this._f[key] = !this._f[key]; } this._p[key] = v; return (now - (this._t[key] || 0) < 900) ? 'dtChange' + (this._f[key] ? 'A' : 'B') + ' .8s ease-out' : 'none'; }
+  toLdu(v, unit) { return Math.round(v * ({ studs: 20, bricks: 24, plates: 8, mm: 2.5 }[unit] || 1)); }
+  ABBR = { studs: 'st', bricks: 'br', plates: 'pl', mm: 'mm' };
+  lduSay(m, AX, v) {
+    if (m.id === 'tree-base') return this.toLdu(Number(v.rw), 'studs') + ' × ' + this.toLdu(Number(v.rd), 'studs') + ' × ' + (this.toLdu(Number(v.hb), 'bricks') + this.toLdu(Number(v.hp || 0), 'plates')) + ' LDU';
+    return AX.map(a => this.toLdu(Number(v[a.k]), a.unit)).join(' × ') + ' LDU';
+  }
+  sayVals(m, AX, v) {
+    const n = (k) => { const x = v[k]; return (x === null || x === undefined || x === '') ? null : Number(x); };
+    if (m.id === 'tree-base') {
+      const pl = n('hp'), h = (n('hb') === null ? '—' : n('hb') + ' br') + (pl ? ' + ' + pl + ' pl' : '');
+      const box = (a, b) => (n(a) === null ? '—' : n(a)) + ' × ' + (n(b) === null ? '—' : n(b)) + ' st';
+      const same = n('rw') === n('bw') && n('rd') === n('bd');
+      return box('rw', 'rd') + ' of room' + (same ? ' (solid all the way out)' : ', ' + box('bw', 'bd') + ' solid') + ', ' + h + ' tall';
+    }
+    return AX.map(a => (n(a.k) === null ? '—' : n(a.k) + ' ' + a.unit)).join(' × ');
+  }
+  caller() { const q = new URLSearchParams(location.search); const from = q.get('from') || this.props.from || ''; const what = q.get('what') || this.props.what || ''; return { from, what }; }
+  renderVals() {
+    const s = this.state, dark = this.isDark(), c = this.caller();
+    const TOOLW = { tape: 'tape measure', calipers: 'calipers', studs: 'counted studs / bricks', photo: 'photo with overlay' };
+    const measures = s.measures.map(m => {
+      const isOpen = s.open === m.id, tool = s.tools[m.id] || m.tool || 'tape';
+      const S = { measured: ['■ MEASURED', 'var(--dt-pass)'], guess: ['◇ GUESS', 'var(--dt-prov-deep)'], unknown: ['○ UNKNOWN', 'var(--dt-unres-ink)'] }[m.status];
+      const pvRaw = s.preview && s.preview.id === m.id ? s.preview : null;
+      const phs = s.photos[m.id] || [], sig = s.initials[m.id] ?? '';
+      const AX = m.axes || [{ k: 'v', label: 'WHAT THE TAPE SAYS', unit: m.unit }];
+      const base = m.values || { v: m.value };
+      const cur = Object.assign({}, base, s.drafts[m.id] || {});
+      const filled = AX.every(a => cur[a.k] !== '' && cur[a.k] !== null && cur[a.k] !== undefined && !isNaN(Number(cur[a.k])));
+      const dirty = filled && AX.some(a => Number(cur[a.k]) !== Number(base[a.k]));
+      const pv = pvRaw || (isOpen && filled ? { id: m.id, vals: cur, tool, same: true } : null);
+      const say = (v) => this.sayVals(m, AX, v);
+      const setAxis = (k) => (e) => { const val = e.target.value; this.setState(st => {
+        const d = Object.assign({}, st.drafts[m.id] || {}, { [k]: val });
+        const next = Object.assign({}, base, d);
+        const ok = AX.every(a => next[a.k] !== '' && next[a.k] !== null && next[a.k] !== undefined && !isNaN(Number(next[a.k])));
+        const diff = ok && AX.some(a => Number(next[a.k]) !== Number(base[a.k]));
+        return { drafts: Object.assign({}, st.drafts, { [m.id]: d }), preview: diff ? { id: m.id, vals: next, tool } : null };
+      }); };
+      return {
+        axisGroups: (() => { const out = []; AX.forEach(a => { const g = a.group || ''; let last = out[out.length - 1]; if (!last || last.label !== g) { last = { label: g, hasLabel: !!g, axes: [] }; out.push(last); } last.axes.push(a.k); }); return out.map((g, i) => ({ label: g.label, hasLabel: g.hasLabel, key: 'g' + i, axes: g.axes.map(k => { const a = AX.find(x => x.k === k); return { label: a.label + ' · ' + a.unit.toUpperCase(), value: String(cur[a.k] ?? ''), step: String(a.step || m.step), aria: m.name + ' — ' + a.label.toLowerCase() + ' in ' + a.unit, set: setAxis(a.k) }; }) })); })(),
+        axes: AX.map(a => ({ label: a.label + ' · ' + a.unit.toUpperCase(), value: String(cur[a.k] ?? ''), step: String(a.step || m.step), aria: m.name + ' — ' + a.label.toLowerCase() + ' in ' + a.unit, set: setAxis(a.k) })),
+        id: m.id, name: m.name, why: m.why, hasRef: /^(Tree 41843|Train 10361)/.test(m.name), refNum: m.name.startsWith('Tree') ? '41843' : '10361', refKind: 'set', refLabel: m.name.split(' — ')[0], nameRest: /^(Tree 41843|Train 10361)/.test(m.name) ? '— ' + m.name.split(' — ').slice(1).join(' — ') : m.name, unit: m.unit.toUpperCase(), step: String(m.step), badge: S[0], color: S[1], isOpen,
+        valueText: m.id === 'tree-base' ? (base.rw ?? '—') + ' × ' + (base.rd ?? '—') : AX.length > 1 ? AX.map(a => base[a.k] ?? '—').join(' × ') : (m.value === null ? '—' : m.value + ' ' + m.unit), meta: (AX.length > 1 ? AX.map(a => a.unit).join(' × ') + ' · ' : '') + (m.status === 'unknown' ? 'nobody has measured this' : (m.status === 'guess' ? 'assumed · ' + m.by : TOOLW[m.tool] + ' · ' + m.by + ' · ' + (m.at === 'ledger' ? 'today · via I-03 / Hub' : m.at)) + (m.ldu !== null ? ' · ' + m.ldu + ' LDU' : '')) + (m.photos && m.photos.length ? ' · ▣ ' + m.photos.length + ' photo' + (m.photos.length > 1 ? 's' : '') : ''),
+        border: isOpen ? 'solid' : 'dashed', stroke: isOpen ? 'var(--dt-accent)' : m.status === 'unknown' ? 'var(--dt-unres)' : 'var(--dt-grid-mid)', bg: isOpen ? 'var(--dt-bg)' : 'transparent', anim: this.pulse('m:' + m.id, [m.value, m.status]),
+        open: () => this.setState({ open: isOpen ? null : m.id, preview: null, narration: isOpen ? '' : m.name + ' — ' + m.howTo }),
+        howTo: m.howTo, depLinks: m.dependents.map(d => ({ label: d[0] + ' · ' + d[1] + ' →', sheet: d[0], card: d[0] === 'A-01' || d[0] === 'C-01' ? 'fit' : '' })), tool, setTool: (e) => { const t = e.target.value; this.setState(st => ({ tools: Object.assign({}, st.tools, { [m.id]: t }), preview: st.preview && st.preview.id === m.id ? Object.assign({}, st.preview, { tool: t }) : st.preview })); },
+        pickPhoto: (e) => { const fs = Array.from(e.target.files || []); if (!fs.length) return; const add = fs.map(f => ({ name: f.name, url: URL.createObjectURL(f) })); e.target.value = ''; this.setState(st => ({ photos: Object.assign({}, st.photos, { [m.id]: (st.photos[m.id] || []).concat(add) }), narration: add.map(a => a.name).join(', ') + ' attached to ' + m.name + '. Photos travel with the measurement as proof.' })); },
+        photoList: phs.map((x, i) => ({ url: x.url, name: x.name, dropAria: 'Remove ' + x.name, drop: () => this.setState(st => ({ photos: Object.assign({}, st.photos, { [m.id]: (st.photos[m.id] || []).filter((_, j) => j !== i) }), narration: x.name + ' removed from ' + m.name + '.' })) })),
+        pickLabel: phs.length ? '＋ Add another photo' : '▢ Choose a photo…', photoAria: 'Choose photos of ' + m.name,
+        confirmKicker: pv && pv.same ? '◇ SIGN TO CONFIRM' : '◇ BEFORE IT’S SAVED', initials: sig, setInitials: (e) => { const v = e.target.value; this.setState(st => ({ initials: Object.assign({}, st.initials, { [m.id]: v }) })); },
+        unsigned: !sig.trim(), commitCursor: sig.trim() ? 'pointer' : 'not-allowed', commitOpacity: sig.trim() ? 1 : 0.45, commitTitle: sig.trim() ? 'Record it under ' + sig.trim() : 'Type your initials first — a measurement is signed by whoever took it',
+        hasPreview: !!pv, preview: !pv ? '' : pv.same ? 'Nothing changed yet — sign and record to confirm ' + m.name + ' really is ' + say(base) + ' as measured with ' + TOOLW[tool] + (phs.length ? ' and ' + phs.length + ' photo' + (phs.length > 1 ? 's' : '') : '') + ', today, by you. Or type new numbers above.' : 'I will change ' + m.name + ' from ' + (m.value === null ? 'unknown' : say(base)) + ' to ' + say(pv.vals) + ' (' + AX.map(a => this.toLdu(Number(pv.vals[a.k]), a.unit)).join(' × ') + ' LDU), measured with ' + TOOLW[pv.tool] + (phs.length ? ', ' + phs.length + ' photo' + (phs.length > 1 ? 's' : '') + ' attached' : '') + ', signed ' + (sig.trim() || '— sign below') + '. This will mark stale: ' + m.dependents.map(d => d[0] + ' · ' + d[1]).join('; ') + '. The old value stays on record.',
+        commit: () => { if (!pv || !sig.trim()) return; const oldSay = m.value === null ? 'unknown' : say(base); const prim = Number(pv.vals[AX[0].k]); this.setState(st => ({
+          measures: st.measures.map(x => x.id === m.id ? Object.assign({}, x, { value: prim, values: AX.reduce((o, a) => { o[a.k] = Number(pv.vals[a.k]); return o; }, {}), ldu: this.toLdu(prim, AX[0].unit), status: 'measured', tool: pv.tool, by: sig.trim().toLowerCase(), photos: phs.map(p => p.name), at: 'now', history: (x.history || []).concat([oldSay + ' · ' + (x.status === 'guess' ? 'assumed' : TOOLW[x.tool] || 'unknown') + ' · ' + (x.by || '—') + ' · ' + (x.at || '—')]) }) : x),
+          preview: null, drafts: Object.assign({}, st.drafts, { [m.id]: {} }),
+          ripples: m.dependents.map(d => ({ tag: '▲ STALE', color: 'var(--dt-block-deep)', text: d[1] + ' — re-runs against ' + say(pv.vals), sheet: d[0], href: this.HREF[d[0]] })).concat(st.ripples),
+          narration: m.name + ' recorded: ' + say(pv.vals) + ', signed ' + sig.trim().toLowerCase() + (phs.length ? ' with ' + phs.length + ' photo' + (phs.length > 1 ? 's' : '') : '') + '. ' + m.dependents.length + ' dependent check' + (m.dependents.length === 1 ? '' : 's') + ' marked stale.' })); },
+        cancel: () => this.setState(st => ({ preview: null, drafts: Object.assign({}, st.drafts, { [m.id]: {} }), narration: 'Left ' + m.name + ' as it was.' })),
+        hasHistory: !!(m.history && m.history.length), history: m.history || []
+      };
+    });
+    const nM = s.measures.filter(m => m.status === 'measured').length;
+    const claims = s.claims.map(k => {
+      const st = s.claimState[k.id] || k.status, ev = s.claimEvidence[k.id] || k.evidence;
+      const S = { holds: ['■ HOLDS', 'var(--dt-pass)'], wrong: ['▲ WRONG', 'var(--dt-block-deep)'], parked: ['○ PARKED', 'var(--dt-unres-ink)'], open: ['◇ UNCHECKED', 'var(--dt-prov-deep)'] }[st];
+      const set = (to, evidence, ripple) => () => this.setState(p => ({ claimDraft: null, claimState: Object.assign({}, p.claimState, { [k.id]: to }), claimEvidence: Object.assign({}, p.claimEvidence, { [k.id]: evidence }), ripples: ripple ? [ripple].concat(p.ripples) : p.ripples, narration: 'Claim “' + k.text + '” → ' + to + '.' }));
+      const D = s.claimDraft && s.claimDraft.id === k.id ? s.claimDraft : null, mode = D && D.mode;
+      const METHODS = { holds: [['listing', 'Read the source listing / inventory'], ['counted', 'Counted the real pieces'], ['measured', 'Measured it on the table'], ['test', 'Built a test piece and tried it'], ['agent', 'An agent’s check (needs its report attached)']], wrong: [['counted', 'Counted the real pieces'], ['measured', 'Measured it on the table'], ['test', 'Built a test piece and tried it'], ['source', 'The source itself says otherwise']], parked: [['blocked', 'Can’t check until something arrives or exists']] };
+      const MW = { listing: 'read the source listing', counted: 'counted the real pieces', measured: 'measured it on the table', test: 'built a test piece', agent: 'an agent’s check', source: 'the source says otherwise', blocked: 'blocked' };
+      const startDraft = (md) => () => this.setState(p => ({ claimDraft: p.claimDraft && p.claimDraft.id === k.id && p.claimDraft.mode === md ? null : { id: k.id, mode: md, method: METHODS[md][0][0], why: '', proof: false, trigger: 'receiving' } }));
+      const upd = (patch) => this.setState(p => ({ claimDraft: Object.assign({}, p.claimDraft, patch) }));
+      const whyOk = !!(D && D.why.trim().length > 8), proofOk = !!(D && (D.proof || mode === 'parked' || (mode === 'holds' && D.method === 'listing') || (mode === 'wrong' && D.method === 'source')));
+      const canRestate = !!D && whyOk && proofOk;
+      const TRIG = { receiving: 'the first parcel arrives', model: 'the model exists', build: 'the build starts', date: 'a date you set' };
+      const restatement = !D ? '' : mode === 'holds' ? 'I will mark “' + k.text + '” as HOLDS — method: ' + MW[D.method] + '; your note: “' + D.why.trim() + '”' + (D.proof ? '; proof attached (mock file + hash)' : '') + '. Checked by James, now. Everything that leans on it keeps its status; the claim stops being a claim.' : mode === 'wrong' ? 'I will mark “' + k.text + '” as WRONG — method: ' + MW[D.method] + '; your note: “' + D.why.trim() + '”' + (D.proof ? '; proof attached' : '') + '. This will reopen: ' + (k.deps || []).map(d => d[0] + ' · ' + d[1]).join('; ') + '. The claim stays on record as refuted.' : 'I will park “' + k.text + '” — owner James; check it when ' + TRIG[D.trigger] + '; your note: “' + D.why.trim() + '”. Dependents keep reading it as an unchecked claim until then.';
+      const evidenceText = !D ? '' : mode === 'holds' ? 'Checked by James · method: ' + MW[D.method] + (D.proof ? ' · proof attached (photo/report, hashed)' : '') + ' · “' + D.why.trim() + '” · now.' : mode === 'wrong' ? 'James: does not hold — ' + MW[D.method] + (D.proof ? ', proof attached' : '') + '. “' + D.why.trim() + '” Dependent rows reopen.' : 'Parked by James · check when ' + TRIG[D.trigger] + ' · “' + D.why.trim() + '”.';
+      return {
+        text: k.text, srcHref: k.src, srcExternal: !/^[A-Z]-\d\d$/.test(k.src), srcInternal: /^[A-Z]-\d\d$/.test(k.src), srcSheet: k.src, srcCard: k.srcCard || '', srcNote: k.srcNote, deps: (k.deps || []).map(d => ({ label: d[0] + ' · ' + d[1] + ' →', sheet: d[0], card: d[2] })), hasRef: !!k.ref, refNum: k.ref ? k.ref[0] : '', refKind: k.ref ? k.ref[1] : 'set', refLabel: k.ref ? k.ref[2] : '', textRest: k.ref ? k.textRest : k.text, who: k.who, usedBy: k.usedBy, badge: S[0], color: S[1], isOpen: st === 'open', isDone: st !== 'open', hasEvidence: !!ev, evidence: ev,
+        border: st === 'open' ? 'dashed' : 'solid', stroke: st === 'open' ? 'var(--dt-prov)' : S[1], anim: this.pulse('c:' + k.id, st),
+        stamp: (st === 'holds' ? 'CHECKED' : st === 'wrong' ? 'REFUTED' : 'PARKED · owner James') + ' · James · now',
+        startHolds: startDraft('holds'), startWrong: startDraft('wrong'), startPark: startDraft('parked'),
+        draftingHolds: mode === 'holds', draftingWrong: mode === 'wrong', draftingPark: mode === 'parked', drafting: !!D,
+        holdsBg: mode === 'holds' ? 'var(--dt-ink)' : 'transparent', holdsFg: mode === 'holds' ? 'var(--dt-on-ink)' : 'var(--dt-ink)', wrongBg: mode === 'wrong' ? 'var(--dt-block)' : 'transparent', wrongFg: mode === 'wrong' ? 'var(--dt-on-ink)' : 'var(--dt-block-deep)', parkBg: mode === 'parked' ? 'var(--dt-unres)' : 'transparent', parkFg: mode === 'parked' ? 'var(--dt-on-ink)' : 'var(--dt-muted)',
+        draftLede: mode === 'holds' ? 'Say how you checked it and attach what proves it. The claim becomes a fact with your name on it — so it has to be your check, not a feeling.' : mode === 'wrong' ? 'Say how you know it’s wrong. Everything that leans on this claim will reopen, so the reason goes on the record.' : 'Nothing is decided. Say who will check it and what has to happen first.',
+        methodLabel: mode === 'parked' ? 'WHY NOT YET' : 'HOW YOU CHECKED', methods: (METHODS[mode] || []).map(([v, t]) => ({ v, t })), method: D ? D.method : '', setMethod: (e) => upd({ method: e.target.value }),
+        wantsProof: mode !== 'parked', attach: () => upd({ proof: !(D && D.proof) }), attachLabel: D && D.proof ? '▣ Proof attached · sha 8f3a…' : '▢ Attach proof (photo, report, screenshot)',
+        wantsOwner: mode === 'parked', trigger: D ? D.trigger : 'receiving', setTrigger: (e) => upd({ trigger: e.target.value }),
+        whyLabel: mode === 'holds' ? 'WHAT YOU SAW · in your words' : mode === 'wrong' ? 'WHAT WAS WRONG · in your words' : 'WHAT’S IN THE WAY', why: D ? D.why : '', setWhy: (e) => upd({ why: e.target.value }), whyPlaceholder: mode === 'holds' ? 'e.g. counted 16 curves in the bag; inventory page lists 16 × 53400' : mode === 'wrong' ? 'e.g. railhead sat one plate high on the test module' : 'e.g. can’t measure the railhead until a curve and a module are in hand',
+        canRestate, cannotRestate: !!D && !canRestate, missing: !D ? '' : [!whyOk ? 'a sentence in your words' : null, !proofOk ? 'proof attached (or a method that needs none)' : null].filter(Boolean).length ? 'Still needed: ' + [!whyOk ? 'a sentence in your words' : null, !proofOk ? 'proof attached (or pick a method that carries its own evidence)' : null].filter(Boolean).join(' · ') : '',
+        restatement, cancelDraft: () => this.setState({ claimDraft: null }),
+        commit: !D ? () => {} : mode === 'holds' ? set('holds', evidenceText, null) : mode === 'wrong' ? set('wrong', evidenceText, { tag: '▲ REOPENED', color: 'var(--dt-block-deep)', text: '“' + k.text + '” refuted — ' + k.usedBy + ' reopen', sheet: k.usedBy.split(' ')[0], href: this.HREF[k.usedBy.split(' ')[0]] || '#' }) : set('parked', evidenceText, null),
+        reopen: set('open', '', null)
+      };
+    });
+    const nC = claims.filter(k => k.isDone && k.badge.startsWith('■')).length;
+    const callerText = c.from ? 'You were on ' + c.from + (c.what ? ' — “' + c.what + '”' : '') + '. Finish here, then go straight back.' : 'Open this from any sheet’s ◇ GUESS or ○ NOT RUN chip and you’ll be sent back there when you’re done. (No caller this visit — you came in from the Hub.)';
+    return {
+      dark, themeLabel: dark ? '☀ PAPER' : '☾ BLUEPRINT', toggleTheme: () => this.setState({ dark: !this.isDark() }),
+      hasCaller: true, callerText, callerHref: c.from && this.HREF[c.from] ? this.HREF[c.from] : '../Hub.dc.html', callerBtn: c.from ? '← Back to ' + c.from : '← Hub',
+      measures, measSummary: nM + ' / ' + s.measures.length + ' MEASURED', claims, claimSummary: nC + ' / ' + claims.length + ' HOLD',
+      ripples: s.ripples.slice(0, 8), noRipples: s.ripples.length === 0, narration: s.narration
+    };
+  }
+}
+</script>
+</body>
+</html>

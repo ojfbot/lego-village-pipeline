@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="ext-resource-dependency" content="../dt/tokens.css">
+<meta name="ext-resource-dependency" content="../dt/overlay.js">
+<meta name="ext-resource-dependency" content="../dt/landing.js">
+<meta name="ext-resource-dependency" content="./image-slot.js">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#F6F2E9"/><rect x="30" y="30" width="140" height="140" rx="8" fill="#22303C"/><text x="100" y="118" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="72" fill="#FDFBF5">D</text></svg></template>
+<x-dc>
+<helmet>
+<title>Design library — LEGO Village</title>
+<script>document.documentElement.lang="en"</script>
+<script src="../dt/landing.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../dt/tokens.css">
+<link rel="stylesheet" href="../dt/responsive.css">
+</helmet>
+<div style="max-width:1120px;margin:0 auto;padding:36px 32px 64px">
+  <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--dt-ink);padding-bottom:12px;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+      <div style="font-family:'Spectral',serif;font-size:22px;font-weight:700;font-style:italic">Design Library</div>
+      <div style="font-size:11px;color:var(--dt-muted);letter-spacing:0.08em">D-01 · LIVING SOURCE OF TRUTH · DRAFTING TABLE SYSTEM</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="../Hub.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none">← HUB</a>
+      <button onClick="{{ toggleTheme }}" aria-pressed="{{ dark }}" style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn)">{{ themeLabel }}</button>
+    </div>
+  </div>
+  <div style="background:var(--dt-info-bg);border:1.5px solid var(--dt-info);padding:12px 16px;margin-top:18px;font-size:13.5px;line-height:1.55;text-wrap:pretty">
+    <strong>How this stays alive:</strong> every color, border, and shadow on every page reads from one shared token file (<span style="font-family:'Azeret Mono',monospace;font-size:12px">dt/tokens.css</span>). Change a token there and the style sample, this library, and every prototype update together. The markup shown here is the canonical form of each element — copy from here, never re-invent. Both themes (paper / blueprint) come from the same tokens; use the toggle above to check any element in both.
+  </div>
+
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;margin-top:16px;display:grid;gap:10px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><div style="font-family:'Spectral',serif;font-size:16px;font-weight:600">The ladder — primitives → patterns → components → sheets</div><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">EXPANDED 2026-09-17 · OPERATOR ASK</span></div>
+    <div style="font-size:12.5px;line-height:1.55;text-wrap:pretty;color:var(--dt-muted)">Anything that will be used on more than one sheet is designed <em>here first</em>, with its states and announcements, then mounted on the sheets. A sheet never invents a widget. Each rung below names what lives there and which sheets consume it; the status chips say how far it has been designed.</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px">
+      <div style="border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:10px 12px;display:grid;gap:5px"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:var(--dt-muted)">A · PRIMITIVES</span><span style="font-size:12px;line-height:1.5">Type voices · tokens · units · buttons, inputs, chips · operational states · motion.</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-pass)">■ §A1–A6 BELOW</span></div>
+      <div style="border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:10px 12px;display:grid;gap:5px"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:var(--dt-muted)">B · PATTERNS</span><span style="font-size:12px;line-height:1.5">Evidence grammar · restate-before-save · proposal (dashed) vs placed (solid) · gate ladder · request lifecycle · return-to-where-you-were.</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-prov-deep)">◇ §B1 BELOW · REST SPEC’D ON SHEETS, TO BE LIFTED HERE</span></div>
+      <div style="border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:10px 12px;display:grid;gap:5px"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:var(--dt-muted)">C · COMPONENTS</span><span style="font-size:12px;line-height:1.5">RequestCard · BasisChip · StanceChip · OptionStateRow · PartPopover · PlantingRow · ChangePulse · DecisionLogEntry · ApprovalGate · EvidenceChips · EnvelopeBadge · StickerTile · SegmentedLine · StatusLine · ActionLog · <strong>GapCloser</strong> · <strong>SetRef</strong> · <strong>CrossRef</strong> · <strong>ReleaseGate</strong> · <strong>Blocker</strong> (new).</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-prov-deep)">◇ §C1–C6 BELOW · 20 NAMED, 12 DRAWN HERE, REST LIVE ONLY ON SHEETS (OW-01)</span></div>
+      <div style="border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:10px 12px;display:grid;gap:5px"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:var(--dt-muted)">D · SHEETS</span><span style="font-size:12px;line-height:1.5">A-01 · B-01 · C-01 · P-01 · F-01 · M-01 (planned) · Hub · J-01 · H-01 — compose only from the rungs above.</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">SEE HUB</span></div>
+    </div>
+  </div>
+
+  <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted);margin:30px 0 12px">A1 · TYPE — THREE VOICES</div>
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:20px;display:grid;gap:14px">
+    <div style="display:flex;gap:16px;align-items:baseline;flex-wrap:wrap"><span style="font-family:'Spectral',serif;font-size:26px;font-weight:700;font-style:italic">Spectral italic</span><span style="font-size:12px;color:var(--dt-muted)">Titles and card headings only — the "hand of the draftsman." Never for data.</span></div>
+    <div style="display:flex;gap:16px;align-items:baseline;flex-wrap:wrap"><span style="font-size:15px">Libre Franklin for sentences,</span><span style="font-size:12px;color:var(--dt-muted)">explanations, buttons and body copy. Minimum 12.5px.</span></div>
+    <div style="display:flex;gap:16px;align-items:baseline;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:14px;font-variant-numeric:tabular-nums">AZERET MONO 24 LDU · 53400 · a1b2c3</span><span style="font-size:12px;color:var(--dt-muted)">every number, unit, part ID and hash — tabular digits so columns line up.</span></div>
+  </div>
+
+  <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted);margin:30px 0 12px">A2 · TOKENS — FOUR LAYERS</div>
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:20px">
+    <div style="font-size:13px;line-height:1.55;margin-bottom:14px;text-wrap:pretty">Naming grammar keeps the layers separable: <span style="font-family:'Azeret Mono',monospace;font-size:12px">--lv-base-*</span> (raw primitives) → <span style="font-family:'Azeret Mono',monospace;font-size:12px">--lv-sem-*</span> (surface/text/status roles) → <span style="font-family:'Azeret Mono',monospace;font-size:12px">--lv-dom-*</span> (evidence, layers, ledger, parity) → <span style="font-family:'Azeret Mono',monospace;font-size:12px">--frame-host-*</span> (theme mode, density, nav slots — the only tokens Frame may set). In this prototype all four collapse into the working <span style="font-family:'Azeret Mono',monospace;font-size:12px">--dt-*</span> set below; the grammar is the handoff contract.</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:10px">
+      <div style="border:1px solid var(--dt-grid-mid);padding:8px"><div style="height:34px;background:var(--dt-bg);border:1px solid var(--dt-grid-mid)"></div><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;margin-top:6px">--dt-bg · ground</div></div>
+      <div style="border:1px solid var(--dt-grid-mid);padding:8px"><div style="height:34px;background:var(--dt-sheet);border:1px solid var(--dt-grid-mid)"></div><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;margin-top:6px">--dt-sheet · card</div></div>
+      <div style="border:1px solid var(--dt-grid-mid);padding:8px"><div style="height:34px;background:var(--dt-ink)"></div><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;margin-top:6px">--dt-ink · text/lines</div></div>
+      <div style="border:1px solid var(--dt-grid-mid);padding:8px"><div style="height:34px;background:var(--dt-accent)"></div><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;margin-top:6px">--dt-accent · terracotta</div></div>
+      <div style="border:1px solid var(--dt-grid-mid);padding:8px"><div style="height:34px;background:var(--dt-pass)"></div><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;margin-top:6px">--dt-pass · verified</div></div>
+      <div style="border:1px solid var(--dt-grid-mid);padding:8px"><div style="height:34px;background:var(--dt-prov)"></div><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;margin-top:6px">--dt-prov · provisional</div></div>
+      <div style="border:1px solid var(--dt-grid-mid);padding:8px"><div style="height:34px;background:var(--dt-block)"></div><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;margin-top:6px">--dt-block · blocking</div></div>
+      <div style="border:1px solid var(--dt-grid-mid);padding:8px"><div style="height:34px;background:var(--dt-info)"></div><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;margin-top:6px">--dt-info · measured</div></div>
+      <div style="border:1px solid var(--dt-grid-mid);padding:8px"><div style="height:34px;background:var(--dt-layer-structure)"></div><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;margin-top:6px">--dt-layer-structure</div></div>
+      <div style="border:1px solid var(--dt-grid-mid);padding:8px"><div style="height:34px;background:var(--dt-layer-transport)"></div><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;margin-top:6px">--dt-layer-transport</div></div>
+      <div style="border:1px solid var(--dt-grid-mid);padding:8px"><div style="height:34px;background:var(--dt-layer-landscape)"></div><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;margin-top:6px">--dt-layer-landscape</div></div>
+      <div style="border:1px solid var(--dt-grid-mid);padding:8px"><div style="height:34px;background:var(--dt-layer-story)"></div><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;margin-top:6px">--dt-layer-story</div></div>
+      <div style="border:1px solid var(--dt-grid-mid);padding:8px"><div style="height:34px;background:var(--dt-layer-electrical)"></div><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;margin-top:6px">--dt-layer-electrical</div></div>
+      <div style="border:1px solid var(--dt-grid-mid);padding:8px"><div style="height:34px;background:var(--dt-unres)"></div><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;margin-top:6px">--dt-unres · unknown</div></div>
+    </div>
+    <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:16px;border-top:1px dashed var(--dt-grid-mid);padding-top:14px">
+      <div style="width:74px;height:50px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);flex:none"></div>
+      <div style="width:74px;height:30px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);flex:none"></div>
+      <div style="width:34px;height:34px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-pill);flex:none"></div>
+      <div style="font-size:12.5px;min-width:220px;flex:1;text-wrap:pretty"><strong>Radius grammar — the brick and the stud.</strong> Cards keep three molded fillets and one stud corner (<span style="font-family:'Azeret Mono',monospace;font-size:11px">--dt-r-card</span>); controls a plain fillet (<span style="font-family:'Azeret Mono',monospace;font-size:11px">--dt-r-btn</span>); perfect circles (<span style="font-family:'Azeret Mono',monospace;font-size:11px">--dt-r-pill</span>) reserved for gauges and studs. Shadows are the vapor pair: terracotta ghost + blue echo.</div>
+    </div>
+    <div class="dt-responsive-split" style="margin-top:16px;border-top:1px dashed var(--dt-grid-mid);padding-top:14px;display:grid;grid-template-columns:minmax(200px,1fr) minmax(220px,1.4fr);gap:16px;align-items:start">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+        <div style="grid-column:1 / -1;height:34px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);position:relative"><span style="position:absolute;top:4px;right:6px;font-family:'Azeret Mono',monospace;font-size:9px;border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:0 3px">⤢</span></div>
+        <div style="height:34px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card)"></div>
+        <div style="height:34px;border:1.5px solid var(--dt-accent);border-radius:var(--dt-r-card);background:var(--dt-accent);opacity:0.18"></div>
+        <div style="grid-column:1 / -1;height:12px;border:1.5px dashed var(--dt-unres);border-radius:var(--dt-r-fillet)"></div>
+      </div>
+      <div style="font-size:12.5px;text-wrap:pretty"><strong>Card behaviour — grow with content to a cap, then scroll; expand on demand.</strong> A card sizes to its children up to a per-card cap (max-height, eased), then scrolls internally; it never pushes the grid past that cap. Every card carries a <span style="font-family:'Azeret Mono',monospace;font-size:11px">⤢</span> toggle: expanded, it spans the full row and takes up to <span style="font-family:'Azeret Mono',monospace;font-size:11px">min(72vh, 760px)</span> while its neighbours collapse to their title rows (72px) until it is restored. One card expanded at a time. First pass in Prototype C; the full grid choreography (animated row/column reflow) is a dedicated design-system session — OPEN.</div>
+    </div>
+  </div>
+
+  <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted);margin:30px 0 12px">A2b · HATCH — GHOSTED DRAFTING FILLS · EXPERIMENT 09-18</div>
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:20px;display:grid;gap:14px">
+    <div style="font-size:13px;line-height:1.6;text-wrap:pretty;max-width:88ch">Five hatch fills, all in <span style="font-family:'Azeret Mono',monospace;font-size:12px">dt/tokens.css</span> as <span style="font-family:'Azeret Mono',monospace;font-size:12px">--dt-hatch-*</span>. They are <strong>fill-only tokens</strong> — they make no contrast claim of their own, so the contract is one rule: <strong>hatch always moves the surface away from the text colour.</strong> On paper it darkens toward ink; on blueprint it darkens below the sheet, which <em>raises</em> contrast for light ink. That asymmetry is why blueprint hatch may run three times denser than paper hatch at the same visual weight. Nothing here lightens a surface — a lightening hatch on blueprint would take <span style="font-family:'Azeret Mono',monospace;font-size:12px">--dt-muted</span> from 5.5:1 to about 2.5:1 in one step.</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:12px">
+      <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);background-image:var(--dt-hatch-ghost);padding:12px 13px;display:grid;gap:6px;align-content:start">
+        <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">--DT-HATCH-GHOST · 4%</span>
+        <span style="font-size:12.5px;line-height:1.5">Body text sits on this. Barely there — use for a whole card that is merely <em>proposed</em>.</span>
+        <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-pass)">■ TEXT-SAFE · MUTED 5.2:1</span>
+      </div>
+      <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);background-image:var(--dt-hatch-draft);padding:12px 13px;display:grid;gap:6px;align-content:start">
+        <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">--DT-HATCH-DRAFT · 7%+4%</span>
+        <span style="font-size:12.5px;line-height:1.5">Two periods (7px / 13px) at two line widths — the sketchy read comes from the beat between them, not from darkness.</span>
+        <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-pass)">■ TEXT-SAFE · MUTED 4.9:1</span>
+      </div>
+      <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);background-image:var(--dt-hatch-cross);padding:12px 13px;display:grid;gap:6px;align-content:start">
+        <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">--DT-HATCH-CROSS · 7%+5%+3%</span>
+        <span style="font-size:12.5px;line-height:1.5">Cross-hatch, deliberately unequal angles so the grid never resolves. This is the ceiling for text.</span>
+        <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-prov-deep)">◇ TEXT-SAFE AT THE LIMIT · MUTED 4.7:1</span>
+      </div>
+      <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);background-image:var(--dt-hatch-dense);padding:12px 13px;display:grid;gap:8px;align-content:start">
+        <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted);background:var(--dt-sheet);padding:2px 5px;justify-self:start">--DT-HATCH-DENSE · 11%+9%</span>
+        <span style="font-size:12.5px;line-height:1.5;background:var(--dt-sheet);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:8px 10px">Too dark for text. Any copy over dense hatch sits on an <strong>opaque plate</strong> like this one — the plate is <span style="font-family:'Azeret Mono',monospace;font-size:11.5px">--dt-sheet</span>, so the measured contrast is the ordinary token contrast.</span>
+        <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-block-deep);background:var(--dt-sheet);padding:2px 5px;justify-self:start">▲ TEXT-FREE OR PLATE ONLY · BARE 4.1:1</span>
+      </div>
+      <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);background-image:var(--dt-hatch-tint);padding:12px 13px;display:grid;gap:6px;align-content:start">
+        <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">--DT-HATCH-TINT · ACCENT 8%</span>
+        <span style="font-size:12.5px;line-height:1.5">The one coloured hatch, drawn from <span style="font-family:'Azeret Mono',monospace;font-size:11.5px">--dt-accent-deep</span>. Reserve it for one meaning per sheet — "held back" reads best.</span>
+        <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-prov-deep)">◇ TEXT-SAFE · NEVER TWO TINTS ON ONE SHEET</span>
+      </div>
+    </div>
+    <div style="border-top:1px dashed var(--dt-grid-mid);padding-top:12px;display:grid;gap:7px;font-size:12.5px;line-height:1.55;text-wrap:pretty;max-width:92ch">
+      <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">RULES BEFORE THIS LEAVES THE EXPERIMENT</div>
+      <div><strong>1 · Hatch is ornament, not notation.</strong> It is never legended, never explained, and never the thing a reader is asked to decode — the explicit label, chip or sentence carries the meaning. Hatch varies <em>with</em> state so the surface feels different before anyone reads anything; association builds by repetition across sheets, the way ornament has always worked.</div>
+      <div><strong>2 · Baked in as <span style="font-family:'Azeret Mono',monospace;font-size:11.5px">--dt-hatch-card</span>.</strong> Every sheet card in the deck — Hub, A-01, B-01, C-01, I-01, M-01, P-01, F-01, J-01, H-01, this library — now carries <span style="font-family:'Azeret Mono',monospace;font-size:11.5px">background-image:var(--dt-hatch-card)</span> (ghost) as its default texture. State-bearing cards escalate from there; nothing in the deck is flat paper any more.</div>
+      <div><strong>2b · Background-image only, never background.</strong> Set <span style="font-family:'Azeret Mono',monospace;font-size:11.5px">background-image:var(--dt-hatch-draft)</span> and leave <span style="font-family:'Azeret Mono',monospace;font-size:11.5px">background-color:var(--dt-sheet)</span> alone, so the opaque base under the strokes is still the token surface.</div>
+      <div><strong>3 · The cap is set by <span style="font-family:'Azeret Mono',monospace;font-size:11.5px">--dt-muted</span>, not by ink.</strong> Ink on sheet has ~13:1 to spend; muted has 5.3:1. Peak alpha where strokes cross is held to 12% on paper for that reason. New densities get checked against muted, never against ink.</div>
+      <div><strong>4 · Losing it costs nothing.</strong> Because no meaning rides on the pattern, a reader who never perceives it misses nothing — <span style="font-family:'Azeret Mono',monospace;font-size:11.5px">prefers-contrast:more</span> and <span style="font-family:'Azeret Mono',monospace;font-size:11.5px">forced-colors</span> set all five tokens to <span style="font-family:'Azeret Mono',monospace;font-size:11.5px">none</span>.</div>
+      <div><strong>5 · Not under inputs, chips, or the canvas.</strong> Editable fields and small status chips keep flat surfaces; hatch lives on card and band backgrounds where a stroke crossing a glyph stem is still 1px of 12%.</div>
+      <div style="color:var(--dt-muted)"><strong style="color:var(--dt-ink)">Settled 09-18 (operator):</strong> every state is hatched, no flat card — ghost for built and standing, cross for in pieces and free to raid, tint for pieces held back, draft for not in the house yet. No legend anywhere: the fills are too faint to be read as a key, which is exactly the point. They work at the intuitive level while the words do the telling.</div>
+    </div>
+  </div>
+
+  <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted);margin:30px 0 12px">A3 · UNITS — GEOMETRY ≠ SPACING</div>
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:20px">
+    <div style="font-size:13px;margin-bottom:12px;text-wrap:pretty">Physical LEGO units are <strong>measurement units</strong>, never UI spacing tokens. Canvas pixels are a zoom-dependent transform of these.</div>
+    <div style="display:grid;grid-template-columns:auto auto auto 1fr;gap:7px 18px;font-family:'Azeret Mono',monospace;font-size:12px;font-variant-numeric:tabular-nums;align-items:baseline">
+      <span style="color:var(--dt-muted)">UNIT</span><span style="color:var(--dt-muted)">LDU</span><span style="color:var(--dt-muted)">MM</span><span style="color:var(--dt-muted);font-family:'Libre Franklin';font-size:11px">USE</span>
+      <span>1 LDU</span><span>1</span><span>0.4</span><span style="font-family:'Libre Franklin';font-size:12px">base integer; all stored heights</span>
+      <span>half-plate</span><span>4</span><span>1.6</span><span style="font-family:'Libre Franklin';font-size:12px">finest common vertical step</span>
+      <span>1 plate</span><span>8</span><span>3.2</span><span style="font-family:'Libre Franklin';font-size:12px">default Z step in whole mode</span>
+      <span>1 brick</span><span>24</span><span>9.6</span><span style="font-family:'Libre Franklin';font-size:12px">= 3 plates</span>
+      <span>1 stud</span><span>20</span><span>8.0</span><span style="font-family:'Libre Franklin';font-size:12px">XY grid unit; grid hierarchy 1/8/16/32</span>
+    </div>
+    <div style="font-size:12px;color:var(--dt-muted);margin-top:12px">Display precision: whole mode shows integers in the chosen unit; fraction mode shows raw LDU / 0.1° / quarter-stud — for curve math, train dynamics, stress and Technic motion checks. Sub-plate part fractions exist and are recorded per part (schema request open).</div>
+  </div>
+
+  <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted);margin:30px 0 12px">B1 · EVIDENCE GRAMMAR — WHO SAID IT, HOW WE KNOW</div>
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:20px">
+    <div style="font-size:13px;margin-bottom:14px;text-wrap:pretty">Every value carries five separate facts (origin, method, verification, authority, workflow) — never squashed into one status. Compact form = shape + line style + word; full chain one click away. Shape and line style carry the meaning, so it works without color.</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);background:var(--dt-pass-bg);padding:4px 10px;border-radius:var(--dt-r-fillet)">■ TOOL/VERIFIED</span>
+      <span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:var(--dt-prov-deep);border:1.5px dashed var(--dt-prov);padding:4px 10px;border-radius:var(--dt-r-fillet)">◇ AGENT/PROVISIONAL</span>
+      <span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:var(--dt-info-deep);border:1.5px solid var(--dt-info);background:var(--dt-info-bg);padding:4px 10px;border-radius:var(--dt-r-fillet)">● PHYSICAL/MEASURED</span>
+      <span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:var(--dt-block-deep);border:1.5px solid var(--dt-block);background:var(--dt-block-bg);padding:4px 10px;border-radius:var(--dt-r-fillet)">▲ REFUTED</span>
+      <span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:var(--dt-unres-ink);border:1.5px solid var(--dt-unres);padding:4px 10px;border-radius:var(--dt-r-fillet)">○ UNRESOLVED</span>
+    </div>
+    <details style="margin-top:14px;border:1px dashed var(--dt-grid-mid);padding:10px 14px">
+      <summary style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;cursor:pointer;color:var(--dt-accent-deep)">▸ PROVENANCE DISCLOSURE — the full chain (canonical pattern, click me)</summary>
+      <div style="display:grid;gap:6px;margin-top:10px;font-size:12.5px">
+        <div style="display:flex;gap:10px"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);width:90px;flex:none">ORIGIN</span><span>agent-proposal (Claude chat, 2026-09-02) — <em>stays visible forever, even after verification</em></span></div>
+        <div style="display:flex;gap:10px"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);width:90px;flex:none">METHOD</span><span>derived-from-geometry (validator v0.4)</span></div>
+        <div style="display:flex;gap:10px"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);width:90px;flex:none">VERIFIED</span><span style="color:var(--dt-pass);font-weight:600">verified — deterministic check passed 2026-09-14; reads as trustworthy despite AI origin</span></div>
+        <div style="display:flex;gap:10px"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);width:90px;flex:none">AUTHORITY</span><span>tool-result</span></div>
+        <div style="display:flex;gap:10px"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);width:90px;flex:none">WORKFLOW</span><span>accepted</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted);margin:30px 0 12px">C1 · DOMAIN COMPONENTS</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:14px">
+    <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px">
+      <div style="font-family:'Spectral',serif;font-size:15px;font-weight:600;margin-bottom:4px">RightsBadge</div>
+      <div style="font-size:11.5px;color:var(--dt-muted);margin-bottom:10px">Creator credit + what we're allowed to do. Private assets are excluded from family view, exports and previews — enforced, not just labeled.</div>
+      <div style="display:grid;gap:8px">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-info-deep);border:1.5px solid var(--dt-info);background:var(--dt-info-bg);padding:3px 8px;border-radius:var(--dt-r-fillet)">✎ CREATOR: BL user (verbatim)</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-prov-deep);border:1.5px dashed var(--dt-prov);padding:3px 8px;border-radius:var(--dt-r-fillet)">REDIST: PERMISSION REQ'D</span></div>
+        <div style="display:flex;gap:8px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-block-deep);border:1.5px solid var(--dt-block);background:var(--dt-block-bg);padding:3px 8px;border-radius:var(--dt-r-fillet)">⛉ PRIVATE — HIDDEN FROM FAMILY VIEW</span></div>
+      </div>
+    </div>
+    <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px">
+      <div style="font-family:'Spectral',serif;font-size:15px;font-weight:600;margin-bottom:4px">LedgerStateChip</div>
+      <div style="font-size:11.5px;color:var(--dt-muted);margin-bottom:10px">Nine inventory states in three meaning groups — shape + text, not nine colors.</div>
+      <div style="display:grid;gap:6px;font-family:'Azeret Mono',monospace;font-size:10px">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="color:var(--dt-muted);width:64px;flex:none">HAVE</span><span style="border:1.5px solid var(--dt-pass);color:var(--dt-pass);background:var(--dt-pass-bg);padding:2px 7px;font-weight:600;border-radius:var(--dt-r-fillet)">■ ON HAND</span><span style="border:1.5px solid var(--dt-pass);color:var(--dt-pass);padding:2px 7px;font-weight:600;border-radius:var(--dt-r-fillet)">■ ALLOCATED</span><span style="border:1.5px solid var(--dt-pass);color:var(--dt-pass);padding:2px 7px;font-weight:600;border-radius:var(--dt-r-fillet)">■ RESERVED</span></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="color:var(--dt-muted);width:64px;flex:none">MOVING</span><span style="border:1.5px dashed var(--dt-info);color:var(--dt-info-deep);padding:2px 7px;font-weight:600;border-radius:var(--dt-r-fillet)">◇ MARKED ORDERED</span><span style="border:1.5px dashed var(--dt-info);color:var(--dt-info-deep);padding:2px 7px;font-weight:600;border-radius:var(--dt-r-fillet)">◇ RECEIVED</span><span style="border:1.5px dashed var(--dt-info);color:var(--dt-info-deep);padding:2px 7px;font-weight:600;border-radius:var(--dt-r-fillet)">◇ RECONCILED</span></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="color:var(--dt-muted);width:64px;flex:none">ATTENTION</span><span style="border:1.5px solid var(--dt-block);color:var(--dt-block-deep);background:var(--dt-block-bg);padding:2px 7px;font-weight:600;border-radius:var(--dt-r-fillet)">▲ SHORTAGE</span><span style="border:1.5px dashed var(--dt-prov);color:var(--dt-prov-deep);padding:2px 7px;font-weight:600;border-radius:var(--dt-r-fillet)">◇ SUB PROPOSED</span><span style="border:1.5px solid var(--dt-unres);color:var(--dt-unres-ink);padding:2px 7px;font-weight:600;border-radius:var(--dt-r-fillet)">○ UNRECONCILED</span></div>
+      </div>
+    </div>
+    <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px">
+      <div style="font-family:'Spectral',serif;font-size:15px;font-weight:600;margin-bottom:4px">ApprovalGate — friction ladder</div>
+      <div style="font-size:11.5px;color:var(--dt-muted);margin-bottom:10px">Friction matches consequence. Stamps for the record, quiet modals for the act.</div>
+      <div style="display:grid;gap:8px;font-size:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);width:18px">1</span><span>Local export (reversible)</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-pass);margin-left:auto">NO GATE</span></div>
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);width:18px">2</span><span>Wishlist mutation (external)</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-prov-deep);margin-left:auto">REVIEWED DIFF + CONFIRM</span></div>
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);width:18px">3</span><span>Standard freeze (physical commitment)</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-block-deep);margin-left:auto">TYPED INITIALS + STAMP</span></div>
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);width:18px">4</span><span>Purchase</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-unres-ink);margin-left:auto">OUTSIDE THE APP — RECORD ONLY</span></div>
+      </div>
+      <div style="margin-top:10px;display:inline-block;font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:var(--dt-pass);border:2px solid var(--dt-pass);padding:4px 12px;transform:rotate(-3deg)">■ FROZEN · 2026-09-14 · JW</div>
+    </div>
+    <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px">
+      <div style="font-family:'Spectral',serif;font-size:15px;font-weight:600;margin-bottom:4px">TwinParityMeter</div>
+      <div style="font-size:11.5px;color:var(--dt-muted);margin-bottom:10px">Plan ↔ reality agreement per element: unverified → measured → diverged.</div>
+      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <svg width="60" height="60" viewBox="0 0 72 72"><circle cx="36" cy="36" r="30" fill="none" stroke="var(--dt-unres)" stroke-width="2" stroke-dasharray="4 3"></circle><path d="M 36 6 A 30 30 0 0 1 62 21" fill="none" stroke="var(--dt-accent)" stroke-width="5" stroke-linecap="round"></path><text x="36" y="41" text-anchor="middle" font-family="Azeret Mono" font-size="14" font-weight="600" fill="var(--dt-ink)">1/4</text></svg>
+        <div style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:10px">
+          <span style="color:var(--dt-unres-ink)">○ UNVERIFIED — no measurement yet</span>
+          <span style="color:var(--dt-info-deep)">● MEASURED — matches within tolerance</span>
+          <span style="color:var(--dt-block-deep)">▲ DIVERGED — reality disagrees with plan</span>
+        </div>
+      </div>
+    </div>
+    <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px">
+      <div style="font-family:'Spectral',serif;font-size:15px;font-weight:600;margin-bottom:4px">ThemeDiffRow</div>
+      <div style="font-size:11.5px;color:var(--dt-muted);margin-bottom:10px">Snow is a policy: a theme change is a reviewable diff per part role. Nothing auto-applies.</div>
+      <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px 12px;font-size:12px;align-items:center">
+        <span>Roof slopes 3038 · <span style="font-family:'Azeret Mono',monospace;font-size:10.5px">dark red → white</span></span>
+        <span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-pass)">AVAIL ✓ · +€4.20</span>
+        <span style="display:flex;gap:5px"><button style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:3px 9px;cursor:pointer">ACCEPT</button><button style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;background:transparent;color:var(--dt-ink);border:1px solid var(--dt-ink);padding:3px 9px;cursor:pointer">SKIP</button></span>
+      </div>
+    </div>
+    <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px">
+      <div style="font-family:'Spectral',serif;font-size:15px;font-weight:600;margin-bottom:4px">HandoffCard</div>
+      <div style="font-size:11.5px;color:var(--dt-muted);margin-bottom:10px">An agent memo arriving for review — its claims carry evidence chips, never implicit trust.</div>
+      <div style="border:1px solid var(--dt-grid-mid);padding:10px 12px;display:grid;gap:6px">
+        <div style="display:flex;gap:8px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600">LEGO-PIPE-008</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">chatgpt → operator</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-prov-deep);margin-left:auto">◇ 3 CLAIMS UNVERIFIED</span></div>
+        <div style="font-size:12px">Recommends 22.5° track quantum; cites part 53400 arc geometry.</div>
+        <div style="display:flex;gap:6px"><button style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:3px 9px;cursor:pointer">ACCEPT</button><button style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;background:transparent;color:var(--dt-ink);border:1px solid var(--dt-ink);padding:3px 9px;cursor:pointer">CHALLENGE</button><button style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;background:transparent;color:var(--dt-muted);border:1px dashed var(--dt-unres);padding:3px 9px;cursor:pointer">DEFER</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted);margin:30px 0 12px">C2 · GAPCLOSER — TURN A STRIKE INTO QUEUED WORK</div>
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px;align-items:start">
+    <div style="display:grid;gap:10px;font-size:12.5px;line-height:1.55;text-wrap:pretty">
+      <div><strong>What it is.</strong> A chip that sits on any option, request or row carrying open strikes (○ NOT MODELED · CAN’T RUN YET · NO PARTS LIST · NO PRICES · FIT UNPROVEN). Tap it and you get the work list that would close them: what each job does in plain words, which runner does it (Blender agent · geometry check · Studio agent · research agent · fit check), what it gives back, and what it must wait for.</div>
+      <div><strong>What it never does.</strong> Choose for you. Results land as <em>evidence on the option</em> — with method and hash — and the option stays an option. AI stance is never authority (014 §8).</div>
+      <div><strong>States.</strong> Chip: <span style="font-family:'Azeret Mono',monospace;font-size:10px">◇ n STRIKES · CLOSE THEM → ◌ n RUNNING · m OPEN → ■ GAPS CLOSED</span>. Row: <span style="font-family:'Azeret Mono',monospace;font-size:10px">○ OPEN · ◇ QUEUED · ◌ RUNNING · ■ CLOSED · ✎ BY HAND</span>. Queuing one job pulls in what it waits for. “Queue all, in order” respects the dependency order. <strong>Restate before run</strong>: “I’ll queue 5 jobs in this order … about 52 minutes … nothing gets chosen for you” → Yes, run it / Not yet.</div>
+      <div><strong>By hand.</strong> Any job can be marked ✎ BY HAND — the operator will do it and attach the file later. Honest provenance for a manual step beats a guessed one (014 §3.4).</div>
+      <div><strong>Accessibility.</strong> Chip is a button with <span style="font-family:'Azeret Mono',monospace;font-size:10px">aria-expanded</span>; panel is a non-modal dialog; focus moves to the first action on open and back to the chip on close; Esc closes; each QUEUE / BY HAND has a full-sentence name; the restatement is <span style="font-family:'Azeret Mono',monospace;font-size:10px">role=status aria-live=assertive</span>; per-row progress notes are polite live regions.</div>
+      <div><strong>Used by.</strong> C-01 (double ballast) today; A-01 planting proposals, P-01 “unpriced” rows, F-01 “not modeled yet” stickers, M-01 unverified measurements next. Props: <span style="font-family:'Azeret Mono',monospace;font-size:10px">subject</span>, <span style="font-family:'Azeret Mono',monospace;font-size:10px">gaps[]</span> (id · label · strike · how · runner · produces · after[] · mins), <span style="font-family:'Azeret Mono',monospace;font-size:10px">onStatus(status, id, to)</span> — the host sheet reads this and re-derives its own strikes, stances, asks and blockers (C-01 does: DOUBLE flips to ■ MODELED / ■ FIT as jobs close). Schema request: a <span style="font-family:'Azeret Mono',monospace;font-size:10px">WorkItem</span> per queued job, joined to the option it closes and to the evidence it returns (see 014 §7.6 envelope).</div>
+    </div>
+    <div style="display:grid;gap:12px">
+      <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:var(--dt-muted)">LIVE · TAP THE CHIP</div>
+      <div style="min-height:420px"><dc-import name="GapCloser" subject="double ballast" hint-size="200px,26px"></dc-import></div>
+    </div>
+  </div>
+
+  <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted);margin:30px 0 12px">C3 · SETREF — EVERY SET, MOC OR PART NUMBER IS A REFERENCE CARD</div>
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px;align-items:start">
+    <div style="display:grid;gap:10px;font-size:12.5px;line-height:1.55;text-wrap:pretty">
+      <div><strong>What it is.</strong> An inline reference: the number stays readable text with a dotted underline; hover or focus opens a card — image, kind + number, name, the facts we hold about it, BrickLink and Rebrickable links. Reference data comes from <strong>BrickLink</strong> (catalog, inventory, price guide), never LEGO.com. For a <strong>Studio MOC</strong> the card points at the stable gallery URL (<span style="font-family:'Azeret Mono',monospace;font-size:10px">design.page?idModel=…</span>), names the creator verbatim with the rights we hold, and links our own hashed snapshot from B-01 — the listing can vanish; the snapshot cannot.</div>
+      <div><strong>Rules.</strong> Card is <span style="font-family:'Azeret Mono',monospace;font-size:10px">role=tooltip</span>, tied to the link by <span style="font-family:'Azeret Mono',monospace;font-size:10px">aria-describedby</span>; opens on hover <em>and</em> keyboard focus; Esc closes. <strong>One card page-wide</strong> — opening another closes the current one. Timing: 120 ms intent delay → 140 ms fade in; 180 ms grace → 150 ms fade out. Painted into a body-level layer so no sheet stacking context can cover it. The lifecycle lives once, in <span style="font-family:'Azeret Mono',monospace;font-size:10px">dt/overlay.js</span> — SetRef and CrossRef both attach to it, so “one card page-wide” holds across kinds (GapCloser to follow, OW-02). Fully opaque sheet background — never translucent. The image slot is fillable once and persists. Unknown numbers show an honest “no reference cached yet”.</div>
+      <div><strong>Used by.</strong> M-01 (tree rows), C-01 (sources). Next: A-01 rig rows, P-01 part rows, F-01 “Tree” (kid-safe copy variant), PartPopover merges into this for parts. Props: <span style="font-family:'Azeret Mono',monospace;font-size:10px">num · kind (set|moc|part) · label · name? · facts?</span>. Schema: <span style="font-family:'Azeret Mono',monospace;font-size:10px">Asset { vendor, product_url }</span> already requested — add <span style="font-family:'Azeret Mono',monospace;font-size:10px">image_ref, fetched_at</span>.</div>
+    </div>
+    <div style="display:grid;gap:12px">
+      <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:var(--dt-muted)">LIVE · HOVER OR TAB TO IT · RULE: NO BARE SET / MOC / PART REFERENCE ANYWHERE — CARDS, HUB COPY, PRIORITY STRIPS, LEDGERS</div>
+      <div style="font-size:13px;line-height:1.7;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 5px"><span>The</span><dc-import name="SetRef" num="41843" kind="set" label="Tree 41843" hint-size="auto,1em"></dc-import><span>is already standing; the</span><dc-import name="SetRef" num="10361" kind="set" label="Holiday Express Train 10361" hint-size="auto,1em"></dc-import><span>brings its own circle;</span><dc-import name="SetRef" num="741807" kind="moc" label="bl-741807" hint-size="auto,1em"></dc-import><span>carries it;</span><dc-import name="SetRef" num="99999" kind="part" label="part 99999" hint-size="auto,1em"></dc-import><span>is unknown.</span></div>
+    </div>
+  </div>
+
+  <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted);margin:30px 0 12px">C4 · CROSSREF + LANDING — LINKS BETWEEN SHEETS PREVIEW, THEN FLASH WHERE THEY LAND</div>
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px;align-items:start">
+    <div style="display:grid;gap:10px;font-size:12.5px;line-height:1.55;text-wrap:pretty">
+      <div><strong>What it is.</strong> Any link from one sheet to a card on another is a <strong>CrossRef</strong> chip: hover or focus shows a preview of the target card — sheet · card id · its current status chip · title · one-line summary — so you know what you’ll find before you go. Click navigates to <span style="font-family:'Azeret Mono',monospace;font-size:10px">sheet#card</span>.</div>
+      <div><strong>Landing.</strong> Every sheet loads <span style="font-family:'Azeret Mono',monospace;font-size:10px">dt/landing.js</span>. On arrival with a <span style="font-family:'Azeret Mono',monospace;font-size:10px">#card</span> hash it scrolls the card to the upper third and fires the token-level <span style="font-family:'Azeret Mono',monospace;font-size:10px">dtLand</span> flash (1.6 s accent ring that swells and fades) on the <em>whole card</em>, and announces “Landed on: {card title}” politely. Ids live on card containers, not titles.</div>
+      <div><strong>Direction.</strong> <span style="font-family:'Azeret Mono',monospace;font-size:10px">dir=back</span> (↖ “where it came from”) and forward (→ “what leans on it”) share one component; the preview header says which.</div>
+      <div><strong>Honesty.</strong> Previews read <span style="font-family:'Azeret Mono',monospace;font-size:10px">window.dtCards</span>, a registry each sheet fills; today it is seeded in landing.js (MOCK). A real host reads the manifest. Unregistered targets say so instead of inventing a summary.</div>
+      <div><strong>Used by.</strong> M-01 claims (back + forward) and measurement rows (forward). Next: A-01 fit checks → M-01, C-01 asks → M-01 / P-01, Hub decision blast-radius chips. Same overlay rule as SetRef: body layer, opaque, one open at a time, 120/140 in · 180/150 out.</div>
+    </div>
+    <div style="display:grid;gap:12px">
+      <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:var(--dt-muted)">LIVE · HOVER, THEN CLICK TO SEE THE FLASH</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap"><dc-import name="CrossRef" sheet="A-01" card="fit" label="A-01 · Does it fit? →" hint-size="auto,1em"></dc-import><dc-import name="CrossRef" sheet="C-01" card="parts" label="C-01 · Parts list →" hint-size="auto,1em"></dc-import><dc-import name="CrossRef" sheet="B-01" card="" label="B-01 · decision trail ↖" dir="back" hint-size="auto,1em"></dc-import><dc-import name="CrossRef" sheet="M-01" card="railhead-z" label="M-01 · Railhead height →" hint-size="auto,1em"></dc-import></div>
+    </div>
+  </div>
+
+  <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted);margin:30px 0 12px">C5 · RELEASEGATE — A FORMAL GATE AS A QUIET CARD AND A FRIENDLY STAMP</div>
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:20px;display:grid;gap:14px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;font-size:12.5px;line-height:1.55;text-wrap:pretty">
+      <div><strong>What it is.</strong> The 014 §8 formal gate — baseline release, procurement release, rights pass — as one component. Left: <em>what’s being released</em> (subject + revision, CrossRef back) and <em>evidence it rests on</em> (badge · text · freshness · CrossRef). Right: <em>open findings</em>, each with severity and three calls: <strong>fix</strong> (CrossRef to the closing sheet), <strong>waive</strong> (a reason sentence on the record), <strong>defer</strong> (owner + due trigger). Then initials + <strong>Release</strong> / <strong>Return for work</strong>. HIGH findings block; the label becomes “· with waivers” when any are waived or deferred. The §8 record sits behind a disclosure; the stamp is what you see.</div>
+      <div><strong>Rules.</strong> Lives at the <em>end</em> of the sheet that produces the subject (C-01 for procurement release — DEC-034), never at the head of the consumer. The consumer (P-01) only reads the result. AI stance is analysis, never authority. Family surfaces never see a gate (K-7): F-01’s send is a proposal. Props: <span style="font-family:'Azeret Mono',monospace;font-size:10px">question · subject* · evidence[] · findings[] · approveLabel · returnLabel · gateId · gateType · onChange(kind: passed | reopened | returned | finding)</span>. Announcements: the tag is a polite live region; approve-disabled reason is written beside the button.</div>
+    </div>
+    <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:var(--dt-muted)">LIVE · DEFAULT SEED = TODAY’S PROCUREMENT FINDINGS</div>
+    <dc-import name="ReleaseGate" step-no="DEMO" hint-size="100%,520px"></dc-import>
+  </div>
+
+  <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted);margin:30px 0 12px">C6 · BLOCKER — “BLOCKED BY” IS NEVER JUST A LABEL</div>
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px;align-items:start">
+    <div style="display:grid;gap:10px;font-size:12.5px;line-height:1.55;text-wrap:pretty">
+      <div><strong>Rule (operator, 2026-09-17).</strong> Wherever a step says it is blocked, each blocker is a <strong>chip</strong>: hover or focus previews the card that owns it (where · status · title · why); the popover carries <strong>the action that clears it</strong> when one exists — same effect as the button on the card, recorded the same way — and a link that lands (with the flash) when it must be cleared where it lives. Click pins the popover open; Esc closes.</div>
+      <div><strong>Props.</strong> <span style="font-family:'Azeret Mono',monospace;font-size:10px">label · sheet · card · title · summary · status · actionLabel · actionNote · onAction? · linkLabel</span>. Built on <span style="font-family:'Azeret Mono',monospace;font-size:10px">dt/overlay.js</span> like SetRef and CrossRef (one open page-wide). Card is <span style="font-family:'Azeret Mono',monospace;font-size:10px">role=dialog</span> named “Blocker: …”.</div>
+      <div><strong>Used by.</strong> C-01 approval trail (open request → park · recolours → derive · fit → run · double-ballast → GapCloser link · LH’s OK → request card). Next: ReleaseGate findings, A-01 “Does it fit?” blocks, P-01 revalidation.</div>
+    </div>
+    <div style="display:grid;gap:12px">
+      <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:var(--dt-muted)">LIVE · HOVER, THEN CLICK TO PIN</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-block-deep)"><span>BLOCKED BY</span><dc-import name="Blocker" label="fit not run" sheet="C-01" card="fit" title="Does it fit? — 3 checks not run" summary="Circle on 4 modules · ballast flush · recoloured module reads as snow. Deterministic; a moment." status="○ 3 NOT RUN" link-label="Does it fit?" hint-size="auto,1.4em"></dc-import><dc-import name="Blocker" label="railhead unknown" sheet="M-01" card="railhead-z" title="Railhead height above module top" summary="Nobody has measured this. Grade, banking and the flush check wait on it." status="○ UNKNOWN" link-label="M-01 · measure it" hint-size="auto,1.4em"></dc-import></div>
+    </div>
+  </div>
+
+  <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted);margin:30px 0 12px">A4 · GENERIC PRIMITIVES</div>
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:20px;display:grid;gap:16px">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <button style="font-family:'Libre Franklin';font-size:13px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:9px 16px;cursor:pointer;box-shadow:var(--dt-btn-shadow);border-radius:var(--dt-r-btn)">Primary action</button>
+      <button style="font-family:'Libre Franklin';font-size:13px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:9px 16px;cursor:pointer;border-radius:var(--dt-r-btn)">Secondary</button>
+      <button style="font-family:'Libre Franklin';font-size:13px;font-weight:600;background:transparent;color:var(--dt-muted);border:1px dashed var(--dt-unres);padding:9px 16px;cursor:pointer">Quiet / defer</button>
+      <button disabled="{{ true }}" style="font-family:'Libre Franklin';font-size:13px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:9px 16px;opacity:0.45">Disabled</button>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:end">
+      <label style="display:grid;gap:4px;font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">NUMERIC + UNIT
+        <input type="number" value="{{ demoNum }}" onChange="{{ setDemoNum }}" style="font-family:'Azeret Mono',monospace;font-size:14px;font-variant-numeric:tabular-nums;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:6px 8px;border-radius:var(--dt-r-fillet);width:110px">
+      </label>
+      <label style="display:grid;gap:4px;font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">TEXT FIELD
+        <input type="text" placeholder="Quadrant name…" style="font-family:'Libre Franklin';font-size:13px;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:7px 9px;border-radius:var(--dt-r-fillet);width:180px">
+      </label>
+      <span style="display:inline-flex;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);overflow:hidden"><button style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn)">SEGMENT A</button><button style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:transparent;color:var(--dt-ink);border:none;border-left:1.5px solid var(--dt-ink);padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn)">SEGMENT B</button></span>
+      <div style="border:1.5px dashed var(--dt-unres);padding:12px 18px;font-size:12px;color:var(--dt-muted)">⇩ File drop zone — .io / .mpd / .ldr</div>
+    </div>
+    <div>
+      <div style="display:grid;grid-template-columns:auto 1fr auto auto;gap:8px 16px;font-size:12.5px;align-items:center">
+        <span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);border-bottom:1.5px solid var(--dt-ink);padding-bottom:5px">PART</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);border-bottom:1.5px solid var(--dt-ink);padding-bottom:5px">NAME</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);border-bottom:1.5px solid var(--dt-ink);padding-bottom:5px">QTY</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);border-bottom:1.5px solid var(--dt-ink);padding-bottom:5px">STATE</span>
+        <span style="font-family:'Azeret Mono',monospace;font-size:11.5px">53400</span><span>Track curved R40, 22.5°</span><span style="font-family:'Azeret Mono',monospace;font-size:11.5px">4</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-pass)">■ ON HAND</span>
+        <span style="font-family:'Azeret Mono',monospace;font-size:11.5px">3038</span><span>Slope 45° 2×3 · white ("snow family")</span><span style="font-family:'Azeret Mono',monospace;font-size:11.5px">18</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-block-deep)">▲ SHORT 6</span>
+      </div>
+      <div style="font-size:11px;color:var(--dt-muted);margin-top:7px">Grouped data table — header rule is ink, row rules are dashed grid. Brick color names are accessible names from a recorded LDConfig release (license capture: schema request open).</div>
+    </div>
+  </div>
+
+  <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted);margin:30px 0 12px">A5 · OPERATIONAL STATES — EVERY SURFACE SPEAKS THESE</div>
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:20px;display:flex;gap:8px;flex-wrap:wrap">
+    <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-unres-ink);border:1.5px dashed var(--dt-unres);padding:4px 10px;border-radius:var(--dt-r-fillet)">EMPTY — invite first action</span>
+    <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-muted);border:1.5px solid var(--dt-grid-mid);padding:4px 10px;border-radius:var(--dt-r-fillet)">LOADING ▮▯▯</span>
+    <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-prov-deep);border:1.5px dashed var(--dt-prov);padding:4px 10px;border-radius:var(--dt-r-fillet)">PARTIAL — some values pending</span>
+    <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);background:var(--dt-pass-bg);padding:4px 10px;border-radius:var(--dt-r-fillet)">SUCCESS</span>
+    <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-prov-deep);border:1.5px solid var(--dt-prov);padding:4px 10px;border-radius:var(--dt-r-fillet)">WARNING</span>
+    <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-block-deep);border:1.5px solid var(--dt-block);background:var(--dt-block-bg);padding:4px 10px;border-radius:var(--dt-r-fillet)">BLOCKING FAILURE</span>
+    <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-block-deep);border:1.5px solid var(--dt-block);padding:4px 10px;border-radius:var(--dt-r-fillet)">⛉ RIGHTS-RESTRICTED</span>
+    <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-unres-ink);border:1.5px solid var(--dt-unres);padding:4px 10px;border-radius:var(--dt-r-fillet)">○ PRIVATE SOURCE UNAVAILABLE</span>
+    <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-muted);border:1.5px solid var(--dt-grid-mid);padding:4px 10px;text-decoration:line-through">STALE / SUPERSEDED</span>
+    <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-info-deep);border:1.5px dashed var(--dt-info);padding:4px 10px;border-radius:var(--dt-r-fillet)">⟳ LONG-RUNNING JOB · CANCEL</span>
+    <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-accent-deep);border:1.5px solid var(--dt-accent);padding:4px 10px;border-radius:var(--dt-r-fillet)">● UNSAVED LOCAL EDIT</span>
+    <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-prov-deep);border:1.5px solid var(--dt-prov);padding:4px 10px;border-radius:var(--dt-r-fillet)">⇅ VERSION CONFLICT</span>
+  </div>
+
+  <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--dt-muted);margin:30px 0 12px">A6 · MOTION — THREE MOVES ONLY</div>
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:20px;display:grid;gap:12px;font-size:13px">
+    <div style="display:flex;gap:14px;align-items:center"><svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="5" fill="var(--dt-pass)"></circle><circle cx="20" cy="20" r="6" fill="none" stroke="var(--dt-pass)" stroke-width="2" style="animation:dtSnapPulse 1.4s ease-out infinite"></circle></svg><span><strong>Snap pulse</strong> — confirms a successful mate on the canvas. Runs 3×, then rests.</span></div>
+    <div style="display:flex;gap:14px;align-items:center"><span style="display:inline-block;font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:2px solid var(--dt-pass);padding:3px 10px;transform:rotate(-3deg)">■ STAMPED</span><span><strong>Stamp</strong> — a gate decision lands with a small rotate-in. The record keeps the stamp.</span></div>
+    <div style="display:flex;gap:14px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:12px">▶ ▶ ▶</span><span><strong>Train run</strong> — the one continuous animation, on the canvas when a loop validates. Everything else is instant. Reduced-motion turns all three off.</span></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;paper&quot;,&quot;blueprint&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto'|'paper'|'blueprint'&quot;}}">
+class Component extends DCLogic {
+  state = { dark: null, demoNum: 24 };
+  isDark() {
+    if (this.state.dark !== null) return this.state.dark;
+    if (this.props.theme === 'blueprint') return true;
+    if (this.props.theme === 'paper') return false;
+    return typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  applyBody() { document.body.classList.toggle('dt-blueprint', this.isDark()); }
+  componentDidMount() { this.applyBody(); this.forceUpdate(); }
+  componentDidUpdate() { this.applyBody(); }
+  renderVals() {
+    const dark = this.isDark();
+    return {
+      dark, themeLabel: dark ? '☀ PAPER' : '☾ BLUEPRINT',
+      toggleTheme: () => this.setState({ dark: !this.isDark() }),
+      demoNum: this.state.demoNum,
+      setDemoNum: (e) => this.setState({ demoNum: parseFloat(e.target.value) || 0 }),
+      true: true
+    };
+  }
+}
+</script>
+</body>
+</html>

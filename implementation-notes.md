@@ -199,3 +199,5 @@
   only on unmerged PR #45. Kept the review branch on protected `main`, preserved the received R6
   bytes unchanged, and recorded the missing parents and brief branch in the draft PR instead of
   stacking review authority on either open branch.
+
+- R6 addendum packaging assumed the reviewed prototype could run from its local dependency link. Added it as a pnpm workspace member with a frozen lockfile and included both model assets and Blender revisions. Offline installation lacked the Three tarball, so verified with a normal locked install. The received R6 overlay stays unchanged.

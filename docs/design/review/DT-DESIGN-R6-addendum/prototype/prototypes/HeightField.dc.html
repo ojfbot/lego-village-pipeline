@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:grid;gap:8px;min-width:0">
+  <div style="font-size:12.5px;font-weight:600;line-height:1.4;font-family:'Libre Franklin',sans-serif">{{ heading }} <span style="font-weight:400;color:var(--dt-muted)">{{ hint }}</span></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,110px),1fr));gap:8px">
+    <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted);min-width:0">WHOLE BRICKS
+      <input type="number" step="1" min="0" value="{{ bricksValue }}" onChange="{{ onBricks }}" aria-label="{{ bricksAria }}" style="font-family:'Azeret Mono',monospace;font-size:17px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:9px 10px;min-height:44px;width:100%;box-sizing:border-box">
+    </label>
+    <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted);min-width:0">PLATES ON TOP · 0–2
+      <input type="number" step="1" min="0" max="2" value="{{ platesValue }}" onChange="{{ onPlates }}" aria-label="{{ platesAria }}" style="font-family:'Azeret Mono',monospace;font-size:17px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:9px 10px;min-height:44px;width:100%;box-sizing:border-box">
+    </label>
+  </div>
+  <div aria-live="polite" style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:{{ readColor }};line-height:1.5">{{ readout }}</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:160},&quot;heading&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;How tall&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;hint&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;— bricks, then leftover plates (3 plates = 1 brick)&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;subject&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;it&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;bricks&quot;:{&quot;editor&quot;:null,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string|number&quot;},&quot;plates&quot;:{&quot;editor&quot;:null,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string|number&quot;},&quot;onBricks&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;(e)=&gt;void&quot;},&quot;onPlates&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;(e)=&gt;void&quot;}}">
+class Component extends DCLogic {
+  static PLATES_PER_BRICK = 3;
+  static LDU_BRICK = 24;
+  static LDU_PLATE = 8;
+  static ldu(b, p) { return (Number(b) || 0) * 24 + (Number(p) || 0) * 8; }
+  static say(b, p) { const B = Number(b) || 0, P = Number(p) || 0; return B + ' brick' + (B === 1 ? '' : 's') + (P ? ' and ' + P + ' plate' + (P === 1 ? '' : 's') : ''); }
+  static short(b, p) { const B = Number(b) || 0, P = Number(p) || 0; return B + ' br' + (P ? ' + ' + P + ' pl' : ''); }
+  static valid(b, p) { const B = Number(b), P = p === '' || p === null || p === undefined ? 0 : Number(p); return !isNaN(B) && !isNaN(P) && B >= 0 && P >= 0 && P <= 2 && (B > 0 || P > 0); }
+  renderVals() {
+    const b = this.props.bricks ?? '', p = this.props.plates ?? '';
+    const what = this.props.subject || 'it';
+    const B = Number(b), P = p === '' ? 0 : Number(p);
+    const over = p !== '' && (P > 2 || P < 0);
+    const has = b !== '' && !isNaN(B);
+    return {
+      heading: this.props.heading || 'How tall',
+      hint: this.props.hint || '— bricks, then leftover plates (3 plates = 1 brick)',
+      bricksValue: String(b), platesValue: String(p),
+      bricksAria: 'Height of ' + what + ', whole bricks', platesAria: 'Height of ' + what + ', extra plates on top (0 to 2)',
+      readColor: over ? 'var(--dt-block-deep)' : 'var(--dt-muted)',
+      readout: over ? '▲ 3 plates make a whole brick — put those in the bricks box and leave 0, 1 or 2 here.'
+        : !has ? 'Count whole bricks first, then the plates left over on top.'
+        : '= ' + Component.say(B, P) + ' · ' + Component.ldu(B, P) + ' LDU stored'
+    };
+  }
+}
+</script>
+</body>
+</html>

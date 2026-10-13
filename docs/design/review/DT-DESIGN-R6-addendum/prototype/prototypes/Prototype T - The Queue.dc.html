@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Everything waiting, and what it's waiting on — LEGO Village</title>
+<script>document.documentElement.lang="en"</script>
+<script src="../dt/landing.js"></script>
+<script src="../dt/ledger.js"></script>
+<script src="../dt/overlay.js"></script>
+<script src="./image-slot.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../dt/tokens.css">
+<link rel="stylesheet" href="../dt/responsive.css">
+</helmet>
+<div class="dt-responsive-page" style="max-width:1180px;margin:0 auto;padding:28px 28px 48px;font-family:'Libre Franklin',sans-serif">
+  <header role="banner" style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--dt-ink);padding-bottom:10px;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;min-width:0;flex:1 1 320px">
+      <h1 style="font-family:'Spectral',serif;font-size:19px;font-weight:700;font-style:italic;white-space:nowrap;margin:0">Everything waiting, and what it's waiting on</h1>
+      <div style="font-family:'Azeret Mono',monospace;font-size:11px;color:var(--dt-muted);letter-spacing:0.08em">T-01 · THE QUEUE · MOCK DATA</div>
+    </div>
+    <nav aria-label="Sheet" style="display:flex;align-items:center;gap:12px">
+      <a href="../Hub.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">← HUB</a>
+      <button onClick="{{ toggleTheme }}" aria-pressed="{{ dark }}" style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn)">{{ themeLabel }}</button>
+    </nav>
+  </header>
+
+  <div style="margin-top:16px;font-size:13.5px;line-height:1.6;max-width:74ch;text-wrap:pretty">The Drafting Table only ever shows three. This is the rest of them. Nothing here is overdue and nothing is nagging — the order is just <strong>what you'd like to reach first</strong>. Drag a row, or send it to the top, and the top three become the three on the front page. Every task says in one line what it's waiting on and what it frees.</div>
+
+  <div role="status" aria-live="polite" style="margin-top:14px;display:flex;gap:10px 22px;flex-wrap:wrap;align-items:baseline;border:1.5px solid var(--dt-ink);background:var(--dt-sheet);border-radius:var(--dt-r-fillet);padding:10px 14px;box-shadow:var(--dt-shadow)">
+    <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">RIGHT NOW</span>
+    <span style="font-size:13px"><strong>{{ nOpen }}</strong> open</span>
+    <span style="font-size:13px"><strong>{{ nReady }}</strong> you could do today</span>
+    <span style="font-size:13px"><strong>{{ nBlocked }}</strong> waiting on something else first</span>
+    <span style="font-size:13px"><strong>{{ nElse }}</strong> waiting on someone else</span>
+    <span style="font-size:13px;color:var(--dt-muted)">{{ nParked }} stepped aside · {{ nDone }} closed</span>
+  </div>
+
+  <div style="margin-top:14px;display:flex;gap:10px 18px;flex-wrap:wrap;align-items:flex-end;justify-content:space-between">
+    <div style="display:flex;gap:10px 18px;flex-wrap:wrap;align-items:flex-end">
+      <div style="display:grid;gap:5px">
+        <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)">HOW MUCH TO SHOW</span>
+        <div role="group" aria-label="How much to show" style="display:flex;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);overflow:hidden">
+          <button onClick="{{ setList }}" aria-pressed="{{ viewList }}" title="One line each — the essentials condensed so the page can breathe" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;border:0;padding:7px 13px;cursor:pointer;background:{{ listBg }};color:{{ listFg }}">≡ Quick list</button>
+          <button onClick="{{ setCards }}" aria-pressed="{{ viewCards }}" title="A card each — room for the links, the chain and the gate" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;border:0;border-left:1.5px solid var(--dt-ink);padding:7px 13px;cursor:pointer;background:{{ cardsBg }};color:{{ cardsFg }}">▦ Cards</button>
+        </div>
+      </div>
+      <div style="display:grid;gap:5px">
+        <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)">ARRANGE</span>
+        <div role="group" aria-label="Arrange" style="display:flex;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);overflow:hidden">
+          <button onClick="{{ setFlat }}" aria-pressed="{{ flat }}" title="Your order. Drag to change it." style="font-family:'Libre Franklin';font-size:12px;font-weight:600;border:0;padding:7px 13px;cursor:pointer;background:{{ flatBg }};color:{{ flatFg }}">In your order</button>
+          <button onClick="{{ setGrouped }}" aria-pressed="{{ grouped }}" title="Gathered by the sheet, set or journey each one unblocks" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;border:0;border-left:1.5px solid var(--dt-ink);padding:7px 13px;cursor:pointer;background:{{ grpBg }};color:{{ grpFg }}">By what it unblocks</button>
+        </div>
+      </div>
+      <div style="display:grid;gap:5px">
+        <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)">WAITING ON</span>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <sc-for list="{{ whoChips }}" as="w" hint-placeholder-count="5">
+            <button onClick="{{ w.pick }}" aria-pressed="{{ w.on }}" title="{{ w.tip }}" style="font-family:'Libre Franklin';font-size:11.5px;font-weight:600;border:1.5px {{ w.border }} {{ w.stroke }};border-radius:var(--dt-r-pill);padding:6px 12px;cursor:pointer;background:{{ w.bg }};color:{{ w.fg }}">{{ w.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+    <button id="add" onClick="{{ openAdd }}" style="font-family:'Libre Franklin';font-size:13px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;border-radius:var(--dt-r-pill);padding:9px 18px;cursor:pointer;box-shadow:var(--dt-btn-shadow);white-space:nowrap">＋ Add something</button>
+  </div>
+
+  <sc-if value="{{ addOpen }}" hint-placeholder-val="{{ false }}">
+    <div role="dialog" aria-label="Add something to the queue" style="margin-top:14px;background-color:var(--dt-sheet);background-image:var(--dt-hatch-draft);border:1.5px solid var(--dt-accent);border-radius:var(--dt-r-card);box-shadow:var(--dt-shadow);padding:16px 18px;display:grid;gap:12px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-accent-deep)">{{ addStepLabel }}</span>
+        <button onClick="{{ closeAdd }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:transparent;color:var(--dt-ink);border:1px solid var(--dt-ink);border-radius:var(--dt-r-btn);padding:3px 9px;cursor:pointer">✕ NEVER MIND</button>
+      </div>
+      <sc-if value="{{ addStep1 }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;gap:10px">
+          <label style="display:grid;gap:6px;font-size:13.5px;line-height:1.5">Say it the way you'd say it out loud. One line is enough — the next step works out what it's about.
+            <input type="text" value="{{ draft }}" onChange="{{ setDraft }}" onKeyDown="{{ draftKey }}" placeholder="e.g. measure the shelf above the radiator before buying the second module" aria-label="What needs doing" style="font-family:'Libre Franklin';font-size:15px;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:11px 12px;width:100%;box-sizing:border-box">
+          </label>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <button onClick="{{ toStep2 }}" disabled="{{ draftEmpty }}" style="font-family:'Libre Franklin';font-size:13px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;border-radius:var(--dt-r-pill);padding:9px 18px;cursor:{{ draftCursor }};opacity:{{ draftOpacity }};box-shadow:var(--dt-btn-shadow)">What is this about? →</button>
+            <button onClick="{{ addBare }}" disabled="{{ draftEmpty }}" title="Straight onto the bottom of the list, no metadata. You can fill it in later." style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px dashed var(--dt-ink);border-radius:var(--dt-r-pill);padding:8px 15px;cursor:{{ draftCursor }};opacity:{{ draftOpacity }}">Just park the line for now</button>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ addStep2 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;gap:12px">
+          <div style="font-family:'Spectral',serif;font-size:17px;font-weight:600;line-height:1.35;text-wrap:pretty">{{ draft }}</div>
+          <div style="font-size:12.5px;color:var(--dt-muted);line-height:1.5;text-wrap:pretty">Here's what I read into that. Each one is a guess with its reason — keep the ones that are right, drop the ones that aren't. Nothing is saved until you add it.</div>
+          <div style="display:grid;gap:7px">
+            <sc-for list="{{ guesses }}" as="g" hint-placeholder-count="4">
+              <div style="display:flex;gap:10px;align-items:flex-start;border:1.5px {{ g.border }} {{ g.stroke }};border-radius:var(--dt-r-fillet);background:{{ g.bg }};padding:8px 11px">
+                <button onClick="{{ g.toggle }}" aria-pressed="{{ g.on }}" aria-label="{{ g.aria }}" style="font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;width:28px;height:28px;flex:none;border:1.5px solid {{ g.stroke }};border-radius:50%;background:{{ g.btnBg }};color:{{ g.btnFg }};cursor:pointer">{{ g.mark }}</button>
+                <div style="display:grid;gap:2px;min-width:0">
+                  <div style="font-size:13px;line-height:1.4"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);margin-right:7px">{{ g.field }}</span><strong>{{ g.value }}</strong></div>
+                  <div style="font-size:11.5px;color:var(--dt-muted);line-height:1.45;text-wrap:pretty">{{ g.why }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
+            <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted);flex:1 1 240px">YOUR OWN TAGS (COMMA SEPARATED)
+              <input type="text" value="{{ addTags }}" onChange="{{ setAddTags }}" placeholder="tree, before-december" aria-label="Your own tags" style="font-family:'Libre Franklin';font-size:13px;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:8px 10px;width:100%;box-sizing:border-box">
+            </label>
+            <label style="display:flex;gap:8px;align-items:center;font-size:13px;padding-bottom:8px">
+              <input type="checkbox" checked="{{ addTop }}" onChange="{{ setAddTop }}" style="width:17px;height:17px;accent-color:var(--dt-accent)">
+              Put it straight in the top three
+            </label>
+          </div>
+          <div style="font-size:12px;color:var(--dt-accent-deep);line-height:1.5;border-top:1px dashed var(--dt-grid-mid);padding-top:9px;text-wrap:pretty">{{ addPreview }}</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button onClick="{{ commitAdd }}" style="font-family:'Libre Franklin';font-size:13px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;border-radius:var(--dt-r-pill);padding:9px 18px;cursor:pointer;box-shadow:var(--dt-btn-shadow)">Add it to the queue</button>
+            <button onClick="{{ backStep1 }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-pill);padding:8px 15px;cursor:pointer">← Change the wording</button>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ flat }}" hint-placeholder-val="{{ true }}">
+    <div style="margin-top:18px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap">
+      <span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted)">THE TOP THREE — WHAT THE DRAFTING TABLE SHOWS</span>
+      <span style="font-size:11.5px;color:var(--dt-muted);text-wrap:pretty">{{ topLine }}</span>
+    </div>
+  </sc-if>
+
+  <div style="margin-top:10px;display:grid;gap:18px">
+    <sc-for list="{{ groups }}" as="grp" hint-placeholder-count="1">
+      <section style="display:grid;gap:9px">
+        <sc-if value="{{ grp.titled }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;border-bottom:1px dashed var(--dt-grid-mid);padding-bottom:5px">
+            <span style="font-family:'Spectral',serif;font-size:15.5px;font-weight:600">{{ grp.label }}</span>
+            <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">{{ grp.count }}</span>
+            <span style="font-size:11.5px;color:var(--dt-muted);text-wrap:pretty">{{ grp.hint }}</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ viewList }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;gap:4px">
+            <sc-for list="{{ grp.items }}" as="t" hint-placeholder-count="4">
+              <div style="display:grid"><div class="dt-queue-item" draggable="{{ t.canDrag }}" onDragStart="{{ t.dragStart }}" onDragOver="{{ t.dragOver }}" onDrop="{{ t.drop }}" onDragEnd="{{ t.dragEnd }}" style="display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;gap:11px;align-items:center;background-color:{{ t.bg }};background-image:{{ t.hatch }};border:1.5px {{ t.border }} {{ t.stroke }};border-radius:var(--dt-r-fillet);padding:7px 10px;opacity:{{ t.opacity }};box-shadow:{{ t.shadow }}">
+                <span aria-hidden="true" title="{{ t.dragTip }}" style="font-family:'Azeret Mono',monospace;font-size:12px;color:var(--dt-muted);cursor:{{ t.grab }};user-select:none">⠿</span>
+                <span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;width:22px;text-align:right;color:{{ t.posColor }}">{{ t.pos }}</span>
+                <div style="display:flex;gap:4px 10px;align-items:baseline;flex-wrap:wrap;min-width:0">
+                  <span style="font-family:'Spectral',serif;font-size:14.5px;font-weight:600;line-height:1.3;text-decoration:{{ t.strike }}">{{ t.title }}</span>
+                  <span title="{{ t.originTip }}" style="font-family:'Azeret Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:0.09em;color:{{ t.originFg }};border:1.5px solid {{ t.originFg }};border-radius:var(--dt-r-fillet);padding:1px 5px;white-space:nowrap">{{ t.originLabel }}</span>
+                  <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);white-space:nowrap">{{ t.oneLine }}</span>
+                  <sc-if value="{{ t.stuck }}" hint-placeholder-val="{{ false }}">
+                    <span title="{{ t.blockedTip }}" style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:var(--dt-block-deep);background:var(--dt-block-bg);border-radius:var(--dt-r-fillet);padding:2px 6px;white-space:nowrap">⊘ {{ t.blockedShort }}</span>
+                  </sc-if>
+                </div>
+                <div style="display:flex;gap:5px;align-items:center;flex:none">
+                  <sc-if value="{{ t.canPromote }}" hint-placeholder-val="{{ true }}">
+                    <button onClick="{{ t.promote }}" aria-label="{{ t.promoteAria }}" title="Send it to the top three — this is what the Drafting Table will show" style="font-family:'Azeret Mono',monospace;font-size:11px;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-pill);padding:4px 9px;cursor:pointer;white-space:nowrap">↑ TOP</button>
+                  </sc-if>
+                  <button onClick="{{ t.park }}" aria-label="{{ t.parkAria }}" title="Not today — step it aside, keep it" style="font-family:'Azeret Mono',monospace;font-size:11px;width:28px;height:28px;border-radius:50%;background:transparent;color:var(--dt-muted);border:1.5px dashed var(--dt-unres);cursor:pointer">○</button>
+                  <button onClick="{{ t.toggle }}" aria-expanded="{{ t.expanded }}" aria-label="{{ t.toggleAria }}" title="Open what it takes to finish this" style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:transparent;color:var(--dt-accent-deep);border:1.5px solid var(--dt-accent);border-radius:var(--dt-r-pill);padding:4px 9px;cursor:pointer;white-space:nowrap">{{ t.toggleLabel }}</button>
+                </div>
+              </div>
+              <sc-if value="{{ t.expanded }}" hint-placeholder-val="{{ false }}">
+                <div style="border:1.5px solid var(--dt-accent);border-top:0;background:var(--dt-sheet);border-radius:0 0 var(--dt-r-fillet) var(--dt-r-fillet);padding:11px 13px;margin:0 0 4px;display:grid;gap:9px">
+                  <div style="font-size:12.5px;line-height:1.5;text-wrap:pretty">{{ t.actAsk }}</div>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                    <a href="{{ t.goHref }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;text-decoration:none;background:var(--dt-ink);color:var(--dt-on-ink);border-radius:var(--dt-r-pill);padding:8px 15px;box-shadow:var(--dt-btn-shadow);white-space:nowrap">{{ t.goLabel }}</a>
+                    <sc-if value="{{ t.hasDispatch }}" hint-placeholder-val="{{ false }}">
+                      <button onClick="{{ t.dispatch }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px dashed var(--dt-ink);border-radius:var(--dt-r-pill);padding:7px 14px;cursor:pointer">{{ t.dispatchLabel }}</button>
+                    </sc-if>
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr));gap:9px">
+                    <sc-for list="{{ t.fields }}" as="f" hint-placeholder-count="3">
+                      <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted);min-width:0">{{ f.label }}
+                        <sc-if value="{{ f.isNumber }}" hint-placeholder-val="{{ false }}"><input type="number" step="1" value="{{ f.value }}" onChange="{{ f.set }}" aria-label="{{ f.aria }}" style="font-family:'Azeret Mono',monospace;font-size:15px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:7px 9px;width:100%;box-sizing:border-box"></sc-if>
+                        <sc-if value="{{ f.isText }}" hint-placeholder-val="{{ false }}"><input type="text" value="{{ f.value }}" onChange="{{ f.set }}" placeholder="{{ f.placeholder }}" aria-label="{{ f.aria }}" style="font-family:'Libre Franklin';font-size:13px;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:8px 9px;width:100%;box-sizing:border-box"></sc-if>
+                        <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}"><select value="{{ f.value }}" onChange="{{ f.set }}" aria-label="{{ f.aria }}" style="font-family:'Libre Franklin';font-size:12.5px;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:8px 9px;width:100%;box-sizing:border-box"><sc-for list="{{ f.options }}" as="o" hint-placeholder-count="3"><option value="{{ o.v }}">{{ o.t }}</option></sc-for></select></sc-if>
+                      </label>
+                    </sc-for>
+                  </div>
+                  <div style="display:grid;gap:6px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">{{ t.photoLabel }}
+                    <sc-for list="{{ t.photos }}" as="ph" hint-placeholder-count="0">
+                      <div style="display:flex;align-items:center;gap:8px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-bg);padding:5px 7px;min-width:0">
+                        <div role="img" aria-label="Thumbnail of the attached photo" style="width:26px;height:26px;border-radius:3px;flex:none;background-color:var(--dt-grid-mid);background-size:cover;background-position:center;background-image:url({{ ph.url }})"></div>
+                        <span style="font-family:'Libre Franklin';font-size:11.5px;letter-spacing:0;color:var(--dt-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 auto;min-width:0">{{ ph.name }}</span>
+                        <button onClick="{{ ph.drop }}" aria-label="{{ ph.dropAria }}" style="font-family:'Azeret Mono',monospace;font-size:11px;background:transparent;border:0;color:var(--dt-muted);cursor:pointer;flex:none">✕</button>
+                      </div>
+                    </sc-for>
+                    <label style="position:relative;display:flex;align-items:center;justify-content:center;font-family:'Libre Franklin';font-size:12px;font-weight:600;letter-spacing:0;color:var(--dt-ink);border:1.5px dashed var(--dt-ink);border-radius:var(--dt-r-fillet);padding:8px 10px;cursor:pointer">{{ t.pickLabel }}
+                      <input type="file" accept="image/*" multiple="{{ true }}" onChange="{{ t.pickPhoto }}" aria-label="Attach a photo as proof" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer">
+                    </label>
+                  </div>
+                  <div style="font-size:11.5px;color:var(--dt-accent-deep);line-height:1.45;border-top:1px dashed var(--dt-grid-mid);padding-top:9px;text-wrap:pretty">{{ t.formPreview }}</div>
+                  <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+                    <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">THIS TOUCHES</span>
+                    <sc-for list="{{ t.derived }}" as="d" hint-placeholder-count="2">
+                      <span title="{{ d.tip }}" style="font-family:'Azeret Mono',monospace;font-size:9px;color:{{ d.fg }};border:1px solid {{ d.fg }};border-radius:var(--dt-r-pill);padding:2px 8px;white-space:nowrap">{{ d.label }}</span>
+                    </sc-for>
+                  </div>
+                  <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap">
+                    <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">SIGN IT
+                      <input type="text" value="{{ t.sig }}" onChange="{{ t.setSig }}" placeholder="jfo" maxlength="5" aria-label="Your initials — signs this record" style="font-family:'Azeret Mono',monospace;font-size:13px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:7px 9px;width:76px;box-sizing:border-box">
+                    </label>
+                    <button onClick="{{ t.record }}" disabled="{{ t.recordOff }}" title="{{ t.recordTitle }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;border-radius:var(--dt-r-pill);padding:9px 16px;cursor:{{ t.recordCursor }};opacity:{{ t.recordOpacity }};box-shadow:var(--dt-btn-shadow)">Record it</button>
+                    <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted);margin-left:auto;text-align:right">{{ t.gate }}</span>
+                  </div>
+                </div>
+              </sc-if></div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ viewCards }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,310px),1fr));gap:12px">
+            <sc-for list="{{ grp.items }}" as="t" hint-placeholder-count="4">
+              <div class="dt-queue-item" draggable="{{ t.canDrag }}" onDragStart="{{ t.dragStart }}" onDragOver="{{ t.dragOver }}" onDrop="{{ t.drop }}" onDragEnd="{{ t.dragEnd }}" style="display:grid;gap:8px;align-content:start;background-color:{{ t.bg }};background-image:{{ t.hatch }};border:1.5px {{ t.border }} {{ t.stroke }};border-radius:var(--dt-r-card);padding:14px 16px;opacity:{{ t.opacity }};box-shadow:{{ t.shadow }}">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+                  <span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);cursor:{{ t.grab }}" title="{{ t.dragTip }}">⠿ {{ t.pos }}</span>
+                  <span title="{{ t.originTip }}" style="font-family:'Azeret Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:0.09em;color:{{ t.originFg }};border:1.5px solid {{ t.originFg }};border-radius:var(--dt-r-fillet);padding:1px 5px;white-space:nowrap">{{ t.originLabel }}</span>
+                </div>
+                <button onClick="{{ t.toggle }}" aria-expanded="{{ t.expanded }}" aria-label="{{ t.toggleAria }}" title="Open what it takes to finish this" style="font-family:'Spectral',serif;font-size:16px;font-weight:600;line-height:1.3;text-decoration:{{ t.strike }};text-wrap:pretty;text-align:left;background:transparent;border:0;padding:0;margin:0;color:var(--dt-accent-deep);cursor:pointer;border-bottom:1px dotted var(--dt-accent);width:fit-content;max-width:100%">{{ t.title }}</button>
+                <div style="font-size:12.5px;color:var(--dt-muted);line-height:1.5;display:flex;flex-wrap:wrap;column-gap:0.28em;align-items:baseline">
+                  <sc-for list="{{ t.whyParts }}" as="p" hint-placeholder-count="22">
+                    <sc-if value="{{ p.isRef }}" hint-placeholder-val="{{ false }}"><dc-import name="SetRef" num="{{ p.num }}" kind="set" label="{{ p.label }}" hint-size="auto,1em"></dc-import></sc-if>
+                    <sc-if value="{{ p.isWord }}" hint-placeholder-val="{{ true }}"><span>{{ p.word }}</span></sc-if>
+                  </sc-for>
+                </div>
+                <div style="display:flex;gap:5px;flex-wrap:wrap">
+                  <sc-for list="{{ t.chips }}" as="c" hint-placeholder-count="3">
+                    <span title="{{ c.tip }}" style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.06em;color:{{ c.fg }};border:1px solid {{ c.fg }};border-radius:var(--dt-r-pill);padding:2px 8px;white-space:nowrap">{{ c.label }}</span>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ t.stuck }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:11.5px;color:var(--dt-block-deep);background:var(--dt-block-bg);border-radius:var(--dt-r-fillet);padding:6px 9px;line-height:1.45;text-wrap:pretty">⊘ {{ t.blockedTip }}</div>
+                </sc-if>
+                <sc-if value="{{ t.frees }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:11.5px;color:var(--dt-pass);line-height:1.45;text-wrap:pretty">→ {{ t.blocksTip }}</div>
+                </sc-if>
+                <div style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted);line-height:1.5;text-wrap:pretty">{{ t.gate }}</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;border-top:1px dashed var(--dt-grid-mid);padding-top:8px">
+                  <sc-for list="{{ t.links }}" as="l" hint-placeholder-count="2">
+                    <sc-if value="{{ l.cross }}" hint-placeholder-val="{{ false }}"><dc-import name="CrossRef" sheet="{{ l.sheet }}" label="{{ l.label }}" href="{{ l.href }}" title="{{ l.title }}" summary="{{ l.summary }}" status="{{ l.status }}" dir="forward" hint-size="auto,18px"></dc-import></sc-if>
+                    <sc-if value="{{ l.plain }}" hint-placeholder-val="{{ true }}"><a href="{{ l.href }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;text-decoration:none;color:var(--dt-accent-deep);border-bottom:1px dotted var(--dt-accent)">{{ l.label }}</a></sc-if>
+                  </sc-for>
+                </div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+                  <sc-if value="{{ t.canPromote }}" hint-placeholder-val="{{ true }}">
+                    <button onClick="{{ t.promote }}" aria-label="{{ t.promoteAria }}" style="font-family:'Azeret Mono',monospace;font-size:10.5px;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-pill);padding:5px 11px;cursor:pointer">↑ TOP THREE</button>
+                  </sc-if>
+                  <button onClick="{{ t.park }}" aria-label="{{ t.parkAria }}" style="font-family:'Azeret Mono',monospace;font-size:10.5px;background:transparent;color:var(--dt-muted);border:1.5px dashed var(--dt-unres);border-radius:var(--dt-r-pill);padding:5px 11px;cursor:pointer">○ NOT TODAY</button>
+                </div>
+                <sc-if value="{{ t.expanded }}" hint-placeholder-val="{{ false }}">
+                  <div onMouseDown="{{ t.backdrop }}" style="position:fixed;inset:0;z-index:60;background:color-mix(in oklch,var(--dt-ink) 45%,transparent);display:grid;place-items:center;padding:20px;overflow:auto">
+                  <div role="dialog" aria-modal="true" aria-label="{{ t.title }}" style="width:min(640px,100%);max-height:calc(100vh - 40px);overflow:auto;background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1.5px solid var(--dt-accent);border-radius:var(--dt-r-card);box-shadow:var(--dt-shadow);padding:16px 18px;display:grid;gap:9px;box-sizing:border-box">
+                    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+                      <div style="display:grid;gap:3px;min-width:0"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)">⠀ #{{ t.pos }} · {{ t.originLabel }} · WHAT IT TAKES TO FINISH</span><span style="font-family:'Spectral',serif;font-size:17px;font-weight:600;line-height:1.3;text-wrap:pretty">{{ t.title }}</span></div>
+                      <button onClick="{{ t.toggle }}" aria-label="Close" style="font-family:'Azeret Mono',monospace;font-size:12px;width:32px;height:32px;border-radius:50%;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);cursor:pointer;flex:none">✕</button>
+                    </div>
+                  <div style="border-top:1.5px solid var(--dt-accent);padding-top:10px;display:grid;gap:9px">
+                    <div style="font-size:12.5px;line-height:1.5;text-wrap:pretty">{{ t.actAsk }}</div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                      <a href="{{ t.goHref }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;text-decoration:none;background:var(--dt-ink);color:var(--dt-on-ink);border-radius:var(--dt-r-pill);padding:8px 15px;box-shadow:var(--dt-btn-shadow);white-space:nowrap">{{ t.goLabel }}</a>
+                      <sc-if value="{{ t.hasDispatch }}" hint-placeholder-val="{{ false }}">
+                        <button onClick="{{ t.dispatch }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px dashed var(--dt-ink);border-radius:var(--dt-r-pill);padding:7px 14px;cursor:pointer">{{ t.dispatchLabel }}</button>
+                      </sc-if>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,118px),1fr));gap:9px">
+                      <sc-for list="{{ t.fields }}" as="f" hint-placeholder-count="3">
+                        <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted);min-width:0">{{ f.label }}
+                          <sc-if value="{{ f.isNumber }}" hint-placeholder-val="{{ false }}"><input type="number" step="1" value="{{ f.value }}" onChange="{{ f.set }}" aria-label="{{ f.aria }}" style="font-family:'Azeret Mono',monospace;font-size:15px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:7px 9px;width:100%;box-sizing:border-box"></sc-if>
+                          <sc-if value="{{ f.isText }}" hint-placeholder-val="{{ false }}"><input type="text" value="{{ f.value }}" onChange="{{ f.set }}" placeholder="{{ f.placeholder }}" aria-label="{{ f.aria }}" style="font-family:'Libre Franklin';font-size:13px;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:8px 9px;width:100%;box-sizing:border-box"></sc-if>
+                          <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}"><select value="{{ f.value }}" onChange="{{ f.set }}" aria-label="{{ f.aria }}" style="font-family:'Libre Franklin';font-size:12.5px;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:8px 9px;width:100%;box-sizing:border-box"><sc-for list="{{ f.options }}" as="o" hint-placeholder-count="3"><option value="{{ o.v }}">{{ o.t }}</option></sc-for></select></sc-if>
+                        </label>
+                      </sc-for>
+                    </div>
+                    <div style="display:grid;gap:6px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">{{ t.photoLabel }}
+                      <sc-for list="{{ t.photos }}" as="ph" hint-placeholder-count="0">
+                        <div style="display:flex;align-items:center;gap:8px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-bg);padding:5px 7px;min-width:0">
+                          <div role="img" aria-label="Thumbnail of the attached photo" style="width:26px;height:26px;border-radius:3px;flex:none;background-color:var(--dt-grid-mid);background-size:cover;background-position:center;background-image:url({{ ph.url }})"></div>
+                          <span style="font-family:'Libre Franklin';font-size:11.5px;letter-spacing:0;color:var(--dt-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 auto;min-width:0">{{ ph.name }}</span>
+                          <button onClick="{{ ph.drop }}" aria-label="{{ ph.dropAria }}" style="font-family:'Azeret Mono',monospace;font-size:11px;background:transparent;border:0;color:var(--dt-muted);cursor:pointer;flex:none">✕</button>
+                        </div>
+                      </sc-for>
+                      <label style="position:relative;display:flex;align-items:center;justify-content:center;font-family:'Libre Franklin';font-size:12px;font-weight:600;letter-spacing:0;color:var(--dt-ink);border:1.5px dashed var(--dt-ink);border-radius:var(--dt-r-fillet);padding:8px 10px;cursor:pointer">{{ t.pickLabel }}
+                        <input type="file" accept="image/*" multiple="{{ true }}" onChange="{{ t.pickPhoto }}" aria-label="Attach a photo as proof" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer">
+                      </label>
+                    </div>
+                    <div style="font-size:11.5px;color:var(--dt-accent-deep);line-height:1.45;border-top:1px dashed var(--dt-grid-mid);padding-top:9px;text-wrap:pretty">{{ t.formPreview }}</div>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+                      <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">THIS TOUCHES</span>
+                      <sc-for list="{{ t.derived }}" as="d" hint-placeholder-count="2">
+                        <span title="{{ d.tip }}" style="font-family:'Azeret Mono',monospace;font-size:9px;color:{{ d.fg }};border:1px solid {{ d.fg }};border-radius:var(--dt-r-pill);padding:2px 8px;white-space:nowrap">{{ d.label }}</span>
+                      </sc-for>
+                    </div>
+                    <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap">
+                      <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">SIGN IT
+                        <input type="text" value="{{ t.sig }}" onChange="{{ t.setSig }}" placeholder="jfo" maxlength="5" aria-label="Your initials — signs this record" style="font-family:'Azeret Mono',monospace;font-size:13px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:7px 9px;width:76px;box-sizing:border-box">
+                      </label>
+                      <button onClick="{{ t.record }}" disabled="{{ t.recordOff }}" title="{{ t.recordTitle }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;border-radius:var(--dt-r-pill);padding:9px 16px;cursor:{{ t.recordCursor }};opacity:{{ t.recordOpacity }};box-shadow:var(--dt-btn-shadow)">Record it</button>
+                    </div>
+                  </div>
+                  </div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </section>
+    </sc-for>
+  </div>
+
+  <div aria-live="polite" style="font-size:11.5px;color:var(--dt-muted);margin-top:12px;min-height:16px;text-wrap:pretty">{{ note }}</div>
+
+  <details style="margin-top:22px;background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);border-radius:var(--dt-r-card);padding:12px 16px">
+    <summary style="cursor:pointer;font-family:'Azeret Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:var(--dt-muted)">STEPPED ASIDE &amp; CLOSED — {{ nParked }} + {{ nDone }} · NOTHING IS EVER DELETED</summary>
+    <div style="display:grid;gap:5px;margin-top:10px">
+      <sc-for list="{{ history }}" as="h" hint-placeholder-count="2">
+        <div style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:11px;align-items:center;border-bottom:1px dashed var(--dt-grid-mid);padding:6px 2px">
+          <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:{{ h.fg }};white-space:nowrap">{{ h.mark }}</span>
+          <span style="font-size:13px;line-height:1.35;min-width:0"><dc-import name="Trail" label="{{ h.title }}" title="{{ h.title }}" status="{{ h.trailStatus }}" steps="{{ h.steps }}" foot="{{ h.foot }}" hint-size="auto,1.2em"></dc-import></span>
+          <button onClick="{{ h.undo }}" aria-label="{{ h.undoAria }}" style="font-family:'Azeret Mono',monospace;font-size:10px;background:transparent;color:var(--dt-accent-deep);border:0;cursor:pointer;text-decoration:underline dotted;white-space:nowrap">{{ h.undoLabel }}</button>
+        </div>
+      </sc-for>
+    </div>
+  </details>
+
+  <footer style="margin-top:26px;border-top:1px solid var(--dt-grid-mid);padding-top:12px;display:grid;gap:6px;font-size:11.5px;color:var(--dt-muted);line-height:1.5">
+    <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em">SCHEMA THIS SHEET NEEDS</div>
+    <div style="text-wrap:pretty;max-width:96ch"><code>Task{title, rank, state: open·parked·done, where: table·online·house·shop, effort, waiting_on, origin: operator·ai·family·gate·order, gate_condition, tags[], links[{kind, id}], blocked_by[], blocks[]}</code> — <code>rank</code> is the only thing drag changes, and the Drafting Table's three are just <code>rank &lt;= 3</code>. <code>origin</code> is never hidden: an AI-proposed task says so for as long as it exists. <code>gate_condition</code> is machine-checkable, so a task closes itself when its evidence lands; it is not a checkbox.</div>
+    <div>Fidelity: rough. The step-two reading of your line is a keyword mock — in the app it goes through Claude and returns the same shape. Ranks, chains and history are real state in this page; nothing persists.</div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;paper&quot;,&quot;blueprint&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto'|'paper'|'blueprint'&quot;,&quot;section&quot;:&quot;Sheet&quot;}}">
+class Component extends DCLogic {
+  ORIGIN = {
+    you: { label: 'YOU', fg: 'var(--dt-ink)', tip: 'You added this.' },
+    ai: { label: '◇ AI PROPOSED', fg: 'var(--dt-prov-deep)', tip: 'The AI raised this from something it noticed. It says so for as long as the task exists.' },
+    family: { label: '♡ FAMILY ASKED', fg: 'var(--dt-layer-story)', tip: 'It arrived as a request from F-01 — answering it replies in their words.' },
+    gate: { label: '⊘ GATE FINDING', fg: 'var(--dt-block-deep)', tip: 'A release gate found this. It closes when the gate runs clean.' },
+    order: { label: '▤ ORDER LANDING', fg: 'var(--dt-info-deep)', tip: 'P-01 made this when a parcel was due.' }
+  };
+  SEED = [
+    { id: 'tree', title: 'Measure the Christmas tree’s base', where: 'On the table', effort: '5 min', origin: 'you', waiting: 'me', unblocks: 'A-01 fit checks',
+      why: 'Set 41843 is in the house, taken apart but kept for itself. Its 16×16 base is the one fact every layout check leans on — three sheets are waiting on it being real, not remembered.',
+      gate: '↩ CLOSES WHEN M-01 HOLDS A SIGNED MEASUREMENT', tags: ['tree'], blocks: ['fit', 'stand-fit'], blockedBy: [],
+      links: [{ label: 'M-01 · MEASURE IT ↗', href: 'Prototype M - Measure and Check.dc.html#tree-base' }, { label: 'I-01 · SET 41843 ↗', href: 'Prototype I - What We Have.dc.html' }], open: 'M-01' },
+    { id: 'train', title: 'Order the Holiday Express Train from LEGO', where: 'Online', effort: '10 min', origin: 'you', waiting: 'shop', unblocks: 'C-01 parts list',
+      why: 'Set 10361 (2025, $129.99, limit 3) brings the 16-piece circular track and the engine. Nothing downstream — track fit, ballast, the boys’ siding — can be tested until it’s on its way.',
+      gate: '↩ CLOSES WHEN P-01 CARRIES AN ORDER NUMBER FOR 10361', tags: ['train'], blocks: ['fit', 'siding'], blockedBy: [],
+      links: [{ label: 'LEGO LISTING ↗', href: 'https://www.lego.com/en-us/product/holiday-express-train-10361' }, { label: 'P-01 · RECORD THE ORDER ↗', href: 'Prototype P - Procurement.dc.html' }], open: 'P-01' },
+    { id: 'fit', title: 'Confirm the train’s rails fit the MILS modules around the tree', where: 'On the table', effort: 'An evening', origin: 'you', waiting: 'me', unblocks: 'A-01 fit checks',
+      why: 'Right now the plan shows the inner corner of each section under the tree base (Q13). Notch or shift — either is fine, but it’s your call before any module parts get bought.',
+      gate: '↩ CLOSES WHEN A-01’S FIT CHECK RUNS CLEAN ON REAL MEASUREMENTS', tags: ['tree', 'rail'], blocks: ['gate-lots'], blockedBy: ['tree', 'train'],
+      links: [{ label: 'A-01 · SEE THE FIT ↗', href: 'Prototype A - Layout Canvas.dc.html#fit' }], open: 'A-01' },
+    { id: 'stand-fit', title: 'Re-check where the hot chocolate stand sits', where: 'On the table', effort: '5 min', origin: 'ai', waiting: 'me', unblocks: 'A-01 fit checks',
+      why: 'Its footprint was placed against the remembered tree base. When the real measurement lands, this placement is stale until someone looks at it — I can’t tell from here whether 2 studs matter.',
+      gate: '↩ CLOSES WHEN THE PLACEMENT IS RE-CHECKED AGAINST THE MEASURED BASE', tags: ['tree'], blocks: [], blockedBy: ['tree'],
+      links: [{ label: 'I-01 · SET 40776 ↗', href: 'Prototype I - What We Have.dc.html' }, { label: 'A-01 ↗', href: 'Prototype A - Layout Canvas.dc.html' }], open: 'A-01' },
+    { id: 'box-photos', title: 'Photograph the boxes on the shelf so their set facts import', where: 'In the house', effort: '10 min', origin: 'ai', waiting: 'me', unblocks: 'I-01 inventory',
+      why: 'Three sets have no cached facts — no piece count, no inventory, no image. One photo of each box front is enough for me to read the number and pull the rest.',
+      gate: '↩ CLOSES WHEN EVERY SET IN I-01 HAS A DOCUMENTED BOX OR BUILD PHOTO', tags: ['inventory'], blocks: [], blockedBy: [],
+      links: [{ label: 'I-02 · DOCUMENT THEM ↗', href: 'Prototype I2 - Documenting the Boxes.dc.html' }, { label: 'I-01 ↗', href: 'Prototype I - What We Have.dc.html' }], open: 'I-02' },
+    { id: 'ballast', title: 'Pick the ballast colour with the boys', where: 'In the house', effort: 'An evening', origin: 'family', waiting: 'boys', unblocks: 'C-01 parts list',
+      why: 'Eli asked for “the grey stones like a real train”. Two candidates cost the same; the choice is theirs to make and it’s the last open thing on the railbed list.',
+      gate: '↩ CLOSES WHEN C-01’S BALLAST CHOICE IS DECIDED, WITH WHO CHOSE IT', tags: ['rail', 'boys'], blocks: ['gate-lots'], blockedBy: [],
+      links: [{ label: 'C-01 · BALLAST OPTIONS ↗', href: 'Prototype C - Measurement to Procurement.dc.html' }, { label: 'F-01 · ELI’S REQUEST ↗', href: '../F-01 Workbench Junior.dc.html' }], open: 'C-01' },
+    { id: 'gate-lots', title: 'Two lots sit under their shop’s minimum', where: 'Online', effort: '10 min', origin: 'gate', waiting: 'me', unblocks: 'C-01 parts list',
+      why: 'The release gate on C-01 won’t pass while two lots each sit $1.40 under a shop minimum. Either add to those carts or move the lots to a shop already in the order — P-01 prices both.',
+      gate: '↩ CLOSES WHEN C-01’S RELEASE GATE RUNS CLEAN', tags: ['rail', 'money'], blocks: [], blockedBy: ['fit', 'ballast'],
+      links: [{ label: 'P-01 · PRICE BOTH WAYS ↗', href: 'Prototype P - Procurement.dc.html' }, { label: 'C-01 · RELEASE GATE ↗', href: 'Prototype C - Measurement to Procurement.dc.html' }], open: 'P-01' },
+    { id: 'siding', title: 'Draw the boys’ siding as a layout branch', where: 'On the table', effort: 'An evening', origin: 'family', waiting: 'boys', unblocks: 'The boys’ siding',
+      why: 'Hugo’s sticker claims eight studs beside the track. As a branch it costs nothing to try — and it’s the first thing either of them asked for that isn’t already in the plan.',
+      gate: '↩ CLOSES WHEN THE BRANCH EXISTS ON A-01, ACCEPTED OR DECLINED WITH A REASON', tags: ['boys', 'rail'], blocks: [], blockedBy: ['train'],
+      links: [{ label: 'F-01 · HUGO’S STICKER ↗', href: '../F-01 Workbench Junior.dc.html' }, { label: 'A-01 ↗', href: 'Prototype A - Layout Canvas.dc.html' }], open: 'A-01' },
+    { id: 'parcel', title: 'Record the order number when the second parcel lands', where: 'In the house', effort: '5 min', origin: 'order', waiting: 'shop', unblocks: 'I-01 inventory',
+      why: 'Two parcels are due this week. Recording the number is what turns “approved to buy” into “in the house” — and what lets the parts list stop counting those pieces as a purchase.',
+      gate: '↩ CLOSES WHEN BOTH PARCELS ARE RECORDED AGAINST THE ORDER', tags: ['money', 'inventory'], blocks: [], blockedBy: [],
+      links: [{ label: 'P-01 · ORDERS ↗', href: 'Prototype P - Procurement.dc.html' }], open: 'P-01' },
+    { id: 'vocab', title: 'Settle what we call rail, railbed and right-of-way', where: 'Online', effort: 'An evening', origin: 'you', waiting: 'me', unblocks: 'Nothing yet — it clears words',
+      why: 'Four sheets use these three words differently. Nothing breaks, but every future sheet inherits whichever one we write down first, and the research note is waiting on a call.',
+      gate: '↩ CLOSES WHEN THE GLOSSARY ENTRY EXISTS AND THE SHEETS AGREE', tags: ['words'], blocks: [], blockedBy: [],
+      links: [{ label: 'RESEARCH-01 ↗', href: '../brief/RESEARCH-01-nomenclature.md' }], open: 'H-01' }
+  ];
+  SHEETMETA = {
+    'M-01': { title: 'Measure and check', summary: 'Every number the parts list rests on, with how we know it. Measuring here is what closes this task — no one has to tick it off.', status: 'DRAWN' },
+    'I-01': { title: 'What we have, and what shape it’s in', summary: 'Have-state, build-state, and whether a set’s pieces may be used elsewhere — three facts kept apart per set.', status: 'DRAWN' },
+    'I-02': { title: 'What’s actually in the boxes', summary: 'Photograph a box; the set number is read off it as a guess with its reason, and you confirm or correct. Feeds I-01.', status: 'DRAWN' },
+    'A-01': { title: 'Layout canvas', summary: 'Place and mate the modules. Its fit checks only mean something once they run on measured values, not remembered ones.', status: 'DRAWN' },
+    'C-01': { title: 'Railbed: what the train brings, what to buy', summary: 'Parts by basis, choices with their worked-out cost, and the release gate several of these tasks feed.', status: 'DRAWN' },
+    'P-01': { title: 'Buying the gap: which shops, in what order', summary: 'Prices every combination of shops that stock the list, then records the order number once you have bought.', status: 'DRAWN' },
+    'F-01': { title: 'Family Workbench', summary: 'Where Eli and Hugo ask for things. Answering a request replies in their own words.', status: 'IN REWORK' },
+    'H-01': { title: 'The handoff', summary: 'Ledgers, per-sheet specs and schema requests — including the Task{} shape this sheet needs.', status: 'DRAWN' }
+  };
+  ACT = {
+    tree: { ask: 'Two things finish this: stand at the tree with a tape, and type what it says. M-01 signs it and this closes itself — you never tick it off.', go: 'Measure it on M-01 →', input: '16 × 16 × 8', inputAria: 'What the tape says — width, depth, height', closes: 'Recorded as measured, signed by you. A-01 and C-01 re-run against it and stop saying “from memory”.' },
+    train: { ask: 'The buying happens on LEGO.com — we never take a payment. Come back with the order number and P-01 turns “approved” into “on its way”.', go: 'Open the LEGO listing →', input: 'LEGO order #…', inputAria: 'The order number', closes: 'Order recorded on P-01. The track stops being a purchase and starts being inventory in transit.' },
+    fit: { ask: 'This one is a check, not a decision — A-01 runs it against whatever the measurements currently are. If it fails, the finding becomes its own task rather than nagging you here.', go: 'Run the fit check on A-01 →', closes: 'Fit check run. Whatever it found is now a task of its own.' },
+    'stand-fit': { ask: 'Look once and say what you saw. If it still clears, that sentence is the whole record; if it does not, A-01 wants a new position.', go: 'Open the placement on A-01 →', input: 'still clears by 3 studs', inputAria: 'What you saw', closes: 'Your note is the record, signed and dated. The stale flag comes off.' },
+    'box-photos': { ask: 'One photo per box is the whole job. I-02 reads the number off each one and you confirm — then the set facts import themselves.', go: 'Document them on I-02 →', closes: 'Every set in I-01 has a photo. Piece counts and inventories stop being blank.' },
+    ballast: { ask: 'Not yours to decide. Send the two options to the Family Workbench and the boys answer in their own words — C-01 records who chose.', go: 'See the two options on C-01 →', dispatch: 'Send it to Eli and Hugo →', closes: 'Choice recorded with who made it.' },
+    'gate-lots': { ask: 'P-01 prices both ways — topping up those two carts, or moving the lots to a shop already in the order. Pick the cheaper one there; the gate clears itself.', go: 'Price both ways on P-01 →', closes: 'C-01’s release gate runs clean.' },
+    siding: { ask: 'Hugo is waiting on an answer either way. Draw it as a branch on A-01, then reply — accepted or declined, with the reason in words he will recognise.', go: 'Open the branch on A-01 →', dispatch: 'Reply to Hugo →', closes: 'The branch exists and Hugo has an answer.' },
+    parcel: { ask: 'When a parcel lands, type which one. Two are due, so this stays open until both are in.', go: 'Open orders on P-01 →', input: 'parcel 2 of 2', inputAria: 'Which parcel landed', closes: 'Recorded against the order. Those pieces move from “arriving” to “in the house”.' },
+    vocab: { ask: 'This one closes by writing something down. Type the call and it goes in the glossary; the sheets get linted against it afterwards.', go: 'Read the research note →', input: 'rail = the track itself', inputAria: 'The naming call', closes: 'Glossary entry written. Later sheets inherit it instead of guessing.' }
+  };
+  FORMS = {
+    tree: { photo: 'PHOTOS OF IT (OPTIONAL)', fields: [
+      { k: 'w', label: 'WIDTH · STUDS', type: 'number', def: 16 }, { k: 'd', label: 'DEPTH · STUDS', type: 'number', def: 16 }, { k: 'h', label: 'HEIGHT · WHOLE BRICKS', type: 'number', def: 8 }, { k: 'hp', label: 'PLATES ON TOP · 0–2', type: 'number', def: 0 },
+      { k: 'tool', label: 'MEASURED WITH', type: 'select', def: 'studs', options: [{ v: 'studs', t: 'Counted studs / bricks' }, { v: 'tape', t: 'Tape measure' }, { v: 'calipers', t: 'Calipers' }, { v: 'photo', t: 'Photo with overlay' }] }] },
+    train: { photo: 'THE CONFIRMATION SCREEN (OPTIONAL)', fields: [
+      { k: 'no', label: 'ORDER NUMBER', type: 'text', def: '', placeholder: '1234567890' },
+      { k: 'at', label: 'BOUGHT FROM', type: 'select', def: 'lego', options: [{ v: 'lego', t: 'LEGO.com' }, { v: 'shop', t: 'A local shop' }, { v: 'bl', t: 'BrickLink seller' }] },
+      { k: 'eta', label: 'DUE', type: 'text', def: '', placeholder: 'next week' }] },
+    fit: { photo: 'THE FIT, PHOTOGRAPHED (OPTIONAL)', fields: [
+      { k: 'out', label: 'WHAT THE CHECK SAID', type: 'select', def: '', options: [{ v: '', t: 'Not run yet' }, { v: 'clean', t: 'Fits as drawn' }, { v: 'notch', t: 'Needs a notch' }, { v: 'shift', t: 'Needs a shift' }] },
+      { k: 'by', label: 'CLEARANCE · STUDS', type: 'number', def: 0 }] },
+    'stand-fit': { photo: 'HOW IT LOOKS NOW (OPTIONAL)', fields: [
+      { k: 'out', label: 'WHAT YOU SAW', type: 'select', def: '', options: [{ v: '', t: 'Not looked yet' }, { v: 'clears', t: 'Still clears' }, { v: 'move', t: 'Needs moving' }] },
+      { k: 'by', label: 'BY · STUDS', type: 'number', def: 3 }] },
+    'box-photos': { photo: 'THE BOX FRONTS — THIS IS THE WORK', fields: [
+      { k: 'n', label: 'SETS PHOTOGRAPHED', type: 'number', def: 0 },
+      { k: 'where', label: 'WHICH SHELF', type: 'text', def: '', placeholder: 'living room shelf' }] },
+    ballast: { photo: 'THE TWO OPTIONS, SIDE BY SIDE (OPTIONAL)', fields: [
+      { k: 'who', label: 'WHO CHOSE', type: 'select', def: '', options: [{ v: '', t: 'Not asked yet' }, { v: 'eli', t: 'Eli' }, { v: 'hugo', t: 'Hugo' }, { v: 'both', t: 'Both of them' }] },
+      { k: 'pick', label: 'WHAT THEY PICKED', type: 'select', def: '', options: [{ v: '', t: '—' }, { v: 'grey', t: 'Grey stones' }, { v: 'sand', t: 'Sand-blue' }] }] },
+    'gate-lots': { photo: 'THE CART TOTALS (OPTIONAL)', fields: [
+      { k: 'how', label: 'HOW YOU CLEARED IT', type: 'select', def: '', options: [{ v: '', t: 'Not cleared yet' }, { v: 'topup', t: 'Topped up both carts' }, { v: 'move', t: 'Moved the lots' }] },
+      { k: 'total', label: 'NEW TOTAL · $', type: 'number', def: 0 }] },
+    siding: { photo: 'THE BRANCH, SCREENSHOTTED (OPTIONAL)', fields: [
+      { k: 'out', label: 'YOUR ANSWER', type: 'select', def: '', options: [{ v: '', t: 'Not answered yet' }, { v: 'yes', t: 'Yes, it goes in' }, { v: 'later', t: 'Not this year' }, { v: 'no', t: 'No — and here is why' }] },
+      { k: 'words', label: 'IN WORDS HUGO WILL RECOGNISE', type: 'text', def: '', placeholder: 'your siding fits beside the station' }] },
+    parcel: { photo: 'THE PARCEL / PACKING SLIP (OPTIONAL)', fields: [
+      { k: 'which', label: 'WHICH PARCEL', type: 'select', def: '', options: [{ v: '', t: 'None yet' }, { v: '1', t: 'Parcel 1 of 2' }, { v: '2', t: 'Parcel 2 of 2' }, { v: 'both', t: 'Both' }] },
+      { k: 'no', label: 'ORDER NUMBER', type: 'text', def: '', placeholder: 'BL-98211' }] },
+    vocab: { photo: 'A SKETCH OF THE THREE (OPTIONAL)', fields: [
+      { k: 'rail', label: 'RAIL MEANS', type: 'text', def: '', placeholder: 'the track itself' },
+      { k: 'bed', label: 'RAILBED MEANS', type: 'text', def: '', placeholder: 'what the track sits on' },
+      { k: 'row', label: 'RIGHT-OF-WAY MEANS', type: 'text', def: '', placeholder: 'clear studs beside it' }] }
+  };
+  DEFAULT_FORM = { photo: 'PROOF, IF THERE IS ANY (OPTIONAL)', fields: [{ k: 'what', label: 'WHAT HAPPENED', type: 'text', def: '', placeholder: 'in your own words' }] };
+  WHO = [
+    { k: 'all', label: 'Everyone', tip: 'No filter.' },
+    { k: 'me', label: 'Just me', tip: 'Nothing and nobody else — you could start these now.' },
+    { k: 'boys', label: 'The boys', tip: 'Waiting on Eli or Hugo. Never chase them; it sits here quietly.' },
+    { k: 'shop', label: 'A shop', tip: 'Waiting on a parcel or a listing. Out of your hands.' }
+  ];
+  state = { dark: null, view: 'list', group: 'flat', who: 'all', order: null, st: {}, expanded: null, f: {}, photos: {}, sigs: {}, note: 'Nothing changed yet. Drag a row, or send one to the top three.', addOpen: false, addStep: 1, draft: '', guessOff: {}, addTags: '', addTop: false, extra: [], drag: null };
+  componentWillUnmount() { document.removeEventListener('keydown', this._esc, true); }
+  GATE_OF = { tree: 'hub-1', train: 'hub-2' };
+  syncLedger() {
+    const L = window.DTLedger; if (!L) return; const v = L.get();
+    this.setState(st => { const next = Object.assign({}, st.st); let note = st.note, changed = false;
+      Object.keys(this.GATE_OF).forEach(id => { const g = v.gates[this.GATE_OF[id]]; if (g && next[id] !== 'done') { next[id] = 'done'; changed = true; note = '■ Closed from ' + (g.evidence || 'another sheet') + ': ' + (g.summary || id) + '. What it was blocking is free to move.'; } });
+      return changed ? { st: next, note } : null; });
+  }
+  componentDidMount() {
+    this._esc = (e) => { if (e.key === 'Escape' && this.state.expanded && this.state.view === 'cards') this.setState({ expanded: null }); };
+    document.addEventListener('keydown', this._esc, true);
+    this.syncLedger(); if (window.DTLedger) this._unsub = window.DTLedger.subscribe(() => this.syncLedger());
+    document.body.classList.toggle('dt-blueprint', this.isDark());
+    if (typeof location !== 'undefined' && location.hash === '#add') this.setState({ addOpen: true });
+  }
+  componentDidUpdate() { document.body.classList.toggle('dt-blueprint', this.isDark()); }
+  isDark() { if (this.state.dark !== null) return this.state.dark; if (this.props.theme === 'blueprint') return true; if (this.props.theme === 'paper') return false; return typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches; }
+  all() { return this.SEED.concat(this.state.extra); }
+  order() { return this.state.order || this.all().map(t => t.id); }
+  stateOf(id) { return this.state.st[id] || 'open'; }
+  setTaskState(id, k, note) { this.setState(s => { const st = Object.assign({}, s.st); if (k) st[id] = k; else delete st[id]; return { st, note }; }); }
+  move(fromId, toId) {
+    if (fromId === toId) return;
+    const ord = this.order().slice(), a = ord.indexOf(fromId), b = ord.indexOf(toId);
+    if (a < 0 || b < 0) return;
+    ord.splice(a, 1); ord.splice(b, 0, fromId);
+    const t = this.all().find(x => x.id === fromId);
+    this.setState({ order: ord, note: '“' + t.title + '” moved to position ' + (ord.indexOf(fromId) + 1) + '. ' + (ord.indexOf(fromId) < 3 ? 'It is now one of the three on the Drafting Table.' : 'The Drafting Table shows the top three; this one is below them.') });
+  }
+  promote(id) {
+    const ord = this.order().filter(x => x !== id); ord.unshift(id);
+    const t = this.all().find(x => x.id === id);
+    this.setState({ order: ord, note: '“' + t.title + '” is first now — the Drafting Table opens on it. Whatever was third has slipped to fourth; nothing was lost.' });
+  }
+  read(text) {
+    const s = (text || '').toLowerCase(), g = [];
+    const nums = (text || '').match(/\b\d{4,6}\b/g) || [];
+    const has = w => s.indexOf(w) >= 0;
+    if (has('measure') || has('measurement') || has('how big') || has('dimension'))
+      g.push({ k: 'where', field: 'WHERE IT HAPPENS', value: 'On the table', why: 'You wrote “measure” — that means a real thing in front of you.' },
+             { k: 'effort', field: 'ROUGH EFFORT', value: '5 min', why: 'Measurements usually are, once you are standing there.' },
+             { k: 'gate', field: 'HOW IT CLOSES ITSELF', value: 'When M-01 holds a signed measurement', why: 'Then no one has to remember to tick it off.' });
+    else if (has('order') || has('buy') || has('bricklink') || has('shop') || has('$'))
+      g.push({ k: 'where', field: 'WHERE IT HAPPENS', value: 'Online', why: 'Buying words — “order”, “buy”, a shop name.' },
+             { k: 'waiting', field: 'WAITING ON', value: 'A shop', why: 'Once it is placed, it is out of your hands.' },
+             { k: 'gate', field: 'HOW IT CLOSES ITSELF', value: 'When P-01 carries an order number', why: 'Recording the order is what closes it.' });
+    else if (has('ask') || has('boys') || has('eli') || has('hugo') || has('with the'))
+      g.push({ k: 'waiting', field: 'WAITING ON', value: 'The boys', why: 'It reads like something to decide together, not alone.' },
+             { k: 'effort', field: 'ROUGH EFFORT', value: 'An evening', why: 'Anything with the boys in it is an evening, not five minutes.' },
+             { k: 'where', field: 'WHERE IT HAPPENS', value: 'In the house', why: 'Default for anything not on the table or online.' });
+    else if (has('photo') || has('photograph') || has('box') || has('shelf'))
+      g.push({ k: 'where', field: 'WHERE IT HAPPENS', value: 'In the house', why: 'Photographing things means walking to them.' },
+             { k: 'effort', field: 'ROUGH EFFORT', value: '10 min', why: 'A few photos, standing up.' },
+             { k: 'link', field: 'CROSSLINK', value: 'I-02 · documenting the boxes', why: 'That is the sheet photos of boxes land on.' });
+    else
+      g.push({ k: 'where', field: 'WHERE IT HAPPENS', value: 'In the house', why: 'Nothing in the line said table, online or shop — this is the safe default.' },
+             { k: 'effort', field: 'ROUGH EFFORT', value: 'An evening', why: 'Unsized things are usually bigger than they sound.' });
+    nums.forEach(n => g.push({ k: 'set' + n, field: 'CROSSLINK', value: 'Set ' + n, why: 'A four-to-six digit number in the line is almost always a set. It links to I-01 and to the parts list.' }));
+    if (has('before') || has('after') || has('then') || has('once'))
+      g.push({ k: 'chain', field: 'ORDER MATTERS', value: 'Something has to happen first', why: 'You used “' + (has('before') ? 'before' : has('after') ? 'after' : has('once') ? 'once' : 'then') + '” — I will ask which task, rather than guess.' });
+    g.push({ k: 'origin', field: 'ORIGIN', value: 'You, just now', why: 'Origin is never hidden. Had I raised this myself, it would say so here for as long as it exists.', locked: true });
+    return g;
+  }
+  fv(id, spec) { const f = this.state.f[id] || {}; const out = {}; spec.fields.forEach(x => { out[x.k] = f[x.k] === undefined ? x.def : f[x.k]; }); return out; }
+  summarise(id, v, spec) {
+    const n = x => Number(x) || 0;
+    if (id === 'tree') { const tool = { studs: 'counted studs', tape: 'a tape measure', calipers: 'calipers', photo: 'a photo with overlay' }[v.tool];
+      const hp = v.hp === '' || v.hp === undefined ? 0 : Number(v.hp);
+      if (!(n(v.w) && n(v.d) && n(v.h))) return { ok: false, text: 'Width, depth and height — the fit check needs all three before this means anything.' };
+      if (!(hp >= 0 && hp <= 2)) return { ok: false, text: '3 plates make a whole brick — put those in the bricks box and leave 0, 1 or 2 plates.' };
+      return { ok: true, text: n(v.w) + ' × ' + n(v.d) + ' studs × ' + n(v.h) + ' brick' + (Number(v.h) === 1 ? '' : 's') + (hp ? ' and ' + hp + ' plate' + (hp === 1 ? '' : 's') : '') + ', by ' + tool + ' → measured, not remembered.' + (n(v.w) === 16 && n(v.d) === 16 && n(v.h) === 8 ? ' Same as the remembered figure, now with a signature behind it.' : ' The remembered 16 × 16 × 8 stays on record, struck through.') }; }
+    if (id === 'train') return String(v.no).trim() ? { ok: true, text: 'Order ' + String(v.no).trim() + ' from ' + ({ lego: 'LEGO.com', shop: 'a local shop', bl: 'a BrickLink seller' })[v.at] + (String(v.eta).trim() ? ', due ' + String(v.eta).trim() : '') + ' → the train stops being a purchase and becomes inventory in transit.' } : { ok: false, text: 'The order number is the whole record here — everything else is already known.' };
+    if (id === 'fit') return v.out ? { ok: true, text: ({ clean: 'Fits as drawn, ' + n(v.by) + ' studs of clearance. Nothing downstream changes and the finding disappears from C-01.', notch: 'Needs a notch of ' + n(v.by) + ' studs. That becomes its own task with A-01 and C-01 attached — this one closes.', shift: 'Needs a shift of ' + n(v.by) + ' studs. New task, same evidence; the modules stay as drawn.' })[v.out] } : { ok: false, text: 'Run it on A-01 first, then say what it told you. A failure is not a problem — it becomes its own task.' };
+    if (id === 'stand-fit') return v.out ? { ok: true, text: v.out === 'clears' ? 'Still clears by ' + n(v.by) + ' studs. The stale flag comes off and A-01 keeps the placement.' : 'Needs moving by ' + n(v.by) + ' studs. A-01 marks the placement provisional until you drag it.' } : { ok: false, text: 'One look is all this needs — did it still clear, or not?' };
+    if (id === 'box-photos') return n(v.n) > 0 ? { ok: true, text: n(v.n) + ' box front' + (n(v.n) > 1 ? 's' : '') + ' photographed' + (String(v.where).trim() ? ' on the ' + String(v.where).trim() : '') + '. I-02 reads each number, you confirm, and the set facts import themselves.' } : { ok: false, text: 'Say how many you got through — the photos themselves live on I-02.' };
+    if (id === 'ballast') return v.who && v.pick ? { ok: true, text: ({ eli: 'Eli', hugo: 'Hugo', both: 'Both of them' })[v.who] + ' chose ' + (v.pick === 'grey' ? 'the grey stones' : 'sand-blue') + '. C-01 records the choice with who made it — that attribution is the point.' } : { ok: false, text: 'Two answers needed: who chose, and what they picked. Not yours to fill in for them.' };
+    if (id === 'gate-lots') return v.how ? { ok: true, text: (v.how === 'topup' ? 'Both carts topped up' : 'Lots moved to a shop already in the order') + ', new total $' + n(v.total) + '. C-01’s release gate re-runs and should pass.' } : { ok: false, text: 'P-01 prices both ways — pick one there, then say which you did.' };
+    if (id === 'siding') return v.out && String(v.words).trim() ? { ok: true, text: (v.out === 'yes' ? 'Accepted' : v.out === 'later' ? 'Parked for next year' : 'Declined') + ', and Hugo gets: “' + String(v.words).trim() + '”. The branch stays on A-01 either way.' } : { ok: false, text: 'An answer and a sentence he will recognise. A silent decline is the one thing this should not allow.' };
+    if (id === 'parcel') return v.which ? { ok: true, text: (v.which === 'both' ? 'Both parcels' : 'Parcel ' + v.which + ' of 2') + ' recorded' + (String(v.no).trim() ? ' against ' + String(v.no).trim() : '') + '. Those pieces move from “arriving” to “in the house” on I-01.' + (v.which !== 'both' ? ' The task stays open until the other lands.' : '') } : { ok: false, text: 'Which parcel landed? This one stays open until both are in.' };
+    if (id === 'vocab') return String(v.rail).trim() && String(v.bed).trim() ? { ok: true, text: 'Three definitions written down. Every later sheet inherits them instead of guessing, and the lint pass can flag the old uses.' } : { ok: false, text: 'Rail and railbed at minimum — right-of-way can follow.' };
+    const first = spec.fields[0];
+    return String(v[first.k] || '').trim() ? { ok: true, text: 'Closed with your note: “' + String(v[first.k]).trim() + '”. Signed and dated, kept in the history.' } : { ok: false, text: 'Say what happened in your own words — that sentence is the record.' };
+  }
+  splitWhy(text) {
+    const words = String(text || '').split(' '), out = [];
+    for (let i = 0; i < words.length; i++) {
+      const w = words[i], next = words[i + 1] || '', m = next.match(/^(\d{4,6})([^\d]*)$/);
+      if (/^sets?$/i.test(w) && m) {
+        out.push({ isRef: true, isWord: false, num: m[1], label: w + ' ' + m[1] });
+        if (m[2]) out.push({ isRef: false, isWord: true, word: m[2] });
+        i++;
+      } else out.push({ isRef: false, isWord: true, word: w });
+    }
+    return out;
+  }
+  linkOut(l) {
+    const code = (l.label.match(/^([A-Z]-\d\d|RESEARCH-\d\d)/) || [])[1];
+    const meta = this.SHEETMETA[code];
+    if (!meta) return { plain: true, cross: false, label: l.label, href: l.href };
+    return { cross: true, plain: false, label: l.label, href: l.href, sheet: code, title: meta.title, summary: meta.summary, status: meta.status };
+  }
+  renderVals() {
+    const dark = this.isDark(), view = this.state.view, group = this.state.group, who = this.state.who;
+    const all = this.all(), ord = this.order(), byId = {};
+    all.forEach(t => { byId[t.id] = t; });
+    const open = ord.map(id => byId[id]).filter(t => t && this.stateOf(t.id) === 'open');
+    const shown = open.filter(t => who === 'all' || t.waiting === who);
+    const stuckOf = t => t.blockedBy.filter(b => byId[b] && this.stateOf(b) === 'open');
+    const on = (a, b) => a === b;
+    const seg = flagOn => ({ bg: flagOn ? 'var(--dt-ink)' : 'transparent', fg: flagOn ? 'var(--dt-on-ink)' : 'var(--dt-ink)' });
+    const vals = {
+      dark, themeLabel: dark ? '☀ PAPER' : '☾ BLUEPRINT', toggleTheme: () => this.setState({ dark: !this.isDark() }),
+      viewList: view === 'list', viewCards: view === 'cards', flat: group === 'flat', grouped: group === 'unblocks',
+      setList: () => this.setState({ view: 'list' }), setCards: () => this.setState({ view: 'cards' }),
+      setFlat: () => this.setState({ group: 'flat', note: 'Back in your order. Drag a row to change it.' }),
+      setGrouped: () => this.setState({ group: 'unblocks', note: 'Gathered by what each one unblocks. Dragging is off here — the order only means something in your order.' }),
+      note: this.state.note, nOpen: open.length, nParked: Object.values(this.state.st).filter(k => k === 'parked').length + 1, nDone: Object.values(this.state.st).filter(k => k === 'done').length + 1,
+      nReady: open.filter(t => t.waiting === 'me' && !stuckOf(t).length).length,
+      nBlocked: open.filter(t => stuckOf(t).length).length,
+      nElse: open.filter(t => t.waiting !== 'me').length
+    };
+    Object.assign(vals, { listBg: seg(view === 'list').bg, listFg: seg(view === 'list').fg, cardsBg: seg(view === 'cards').bg, cardsFg: seg(view === 'cards').fg,
+      flatBg: seg(group === 'flat').bg, flatFg: seg(group === 'flat').fg, grpBg: seg(group === 'unblocks').bg, grpFg: seg(group === 'unblocks').fg });
+    vals.whoChips = this.WHO.map(w => { const active = on(who, w.k); return { label: w.label, tip: w.tip, on: active, pick: () => this.setState({ who: w.k, note: w.k === 'all' ? 'Everything open, whoever it waits on.' : 'Only what is waiting on ' + w.label.toLowerCase() + '.' }),
+      bg: active ? 'var(--dt-ink)' : 'transparent', fg: active ? 'var(--dt-on-ink)' : 'var(--dt-ink)', border: active ? 'solid' : 'dashed', stroke: active ? 'var(--dt-ink)' : 'var(--dt-unres)' }; });
+    const top3 = open.slice(0, 3).map(t => t.title.replace(/^(\w+)/, m => m));
+    vals.topLine = top3.length ? top3.join(' · ') : 'Nothing open — the front page will say so, kindly.';
+    const mk = t => {
+      const rank = ord.indexOf(t.id) + 1, isTop = open.indexOf(t) < 3, stuck = stuckOf(t), o = this.ORIGIN[t.origin], act = this.ACT[t.id] || { ask: 'Nothing special is wired to this one — it is a line you wrote. Say what happened in your own words and it closes, signed.', closes: 'Closed with your note, signed and dated.' };
+      const spec = this.FORMS[t.id] || this.DEFAULT_FORM, fvals = this.fv(t.id, spec), sum = this.summarise(t.id, fvals, spec);
+      const photos = this.state.photos[t.id] || [], sig = this.state.sigs[t.id] || '', ready = !!(sum.ok && sig.trim());
+      const blockedTitles = stuck.map(b => byId[b].title);
+      const freed = t.blocks.filter(b => byId[b]).map(b => byId[b].title);
+      const canDrag = group === 'flat';
+      return {
+        id: t.id, pos: rank, title: t.title, why: t.why, gate: t.gate,
+        originLabel: o.label, originFg: o.fg, originTip: o.tip,
+        oneLine: t.where + ' · ' + t.effort + (t.waiting === 'me' ? '' : ' · waiting on ' + (t.waiting === 'boys' ? 'the boys' : 'a shop')),
+        chips: [{ label: t.where.toUpperCase(), fg: 'var(--dt-muted)', tip: 'Where this happens.' }, { label: t.effort.toUpperCase(), fg: 'var(--dt-muted)', tip: 'Rough effort — never a deadline.' },
+          { label: t.waiting === 'me' ? 'YOURS TO START' : t.waiting === 'boys' ? 'WAITING ON THE BOYS' : 'WAITING ON A SHOP', fg: t.waiting === 'me' ? 'var(--dt-pass)' : 'var(--dt-info-deep)', tip: 'Who it waits on.' },
+          { label: '↳ ' + t.unblocks.toUpperCase(), fg: 'var(--dt-accent-deep)', tip: 'What it unblocks.' }].concat(t.tags.map(x => ({ label: '#' + x, fg: 'var(--dt-muted)', tip: 'Your own tag.' }))),
+        whyParts: this.splitWhy(t.why), links: t.links.map(l => this.linkOut(l)), stuck: stuck.length > 0, frees: freed.length > 0,
+        blockedShort: stuck.length === 1 ? 'AFTER ' + (ord.indexOf(stuck[0]) + 1) : 'AFTER ' + stuck.map(b => ord.indexOf(b) + 1).join(' + '),
+        blockedTip: 'Waits on ' + blockedTitles.join(' and ') + ' first. It will stay quiet until then.',
+        blocksTip: 'Doing this frees ' + freed.join(' and ') + '.',
+        bg: isTop ? 'var(--dt-sheet)' : 'transparent', hatch: isTop ? 'var(--dt-hatch-card)' : 'none',
+        border: stuck.length ? 'dashed' : 'solid', stroke: isTop ? 'var(--dt-accent)' : stuck.length ? 'var(--dt-grid-mid)' : 'var(--dt-ink)',
+        shadow: isTop && view === 'cards' ? 'var(--dt-shadow)' : 'none', opacity: stuck.length ? 0.72 : 1, strike: 'none',
+        posColor: isTop ? 'var(--dt-accent-deep)' : 'var(--dt-muted)',
+        canDrag, grab: canDrag ? 'grab' : 'default', dragTip: canDrag ? 'Drag to reorder — the top three are the three on the Drafting Table' : 'Dragging works in “In your order”',
+        canPromote: !isTop, promoteAria: 'Send “' + t.title + '” to the top three', promote: () => this.promote(t.id),
+        parkAria: 'Step “' + t.title + '” aside for now', park: () => this.setTaskState(t.id, 'parked', '○ “' + t.title + '” stepped aside. It is in the list at the bottom, not gone, and nothing will chase you about it.'),
+        openShort: t.open + ' →', openAria: 'Open ' + t.open, open: () => { if (t.links[0]) location.href = t.links[0].href; },
+        expanded: this.state.expanded === t.id,
+        backdrop: (e) => { if (e.target === e.currentTarget) this.setState({ expanded: null }); },
+        toggleLabel: this.state.expanded === t.id ? 'CLOSE ▴' : 'DO IT ▾',
+        toggleAria: (this.state.expanded === t.id ? 'Hide' : 'Show') + ' what it takes to finish “' + t.title + '”',
+        toggle: () => this.setState(s => ({ expanded: s.expanded === t.id ? null : t.id, note: s.expanded === t.id ? '' : 'Everything this one needs is in here — usually a trip to another sheet and one line back.' })),
+        actAsk: act.ask || 'No interface designed for this one yet. Open the sheet it belongs to, do the thing, and say what happened.',
+        goHref: (t.links[0] || {}).href || '#', goLabel: act.go || (t.open + ' →'),
+        fields: spec.fields.map(x => ({ label: x.label, aria: x.label.toLowerCase(), placeholder: x.placeholder || '', value: fvals[x.k],
+          isNumber: x.type === 'number', isText: x.type === 'text', isSelect: x.type === 'select', options: x.options || [],
+          set: e => { const v = e.target.value; this.setState(s => ({ f: Object.assign({}, s.f, { [t.id]: Object.assign({}, s.f[t.id], { [x.k]: v }) }) })); } })),
+        photoLabel: spec.photo, pickLabel: photos.length ? '＋ Add another photo' : '▢ Attach a photo…',
+        photos: photos.map((p, i) => ({ url: p.url, name: p.name, dropAria: 'Remove ' + p.name, drop: () => this.setState(s => ({ photos: Object.assign({}, s.photos, { [t.id]: (s.photos[t.id] || []).filter((_, j) => j !== i) }) })) })),
+        pickPhoto: e => { const fs = Array.from(e.target.files || []); e.target.value = ''; if (!fs.length) return;
+          this.setState(s => ({ photos: Object.assign({}, s.photos, { [t.id]: (s.photos[t.id] || []).concat(fs.map(f => ({ name: f.name, url: URL.createObjectURL(f) }))) }) })); },
+        formPreview: sum.text + (sum.ok && photos.length ? ' ' + photos.length + ' photo' + (photos.length > 1 ? 's' : '') + ' attached as proof.' : ''),
+        derived: [{ label: '◇ ORIGIN KEPT · ' + o.label.replace(/^[◇♡⊘▤] /, ''), fg: o.fg, tip: 'Who raised this task travels with the record for ever.' }]
+          .concat(t.links.filter(l => /^[A-Z]-\d\d/.test(l.label)).map(l => ({ label: l.label.replace(/ ?[↗→].*$/, '').replace(/ · .*$/, '') + ' RE-RUNS', fg: 'var(--dt-accent-deep)', tip: 'This sheet reads the value you record here and recalculates.' })))
+          .concat(freed.length ? [{ label: '↳ FREES ' + freed.length + ' TASK' + (freed.length > 1 ? 'S' : ''), fg: 'var(--dt-pass)', tip: 'Doing this unblocks ' + freed.join(' and ') + '.' }] : [])
+          .concat(sum.ok ? [{ label: '✎ SIGNED RECORD', fg: 'var(--dt-ink)', tip: 'A signed, dated row — not a tick. The old value is kept and struck.' }] : []),
+        sig: sig, setSig: e => { const v = e.target.value; this.setState(s => ({ sigs: Object.assign({}, s.sigs, { [t.id]: v }) })); },
+        recordOff: !ready, recordCursor: ready ? 'pointer' : 'not-allowed', recordOpacity: ready ? 1 : 0.45,
+        recordTitle: !sum.ok ? 'Fill in what this needs first' : sig.trim() ? 'Record it under ' + sig.trim().toLowerCase() : 'Initials first — a record is signed by whoever made it',
+        record: () => { if (!ready) return;
+          this.setState({ expanded: null }); this.setTaskState(t.id, 'done', '■ “' + t.title + '” — ' + sum.text + ' Signed ' + sig.trim().toLowerCase() + ', today. ' + (act.closes || '')); },
+        hasDispatch: !!act.dispatch, dispatchLabel: act.dispatch || '',
+        dispatch: () => this.setState({ note: '→ Sent. ' + (t.waiting === 'boys' ? 'It is with the boys now, and this row will say so until they answer. Nobody gets chased.' : 'Away it goes; this task keeps waiting quietly.') }),
+        dragStart: e => { this.setState({ drag: t.id }); if (e.dataTransfer) { e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', t.id); } catch (x) {} } },
+        dragOver: e => { if (this.state.drag && canDrag) e.preventDefault(); },
+        drop: e => { e.preventDefault(); if (this.state.drag) this.move(this.state.drag, t.id); this.setState({ drag: null }); },
+        dragEnd: () => this.setState({ drag: null })
+      };
+    };
+    if (group === 'flat') {
+      vals.groups = [{ titled: false, label: '', hint: '', count: '', items: shown.map(mk) }];
+    } else {
+      const keys = [];
+      shown.forEach(t => { if (keys.indexOf(t.unblocks) < 0) keys.push(t.unblocks); });
+      const HINTS = { 'A-01 fit checks': 'Everything the layout canvas cannot check until these are real.', 'C-01 parts list': 'Nothing gets bought until these are settled.', 'I-01 inventory': 'What we own, and in what shape — the parts list reads it.', 'The boys’ siding': 'Asked for by Eli and Hugo. Not urgent, not forgotten.', 'Nothing yet — it clears words': 'No sheet is blocked. It just makes every later sheet cheaper.' };
+      vals.groups = keys.map(k => { const items = shown.filter(t => t.unblocks === k); return { titled: true, label: k, hint: HINTS[k] || '', count: items.length + (items.length === 1 ? ' task' : ' tasks'), items: items.map(mk) }; });
+    }
+    const hist = [{ id: '_parked', mark: '○ STEPPED ASIDE', fg: 'var(--dt-muted)', title: 'Ask about a second tree for the loft', strike: 'none', trailStatus: 'parked',
+      steps: '09-12 :: Added by you, one line, from a conversation about the loft. | 09-13 :: I read it as needing a measurement first and asked which tree — you said leave it. | 09-15 :: Stepped aside, no date. Nothing depends on it; nothing will chase you. | today :: Still here. It comes back the moment you ask, at the bottom.',
+      foot: 'Parked is not deleted and not overdue — there is no such thing here.', undoLabel: 'bring it back', undoAria: 'Bring “Ask about a second tree for the loft” back into the queue', undo: () => this.setState({ note: 'Back in the list, at the bottom. (Mock: seeded history does not move.)' }) },
+      { id: '_done', mark: '■ CLOSED', fg: 'var(--dt-pass)', title: 'Choose the winter palette', strike: 'line-through', trailStatus: 'closed',
+      steps: '09-10 :: Added by you while C-01 was still a sketch. | 09-11 :: Eli and Hugo picked sand-blue over grey; recorded on F-01 in their words. | 09-12 :: Gate condition set: closes when C-01 holds a palette with who chose it. | 09-14 :: Closed itself — C-01 recorded the palette, so nobody ticked anything. | 09-16 :: Nine part rows on C-01 now cite this decision.',
+      foot: 'DEC-031 · inputs: F-01 request, C-01 colour options · touched: C-01, A-01 render', undoLabel: 'not done after all', undoAria: 'Reopen “Choose the winter palette”', undo: () => this.setState({ note: 'Reopened. (Mock: seeded history does not move.)' }) }]
+      .concat(Object.keys(this.state.st).map(id => { const t = byId[id], k = this.state.st[id]; if (!t) return null; return {
+        id, mark: k === 'done' ? '■ CLOSED TODAY' : '○ STEPPED ASIDE', fg: k === 'done' ? 'var(--dt-pass)' : 'var(--dt-muted)', title: t.title, strike: k === 'done' ? 'line-through' : 'none',
+        trailStatus: k === 'done' ? 'closed' : 'parked',
+        steps: 'earlier :: Came in as ' + (t.origin === 'you' ? 'your own line' : t.origin === 'ai' ? 'something I raised — and it says so for as long as it exists' : t.origin === 'family' ? 'a request from the boys on F-01' : t.origin === 'gate' ? 'a release-gate finding on C-01' : 'a parcel landing on P-01') + '. | earlier :: ' + t.gate.replace('↩ ', 'Gate set: ').toLowerCase() + ' | today :: ' + (k === 'done' ? 'Closed. ' + (t.blocks.length ? 'It frees ' + t.blocks.length + ' other task' + (t.blocks.length > 1 ? 's' : '') + '.' : 'Nothing else was waiting on it.') : 'Stepped aside by you. No date, no nagging.'),
+        foot: 'Where it lives: ' + t.where.toLowerCase() + ' · unblocks ' + t.unblocks,
+        undoLabel: k === 'done' ? 'not done after all' : 'bring it back', undoAria: 'Bring “' + t.title + '” back into the queue',
+        undo: () => this.setTaskState(id, null, '“' + t.title + '” is back in the queue at position ' + (ord.indexOf(id) + 1) + '.') }; }).filter(Boolean));
+    vals.history = hist;
+    // composer
+    const draft = this.state.draft, guesses = this.read(draft);
+    vals.addOpen = this.state.addOpen; vals.addStep1 = this.state.addStep === 1; vals.addStep2 = this.state.addStep === 2;
+    vals.addStepLabel = this.state.addStep === 1 ? 'ADD SOMETHING · STEP 1 OF 2 — SAY IT PLAINLY' : 'ADD SOMETHING · STEP 2 OF 2 — WHAT IS THIS ABOUT?';
+    vals.openAdd = () => this.setState({ addOpen: true, addStep: 1 });
+    vals.closeAdd = () => this.setState({ addOpen: false, addStep: 1, draft: '', guessOff: {}, addTags: '', addTop: false });
+    vals.draft = draft; vals.setDraft = e => this.setState({ draft: e.target.value });
+    vals.draftKey = e => { if (e.key === 'Enter' && this.state.draft.trim()) this.setState({ addStep: 2 }); };
+    vals.draftEmpty = !draft.trim(); vals.draftCursor = draft.trim() ? 'pointer' : 'not-allowed'; vals.draftOpacity = draft.trim() ? 1 : 0.45;
+    vals.toStep2 = () => { if (draft.trim()) this.setState({ addStep: 2 }); };
+    vals.backStep1 = () => this.setState({ addStep: 1 });
+    vals.addTags = this.state.addTags; vals.setAddTags = e => this.setState({ addTags: e.target.value });
+    vals.addTop = this.state.addTop; vals.setAddTop = e => this.setState({ addTop: e.target.checked });
+    vals.guesses = guesses.map(g => { const kept = !this.state.guessOff[g.k];
+      return { field: g.field, value: g.value, why: g.why, on: kept, mark: g.locked ? '◆' : kept ? '✓' : '✕',
+        aria: (g.locked ? 'Always kept: ' : kept ? 'Keep ' : 'Dropped — restore ') + g.field.toLowerCase() + ' ' + g.value,
+        stroke: g.locked ? 'var(--dt-prov-deep)' : kept ? 'var(--dt-pass)' : 'var(--dt-unres)', border: kept ? 'solid' : 'dashed',
+        bg: kept ? 'var(--dt-sheet)' : 'transparent', btnBg: kept && !g.locked ? 'var(--dt-pass)' : 'transparent', btnFg: kept && !g.locked ? 'var(--dt-on-ink)' : g.locked ? 'var(--dt-prov-deep)' : 'var(--dt-muted)',
+        toggle: () => { if (g.locked) return; this.setState(s => { const off = Object.assign({}, s.guessOff); if (off[g.k]) delete off[g.k]; else off[g.k] = true; return { guessOff: off }; }); } }; });
+    const keptG = guesses.filter(g => !this.state.guessOff[g.k]);
+    const tagList = this.state.addTags.split(',').map(x => x.trim()).filter(Boolean);
+    vals.addPreview = 'It lands ' + (this.state.addTop ? 'first — and the Drafting Table opens on it' : 'at position ' + (open.length + 1) + ', below the three on the front page')
+      + ', carrying ' + keptG.length + ' fact' + (keptG.length === 1 ? '' : 's') + (tagList.length ? ' and ' + tagList.length + ' tag' + (tagList.length === 1 ? '' : 's') : '')
+      + '. Marked as added by you — that never comes off.';
+    vals.commitAdd = () => {
+      const val = k => { const g = keptG.find(x => x.k === k); return g ? g.value : null; };
+      const t = { id: 'new' + Date.now(), title: draft.trim(), where: val('where') || 'In the house', effort: val('effort') || 'An evening', origin: 'you',
+        waiting: (val('waiting') || '').indexOf('boys') >= 0 ? 'boys' : (val('waiting') || '').indexOf('shop') >= 0 ? 'shop' : 'me',
+        unblocks: 'Nothing yet — it clears words', why: 'Added just now from one line. Nothing else knows about it yet — link it to a sheet or a set when you next open it.',
+        gate: '↩ ' + (val('gate') ? val('gate').toUpperCase() : 'NO SELF-CLOSING CONDITION YET — IT WAITS FOR YOU'), tags: tagList, blocks: [], blockedBy: [],
+        links: keptG.filter(g => g.field === 'CROSSLINK').map(g => ({ label: g.value.toUpperCase() + ' ↗', href: g.value.indexOf('I-02') >= 0 ? 'Prototype I2 - Documenting the Boxes.dc.html' : 'Prototype I - What We Have.dc.html' })), open: 'I-01' };
+      if (!t.links.length) t.links = [{ label: 'NOT LINKED YET', href: '#' }];
+      const nord = this.order().slice();
+      if (this.state.addTop) nord.unshift(t.id); else nord.push(t.id);
+      this.setState({ extra: this.state.extra.concat([t]), order: nord, addOpen: false, addStep: 1, draft: '', guessOff: {}, addTags: '', addTop: false,
+        note: '＋ “' + t.title + '” added at position ' + (nord.indexOf(t.id) + 1) + ' with ' + keptG.length + ' fact' + (keptG.length === 1 ? '' : 's') + '. Open it any time to link it to a sheet, a set or a measurement.' });
+    };
+    vals.addBare = () => {
+      const t = { id: 'new' + Date.now(), title: draft.trim(), where: 'In the house', effort: 'An evening', origin: 'you', waiting: 'me', unblocks: 'Nothing yet — it clears words',
+        why: 'Just a line, kept as written. No metadata, no links, no gate — it will not close itself, and that is fine.', gate: '↩ NO SELF-CLOSING CONDITION — IT WAITS FOR YOU',
+        tags: [], blocks: [], blockedBy: [], links: [{ label: 'NOT LINKED YET', href: '#' }], open: 'I-01' };
+      const nord = this.order().slice(); nord.push(t.id);
+      this.setState({ extra: this.state.extra.concat([t]), order: nord, addOpen: false, addStep: 1, draft: '', guessOff: {}, addTags: '', addTop: false,
+        note: '＋ “' + t.title + '” parked at the bottom, exactly as you wrote it. Nothing guessed.' });
+    };
+    return vals;
+  }
+}
+</script>
+</body>
+</html>

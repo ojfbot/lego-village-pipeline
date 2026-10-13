@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../dt/tokens.css">
+<link rel="stylesheet" href="../dt/responsive.css">
+<script src="../dt/overlay.js"></script>
+</helmet>
+<button ref="{{ anchorRef }}" onClick="{{ toggle }}" onMouseEnter="{{ show }}" onMouseLeave="{{ hideSoon }}" onFocus="{{ show }}" onBlur="{{ hideSoon }}" onKeyDown="{{ key }}" aria-expanded="{{ isOpen }}" aria-describedby="{{ descId }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-block-deep);background:transparent;border:1px dashed var(--dt-block);border-radius:var(--dt-r-fillet);padding:2px 7px;cursor:pointer;white-space:nowrap;display:inline-block;line-height:1.4">▲ {{ labelText }}</button>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;420px&quot;,&quot;height&quot;:&quot;220px&quot;},&quot;label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;fit not run&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Blocker&quot;},&quot;sheet&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;C-01&quot;,&quot;A-01&quot;,&quot;B-01&quot;,&quot;P-01&quot;,&quot;M-01&quot;,&quot;F-01&quot;],&quot;default&quot;:&quot;C-01&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Blocker&quot;},&quot;card&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;fit&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Blocker&quot;},&quot;title&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;summary&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;status&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;actionLabel&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;actionNote&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;linkLabel&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;onAction&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
+class Component extends DCLogic {
+  state = { phase: 'closed', pinned: false, busy: false };
+  anchorRef = React.createRef(); _uid = 'bk' + Math.random().toString(36).slice(2, 7);
+  ov() { if (!this._ov) this._ov = window.dtOverlay.attach(this, { anchor: () => this.anchorRef.current, render: () => this.card(this.renderVals()), width: 340 }); return this._ov; }
+  componentDidUpdate() { if (this._ov) { this._ov.paint(); this._ov.place(); } }
+  componentWillUnmount() { if (this._ov) this._ov.destroy(); this.setState = () => {}; }
+  card(v) {
+    const h = React.createElement, mono = "'Azeret Mono',monospace";
+    return h('span', { role: 'dialog', 'aria-label': 'Blocker: ' + v.labelText, id: v.descId, onMouseEnter: v.show, onMouseLeave: v.hideSoon, style: Object.assign({ position: 'fixed', top: 0, left: 0, width: 340, boxSizing: 'border-box', display: 'grid', gap: 8, background: 'var(--dt-sheet)', color: 'var(--dt-ink)', border: '1.5px solid var(--dt-block)', boxShadow: 'var(--dt-shadow)', borderRadius: 'var(--dt-r-card)', padding: '11px 13px', fontFamily: "'Libre Franklin',sans-serif", textAlign: 'left', fontWeight: 400, fontSize: 12, lineHeight: 1.45, whiteSpace: 'normal' }, window.dtOverlay.style(v.isOpen)) },
+      h('span', { style: { display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'baseline', fontFamily: mono, fontSize: 9, letterSpacing: '0.1em', color: 'var(--dt-muted)' } }, h('span', null, 'BLOCKED BY · ' + (v.where || 'THIS SHEET')), h('span', { style: { color: 'var(--dt-block-deep)', fontWeight: 600, letterSpacing: 0 } }, v.status)),
+      h('span', { style: { fontFamily: "'Spectral',serif", fontSize: 14, fontWeight: 600, lineHeight: 1.2 } }, v.title),
+      h('span', { style: { color: 'var(--dt-muted)', fontSize: 11.5, lineHeight: 1.45 } }, v.summary),
+      v.hasAction ? h('span', { style: { display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', borderTop: '1px dashed var(--dt-grid-mid)', paddingTop: 8 } },
+        h('button', { onClick: v.doAction, disabled: v.busy, style: { fontFamily: "'Libre Franklin',sans-serif", fontSize: 12, fontWeight: 600, background: 'var(--dt-ink)', color: 'var(--dt-on-ink)', border: 'none', padding: '7px 12px', cursor: 'pointer', borderRadius: 'var(--dt-r-btn)', boxShadow: 'var(--dt-btn-shadow)', opacity: v.busy ? 0.5 : 1 } }, v.busy ? 'Working…' : v.actionLabel),
+        h('span', { style: { fontSize: 11, color: 'var(--dt-muted)', flex: 1, minWidth: 120 } }, v.actionNote)) : null,
+      v.href ? h('a', { href: v.href, style: { fontFamily: mono, fontSize: 9.5, fontWeight: 600, borderTop: v.hasAction ? 'none' : '1px dashed var(--dt-grid-mid)', paddingTop: v.hasAction ? 0 : 8 } }, v.linkLabel + ' →') : null,
+      h('span', { style: { fontFamily: mono, fontSize: 9, color: 'var(--dt-muted)', lineHeight: 1.5 } }, v.hasAction ? 'Clearing it here is the same as doing it on its card — recorded the same way.' : 'This one has to be cleared where it lives; the card flashes when you land.'));
+  }
+  renderVals() {
+    const P = this.props, ph = this.state.phase;
+    const HREF = { 'A-01': 'Prototype A - Layout Canvas.dc.html', 'B-01': 'Prototype B - When the AI Isnt Sure.dc.html', 'C-01': '', 'P-01': 'Prototype P - Procurement.dc.html', 'M-01': 'Prototype M - Measure and Check.dc.html', 'F-01': '../F-01 Workbench Junior.dc.html' };
+    const sheet = P.sheet ?? 'C-01', card = P.card ?? '';
+    const hasAction = typeof P.onAction === 'function';
+    const v = {
+      anchorRef: this.anchorRef, descId: this._uid, labelText: P.label ?? 'blocker', isOpen: ph === 'open', where: sheet + (card ? ' · #' + card : ''),
+      status: P.status ?? '○ OPEN', title: P.title ?? P.label ?? 'Blocker', summary: P.summary ?? 'No preview registered for this blocker yet.',
+      hasAction, actionLabel: P.actionLabel ?? 'Clear it', actionNote: P.actionNote ?? '', busy: this.state.busy,
+      doAction: () => { if (!hasAction) return; this.setState({ busy: true }); setTimeout(() => { P.onAction(); this.setState({ busy: false }); this.ov().close(true); }, 450); },
+      href: card || HREF[sheet] ? (HREF[sheet] || '') + (card ? '#' + card : '') : '', linkLabel: P.linkLabel ?? (sheet + (card ? ' · ' + card : '')),
+      show: () => this.ov().open(), hideSoon: () => { if (!this.state.pinned) this.ov().close(false); },
+      toggle: () => { this.setState(s => ({ pinned: !s.pinned })); this.ov().open(); },
+      key: (e) => { if (e.key === 'Escape') { this.setState({ pinned: false }); this.ov().close(true); } }
+    };
+    return v;
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#F6F2E9"/><rect x="30" y="30" width="140" height="140" rx="8" fill="#22303C"/><text x="100" y="118" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="72" fill="#FDFBF5">H</text></svg></template>
+<x-dc>
+<helmet>
+<title>Handoff — LEGO Village</title>
+<script>document.documentElement.lang="en"</script>
+<script src="dt/landing.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="dt/tokens.css">
+<link rel="stylesheet" href="dt/responsive.css">
+</helmet>
+<div class="dt-responsive-page" style="max-width:1120px;margin:0 auto;padding:28px 28px 48px;display:grid;gap:18px">
+  <div class="dt-responsive-heading" style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:center;border-bottom:2px solid var(--dt-ink);padding-bottom:10px">
+    <div style="display:grid;gap:3px;min-width:0">
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:700;font-style:italic;line-height:1.2">H-01 — The handoff</div>
+      <div style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);letter-spacing:0.08em">SEAM · SCHEMA REQUESTS · DECISIONS · PACKAGE FOR CLAUDE CODE, CLAUDE CHAT AND CHATGPT</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="Hub.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none">← HUB</a>
+      <button onClick="{{ toggleTheme }}" aria-pressed="{{ dark }}" style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn)">{{ themeLabel }}</button>
+    </div>
+  </div>
+  <div style="background:var(--dt-info-bg);border:1.5px solid var(--dt-info);border-radius:var(--dt-r-fillet);padding:11px 15px;font-size:13px;line-height:1.5;text-wrap:pretty">
+    Everything this design session settled, asked for, or left open — in one folder of plain files any agent can read. <strong>Read <a href="handoff/README.md">README.md</a> first</strong>; it says how. The sheets themselves stay the reference for behaviour; their code is not to be copied. Responsive design for iPhone and iPad is <em>not</em> done — only its intent is written down.
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px">
+    <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 20px;display:grid;gap:10px">
+      <div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted)">01 · THE LEDGERS</div>
+      <div style="font-family:'Spectral',serif;font-size:16px;font-weight:600">Plain Markdown, one topic each</div>
+      <div style="display:grid;gap:4px">
+        <sc-for list="{{ ledgers }}" as="l" hint-placeholder-count="7">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:baseline;border-bottom:1px dashed var(--dt-grid-mid);padding:6px 0;font-size:12.5px"><span style="min-width:0"><strong style="font-weight:600">{{ l.name }}</strong> <span style="color:var(--dt-muted)">— {{ l.what }}</span></span><button onClick="{{ l.preview }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-accent-deep);border:1px solid var(--dt-accent);border-radius:var(--dt-r-fillet);padding:2px 7px;background:transparent;cursor:pointer;white-space:nowrap">▤ PREVIEW</button><a href="{{ l.href }}" target="_blank" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;white-space:nowrap">OPEN ↗</a></div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 20px;display:grid;gap:10px">
+      <div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted)">02 · THE SHEETS</div>
+      <div style="font-family:'Spectral',serif;font-size:16px;font-weight:600">Spec · live · offline · pictures</div>
+      <div style="display:grid;gap:4px">
+        <sc-for list="{{ sheets }}" as="s" hint-placeholder-count="8">
+          <div style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px;align-items:start;border-bottom:1px dashed var(--dt-grid-mid);padding:6px 0;font-size:12.5px">
+            <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;padding-top:2px">{{ s.id }}</span>
+            <span style="min-width:0;display:grid;gap:3px"><span><strong style="font-weight:600">{{ s.title }}</strong> <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">{{ s.status }}</span></span><span style="display:flex;gap:10px;flex-wrap:wrap;font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600"><sc-if value="{{ s.hasSpec }}" hint-placeholder-val="{{ true }}"><a href="{{ s.spec }}" target="_blank">SPEC ↗</a></sc-if><a href="{{ s.file }}">LIVE →</a><sc-if value="{{ s.hasStandalone }}" hint-placeholder-val="{{ true }}"><a href="{{ s.standalone }}" target="_blank">OFFLINE ↗</a></sc-if><sc-if value="{{ s.hasShots }}" hint-placeholder-val="{{ true }}"><button onClick="{{ s.showShots }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-accent-deep);border:0;background:transparent;padding:0;cursor:pointer">PICTURES ({{ s.nShots }})</button></sc-if></span></span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <sc-if value="{{ shotsOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="background:var(--dt-sheet);border:1.5px solid var(--dt-accent);border-radius:var(--dt-r-card);box-shadow:var(--dt-shadow);padding:14px 18px;display:grid;gap:10px">
+      <div style="display:flex;gap:12px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600">PICTURES · {{ shotsId }}</span><span style="font-size:11.5px;color:var(--dt-muted)">as captured at handoff — recognition, not measurement</span><button onClick="{{ closeShots }}" style="margin-left:auto;font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:transparent;color:var(--dt-ink);border:1px solid var(--dt-ink);border-radius:var(--dt-r-btn);padding:3px 9px;cursor:pointer">✕ CLOSE</button></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:10px">
+        <sc-for list="{{ shots }}" as="p" hint-placeholder-count="2"><a href="{{ p.href }}" target="_blank" style="display:block;border:1px solid var(--dt-ink);border-radius:var(--dt-r-fillet);overflow:hidden;background:var(--dt-bg)"><div role="img" aria-label="{{ p.name }}" style="aspect-ratio:16/10;background-image:url({{ p.href }});background-size:cover;background-position:top"></div><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;padding:5px 8px;color:var(--dt-muted)">{{ p.name }}</div></a></sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ previewOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="background:var(--dt-sheet);border:1.5px solid var(--dt-accent);border-radius:var(--dt-r-card);box-shadow:var(--dt-shadow);padding:14px 18px">
+      <div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600">▤ {{ previewName }}</span><a href="{{ previewHref }}" target="_blank" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600">OPEN FULL FILE ↗</a><button onClick="{{ closePreview }}" style="margin-left:auto;font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:transparent;color:var(--dt-ink);border:1px solid var(--dt-ink);border-radius:var(--dt-r-btn);padding:3px 9px;cursor:pointer">✕ CLOSE</button></div>
+      <pre style="font-family:'Azeret Mono',monospace;font-size:11px;line-height:1.55;background:var(--dt-bg);border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:10px 12px;margin:10px 0 0;max-height:420px;overflow:auto;white-space:pre-wrap">{{ previewText }}</pre>
+    </div>
+  </sc-if>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px">
+    <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 20px;display:grid;gap:8px">
+      <div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted)">03 · WHAT IS STILL OPEN</div>
+      <div style="font-family:'Spectral',serif;font-size:16px;font-weight:600">Ten questions, each with an owner</div>
+      <div style="display:grid;gap:3px;font-size:12.5px">
+        <sc-for list="{{ open }}" as="q" hint-placeholder-count="10"><div style="display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:8px;padding:4px 0;border-bottom:1px dashed var(--dt-grid-mid)"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">{{ q.id }}</span><span>{{ q.text }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:{{ q.color }};border:1.5px dashed {{ q.color }};padding:1px 6px;border-radius:var(--dt-r-fillet);white-space:nowrap;align-self:start">{{ q.owner }}</span></div></sc-for>
+      </div>
+    </div>
+    <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 20px;display:grid;gap:8px">
+      <div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted)">04 · FOR CLAUDE CODE</div>
+      <div style="font-family:'Spectral',serif;font-size:16px;font-weight:600">Fresh repo, proposed</div>
+      <div style="font-size:12.5px;line-height:1.5;text-wrap:pretty">Monorepo: <span style="font-family:'Azeret Mono',monospace;font-size:11px">packages/schema · tokens · ui · geometry · evidence · procurement · story</span>, apps <span style="font-family:'Azeret Mono',monospace;font-size:11px">planner</span> and <span style="font-family:'Azeret Mono',monospace;font-size:11px">family</span>, a CLI as the audit surface, and <span style="font-family:'Azeret Mono',monospace;font-size:11px">docs/handoff</span> copied verbatim with an append-only decision ledger. Full layout and working rules in <a href="handoff/repo-structure.md" target="_blank">repo-structure.md</a>.</div>
+      <div style="font-size:12.5px;line-height:1.5;text-wrap:pretty;border-top:1px dashed var(--dt-grid-mid);padding-top:8px"><strong>Build order suggested:</strong> tokens → schema proposals → geometry (LDU, envelopes, fit) → evidence + decision log → Hub/J-01 → B-01 → A-01 split → C-01 → P-01 → F-01. Every "mock math" becomes a tested function plus an independent audit entry.</div>
+      <a href="handoff/" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;text-decoration:none;background:var(--dt-ink);color:var(--dt-on-ink);padding:9px 14px;border-radius:var(--dt-r-btn);box-shadow:var(--dt-btn-shadow);justify-self:start">Open the handoff folder →</a>
+    </div>
+  </div>
+  <div style="font-size:11px;color:var(--dt-muted);text-wrap:pretty">Sources of truth in order: <span style="font-family:'Azeret Mono',monospace">CLAUDE.md</span> · <span style="font-family:'Azeret Mono',monospace">handoff/decisions.md</span> · <span style="font-family:'Azeret Mono',monospace">dt/tokens.css</span> · the sheets. When two disagree, the newer dated entry wins and a new entry records the change.</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { dark: false, preview: null, shots: null, index: null };
+  componentDidMount() {
+    const dark = typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches;
+    document.body.classList.toggle('dt-blueprint', dark); this.setState({ dark });
+    fetch('handoff/index.json').then(r => r.json()).then(index => this.setState({ index })).catch(() => {});
+  }
+  openPreview(name, href) {
+    this.setState({ preview: { name, href, text: 'Loading…' }, shots: null });
+    fetch(href).then(r => r.text()).then(t => { if (this.state.preview && this.state.preview.name === name) this.setState({ preview: { name, href, text: t.slice(0, 12000) } }); }).catch(() => this.setState({ preview: { name, href, text: '(could not load — use OPEN FULL FILE)' } }));
+  }
+  renderVals() {
+    const s = this.state, idx = s.index;
+    const L = [['REVIEW-R1.md', 'START HERE if reviewing — what changed, what to check, how to answer', 'handoff/REVIEW-R1.md'], ['README.md', 'how to read this, standing rules, file map', 'handoff/README.md'], ['ADDENDUM-A1-right-now.md', 'the Hub’s three-priority strip and the no-nag contract it tests', 'handoff/ADDENDUM-A1-right-now.md'], ['decisions.md', 'dated ledger; append-only', 'handoff/decisions.md'], ['schema-requests.md', 'every field the UI needs, by entity', 'handoff/schema-requests.md'], ['seam.md', 'Frame host assumptions and questions', 'handoff/seam.md'], ['specs/ANNOUNCEMENTS.md', 'what a screen reader hears — trigger → region → sentence, per sheet', 'handoff/specs/ANNOUNCEMENTS.md'], ['a11y/README.md', 'accessibility-tree baselines per sheet; diff the build against them', 'handoff/a11y/README.md'], ['open-questions.md', 'ten open items with owners', 'handoff/open-questions.md'], ['responsive.md', 'targets and collapse rules — intent only', 'handoff/responsive.md'], ['repo-structure.md', 'proposed monorepo for Claude Code', 'handoff/repo-structure.md'], ['index.json', 'machine-readable map of all of the above', 'handoff/index.json'], ['RESEARCH-01', 'vocabulary note for a research agent', 'brief/RESEARCH-01-nomenclature.md']];
+    const ledgers = L.map(([name, what, href]) => ({ name, what, href, preview: () => this.openPreview(name, href) }));
+    const fallback = [{ id: 'Hub' }, { id: 'D-01' }, { id: 'A-01' }, { id: 'B-01' }, { id: 'C-01' }, { id: 'P-01' }, { id: 'F-01' }, { id: 'J-01' }];
+    const sheets = (idx ? idx.sheets.filter(x => x.id !== 'D-00') : fallback).map(x => ({ id: x.id, title: x.title || '', status: x.status || '', file: x.file || '#', spec: x.spec || '#', hasSpec: !!x.spec, standalone: x.standalone || '#', hasStandalone: !!x.standalone, hasShots: !!(x.screenshots && x.screenshots.length), nShots: x.screenshots ? x.screenshots.length : 0, showShots: () => this.setState({ shots: { id: x.id, list: x.screenshots }, preview: null }) }));
+    const OWN = { research: ['research agent', 'var(--dt-prov-deep)'], operator: ['operator', 'var(--dt-accent-deep)'], code: ['claude code', 'var(--dt-info-deep)'], design: ['design session', 'var(--dt-pass)'], frame: ['frame team', 'var(--dt-muted)'] };
+    const Q = [['Q1', 'Decomposition vocabulary (parts · pieces · elements · modules · units) — RESEARCH-01', 'research'], ['Q2', 'Tree 41843 measurements: base, height, branch overhang', 'operator'], ['Q3', 'A-01 split: component viewer (design source · brick source) vs layout canvas', 'code'], ['Q4', 'Animated card reflow', 'design'], ['Q5', 'Wand backend: precedent retrieval → proposal, audited', 'code'], ['Q6', 'Real BrickLink price/store data and account history', 'code'], ['Q7', 'Responsive design for iPhone and iPad — not done', 'design'], ['Q8', 'Frame seam: tokens, routing, decision log ownership, storage', 'frame'], ['Q9', 'Rights-review policy: artifact vs listing visibility', 'operator'], ['Q10', 'Build order as a derived view from separation strata', 'design']];
+    return {
+      dark: s.dark, themeLabel: s.dark ? '◐ BLUEPRINT' : '◑ PAPER', toggleTheme: () => { const d = !s.dark; document.body.classList.toggle('dt-blueprint', d); this.setState({ dark: d }); },
+      ledgers, sheets,
+      previewOpen: !!s.preview, previewName: s.preview ? s.preview.name : '', previewHref: s.preview ? s.preview.href : '#', previewText: s.preview ? s.preview.text : '', closePreview: () => this.setState({ preview: null }),
+      shotsOpen: !!s.shots, shotsId: s.shots ? s.shots.id : '', shots: s.shots ? s.shots.list.map(h => ({ href: h, name: h.split('/').pop() })) : [], closeShots: () => this.setState({ shots: null }),
+      open: Q.map(([id, text, o]) => ({ id, text, owner: OWN[o][0].toUpperCase(), color: OWN[o][1] }))
+    };
+  }
+}
+</script>
+</body>
+</html>

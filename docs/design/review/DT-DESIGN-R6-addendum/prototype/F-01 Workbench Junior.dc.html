@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#F6F2E9"/><rect x="30" y="30" width="140" height="140" rx="8" fill="#C65A33"/><text x="100" y="118" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="72" fill="#FDFBF5">F</text></svg></template>
+<x-dc>
+<helmet>
+<title>Family Workbench — LEGO Village</title>
+<script>document.documentElement.lang="en"</script>
+<script src="dt/landing.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="dt/tokens.css">
+<link rel="stylesheet" href="dt/responsive.css">
+<style>@keyframes dtStampIn{0%{transform:rotate(-14deg) scale(1.6);opacity:0}60%{transform:rotate(-3deg) scale(0.96);opacity:1}100%{transform:rotate(-3deg) scale(1)}} @keyframes dtWand{0%{opacity:.35}50%{opacity:1}100%{opacity:.35}} button:disabled{opacity:.45;cursor:not-allowed}</style>
+</helmet>
+<div class="dt-responsive-page" style="max-width:1240px;margin:0 auto;padding:28px 28px 48px">
+  <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--dt-ink);padding-bottom:10px;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:700;font-style:italic;flex:none;white-space:nowrap">F-01 — Family Workbench</div>
+      <div style="font-size:11px;color:var(--dt-muted);letter-spacing:0.08em">FAMILY POSTURE STUDY · TABLET · J11 + O4 · MOCK</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="Hub.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">← HUB</a>
+      <button onClick="{{ toggleTheme }}" aria-pressed="{{ dark }}" style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn)">{{ themeLabel }}</button>
+    </div>
+  </div>
+  <div style="background:var(--dt-info-bg);border:1.5px solid var(--dt-info);border-radius:var(--dt-r-fillet);padding:11px 15px;margin-top:14px;font-size:13px;line-height:1.5;text-wrap:pretty">
+    The same drafting tools James uses, laid out for a tablet and for the boys — bigger targets, plainer words, nothing hidden. A scene they propose is a real layout branch — <span style="font-family:'Azeret Mono',monospace;font-size:11px">origin: family · status: proposed</span> — that claims real studs on the table, with its consequences worked out before it reaches @jfo as a request. Designs still under rights review never appear here.
+  </div>
+  <div style="display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:8px 14px;align-items:start;margin-top:10px;font-size:12px;color:var(--dt-muted);line-height:1.4"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;padding-top:2px">SCHEMA</span><span style="text-wrap:pretty"><strong style="color:var(--dt-ink)">Sticker</strong> — the idea: kind, glyph, story.</span><span style="text-wrap:pretty"><strong style="color:var(--dt-ink)">Envelope</strong> — the room it claims: footprint × clear height, checked against tree, rail and neighbours.</span><span style="text-wrap:pretty"><strong style="color:var(--dt-ink)">Model</strong> — what fills it: Studio file, photos or a wand proposal. Must fit the envelope.</span></div>
+
+  <div class="dt-responsive-split" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,0.75fr);gap:18px;margin-top:16px;align-items:start">
+    <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:22px 24px 24px;display:grid;gap:18px;min-width:0">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap">
+        <div style="font-family:'Spectral',serif;font-size:24px;font-weight:600">Make a scene for the village</div>
+        <span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">{{ stepLine }}</span>
+      </div>
+      <div style="font-size:15px;line-height:1.5;color:var(--dt-muted)">{{ hint }}</div>
+
+      <div style="display:grid;gap:12px;border-top:1px dashed var(--dt-grid-mid);padding-top:18px">
+        <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:{{ step1Color }}">1</span><span style="font-family:'Spectral',serif;font-size:17px;font-weight:600">Pick a sticker</span><span style="grid-column:2;font-size:12px;color:var(--dt-muted);text-wrap:pretty">Each one claims a patch of studs — resize it after you drop it.</span></div>
+        <div style="display:grid;grid-template-columns:repeat({{ stickerCols }},minmax(0,1fr));gap:5px">
+          <sc-for list="{{ stickers }}" as="s" hint-placeholder-count="8">
+            <button onClick="{{ s.pick }}" aria-pressed="{{ s.active }}" title="{{ s.name }}" style="display:grid;justify-items:center;gap:3px;min-width:0;min-height:78px;padding:8px 3px;font-family:'Libre Franklin';font-size:11px;font-weight:600;color:{{ s.fg }};background:{{ s.bg }};border:2px {{ s.borderStyle }} var(--dt-ink);border-radius:var(--dt-r-card);cursor:pointer"><span style="font-size:22px;line-height:1">{{ s.glyph }}</span><span style="max-width:100%;text-align:center;line-height:1.15;text-wrap:balance;font-size:10.5px;letter-spacing:-0.01em;hyphens:auto">{{ s.name }}</span><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;font-weight:400;opacity:.8">{{ s.size }}</span></button>
+          </sc-for>
+          <button onClick="{{ pickCustom }}" aria-pressed="{{ customActive }}" style="display:grid;justify-items:center;gap:3px;min-width:0;min-height:78px;padding:8px 3px;font-family:'Libre Franklin';font-size:11px;font-weight:600;color:{{ customFg }};background:{{ customBg }};border:2px dashed var(--dt-accent);border-radius:var(--dt-r-card);cursor:pointer"><span style="font-size:22px;line-height:1">✦</span><span style="max-width:100%;text-align:center;line-height:1.15;text-wrap:balance;font-size:10.5px;letter-spacing:-0.01em">Something else</span><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;font-weight:400;opacity:.8">SAY IT</span></button>
+        </div>
+        <sc-if value="{{ customActive }}" hint-placeholder-val="{{ false }}">
+          <div style="border:1.5px dashed var(--dt-accent);border-radius:var(--dt-r-fillet);padding:12px 14px;display:grid;gap:8px;background:var(--dt-bg)">
+            <div style="font-size:13px;text-wrap:pretty">Say what it is and we make a sticker for it — like <em>a reindeer pulling a sled</em> or <em>a big igloo</em>. Words like <em>big</em> or <em>tiny</em> set how many studs it starts with.</div>
+            <div style="display:grid;grid-template-columns:minmax(0,1fr) 48px auto;gap:8px;align-items:stretch">
+              <input type="text" value="{{ customText }}" onChange="{{ setCustomText }}" aria-label="Describe your sticker" placeholder="e.g. a reindeer pulling a sled" style="width:100%;min-width:0;font-family:'Libre Franklin';font-size:15px;background:var(--dt-sheet);color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:0 14px;border-radius:var(--dt-r-btn);height:48px;box-sizing:border-box">
+              <button onClick="{{ voiceCustom }}" aria-pressed="{{ listeningCustom }}" aria-label="Say it instead" style="height:48px;font-size:20px;background:{{ micBgCustom }};color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);cursor:pointer">🎙</button>
+              <button onClick="{{ makeCustom }}" disabled="{{ customEmpty }}" style="height:48px;padding:0 16px;font-family:'Libre Franklin';font-size:13px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:0;border-radius:var(--dt-r-btn);cursor:pointer;box-shadow:var(--dt-btn-shadow);white-space:nowrap">Make the sticker</button>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;font-size:12px;color:var(--dt-muted)"><span style="font-size:22px;line-height:1">{{ customPreviewGlyph }}</span><span>{{ customPreviewText }}</span></div>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="display:grid;gap:12px;border-top:1px dashed var(--dt-grid-mid);padding-top:18px">
+        <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:{{ step2Color }}">2</span><span style="font-family:'Spectral',serif;font-size:17px;font-weight:600">Put it on the map</span><span style="grid-column:2;font-size:12px;color:var(--dt-muted);text-wrap:pretty">Pick a sticker above, then tap the snow to drop it. Tap a sticker to pick it, drag to move, drag its corner to resize. To scale — 112 × 112 studs.</span></div>
+        <div style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:6px 10px;align-items:center">
+          <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">SHOW</span>
+          <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2px;padding:3px;border-radius:var(--dt-r-pill);background:color-mix(in oklch, var(--dt-ink) 7%, transparent);border:1px solid var(--dt-grid-mid);">
+            <sc-for list="{{ layers }}" as="l" hint-placeholder-count="4">
+              <button onClick="{{ l.toggle }}" aria-pressed="{{ l.on }}" title="{{ l.title }}" style="display:flex;align-items:center;justify-content:center;height:34px;padding:0 10px;min-width:0;overflow:hidden;font-family:'Libre Franklin';font-size:13px;letter-spacing:0.01em;font-weight:{{ l.weight }};color:{{ l.fg }};background:{{ l.bg }};border:0;border-radius:var(--dt-r-pill);cursor:pointer;white-space:nowrap;transition:background .15s,color .15s">{{ l.name }}</button>
+            </sc-for>
+          </div>
+          <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">LOOK</span>
+          <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;padding:3px;border-radius:var(--dt-r-pill);background:color-mix(in oklch, var(--dt-ink) 7%, transparent);border:1px solid var(--dt-grid-mid);">
+            <sc-for list="{{ views }}" as="v" hint-placeholder-count="5">
+              <button onClick="{{ v.pick }}" aria-pressed="{{ v.on }}" title="{{ v.title }}" style="display:flex;align-items:center;justify-content:center;height:34px;padding:0 10px;min-width:0;overflow:hidden;font-family:'Libre Franklin';font-size:13px;letter-spacing:0.01em;font-weight:{{ v.weight }};color:{{ v.fg }};background:{{ v.bg }};border:0;border-radius:var(--dt-r-pill);cursor:pointer;white-space:nowrap;transition:background .15s,color .15s">{{ v.name }}</button>
+            </sc-for>
+          </div>
+          <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted);opacity:{{ zoomRowOpacity }}">ZOOM</span>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr);opacity:{{ zoomRowOpacity }}">
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;padding:3px;border-radius:var(--dt-r-pill);background:color-mix(in oklch, var(--dt-ink) 7%, transparent);border:1px solid var(--dt-grid-mid);">
+              <sc-for list="{{ zooms }}" as="z" hint-placeholder-count="3">
+                <button onClick="{{ z.pick }}" aria-pressed="{{ z.on }}" disabled="{{ elevView }}" title="{{ z.title }}" style="display:flex;align-items:center;justify-content:center;height:34px;padding:0 10px;min-width:0;overflow:hidden;font-family:'Libre Franklin';font-size:13px;letter-spacing:0.01em;font-weight:{{ z.weight }};color:{{ z.fg }};background:{{ z.bg }};border:0;border-radius:var(--dt-r-pill);cursor:pointer;white-space:nowrap;transition:background .15s,color .15s">{{ z.name }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div aria-live="polite" style="min-height:34px;display:flex;gap:10px;align-items:center;padding:0 12px;border-radius:var(--dt-r-btn);background:{{ statusBg }};color:{{ statusFg }};font-size:12.5px;line-height:1.35;transition:background .2s,color .2s"><span style="flex:1;min-width:0;text-wrap:pretty">{{ statusText }}</span><sc-if value="{{ showUndo }}" hint-placeholder-val="{{ false }}"><button onClick="{{ undo }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:var(--dt-on-ink);color:var(--dt-ink);border:0;border-radius:var(--dt-r-btn);padding:4px 8px;cursor:pointer;flex:none;white-space:nowrap">↶ UNDO</button></sc-if></div>
+        <sc-if value="{{ elevView }}" hint-placeholder-val="{{ false }}">
+          <div style="background:var(--dt-bg);border:1px solid var(--dt-ink);border-radius:var(--dt-r-card);padding:16px;display:grid;place-items:center">
+            <svg viewBox="-2 -2 116 58" style="width:100%;max-width:760px;height:auto;display:block;user-select:none" aria-label="{{ elevAria }}">
+              <defs><pattern id="courses" width="112" height="1.2" patternUnits="userSpaceOnUse" y="{{ groundY }}"><path d="M0 0H112" fill="none" stroke="var(--dt-grid-mid)" stroke-width="0.12"></path></pattern></defs>
+              <sc-if value="{{ showGrid }}" hint-placeholder-val="{{ true }}"><rect x="0" y="0" width="112" height="{{ groundY }}" fill="url(#courses)"></rect></sc-if>
+              <sc-for list="{{ courseLabels }}" as="c" hint-placeholder-count="4"><line x1="0" y1="{{ c.y }}" x2="112" y2="{{ c.y }}" stroke="var(--dt-grid-mid)" stroke-width="0.25"></line><text x="0.8" y="{{ c.ty }}" font-family="Azeret Mono" font-size="1.6" fill="var(--dt-muted)">{{ c.label }}</text></sc-for>
+              <sc-if value="{{ showTrack }}" hint-placeholder-val="{{ true }}">
+                <rect x="12" y="{{ railY }}" width="8" height="0.8" fill="var(--dt-pass)" opacity="0.85"></rect><rect x="92" y="{{ railY }}" width="8" height="0.8" fill="var(--dt-pass)" opacity="0.85"></rect>
+                <rect x="12" y="{{ trainTop }}" width="8" height="{{ trainH }}" fill="none" stroke="var(--dt-pass)" stroke-width="0.25" stroke-dasharray="0.8 0.6"></rect><rect x="92" y="{{ trainTop }}" width="8" height="{{ trainH }}" fill="none" stroke="var(--dt-pass)" stroke-width="0.25" stroke-dasharray="0.8 0.6"></rect>
+                <text x="16" y="{{ trainLabelY }}" font-family="Azeret Mono" font-size="1.5" fill="var(--dt-pass)" text-anchor="middle">TRAIN · {{ trainBricks }} BRICKS</text>
+              </sc-if>
+              <sc-for list="{{ elevBehind }}" as="e" hint-placeholder-count="0">
+                <rect x="{{ e.x }}" y="{{ e.top }}" width="{{ e.w }}" height="{{ e.hh }}" fill="var(--dt-sheet)" stroke="{{ e.stroke }}" stroke-width="0.3" stroke-dasharray="{{ e.dash }}" opacity="{{ e.opacity }}"></rect>
+                <foreignObject x="{{ e.x }}" y="{{ e.top }}" width="{{ e.w }}" height="{{ e.hh }}" style="pointer-events:none"><div style="width:100%;height:100%;display:grid;place-items:center;font-size:{{ e.fs }};line-height:1;opacity:{{ e.opacity }}">{{ e.glyph }}</div></foreignObject>
+              </sc-for>
+              <sc-if value="{{ showTree }}" hint-placeholder-val="{{ true }}">
+                <path d="{{ canopyPath }}" fill="var(--dt-pass-bg)" stroke="var(--dt-pass)" stroke-width="0.4"></path>
+                <rect x="{{ trunkX }}" y="{{ trunkTop }}" width="4" height="{{ trunkH }}" fill="var(--dt-pass-bg)" stroke="var(--dt-pass)" stroke-width="0.4"></rect>
+                <rect x="{{ treeX }}" y="{{ baseTop }}" width="{{ treeW }}" height="{{ baseH }}" fill="var(--dt-pass-bg)" stroke="var(--dt-pass)" stroke-width="0.5"></rect>
+                <text x="56" y="{{ baseLabelY }}" font-family="Azeret Mono" font-size="1.6" font-weight="600" fill="var(--dt-pass)" text-anchor="middle">TREE BASE · {{ treeW }} × {{ treeW }} · BUILT</text>
+                <path d="{{ headroomL }}" fill="none" stroke="var(--dt-prov)" stroke-width="0.3" stroke-dasharray="0.6 0.6"></path><path d="{{ headroomR }}" fill="none" stroke="var(--dt-prov)" stroke-width="0.3" stroke-dasharray="0.6 0.6"></path>
+                <text x="{{ headroomLx }}" y="{{ headroomLabelY }}" font-family="Azeret Mono" font-size="1.5" fill="var(--dt-prov-deep)" text-anchor="middle">UNDER THE BRANCHES · {{ canopyBottom }} BRICKS CLEAR</text>
+              </sc-if>
+              <sc-if value="{{ showTreeGhost }}" hint-placeholder-val="{{ false }}"><path d="{{ canopyPath }}" fill="none" stroke="var(--dt-muted)" stroke-width="0.3" stroke-dasharray="1 1"></path><rect x="{{ treeX }}" y="{{ baseTop }}" width="{{ treeW }}" height="{{ baseH }}" fill="none" stroke="var(--dt-muted)" stroke-width="0.3" stroke-dasharray="1 1"></rect></sc-if>
+              <sc-for list="{{ elevFront }}" as="e" hint-placeholder-count="0">
+                <rect x="{{ e.x }}" y="{{ e.top }}" width="{{ e.w }}" height="{{ e.hh }}" fill="{{ e.fill }}" stroke="{{ e.stroke }}" stroke-width="{{ e.sw }}" stroke-dasharray="{{ e.dash }}" opacity="{{ e.opacity }}"></rect>
+                <foreignObject x="{{ e.x }}" y="{{ e.top }}" width="{{ e.w }}" height="{{ e.hh }}" style="pointer-events:none"><div style="width:100%;height:100%;display:grid;place-items:center;font-size:{{ e.fs }};line-height:1">{{ e.glyph }}</div></foreignObject>
+                <sc-if value="{{ e.warn }}" hint-placeholder-val="{{ false }}"><text x="{{ e.cx }}" y="{{ e.warnY }}" font-family="Azeret Mono" font-size="1.5" font-weight="600" fill="var(--dt-block-deep)" text-anchor="middle">▲ TOO TALL HERE</text></sc-if>
+              </sc-for>
+              <line x1="0" y1="{{ groundY }}" x2="112" y2="{{ groundY }}" stroke="var(--dt-ink)" stroke-width="0.6"></line>
+              <text x="111" y="{{ groundLabelY }}" font-family="Azeret Mono" font-size="1.5" fill="var(--dt-muted)" text-anchor="end">{{ elevCaption }}</text>
+            </svg>
+          </div>
+        </sc-if>
+        <sc-if value="{{ planView }}" hint-placeholder-val="{{ true }}">
+        <div style="background:var(--dt-bg);border:1px solid var(--dt-ink);border-radius:var(--dt-r-card);padding:16px;display:grid;place-items:center;position:relative">
+          <svg ref="{{ svgRef }}" viewBox="{{ vb }}" onPointerDown="{{ onDown }}" onPointerMove="{{ onMove }}" onPointerUp="{{ onUp }}" onPointerLeave="{{ onLeave }}" style="width:100%;max-width:640px;height:auto;display:block;touch-action:none;cursor:{{ cursor }};user-select:none" aria-label="The village table to scale: 112 by 112 studs. The train rail runs 36 to 44 studs from the centre; the family tree holds the middle 16 by 16. Tap to drop the picked sticker; tap a sticker to select it.">
+            <defs>
+              <pattern id="g16" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M16 0H0V16" fill="none" stroke="var(--dt-grid-mid)" stroke-width="0.35"></path></pattern>
+              <pattern id="g4" width="4" height="4" patternUnits="userSpaceOnUse"><path d="M4 0H0V4" fill="none" stroke="var(--dt-grid-mid)" stroke-width="0.14"></path></pattern>
+              <pattern id="studs" width="1" height="1" patternUnits="userSpaceOnUse"><circle cx="0.5" cy="0.5" r="0.3" fill="var(--dt-ink)" opacity="0.06"></circle><circle cx="0.5" cy="0.5" r="0.3" fill="none" stroke="var(--dt-ink)" stroke-width="{{ studStroke }}" opacity="{{ studOpacity }}"></circle></pattern>
+              <pattern id="studsClose" width="1" height="1" patternUnits="userSpaceOnUse"><circle cx="0.5" cy="0.5" r="0.3" fill="var(--dt-ink)" opacity="0.05"></circle><circle cx="0.5" cy="0.5" r="0.3" fill="none" stroke="var(--dt-ink)" stroke-width="0.05" opacity="0.32"></circle></pattern>
+            </defs>
+            <rect x="0" y="0" width="112" height="112" fill="var(--dt-sheet)"></rect>
+            <sc-if value="{{ showGrid }}" hint-placeholder-val="{{ true }}">
+              <sc-if value="{{ showG1 }}" hint-placeholder-val="{{ false }}"><rect x="0" y="0" width="112" height="112" fill="url(#studsClose)"></rect></sc-if>
+              <sc-if value="{{ showStudsFar }}" hint-placeholder-val="{{ true }}"><rect x="0" y="0" width="112" height="112" fill="url(#studs)"></rect></sc-if>
+              <sc-if value="{{ showG4 }}" hint-placeholder-val="{{ false }}"><rect x="0" y="0" width="112" height="112" fill="url(#g4)"></rect></sc-if>
+              <rect x="0" y="0" width="112" height="112" fill="url(#g16)"></rect>
+            </sc-if>
+            <sc-if value="{{ showTrack }}" hint-placeholder-val="{{ true }}">
+              <circle cx="56" cy="56" r="40" fill="none" stroke="var(--dt-pass-bg)" stroke-width="8" style="pointer-events:none"></circle>
+              <circle cx="56" cy="56" r="37.5" fill="none" stroke="var(--dt-pass)" stroke-width="0.8" style="pointer-events:none"></circle>
+              <circle cx="56" cy="56" r="42.5" fill="none" stroke="var(--dt-pass)" stroke-width="0.8" style="pointer-events:none"></circle>
+              <circle cx="56" cy="56" r="40" fill="none" stroke="var(--dt-pass)" stroke-width="1.6" stroke-dasharray="1.6 1.6" opacity="0.6" style="pointer-events:none"></circle>
+            </sc-if>
+            <sc-if value="{{ showTree }}" hint-placeholder-val="{{ true }}">
+              <circle cx="56" cy="56" r="{{ canopyR }}" fill="var(--dt-prov-bg)" fill-opacity="0.45" stroke="var(--dt-prov)" stroke-width="0.35" stroke-dasharray="1 0.8" style="pointer-events:none"></circle>
+              <rect x="{{ treeX }}" y="{{ treeX }}" width="{{ treeW }}" height="{{ treeW }}" fill="var(--dt-pass-bg)" stroke="var(--dt-pass)" stroke-width="0.5" style="pointer-events:none"></rect>
+              <foreignObject x="{{ treeX }}" y="{{ treeX }}" width="{{ treeW }}" height="{{ treeW }}" style="pointer-events:none"><div style="width:100%;height:100%;display:grid;place-items:center;align-content:center;gap:0.6px;line-height:1"><span style="font-size:{{ treeGlyphFs }}">🎄</span><span style="font-family:'Azeret Mono',monospace;font-size:1.6px;font-weight:600;letter-spacing:0.02em;color:var(--dt-pass);white-space:nowrap;line-height:1.2;text-align:center">THE TREE · BUILT</span><span style="font-family:'Azeret Mono',monospace;font-size:1.3px;color:var(--dt-pass);white-space:nowrap;line-height:1.2">BASE {{ treeW }} × {{ treeW }} · {{ treeHeight }} BRICKS TALL</span></div></foreignObject>
+              <foreignObject x="26" y="{{ canopyLabelY }}" width="60" height="3" style="pointer-events:none"><div style="text-align:center;font-family:'Azeret Mono',monospace;font-size:1.4px;color:var(--dt-prov-deep);white-space:nowrap;line-height:3px">BRANCHES OVERHANG TO HERE · ONLY {{ canopyBottom }} BRICKS CLEAR BELOW</div></foreignObject>
+            </sc-if>
+            <sc-if value="{{ showTreeGhost }}" hint-placeholder-val="{{ false }}">
+              <rect x="{{ treeX }}" y="{{ treeX }}" width="{{ treeW }}" height="{{ treeW }}" fill="none" stroke="var(--dt-muted)" stroke-width="0.4" stroke-dasharray="1 1" style="pointer-events:none"></rect>
+              <circle cx="56" cy="56" r="{{ canopyR }}" fill="none" stroke="var(--dt-muted)" stroke-width="0.3" stroke-dasharray="1 1" style="pointer-events:none"></circle>
+            </sc-if>
+            <sc-if value="{{ showStickers }}" hint-placeholder-val="{{ true }}">
+              <sc-for list="{{ items }}" as="it" hint-placeholder-count="0">
+                <g role="button" tabindex="0" onKeyDown="{{ it.key }}" aria-label="{{ it.aria }}" style="outline:none;pointer-events:none">
+                  <rect x="{{ it.x }}" y="{{ it.y }}" width="{{ it.w }}" height="{{ it.h }}" fill="{{ it.fill }}" stroke="{{ it.stroke }}" stroke-width="{{ it.sw }}" stroke-dasharray="{{ it.dash }}" rx="0.6"></rect>
+                  <foreignObject x="{{ it.x }}" y="{{ it.y }}" width="{{ it.w }}" height="{{ it.h }}"><div style="width:100%;height:100%;display:grid;place-items:center;font-size:{{ it.fs }};line-height:1">{{ it.glyph }}</div></foreignObject>
+                  <sc-if value="{{ it.hasLabel }}" hint-placeholder-val="{{ false }}"><foreignObject x="{{ it.lx }}" y="{{ it.ly }}" width="{{ it.lw }}" height="{{ it.lh }}"><div style="text-align:center;font-family:'Libre Franklin';font-size:{{ it.lfs }};font-weight:600;color:var(--dt-prov-deep);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2">{{ it.label }}</div></foreignObject></sc-if>
+                </g>
+              </sc-for>
+            </sc-if>
+            <sc-if value="{{ ghostOn }}" hint-placeholder-val="{{ false }}">
+              <g style="pointer-events:none"><rect x="{{ ghost.x }}" y="{{ ghost.y }}" width="{{ ghost.w }}" height="{{ ghost.h }}" fill="{{ ghost.fill }}" fill-opacity="0.6" stroke="{{ ghost.stroke }}" stroke-width="0.4" stroke-dasharray="1 0.7" rx="0.6"></rect><foreignObject x="{{ ghost.x }}" y="{{ ghost.y }}" width="{{ ghost.w }}" height="{{ ghost.h }}"><div style="width:100%;height:100%;display:grid;place-items:center;font-size:{{ ghost.fs }};line-height:1;opacity:.55">{{ ghost.glyph }}</div></foreignObject></g>
+            </sc-if>
+            <sc-if value="{{ handleOn }}" hint-placeholder-val="{{ false }}">
+              <g style="pointer-events:none"><circle cx="{{ handleX }}" cy="{{ handleY }}" r="{{ handleR }}" fill="var(--dt-accent)" stroke="var(--dt-sheet)" stroke-width="{{ handleSw }}"></circle><foreignObject x="{{ handleLx }}" y="{{ handleLy }}" width="{{ handleLw }}" height="{{ handleLh }}"><div style="font-family:'Azeret Mono',monospace;font-size:{{ handleFs }};font-weight:600;color:var(--dt-accent-deep);white-space:nowrap;line-height:1;text-align:right">{{ handleLabel }}</div></foreignObject></g>
+            </sc-if>
+            <rect x="0" y="0" width="112" height="112" fill="none" stroke="var(--dt-ink)" stroke-width="0.5" style="pointer-events:none"></rect>
+          </svg>
+          <div style="position:absolute;right:22px;bottom:22px;display:grid;gap:4px"><button onClick="{{ placeCentre }}" title="Drop the picked sticker in the middle of what you can see" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;background:var(--dt-sheet);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);padding:6px 9px;cursor:pointer;box-shadow:var(--dt-btn-shadow)">＋ DROP IN THE MIDDLE</button></div>
+        </div>
+        </sc-if>
+
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--dt-muted)"><span style="display:flex;gap:6px;align-items:center"><span style="width:16px;height:6px;background:var(--dt-pass-bg);border-top:1.5px solid var(--dt-pass);border-bottom:1.5px solid var(--dt-pass)"></span>where the train runs — fixed this year; anything overlapping it gets a fit check</span><span style="display:flex;gap:6px;align-items:center"><span style="width:12px;height:12px;background:var(--dt-pass-bg);border:1.5px solid var(--dt-pass)"></span>the tree base — already built, it stays</span><span style="display:flex;gap:6px;align-items:center"><span style="width:12px;height:12px;border-radius:50%;background:var(--dt-prov-bg);border:1.5px dashed var(--dt-prov)"></span>under the branches — floor is free, headroom {{ canopyBottom }} bricks</span><span style="display:flex;gap:6px;align-items:center"><span style="width:12px;height:12px;background:var(--dt-sheet);border:1.5px dashed var(--dt-prov)"></span>your sticker and the studs it claims</span></div>
+      </div>
+
+      <div style="display:grid;gap:12px;border-top:1px dashed var(--dt-grid-mid);padding-top:18px">
+        <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:{{ step3Color }}">3</span><span style="font-family:'Spectral',serif;font-size:17px;font-weight:600">Tell its story</span><span style="grid-column:2;font-size:12px;color:var(--dt-muted);text-wrap:pretty">Type, or tap the mic and say it.</span></div>
+        <div style="display:grid;gap:8px">
+          <input type="text" value="{{ sceneName }}" onChange="{{ setName }}" aria-label="What is this place called?" placeholder="What is it called? — e.g. Nils’s chocolate shop" style="width:100%;font-family:'Libre Franklin';font-size:15px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:0 14px;border-radius:var(--dt-r-btn);height:48px;box-sizing:border-box">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) 48px;gap:8px;align-items:stretch">
+            <input type="text" value="{{ lore }}" onChange="{{ setLore }}" aria-label="What happens there?" placeholder="What happens there? — e.g. the train stops so Nils can load hot chocolate" style="width:100%;min-width:0;font-family:'Libre Franklin';font-size:15px;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:0 14px;border-radius:var(--dt-r-btn);height:48px;box-sizing:border-box">
+            <button onClick="{{ voiceLore }}" aria-pressed="{{ listeningLore }}" aria-label="Say it instead" style="height:48px;font-size:20px;background:{{ micBgLore }};color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);cursor:pointer">🎙</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;gap:12px;border-top:1px dashed var(--dt-grid-mid);padding-top:18px">
+        <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:{{ step4Color }}">4</span><span style="font-family:'Spectral',serif;font-size:17px;font-weight:600">Model it</span><span style="grid-column:2;font-size:12px;color:var(--dt-muted);text-wrap:pretty">Show what it looks like — build it in Studio, build it for real and photograph it, or let the wand sketch a start.</span></div>
+        <div ref="{{ modelRef }}" style="display:grid;grid-template-columns:{{ modelCols }};gap:14px;padding:6px 2px 6px">
+          <div style="position:relative;background:color-mix(in oklch, var(--dt-layer-landscape) 9%, var(--dt-sheet));border:1px solid var(--dt-layer-landscape);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px 18px;display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-content:start;min-width:0;overflow:hidden">
+            
+            <span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.08em;color:{{ studioColor }};border:1.5px {{ studioBorder }} {{ studioColor }};padding:2px 7px;border-radius:var(--dt-r-pill);white-space:nowrap;justify-self:start">{{ studioTag }}</span>
+            <div style="font-family:'Spectral',serif;font-size:18px;font-weight:700;font-style:italic;line-height:1.15;text-wrap:balance">Build it in Studio</div>
+            <div style="font-size:12.5px;color:var(--dt-muted);line-height:1.5;text-wrap:pretty">BrickLink Studio is the free program the whole village is designed in. Build your idea brick by brick, save the file, and attach it here.</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:2px"><a href="https://www.bricklink.com/v3/studio/download.page" target="_blank" rel="noopener" style="font-family:'Libre Franklin';font-size:13px;font-weight:600;text-decoration:none;background:var(--dt-ink);color:var(--dt-on-ink);padding:9px 13px;border:0;border-radius:var(--dt-r-btn);box-shadow:var(--dt-btn-shadow);justify-self:start;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-align:left;white-space:nowrap">Open Studio <span aria-hidden="true">↗</span></a><label style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:transparent;color:var(--dt-ink);padding:8px 12px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);cursor:pointer;justify-self:start;display:inline-flex;align-items:center;gap:6px;position:relative;overflow:hidden;text-align:left;white-space:nowrap">Attach the .io file<input type="file" accept=".io" onChange="{{ pickStudio }}" aria-label="Attach the .io file" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%"></label></div>
+            <sc-if value="{{ hasStudio }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:11px">▤ {{ studioName }}</span><button onClick="{{ clearStudio }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;background:transparent;color:var(--dt-muted);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-btn);padding:3px 7px;cursor:pointer">REMOVE</button></div></sc-if>
+          </div>
+          <div style="position:relative;background:color-mix(in oklch, var(--dt-info) 9%, var(--dt-sheet));border:1px solid var(--dt-info);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px 18px;display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-content:start;min-width:0;overflow:hidden">
+            
+            <span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.08em;color:{{ photoColor }};border:1.5px {{ photoBorder }} {{ photoColor }};padding:2px 7px;border-radius:var(--dt-r-pill);white-space:nowrap;justify-self:start">{{ photoTag }}</span>
+            <div style="font-family:'Spectral',serif;font-size:18px;font-weight:700;font-style:italic;line-height:1.15;text-wrap:balance">Build it for real, then photograph it</div>
+            <div style="font-size:12.5px;color:var(--dt-muted);line-height:1.5;text-wrap:pretty">Use bricks from the loose bin. Take a photo from the front and one from above so the size shows against the studs.</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:2px"><label style="font-family:'Libre Franklin';font-size:13px;font-weight:600;text-decoration:none;background:var(--dt-ink);color:var(--dt-on-ink);padding:9px 13px;border:0;border-radius:var(--dt-r-btn);box-shadow:var(--dt-btn-shadow);justify-self:start;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-align:left;white-space:nowrap">Add photos<input type="file" accept="image/*" multiple="{{ true }}" onChange="{{ pickPhotos }}" aria-label="Add photos" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%"></label></div>
+            <sc-if value="{{ hasPhotos }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <sc-for list="{{ photos }}" as="p" hint-placeholder-count="0"><div role="img" aria-label="{{ p.name }}" style="width:64px;height:64px;background-image:url({{ p.src }});background-size:cover;background-position:center;border:1px solid var(--dt-ink);border-radius:var(--dt-r-fillet)"></div></sc-for>
+                <button onClick="{{ clearPhotos }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;background:transparent;color:var(--dt-muted);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-btn);padding:3px 7px;cursor:pointer;align-self:end">REMOVE ALL</button>
+              </div>
+            </sc-if>
+          </div>
+          <div style="position:relative;background:color-mix(in oklch, var(--dt-accent) 9%, var(--dt-sheet));border:1px solid var(--dt-accent);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px 18px;display:grid;grid-template-columns:{{ wandInner }};gap:10px;align-content:start;min-width:0;overflow:hidden;grid-column:{{ wandSpan }}">
+            
+            <div style="display:grid;gap:10px;align-content:start;min-width:0">
+            <span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.08em;color:{{ wandColor }};border:1.5px {{ wandBorder }} {{ wandColor }};padding:2px 7px;border-radius:var(--dt-r-pill);white-space:nowrap;justify-self:start">{{ wandTag }}</span>
+            <div style="font-family:'Spectral',serif;font-size:18px;font-weight:700;font-style:italic;line-height:1.15;text-wrap:balance">Try the magic wand</div>
+            <div style="font-size:12.5px;color:var(--dt-muted);line-height:1.5;text-wrap:pretty">The AI reads your story, the room you claimed and what kind of thing it is, looks at what other builders have made like it, and sketches a first version. It is a starting point, not an answer: keep it, change it, ask for another, or throw it out and build your own.</div>
+            </div>
+            <div style="display:grid;gap:8px;align-content:{{ wandActionsAlign }};min-width:0">
+            <button onClick="{{ runWand }}" disabled="{{ wandDisabled }}" style="font-family:'Libre Franklin';font-size:13px;font-weight:600;text-decoration:none;background:var(--dt-accent);color:#FFFDF8;padding:9px 13px;border:0;border-radius:var(--dt-r-btn);box-shadow:var(--dt-btn-shadow);justify-self:start;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-align:left;white-space:nowrap">{{ wandLabel }}</button>
+            <div style="font-size:11.5px;color:var(--dt-muted)">{{ wandWhy }}</div>
+            </div>
+            <sc-if value="{{ wandBusy }}" hint-placeholder-val="{{ false }}"><div style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-accent-deep);animation:dtWand 1.2s ease-in-out infinite">{{ wandStatus }}</div></sc-if>
+            <div style="grid-column:1 / -1;min-width:0">
+            <sc-if value="{{ hasWand }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid;gap:8px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px">
+                <div style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)">IT LOOKED AT</div>
+                <div style="display:grid;gap:4px">
+                  <sc-for list="{{ wandPrecedents }}" as="w" hint-placeholder-count="3"><div style="display:flex;gap:8px;align-items:center;font-size:11.5px"><span style="width:28px;height:28px;flex:none;border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);display:grid;place-items:center;font-size:14px">{{ w.glyph }}</span><span style="min-width:0"><span style="font-weight:600">{{ w.title }}</span> <span style="color:var(--dt-muted)">{{ w.meta }}</span></span></div></sc-for>
+                </div>
+                <div style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)">IT SUGGESTS</div>
+                <div style="font-size:12.5px;line-height:1.5;text-wrap:pretty">{{ wandProposal }}</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap"><button onClick="{{ keepWand }}" aria-pressed="{{ wandKept }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:{{ wandKeepBg }};color:{{ wandKeepFg }};border:1.5px solid var(--dt-ink);padding:6px 11px;border-radius:var(--dt-r-btn);cursor:pointer">{{ wandKeepLabel }}</button><button onClick="{{ runWand }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;background:transparent;color:var(--dt-ink);border:1px dashed var(--dt-ink);padding:6px 9px;border-radius:var(--dt-r-btn);cursor:pointer">TRY AGAIN</button></div>
+              </div>
+            </sc-if>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <sc-if value="{{ hasLog }}" hint-placeholder-val="{{ false }}">
+        <details style="border-top:1px dashed var(--dt-grid-mid);padding-top:10px">
+          <summary style="cursor:pointer;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;list-style:none"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">WHAT HAPPENED · {{ logCount }}</span><span style="font-size:12px;color:var(--dt-muted)">{{ logLast }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-accent-deep);margin-left:auto">OPEN ▾</span></summary>
+          <div style="display:grid;gap:2px;margin-top:8px;max-height:180px;overflow:auto;font-size:12px">
+            <sc-for list="{{ logRows }}" as="e" hint-placeholder-count="3">
+              <div style="display:grid;grid-template-columns:52px 64px minmax(0,1fr) auto;gap:8px;align-items:baseline;padding:4px 0;border-bottom:1px dashed var(--dt-grid-mid)"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">{{ e.time }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.06em;color:{{ e.color }}">{{ e.kind }}</span><span style="text-wrap:pretty">{{ e.text }}</span><sc-if value="{{ e.canUndo }}" hint-placeholder-val="{{ false }}"><button onClick="{{ undo }}" style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;background:transparent;color:var(--dt-ink);border:1px solid var(--dt-ink);border-radius:var(--dt-r-btn);padding:2px 6px;cursor:pointer">↶ UNDO</button></sc-if></div>
+            </sc-for>
+          </div>
+          <div style="font-size:11px;color:var(--dt-muted);margin-top:6px;text-wrap:pretty">Every placement, move, resize, turn and removal is kept — this is what versions, undo and "how do the boys actually use this" are built from. Nothing here is sent to James until you press Send.</div>
+        </details>
+      </sc-if>
+    </div>
+
+    <div style="display:grid;gap:14px">
+      <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:12px">
+        <div style="font-family:'Spectral',serif;font-size:18px;font-weight:600">What your scene would need</div>
+        <div style="font-size:12.5px;color:var(--dt-muted);line-height:1.5">Worked out from your stickers and their envelopes, the same way the main drafting sheets do. Tap one to pick it out on the map.</div>
+        <sc-if value="{{ hasStickers }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;gap:8px">
+            <sc-for list="{{ itemRows }}" as="n" hint-placeholder-count="3">
+              <button onClick="{{ n.select }}" aria-pressed="{{ n.on }}" style="display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;font-family:'Libre Franklin';color:var(--dt-ink);background:{{ n.bg }};border:1.5px solid {{ n.border }};border-radius:var(--dt-r-fillet);padding:9px 12px;cursor:pointer;animation:{{ n.anim }}">
+                <span style="font-size:18px;line-height:1.2;flex:none">{{ n.glyph }}</span>
+                <span style="display:grid;gap:3px;min-width:0;flex:1"><span style="font-size:13.5px;font-weight:600">{{ n.title }}</span><sc-if value="{{ n.hasStory }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:var(--dt-muted);line-height:1.4;text-wrap:pretty">{{ n.story }}</span></sc-if><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">{{ n.foot }}</span><sc-if value="{{ n.hasFlag }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;font-weight:600;color:{{ n.flagColor }}">{{ n.flag }}</span></sc-if></span>
+                <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:{{ n.color }};border:1.5px {{ n.tagBorder }} {{ n.color }};padding:2px 7px;border-radius:var(--dt-r-fillet);flex:none;white-space:nowrap">{{ n.tag }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:2px">
+            <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:8px 10px;animation:{{ aBricks }}"><div style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">BRICKS, ABOUT</div><div style="font-family:'Azeret Mono',monospace;font-size:20px;font-weight:600">{{ bricks }}</div></div>
+            <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:8px 10px;animation:{{ aStuds }}"><div style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">ENVELOPE · STUDS</div><div style="font-family:'Azeret Mono',monospace;font-size:20px;font-weight:600">{{ studs }}<span style="font-size:11px;color:var(--dt-muted)"> of ~{{ freeStuds }} free</span></div></div>
+            <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:8px 10px"><div style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">TRACK?</div><div style="font-family:'Azeret Mono',monospace;font-size:11.5px;font-weight:600;color:{{ trackColor }};margin-top:4px;line-height:1.35">{{ trackNote }}</div></div>
+            <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:8px 10px;animation:{{ aHeight }}"><div style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">ENVELOPE · HEIGHT</div><div style="font-family:'Azeret Mono',monospace;font-size:11.5px;font-weight:600;color:{{ heightColor }};margin-top:4px;line-height:1.35">{{ heightNote }}</div></div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ noStickers }}" hint-placeholder-val="{{ true }}">
+          <div style="border:1.5px dashed var(--dt-unres);border-radius:var(--dt-r-fillet);padding:16px;text-align:center;font-size:13px;color:var(--dt-muted)">Pick a sticker, then tap the map.</div>
+        </sc-if>
+      </div>
+
+      <div style="background:var(--dt-sheet);border:1.5px solid {{ selCardBorder }};box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:10px;min-height:120px">
+        <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap"><span style="font-size:22px;line-height:1">{{ sel.glyph }}</span><span style="font-family:'Spectral',serif;font-size:18px;font-weight:600">{{ sel.name }}</span><button onClick="{{ deselect }}" style="margin-left:auto;min-height:32px;padding:4px 10px;font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-ink);background:transparent;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-pill);cursor:pointer">DONE</button></div>
+          <div style="font-family:'Azeret Mono',monospace;font-size:11px;color:var(--dt-prov-deep)">ENVELOPE {{ sel.w }} × {{ sel.h }} STUDS × {{ sel.hb }} BRICKS · {{ sel.zoneNote }}</div>
+          <sc-if value="{{ sel.hasHeightNote }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;font-weight:600;color:{{ sel.heightColor }}">{{ sel.heightNote }}</div></sc-if>
+          <div style="display:grid;gap:6px;border-top:1px dashed var(--dt-grid-mid);padding-top:10px">
+            <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">ITS STORY</span>
+            <input type="text" value="{{ sel.label }}" onChange="{{ sel.setLabel }}" aria-label="Who or what is this?" placeholder="{{ sel.labelPlaceholder }}" style="width:100%;font-family:'Libre Franklin';font-size:14px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:0 12px;border-radius:var(--dt-r-btn);height:42px;box-sizing:border-box">
+            <div style="display:grid;grid-template-columns:minmax(0,1fr) 42px;gap:6px;align-items:stretch">
+              <input type="text" value="{{ sel.story }}" onChange="{{ sel.setStory }}" aria-label="What is it doing here, and why?" placeholder="{{ sel.storyPlaceholder }}" style="width:100%;min-width:0;font-family:'Libre Franklin';font-size:13.5px;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:0 12px;border-radius:var(--dt-r-btn);height:42px;box-sizing:border-box">
+              <button onClick="{{ voiceItem }}" aria-pressed="{{ listeningItem }}" aria-label="Say it instead" style="height:42px;font-size:18px;background:{{ micBgItem }};color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);cursor:pointer">🎙</button>
+            </div>
+          </div>
+          <div style="display:grid;gap:6px;border-top:1px dashed var(--dt-grid-mid);padding-top:10px">
+            <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">FOOTPRINT</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <sc-for list="{{ sel.sizes }}" as="z" hint-placeholder-count="3">
+                <button onClick="{{ z.pick }}" aria-pressed="{{ z.on }}" style="min-height:36px;padding:6px 12px;font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:{{ z.fg }};background:{{ z.bg }};border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-pill);cursor:pointer">{{ z.label }}</button>
+              </sc-for>
+              <button onClick="{{ toggleSizer }}" aria-pressed="{{ sizerOpen }}" aria-expanded="{{ sizerOpen }}" style="min-height:36px;padding:6px 12px;font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:{{ sizerFg }};background:{{ sizerBg }};border:1.5px dashed var(--dt-ink);border-radius:var(--dt-r-pill);cursor:pointer">{{ sizerLabel }}</button>
+              <button onClick="{{ sel.rotate }}" style="min-height:36px;padding:6px 12px;font-family:'Libre Franklin';font-size:12.5px;font-weight:600;color:var(--dt-ink);background:transparent;border:1.5px dashed var(--dt-ink);border-radius:var(--dt-r-pill);cursor:pointer">↻ Turn it</button>
+            </div>
+            <sc-if value="{{ sizerOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="border:1.5px solid var(--dt-accent);background:var(--dt-bg);border-radius:var(--dt-r-fillet);padding:12px 14px;display:grid;gap:10px">
+                <div style="font-size:12px;color:var(--dt-muted);text-wrap:pretty">Any size from 1 × 1 up to 32 × 32 studs — one MILS module is the biggest a sticker can be for now. You can also drag the corner handle on the map.</div>
+                <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end">
+                  <label style="display:grid;gap:4px;font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">ACROSS
+                    <div style="display:grid;grid-template-columns:40px minmax(0,1fr) 40px;gap:4px"><button onClick="{{ wDown }}" aria-label="Narrower" style="height:40px;font-size:18px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);cursor:pointer">−</button><input type="number" min="1" max="32" value="{{ sizerW }}" onChange="{{ setW }}" aria-label="Studs across" style="height:40px;text-align:center;font-family:'Azeret Mono',monospace;font-size:16px;font-weight:600;background:var(--dt-sheet);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);min-width:0;box-sizing:border-box"><button onClick="{{ wUp }}" aria-label="Wider" style="height:40px;font-size:18px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);cursor:pointer">+</button></div>
+                  </label>
+                  <span style="font-family:'Azeret Mono',monospace;font-size:16px;color:var(--dt-muted);padding-bottom:10px">×</span>
+                  <label style="display:grid;gap:4px;font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">DEEP
+                    <div style="display:grid;grid-template-columns:40px minmax(0,1fr) 40px;gap:4px"><button onClick="{{ hDown }}" aria-label="Shallower" style="height:40px;font-size:18px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);cursor:pointer">−</button><input type="number" min="1" max="32" value="{{ sizerH }}" onChange="{{ setH }}" aria-label="Studs deep" style="height:40px;text-align:center;font-family:'Azeret Mono',monospace;font-size:16px;font-weight:600;background:var(--dt-sheet);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);min-width:0;box-sizing:border-box"><button onClick="{{ hUp }}" aria-label="Deeper" style="height:40px;font-size:18px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);cursor:pointer">+</button></div>
+                  </label>
+                </div>
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:11px;color:var(--dt-prov-deep)">= {{ sizerArea }} STUDS</span><span style="font-size:12px;color:{{ sizerNoteColor }};flex:1;min-width:140px;text-wrap:pretty">{{ sizerNote }}</span><button onClick="{{ applySizer }}" disabled="{{ sizerBlocked }}" style="height:36px;padding:0 14px;font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:0;border-radius:var(--dt-r-btn);cursor:pointer;box-shadow:var(--dt-btn-shadow)">Use this size</button></div>
+              </div>
+            </sc-if>
+          </div>
+          <div style="font-size:12px;color:var(--dt-muted);text-wrap:pretty">{{ sel.sizeNote }} On the map: drag the sticker to move it, drag the orange corner to resize it.</div>
+          <button onClick="{{ sel.remove }}" style="justify-self:start;min-height:36px;padding:6px 12px;font-family:'Libre Franklin';font-size:12.5px;font-weight:600;color:var(--dt-block-deep);background:transparent;border:1.5px dashed var(--dt-block);border-radius:var(--dt-r-pill);cursor:pointer">Take it off the map</button>
+        </sc-if>
+        <sc-if value="{{ noSel }}" hint-placeholder-val="{{ true }}">
+          <div style="font-family:'Spectral',serif;font-size:18px;font-weight:600;color:var(--dt-muted)">Nothing picked</div>
+          <div style="font-size:12.5px;color:var(--dt-muted);line-height:1.5;text-wrap:pretty">Tap a sticker on the map, or in the list above, to resize it, turn it, move it or take it off. Tap empty snow to put it down.</div>
+        </sc-if>
+      </div>
+
+      <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;display:grid;gap:12px">
+        <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ send }}" disabled="{{ cantSend }}" style="font-family:'Libre Franklin';font-size:16px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:14px 18px;cursor:pointer;border-radius:var(--dt-r-btn);box-shadow:var(--dt-btn-shadow);min-height:52px">Send it to James →</button>
+          <div style="font-size:12px;color:var(--dt-muted);line-height:1.5">{{ sendHint }}</div>
+        </sc-if>
+        <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span style="display:inline-block;font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;color:var(--dt-prov-deep);border:2.5px solid var(--dt-prov);padding:5px 12px;border-radius:var(--dt-r-fillet);animation:dtStampIn .35s ease-out both">◇ SENT · PROPOSED</span><span style="font-size:13px">It arrives with everything it needs worked out. The answer can be yes, not yet, or a question back.</span></div>
+          <div style="border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:12px 14px;display:grid;gap:6px;font-size:12px">
+            <div style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)">WHAT JAMES'S SHEET RECEIVES — THE SAME REQUEST CARD AS C-01</div>
+            <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;font-family:'Azeret Mono',monospace;font-size:10.5px">
+              <span style="color:var(--dt-muted)">FROM</span><span>@boys · Family Workbench</span>
+              <span style="color:var(--dt-muted)">ASKS</span><span style="font-family:'Libre Franklin';font-size:12.5px">{{ reqAsks }}</span>
+              <span style="color:var(--dt-muted)">CLAIMS</span><span>{{ studs }} studs in {{ itemCount }} {{ itemWord }} · tallest {{ tallest }} bricks · ~{{ bricks }} bricks · track {{ trackShort }} · headroom {{ heightShort }}</span>
+              <span style="color:var(--dt-muted)">ATTACHED WORK</span><span>{{ attachedWork }}</span>
+              <span style="color:var(--dt-muted)">ORIGIN · STATUS</span><span>family · proposed</span>
+            </div>
+          </div>
+          <button onClick="{{ reset }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:transparent;color:var(--dt-muted);border:1px dashed var(--dt-unres);padding:6px 10px;cursor:pointer;border-radius:var(--dt-r-btn);justify-self:start">MAKE ANOTHER</button>
+        </sc-if>
+      </div>
+
+      <div style="background:var(--dt-sheet);border:1px dashed var(--dt-unres);border-radius:var(--dt-r-card);padding:14px 18px;font-size:11.5px;color:var(--dt-muted);line-height:1.5">
+        <div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.1em;margin-bottom:6px">HOW THIS SHARES TOOLS WITH JAMES’S SHEETS</div>
+        Three things, kept apart: a <strong>sticker</strong> says what the idea is; its <strong>envelope</strong> is the room it claims — a footprint in studs plus the height that is actually clear there (under the branches, less); a <strong>model</strong> (step 4) is something that must fit inside that envelope. Same tokens, same request card, same basis (story), same evidence chips — at lower density, bigger targets, plain words. A sticker is a layout-branch proposal that claims an envelope; "Send to James" is exactly the @boys request that C-01 answers, with attached work listed so "words only" is visible. The tree’s base, height and branch overhang are <span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-prov-deep)">◇ TO BE MEASURED</span> (J9) — adjust them in Tweaks; every headroom check follows. The magic wand is a mock — the real one needs a retrieval backend (story + claimed area + kind → precedent study → proposal) and an audit. Private designs are filtered out before this page ever renders them. Every sticker carries its own story (who or what it is, what it does here) beside the scene’s story — both travel on the request (schema: Sticker {label, story} → story-graph node, J11). Envelopes are capped at 32 × 32 studs — one MILS module — for now. Naming open: “Rail” on the SHOW row is a placeholder for a namespace still to settle — rail · railbed · right-of-way (the studs the train needs clear beside it) · rail infrastructure (stops, signals). No step here can buy, freeze, or change James’s layout.
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;paper&quot;,&quot;blueprint&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto'|'paper'|'blueprint'&quot;}}">
+class Component extends DCLogic {
+  state = { dark: null, tool: 'shop', customText: '', customs: [], items: [], selId: null, sceneName: '', lore: '', sent: false, listening: null, narration: '', narAt: 0, log: [], show: { track: true, tree: true, stickers: true, grid: true }, zoom: 1, cx: 56, cy: 56, view: 'plan', sizer: null, armed: false, hover: null, narrow: false, model: { studio: null, photos: [], wand: null, wandBusy: false, wandStatus: '', wandKept: false }, drag: null };
+  svgRef = React.createRef(); modelRef = React.createRef();
+  LAYERS = [
+    { k: 'track', mark: '🟩', name: 'Rail', off: 'Hide the rail (it stays put — only the drawing goes).' },
+    { k: 'tree', mark: '🎄', name: 'Tree', off: 'Hide the tree — its studs stay taken; a dotted outline remains.' },
+    { k: 'stickers', mark: '★', name: 'Stickers', off: 'Hide your stickers — nothing is removed.' },
+    { k: 'grid', mark: '▦', name: 'Studs', off: 'Hide the stud grid.' }
+  ];
+  ZOOMS = [{ z: 1, name: 'Table', hint: 'The whole table' }, { z: 2, name: 'Closer', hint: 'Half the table — drag to move around' }, { z: 4, name: 'Studs', hint: 'Every stud — drag to move around' }];
+  STICKERS = [
+    { k: 'fig', glyph: '🧍', name: 'Minifig', sizes: [[2, 2]], hts: [4], bps: 1, title: 'A minifigure', detail: 'One figure standing on a 2 × 2 patch. Ornament layer — no fit check needed.', tag: '■ EASY', color: 'var(--dt-pass)', border: 'solid' },
+    { k: 'horse', glyph: '🐴', name: 'Horse', sizes: [[2, 4]], hts: [3], bps: 1, title: 'A horse', detail: 'Stands on 2 × 4. Turn it to face along the path. Ornament layer.', tag: '■ EASY', color: 'var(--dt-pass)', border: 'solid' },
+    { k: 'lamp', glyph: '🕯️', name: 'Lamp post', sizes: [[1, 1], [2, 2]], hts: [5, 6], bps: 3, title: 'A lamp post', detail: 'One stud, or 2 × 2 with a base. If it should light up, that needs the electrical layer — it goes on the list as a question.', tag: '◇ ASK', color: 'var(--dt-accent-deep)', border: 'dashed' },
+    { k: 'snowman', glyph: '⛄', name: 'Snowman', sizes: [[2, 2], [4, 4]], hts: [4, 7], bps: 2.25, title: 'A snowman', detail: 'Small on 2 × 2, big on 4 × 4. Ornament layer.', tag: '■ EASY', color: 'var(--dt-pass)', border: 'solid' },
+    { k: 'tree', glyph: '🌲', name: 'Tree', sizes: [[2, 2], [4, 4], [6, 6]], hts: [5, 9, 14], bps: 1.4, title: 'A tree', detail: 'Three sizes. Goes on the planting layer; fits anywhere off the track.', tag: '■ EASY', color: 'var(--dt-pass)', border: 'solid' },
+    { k: 'shop', glyph: '🏠', name: 'Building', sizes: [[8, 8], [8, 16], [16, 16]], hts: [10, 12, 16], bps: 2.2, title: 'A building', detail: 'Needs flat ground the whole way under it. If the train should stop here, that is a siding — a bigger ask.', tag: '◇ BIG', color: 'var(--dt-prov-deep)', border: 'dashed' },
+    { k: 'stop', glyph: '🚉', name: 'Train stop', sizes: [[4, 16], [6, 16]], hts: [4, 9], bps: 1, title: 'A train stop', detail: 'A platform that must touch the rail. Track pieces are fixed this year, so this goes on the list as a question.', tag: '▲ TRACK', color: 'var(--dt-block-deep)', border: 'solid' }
+  ];
+  GLYPHS = [['reindeer|deer|moose', '🦌'], ['sled|sleigh', '🛷'], ['dog|puppy', '🐕'], ['cat|kitten', '🐈'], ['horse|pony', '🐴'], ['bear', '🐻'], ['penguin', '🐧'], ['owl', '🦉'], ['rabbit|bunny', '🐇'], ['fox', '🦊'], ['gift|present', '🎁'], ['bell', '🔔'], ['star', '⭐'], ['santa|claus', '🎅'], ['elf', '🧝'], ['car|truck|van', '🚗'], ['bridge', '🌉'], ['well', '🪣'], ['fountain', '⛲'], ['bench|chair', '🪑'], ['fence|gate', '🚧'], ['igloo|mountain|hill', '🏔️'], ['rock|boulder', '🪨'], ['pond|ice|rink|lake', '🧊'], ['fire|campfire', '🔥'], ['cocoa|chocolate|coffee|cafe', '☕'], ['cookie|bakery|bread', '🍪'], ['church|chapel', '⛪'], ['castle|tower', '🏰'], ['tent', '⛺'], ['boat|ship', '⛵'], ['robot', '🤖'], ['dragon', '🐉'], ['snow', '❄️'], ['ski', '🎿'], ['candy|sweet', '🍬'], ['market|stall|shop|store', '🏪'], ['barn|farm', '🏚️'], ['house|home|cabin|cottage|hut', '🏡'], ['sign|post', '🪧'], ['wagon|cart', '🛒']];
+  PRECEDENTS = [
+    { glyph: '🏪', title: 'Winter market stall', meta: '8 × 8 · Rebrickable MOC · 2019 · 96 parts' },
+    { glyph: '🏡', title: 'Snowy cottage', meta: '16 × 16 · LEGO 10229 sub-build · 2012' },
+    { glyph: '🛷', title: 'Sled run with lamp', meta: '4 × 12 · BrickLink Studio gallery · 2022' },
+    { glyph: '⛲', title: 'Frozen fountain', meta: '6 × 6 · Eurobricks winter village · 2020' },
+    { glyph: '🚉', title: 'Halt platform', meta: '4 × 16 · MILS-compatible · 2021' },
+    { glyph: '🌲', title: 'Pine cluster', meta: '4 × 4 · official parts pack · 2018' }
+  ];
+  isDark() {
+    if (this.state.dark !== null) return this.state.dark;
+    if (this.props.theme === 'blueprint') return true;
+    if (this.props.theme === 'paper') return false;
+    return typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  applyBody() { document.body.classList.toggle('dt-blueprint', this.isDark()); }
+  componentDidMount() { this.applyBody(); this.forceUpdate(); if (typeof ResizeObserver !== 'undefined') { this._ro = new ResizeObserver(en => { const w = en[0].contentRect.width; const narrow = w < 720; if (narrow !== this.state.narrow) this.setState({ narrow }); }); const el = this.modelRef.current; if (el) this._ro.observe(el); } }
+  componentWillUnmount() { if (this._ro) this._ro.disconnect(); clearTimeout(this._toast); }
+  componentDidUpdate() { this.applyBody(); }
+  pulse(key, val) {
+    this.prev = this.prev || {}; this.pulseAt = this.pulseAt || {}; this.pulseTog = this.pulseTog || {};
+    const v = JSON.stringify(val), now = Date.now();
+    if (key in this.prev && this.prev[key] !== v) { this.pulseAt[key] = now; this.pulseTog[key] = !this.pulseTog[key]; }
+    this.prev[key] = v;
+    return (now - (this.pulseAt[key] || 0) < 900) ? 'dtChange' + (this.pulseTog[key] ? 'A' : 'B') + ' .8s ease-out' : 'none';
+  }
+  tree() { const base = 16; return { base, half: 8, x0: 48, height: 40, baseH: 8, canopyR: 28, canopyBottom: 10 }; } // 41843 measured 2026-09-17 (DEC-016) — not tweakable
+  headroomAt(x, y, w, h) { const T = this.tree(); const nx = Math.max(x, Math.min(56, x + w)), ny = Math.max(y, Math.min(56, y + h)); const dMin = Math.hypot(nx - 56, ny - 56); return dMin < T.canopyR ? T.canopyBottom : 99; }
+  act(kind, text, patch, before) {
+    this.setState(st => Object.assign({}, typeof patch === 'function' ? patch(st) : (patch || {}), { narration: text, narAt: Date.now(), log: st.log.concat([{ t: Date.now(), kind, text, before: before === undefined ? null : before }]).slice(-300) }));
+    this.tick();
+  }
+  toast(text) { this.setState({ narration: text, narAt: Date.now() }); this.tick(); }
+  tick() { clearTimeout(this._toast); this._toast = setTimeout(() => this.forceUpdate(), 4300); }
+  undo() {
+    const log = this.state.log; let i = log.length - 1; while (i >= 0 && !log[i].before) i--; if (i < 0) return;
+    const e = log[i]; this.setState(st => ({ items: e.before, selId: null, sent: false, narration: 'Undid: ' + e.text, narAt: Date.now(), log: st.log.slice(0, i).concat(st.log.slice(i + 1), [{ t: Date.now(), kind: 'undo', text: 'Undid: ' + e.text, before: null }]) })); this.tick();
+  }
+  allStickers() { return this.STICKERS.concat(this.state.customs); }
+  byKey(k) { return this.allStickers().find(x => x.k === k); }
+  view() { const z = this.state.zoom, half = 56 / z; return [this.state.cx - half, this.state.cy - half, 112 / z, 112 / z]; }
+  clampView(cx, cy, z) { const half = 56 / z; return [Math.min(112 - half, Math.max(half, cx)), Math.min(112 - half, Math.max(half, cy))]; }
+  toStud(e) { const el = this.svgRef.current; if (!el) return null; const r = el.getBoundingClientRect(); const [vx, vy, vw, vh] = this.view(); return [vx + (e.clientX - r.left) / r.width * vw, vy + (e.clientY - r.top) / r.height * vh]; }
+  ringHit(x, y, w, h) { const CX = 56, CY = 56; const dx = Math.max(x - CX, 0, CX - (x + w)), dy = Math.max(y - CY, 0, CY - (y + h)); const fx = Math.max(Math.abs(x - CX), Math.abs(x + w - CX)), fy = Math.max(Math.abs(y - CY), Math.abs(y + h - CY)); const dMin = Math.hypot(dx, dy), dMax = Math.hypot(fx, fy); return dMin <= 44 && dMax >= 36 ? 'track' : dMax < 36 ? 'inside' : 'snow'; }
+  overlaps(a, b) { return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y; }
+  blocked(rect, ignoreId) { const T = this.tree(); if (this.overlaps(rect, { x: T.x0, y: T.x0, w: T.base, h: T.base })) return 'That is the tree’s base — it is already built.'; const hit = this.state.items.find(it => it.id !== ignoreId && this.overlaps(rect, it)); if (hit) return 'That overlaps your ' + hit.name.toLowerCase() + ' — pick a free patch or make one smaller.'; return null; }
+  placeAt(sx, sy) {
+    const s = this.state; if (!s.show.stickers) { this.toast('Show "Stickers" first to change them.'); return; }
+    if (s.tool === 'custom') { this.toast('Describe your sticker and tap "Make the sticker" first.'); return; }
+    const def = this.byKey(s.tool); const [w, h] = def.sizes[0];
+    let x = Math.round(sx - w / 2), y = Math.round(sy - h / 2); x = Math.min(112 - w, Math.max(0, x)); y = Math.min(112 - h, Math.max(0, y));
+    const rect = { x, y, w, h }; const why = this.blocked(rect); if (why) { this.toast(why); return; }
+    const id = 'i' + Date.now().toString(36); const zone = this.ringHit(x, y, w, h);
+    const hb = (def.hts || [4])[0]; const room = this.headroomAt(x, y, w, h);
+    this.act('place', def.name + ' dropped at ' + x + ', ' + y + ' — ' + w + ' × ' + h + ' studs, ' + hb + ' bricks tall.' + (zone === 'track' ? ' Overlaps the rail — fit check.' : '') + (hb > room ? ' Too tall under the branches — only ' + room + ' clear.' : ''), st => ({ items: st.items.concat([Object.assign({ id, k: def.k, name: def.name, glyph: def.glyph, sizeIdx: 0, hb }, rect)]), selId: id, armed: false, hover: null, sent: false }), s.items);
+  }
+  glyphFor(t) { const s = t.toLowerCase(); for (const [re, g] of this.GLYPHS) if (new RegExp('\\b(' + re + ')').test(s)) return g; return '✦'; }
+  sizeFor(t) { const s = t.toLowerCase(); if (/huge|giant|enormous/.test(s)) return [[16, 16], [8, 8], [4, 4]]; if (/big|large|building|house|barn|castle|church/.test(s)) return [[8, 8], [4, 4], [16, 16]]; if (/tiny|small|little/.test(s)) return [[2, 2], [4, 4], [1, 1]]; return [[4, 4], [2, 2], [8, 8]]; }
+  renderVals() {
+    const s = this.state, dark = this.isDark();
+    const INK = 'var(--dt-ink)', ON = 'var(--dt-on-ink)';
+    const all = this.allStickers();
+    const armed = s.armed && s.tool !== 'custom';
+    const stickers = all.map(x => { const on = armed && s.tool === x.k; return { glyph: x.glyph, name: x.name, size: x.sizes[0][0] + '×' + x.sizes[0][1] + (x.sizes.length > 1 ? '+' : ''), active: on, fg: on ? ON : INK, bg: on ? INK : 'transparent', edge: 'var(--dt-ink)', shadow: 'none', lift: 'none', borderStyle: on ? 'solid' : 'dashed', pick: () => { if (on) { this.setState({ armed: false }); this.toast('Done adding. Tap a sticker on the map to pick it.'); } else { this.setState({ tool: x.k, armed: true, selId: null, sizer: null }); this.toast(x.name + ' ready — tap the snow where it should go.'); } } }; });
+    const [vx, vy, vw, vh] = this.view();
+    const sel = s.items.find(it => it.id === s.selId) || null;
+    const items = s.items.map(it => { const isSel = sel && sel.id === it.id; const zone = this.ringHit(it.x, it.y, it.w, it.h); const lfs = Math.max(1.6, Math.min(2.6, it.w * 0.28)); return { x: it.x, y: it.y, w: it.w, h: it.h, glyph: it.glyph, fs: (Math.min(it.w, it.h) * 0.62) + 'px', hasLabel: !!(it.label && it.label.trim()), label: it.label || '', lx: it.x + it.w / 2 - Math.max(it.w, 12) / 2, ly: it.y + it.h + 0.3, lw: Math.max(it.w, 12), lh: lfs * 1.4, lfs: lfs + 'px', fill: isSel ? 'var(--dt-prov-bg)' : 'var(--dt-sheet)', stroke: isSel ? 'var(--dt-accent)' : 'var(--dt-prov)', sw: isSel ? 0.6 : 0.4, dash: isSel ? 'none' : '1 0.7', aria: it.name + ' at ' + it.x + ', ' + it.y + ', ' + it.w + ' by ' + it.h + ' studs' + (zone === 'track' ? ', overlapping the rail' : '') + '. Press Enter to select.', key: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.setState({ selId: it.id }); } } }; });
+    const setSize = (idx) => { const def = this.byKey(sel.k); const [w, h] = def.sizes[idx]; const rect = { x: Math.min(112 - w, sel.x), y: Math.min(112 - h, sel.y), w, h }; const why = this.blocked(rect, sel.id); if (why) { this.toast('Can’t grow it there — ' + why.toLowerCase()); return; } const hb = (def.hts || [4])[idx] || sel.hb; this.act('resize', sel.name + ' now ' + w + ' × ' + h + ' studs, ' + hb + ' bricks tall.', st => ({ items: st.items.map(it => it.id === sel.id ? Object.assign({}, it, rect, { sizeIdx: idx, hb }) : it), sent: false }), s.items); };
+    const clamp32 = (n) => Math.max(1, Math.min(32, Math.round(Number(n) || 1)));
+    const sizerOpen = !!(sel && s.sizer && s.sizer.id === sel.id);
+    const sz = sizerOpen ? s.sizer : { w: sel ? sel.w : 1, h: sel ? sel.h : 1 };
+    const sizerRect = sel ? { x: Math.min(112 - sz.w, sel.x), y: Math.min(112 - sz.h, sel.y), w: sz.w, h: sz.h } : null;
+    const sizerWhy = sel ? this.blocked(sizerRect, sel.id) : null;
+    const sizerIsPreset = sel ? this.byKey(sel.k).sizes.some(p => (p[0] === sel.w && p[1] === sel.h) || (p[1] === sel.w && p[0] === sel.h)) : true;
+    const setSizer = (w, h) => this.setState({ sizer: { id: sel.id, w: clamp32(w), h: clamp32(h) } });
+    const handleR = 1.7 * (vw / 112) * 1.0 + 0.6 * (vw / 112);
+    const selV = sel ? (() => { const def = this.byKey(sel.k); const zone = this.ringHit(sel.x, sel.y, sel.w, sel.h); const sizes = def.sizes.map((sz, i) => { const on = sz[0] === Math.min(sel.w, sel.h) && sz[1] === Math.max(sel.w, sel.h) || (sz[0] === sel.w && sz[1] === sel.h); return { label: sz[0] + ' × ' + sz[1], on, fg: on ? ON : INK, bg: on ? INK : 'transparent', pick: () => setSize(i) }; }); const room = this.headroomAt(sel.x, sel.y, sel.w, sel.h); const tooTall = sel.hb > room; const upd = (patch) => this.setState(st => ({ items: st.items.map(it => it.id === sel.id ? Object.assign({}, it, patch) : it), sent: false })); return { glyph: sel.glyph, name: sel.label && sel.label.trim() ? sel.label + ' · ' + sel.name.toLowerCase() : sel.name, label: sel.label || '', story: sel.story || '', setLabel: (e) => upd({ label: e.target.value }), setStory: (e) => upd({ story: e.target.value }), labelPlaceholder: sel.k === 'fig' ? 'Who is this? — e.g. Mads, Nils’s friend' : 'What is this one called? — e.g. the old lamp by the gate', storyPlaceholder: sel.k === 'fig' ? 'What are they doing here, and why? — e.g. waiting for the train with a sled' : 'What happens here? — e.g. it flickers when the train passes', w: sel.w, h: sel.h, area: sel.w * sel.h, hb: sel.hb, hasHeightNote: room < 99, heightNote: room < 99 ? (tooTall ? '▲ too tall under the branches — ' + room + ' bricks clear, this is ' + sel.hb : '■ fits under the branches (' + room + ' bricks clear)') : '', heightColor: tooTall ? 'var(--dt-block-deep)' : 'var(--dt-pass)', sizes, zoneNote: zone === 'track' ? '▲ overlaps the train rail — James checks the fit' : zone === 'inside' ? 'inside the rail, by the tree' : 'on the snow', sizeNote: def.sizes.length > 1 ? 'Bigger claims more studs and more bricks — the card on the right updates as you change it.' : 'This one is always ' + sel.w + ' × ' + sel.h + '. Turn it to face the other way.', rotate: () => { const rect = { x: Math.min(112 - sel.h, sel.x), y: Math.min(112 - sel.w, sel.y), w: sel.h, h: sel.w }; const why = this.blocked(rect, sel.id); if (why) { this.toast('Can’t turn it there — ' + why.toLowerCase()); return; } this.act('turn', sel.name + ' turned — now ' + rect.w + ' × ' + rect.h + '.', st => ({ items: st.items.map(it => it.id === sel.id ? Object.assign({}, it, rect) : it), sent: false }), s.items); }, remove: () => this.act('remove', sel.name + ' taken off the map.', st => ({ items: st.items.filter(it => it.id !== sel.id), selId: null, sent: false }), s.items) }; })() : null;
+    // needs
+    const kinds = [...new Set(s.items.map(it => it.k))];
+    const brickFor = (it) => Math.max(1, Math.round(it.w * it.h * this.byKey(it.k).bps));
+    const itemRows = s.items.map(it => { const def = this.byKey(it.k); const on = s.selId === it.id; const zone = this.ringHit(it.x, it.y, it.w, it.h); const room = this.headroomAt(it.x, it.y, it.w, it.h); const tall = it.hb > room; const flag = tall ? '▲ too tall under the branches (' + room + ' clear)' : zone === 'track' ? '▲ overlaps the rail — fit check' : ''; return { glyph: it.glyph, title: it.label && it.label.trim() ? it.label + ' — ' + def.title.toLowerCase() : def.title, hasStory: !!(it.story && it.story.trim()), story: it.story || '', foot: it.w + ' × ' + it.h + ' studs × ' + it.hb + ' bricks · ~' + brickFor(it) + ' bricks · at ' + it.x + ', ' + it.y, tag: def.tag, color: def.color, tagBorder: def.border, on, bg: on ? 'var(--dt-prov-bg)' : 'transparent', border: on ? 'var(--dt-accent)' : 'var(--dt-grid-mid)', hasFlag: !!flag, flag, flagColor: tall ? 'var(--dt-block-deep)' : 'var(--dt-prov-deep)', anim: this.pulse('row:' + it.id, [it.w, it.h, it.hb, it.x, it.y]), select: () => { if (on) { this.setState({ selId: null }); return; } const z = s.zoom; const [cx, cy] = this.clampView(it.x + it.w / 2, it.y + it.h / 2, z); this.setState({ selId: it.id, cx: z > 1 ? cx : s.cx, cy: z > 1 ? cy : s.cy }); } }; });
+    const needs = kinds.map(k => { const def = this.byKey(k); const list = s.items.filter(it => it.k === k); const studs = list.reduce((a, it) => a + it.w * it.h, 0); const b = list.reduce((a, it) => a + brickFor(it), 0); return { glyph: def.glyph, title: def.title + (list.length > 1 ? ' ×' + list.length : ''), detail: def.detail, foot: list.map(it => it.w + '×' + it.h + '×' + it.hb + 'h').join(' · ') + ' = ' + studs + ' studs · ~' + b + ' bricks', tag: def.tag, color: def.color, border: def.border, anim: this.pulse('need:' + k, [list.length, studs]) }; });
+    const bricks = s.items.reduce((a, it) => a + brickFor(it), 0);
+    const studs = s.items.reduce((a, it) => a + it.w * it.h, 0);
+    const onTrack = s.items.filter(it => this.ringHit(it.x, it.y, it.w, it.h) === 'track');
+    const wantsSiding = kinds.includes('shop') && /stop|load|deliver|siding/i.test(s.lore);
+    const asksTrack = onTrack.length > 0 || kinds.includes('stop') || wantsSiding;
+    const trackNote = onTrack.length > 0 ? '▲ ' + onTrack.length + (onTrack.length === 1 ? ' STICKER OVERLAPS THE RAIL · FIT CHECK' : ' STICKERS OVERLAP THE RAIL · FIT CHECK') : asksTrack ? '▲ ASKS FOR TRACK' : '■ LEAVES TRACK ALONE';
+    const tooTall = s.items.filter(it => it.hb > this.headroomAt(it.x, it.y, it.w, it.h));
+    const tallest = s.items.reduce((a, it) => Math.max(a, it.hb || 0), 0);
+    const heightNote = tooTall.length ? '▲ ' + tooTall.length + (tooTall.length === 1 ? ' STICKER TOO TALL UNDER THE BRANCHES' : ' STICKERS TOO TALL UNDER THE BRANCHES') : tallest ? '■ EVERYTHING CLEARS · TALLEST ' + tallest + ' BRICKS' : '—';
+    const T = this.tree(); const B = 1.2; const G = 50;
+    const hasStickers = s.items.length > 0, named = s.sceneName.trim().length > 0;
+    const cantSend = !hasStickers || !named;
+    const m = s.model; const hasStudio = !!m.studio, hasPhotos = m.photos.length > 0, hasWand = !!m.wand;
+    const attached = [hasStudio ? 'Studio file ▤ ' + m.studio : null, hasPhotos ? m.photos.length + (m.photos.length === 1 ? ' photo' : ' photos') : null, hasWand && m.wandKept ? '◇ AI proposal (kept)' : null].filter(Boolean);
+    const reqAsks = (s.sceneName.trim() || 'A scene') + (s.lore.trim() ? ' — "' + s.lore.trim() + '"' : '') + ' · ' + kinds.map(k => this.byKey(k).name.toLowerCase()).join(', ') + (s.items.some(it => it.label && it.label.trim()) ? ' · with ' + s.items.filter(it => it.label && it.label.trim()).map(it => it.label.trim() + (it.story && it.story.trim() ? ' (' + it.story.trim() + ')' : '')).join(', ') : '');
+    const voice = (target) => () => {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) { this.toast('No microphone here — type it instead.'); return; }
+      if (s.listening) { try { this.rec.stop(); } catch (e) {} this.setState({ listening: null }); return; }
+      this.rec = new SR(); this.rec.lang = 'en-US';
+      this.rec.onresult = (ev) => { const t = ev.results[0][0].transcript; if (target === 'item') { this.setState(st => ({ items: st.items.map(it => it.id === st.selId ? Object.assign({}, it, { story: t }) : it), listening: null, sent: false })); } else this.setState(target === 'lore' ? { lore: t, listening: null } : { customText: t, listening: null }); this.toast('Heard you.'); };
+      this.rec.onerror = () => { this.setState({ listening: null }); this.toast('Mic didn’t work — type it instead.'); };
+      this.rec.onend = () => { if (this.state.listening) this.setState({ listening: null }); };
+      this.rec.start(); this.setState({ listening: target }); this.toast('Listening…');
+    };
+    const customActive = s.tool === 'custom';
+    const hv = s.hover; let ghost = null, cursor = 'default';
+    if (s.view === 'plan' && hv) {
+      const overHandle = sel && s.show.stickers && Math.hypot(hv.fx - (sel.x + sel.w), hv.fy - (sel.y + sel.h)) <= Math.min(handleR * 1.3, Math.max(0.8, Math.min(sel.w, sel.h) / 2));
+      const overItem = s.show.stickers ? s.items.find(it => hv.fx >= it.x && hv.fx < it.x + it.w && hv.fy >= it.y && hv.fy < it.y + it.h) : null;
+      if (s.drag && s.drag.moved) cursor = s.drag.resize ? 'nwse-resize' : s.drag.item ? 'grabbing' : 'grabbing';
+      else if (overHandle) cursor = 'nwse-resize';
+      else if (overItem) cursor = 'grab';
+      else if (armed) { const def = this.byKey(s.tool); const [w, h] = def.sizes[0]; let gx = Math.round(hv.fx - w / 2), gy = Math.round(hv.fy - h / 2); gx = Math.min(112 - w, Math.max(0, gx)); gy = Math.min(112 - h, Math.max(0, gy)); const why = this.blocked({ x: gx, y: gy, w, h }); ghost = { x: gx, y: gy, w, h, glyph: def.glyph, fs: Math.min(w, h) * 0.62 + 'px', ok: !why, stroke: why ? 'var(--dt-block)' : 'var(--dt-accent)', fill: why ? 'var(--dt-block-bg)' : 'var(--dt-prov-bg)' }; cursor = why ? 'not-allowed' : 'copy'; }
+      else if (s.zoom > 1) cursor = 'grab';
+      else cursor = sel ? 'default' : 'default';
+    }
+    const readFiles = (files, cb) => { const arr = Array.from(files || []); let out = []; if (!arr.length) return; arr.forEach(f => { const rd = new FileReader(); rd.onload = () => { out.push({ name: f.name, src: rd.result }); if (out.length === arr.length) cb(out); }; rd.readAsDataURL(f); }); };
+    const wandDisabled = !hasStickers || m.wandBusy;
+    return {
+      dark, themeLabel: dark ? '☀ PAPER' : '☾ BLUEPRINT', toggleTheme: () => this.setState({ dark: !this.isDark() }),
+      stepLine: !hasStickers ? 'STEP 1–2 · PICK, THEN TAP THE MAP' : !named ? 'STEP 3 · NAME YOUR PLACE' : s.sent ? 'SENT' : 'STEP 4 · MODEL IT, OR SEND',
+      step1Color: !hasStickers ? 'var(--dt-accent-deep)' : 'var(--dt-muted)', step2Color: !hasStickers ? 'var(--dt-accent-deep)' : 'var(--dt-muted)', step3Color: hasStickers && !named ? 'var(--dt-accent-deep)' : 'var(--dt-muted)', step4Color: hasStickers && named && !s.sent ? 'var(--dt-accent-deep)' : 'var(--dt-muted)',
+      hint: !hasStickers ? 'Pick a sticker, then tap the map where it should go. It claims a patch of studs — real size, on the real table.' : !named ? 'Nice. Now give your place a name, and say what happens there.' : s.sent ? 'Sent. It arrives with everything it needs worked out.' : 'Ready. Model it if you like, then send it — it arrives with what it needs already worked out.',
+      stickers, stickerCols: all.length + 1, pickCustom: () => this.setState({ tool: 'custom', armed: false, selId: null }), customActive, customFg: customActive ? ON : INK, customBg: customActive ? INK : 'transparent',
+      customText: s.customText, setCustomText: (e) => this.setState({ customText: e.target.value }), customEmpty: !s.customText.trim(), voiceCustom: voice('custom'), listeningCustom: s.listening === 'custom', micBgCustom: s.listening === 'custom' ? 'var(--dt-block-bg)' : 'transparent',
+      customPreviewGlyph: s.customText.trim() ? this.glyphFor(s.customText) : '✦', customPreviewText: s.customText.trim() ? 'Starts at ' + this.sizeFor(s.customText)[0].join(' × ') + ' studs — you can resize it on the map.' : 'The sticker appears here as you type.',
+      makeCustom: () => { const t = s.customText.trim(); if (!t) return; const k = 'x' + Date.now().toString(36); const name = t.length > 18 ? t.slice(0, 17).replace(/\s+\S*$/, '') + '…' : t; const c = { k, glyph: this.glyphFor(t), name: name.charAt(0).toUpperCase() + name.slice(1), sizes: this.sizeFor(t), hts: this.sizeFor(t).map(sz => Math.max(3, Math.round(Math.max(sz[0], sz[1]) * 0.9))), bps: 1.8, title: t.charAt(0).toUpperCase() + t.slice(1), detail: 'Your own idea. Nobody has a parts count yet — the estimate is rough until it is modeled.', tag: '◇ NEW IDEA', color: 'var(--dt-accent-deep)', border: 'dashed', custom: true }; this.act('sticker', 'New sticker: ' + c.glyph + ' ' + c.name + ' (' + c.sizes[0].join(' × ') + ' studs). Tap the snow where it should go.', st => ({ customs: st.customs.concat([c]), tool: k, armed: true, customText: '' })); },
+      layers: this.LAYERS.map(l => { const on = s.show[l.k]; return { mark: l.mark, name: l.name, title: l.off, on, fg: on ? ON : 'var(--dt-muted)', bg: on ? INK : 'transparent', weight: on ? 600 : 500, toggle: () => this.setState(st => ({ show: Object.assign({}, st.show, { [l.k]: !st.show[l.k] }) })) }; }),
+      layerHint: this.LAYERS.filter(l => !s.show[l.k]).map(l => l.off).join(' '),
+      zooms: this.ZOOMS.map(z => { const on = s.zoom === z.z; return { name: z.name, title: z.hint, on, fg: on ? ON : 'var(--dt-muted)', bg: on ? INK : 'transparent', weight: on ? 600 : 500, pick: () => { const c = sel ? [sel.x + sel.w / 2, sel.y + sel.h / 2] : [s.cx, s.cy]; const [cx, cy] = this.clampView(c[0], c[1], z.z); this.setState({ zoom: z.z, cx, cy }); } }; }),
+      zoomRowOpacity: s.view === 'plan' ? 1 : 0.4, zoomTail: s.view !== 'plan' ? 'side views show everything' : s.zoom > 1 ? 'drag to move around' : '',
+      showTrack: s.show.track, showTree: s.show.tree, showTreeGhost: !s.show.tree, showGrid: s.show.grid, showStickers: s.show.stickers, showG4: s.zoom >= 2, showG1: s.zoom >= 4, showStudsFar: s.zoom < 4, studOpacity: s.zoom === 1 ? 0.34 : 0.3, studStroke: s.zoom === 1 ? 0.12 : 0.07,
+      views: [{ k: 'plan', mark: '⬒', name: 'Above', title: 'Top-down plan — where things go' }, { k: 'S', mark: '↑', name: 'South', title: 'Side view from the south — how tall things are' }, { k: 'E', mark: '←', name: 'East', title: 'Side view from the east' }, { k: 'N', mark: '↓', name: 'North', title: 'Side view from the north' }, { k: 'W', mark: '→', name: 'West', title: 'Side view from the west' }].map(v => { const on = s.view === v.k; return { mark: v.mark, name: v.name, title: v.title, on, fg: on ? ON : 'var(--dt-muted)', bg: on ? INK : 'transparent', weight: on ? 600 : 500, pick: () => this.setState({ view: v.k }) }; }),
+      planView: s.view === 'plan', elevView: s.view !== 'plan',
+      viewHint: s.view === 'plan' ? 'Top-down plan — where things go and how many studs they claim.' : 'Side view — how tall things are, and what fits under the tree’s branches. Go back to “From above” to move things.',
+      elevAria: 'The village from the ' + ({ S: 'south', E: 'east', N: 'north', W: 'west' })[s.view] + ': the table, the tree on its base with branches overhanging, the train rail, and every sticker at its height in bricks.',
+      elevCaption: 'TABLE · FROM THE ' + ({ S: 'SOUTH', E: 'EAST', N: 'NORTH', W: 'WEST' })[s.view] + ' · HEIGHTS IN BRICKS · TREE MEASURED 17 SEP',
+      groundY: G, groundLabelY: G + 4, railY: G - 0.8, trainTop: G - 0.8 - 10 * B, trainH: 10 * B, trainLabelY: G - 0.8 - 10 * B - 1, trainBricks: 10,
+      courseLabels: [5, 10, 20, 30, 40].filter(n => n <= T.height + 2).map(n => ({ y: G - n * B, ty: G - n * B - 0.4, label: n + ' BRICKS' })),
+      treeX: T.x0, treeW: T.base, treeHeight: T.height, canopyR: T.canopyR, canopyBottom: T.canopyBottom, treeGlyphFs: (T.base * 0.35) + 'px', canopyLabelY: 56 + T.canopyR + 0.6,
+      baseTop: G - T.baseH * B, baseH: T.baseH * B, baseLabelY: G - T.baseH * B / 2 + 0.6, trunkX: 54, trunkTop: G - T.canopyBottom * B, trunkH: Math.max(0, (T.canopyBottom - T.baseH) * B),
+      canopyPath: 'M ' + (56 - T.canopyR) + ' ' + (G - T.canopyBottom * B) + ' L 56 ' + (G - T.height * B) + ' L ' + (56 + T.canopyR) + ' ' + (G - T.canopyBottom * B) + ' Z',
+      headroomL: 'M ' + (56 - T.canopyR) + ' ' + G + ' V ' + (G - T.canopyBottom * B) + ' H ' + T.x0, headroomR: 'M ' + (56 + T.canopyR) + ' ' + G + ' V ' + (G - T.canopyBottom * B) + ' H ' + (T.x0 + T.base),
+      headroomLx: 56, headroomLabelY: G - T.canopyBottom * B - 0.8,
+      elevBehind: [], elevFront: (() => { if (s.view === 'plan' || !s.show.stickers) return []; const proj = (it) => { switch (s.view) { case 'S': return { x: it.x, w: it.w, depth: it.y }; case 'N': return { x: 112 - it.x - it.w, w: it.w, depth: -it.y }; case 'E': return { x: 112 - it.y - it.h, w: it.h, depth: -it.x }; default: return { x: it.y, w: it.h, depth: it.x }; } }; return s.items.map(it => { const p = proj(it); const room = this.headroomAt(it.x, it.y, it.w, it.h); const warn = it.hb > room; const isSel = s.selId === it.id; const hh = it.hb * B; return { x: p.x, w: p.w, top: G - hh, hh, depth: p.depth, cx: p.x + p.w / 2, warnY: G - hh - 1, glyph: it.glyph, fs: Math.min(p.w, hh) * 0.6 + 'px', fill: warn ? 'var(--dt-block-bg)' : isSel ? 'var(--dt-prov-bg)' : 'var(--dt-sheet)', stroke: warn ? 'var(--dt-block)' : isSel ? 'var(--dt-accent)' : 'var(--dt-prov)', sw: isSel ? 0.5 : 0.35, dash: warn || isSel ? 'none' : '0.8 0.6', opacity: 1, warn }; }).sort((a, b) => a.depth - b.depth); })(),
+      heightNote, heightColor: tooTall.length ? 'var(--dt-block-deep)' : 'var(--dt-pass)', aHeight: this.pulse('height', heightNote), tallest, heightShort: tooTall.length ? tooTall.length + ' too tall' : 'clear',
+      svgRef: this.svgRef, vb: [vx, vy, vw, vh].map(n => n.toFixed(2)).join(' '), cursor, ghostOn: !!ghost && !(s.drag && s.drag.moved), ghost: ghost || {}, items,
+      onDown: (e) => { const p = this.toStud(e); if (!p) return; const onHandle = sel && s.show.stickers && Math.hypot(p[0] - (sel.x + sel.w), p[1] - (sel.y + sel.h)) <= Math.min(handleR * 1.3, Math.max(0.8, Math.min(sel.w, sel.h) / 2)); const hit = onHandle ? sel : (s.show.stickers ? s.items.find(it => p[0] >= it.x && p[0] < it.x + it.w && p[1] >= it.y && p[1] < it.y + it.h) : null); this.setState({ drag: { x0: e.clientX, y0: e.clientY, sx: p[0], sy: p[1], cx: s.cx, cy: s.cy, moved: false, item: hit ? hit.id : null, ix: hit ? hit.x : 0, iy: hit ? hit.y : 0, iw: hit ? hit.w : 0, ih: hit ? hit.h : 0, resize: !!onHandle, before: s.items } }); },
+      onMove: (e) => { const d = s.drag; if (!d) { const p = this.toStud(e); if (!p) return; const hx = Math.round(p[0]), hy = Math.round(p[1]); if (!s.hover || s.hover.x !== hx || s.hover.y !== hy) this.setState({ hover: { x: hx, y: hy, fx: p[0], fy: p[1] } }); return; } const dx = e.clientX - d.x0, dy = e.clientY - d.y0; if (!d.moved && Math.hypot(dx, dy) < 6) return; const el = this.svgRef.current; const r = el.getBoundingClientRect(); const per = vw / r.width;
+        if (d.item && d.resize) { const it = s.items.find(q => q.id === d.item); if (!it) return; const nw = Math.max(1, Math.min(32, Math.round(d.iw + dx * per), 112 - it.x)), nh = Math.max(1, Math.min(32, Math.round(d.ih + dy * per), 112 - it.y)); const rect = { x: it.x, y: it.y, w: nw, h: nh }; const why = this.blocked(rect, it.id); this.setState({ drag: Object.assign({}, d, { moved: true, blockedMsg: why }), items: why ? s.items : s.items.map(q => q.id === it.id ? Object.assign({}, q, rect, { sizeIdx: -1 }) : q) }); return; }
+        if (d.item) { const it = s.items.find(q => q.id === d.item); if (!it) return; let nx = Math.round(d.ix + dx * per), ny = Math.round(d.iy + dy * per); nx = Math.min(112 - it.w, Math.max(0, nx)); ny = Math.min(112 - it.h, Math.max(0, ny)); const rect = { x: nx, y: ny, w: it.w, h: it.h }; const why = this.blocked(rect, it.id); this.setState({ selId: it.id, drag: Object.assign({}, d, { moved: true, blockedMsg: why }), items: why ? s.items : s.items.map(q => q.id === it.id ? Object.assign({}, q, rect) : q) }); return; }
+        if (s.zoom === 1) { this.setState({ drag: Object.assign({}, d, { moved: true }) }); return; } const [cx, cy] = this.clampView(d.cx - dx * per, d.cy - dy * per, s.zoom); this.setState({ cx, cy, drag: Object.assign({}, d, { moved: true }) }); },
+      onLeave: (e) => { this.setState({ hover: null, drag: null }); },
+      onUp: (e) => { const d = s.drag; if (!d) return; this.setState({ drag: null }); if (e.type === 'pointerleave') return;
+        if (d.moved && d.item && d.resize) { const it = s.items.find(q => q.id === d.item); if (it && (it.w !== d.iw || it.h !== d.ih)) this.act('resize', it.name + ' resized to ' + it.w + ' × ' + it.h + ' studs' + (d.blockedMsg ? ' — stopped: ' + d.blockedMsg.toLowerCase() : '.'), { sent: false, sizer: null }, d.before); return; }
+        if (d.moved) { if (d.item) { const it = s.items.find(q => q.id === d.item); if (it && (it.x !== d.ix || it.y !== d.iy)) this.act('move', it.name + ' moved to ' + it.x + ', ' + it.y + (d.blockedMsg ? ' — stopped: ' + d.blockedMsg.toLowerCase() : '') , { sent: false }, d.before); } return; }
+        if (d.item) { if (s.selId === d.item) { this.setState({ selId: null, sizer: null }); } else { const it = s.items.find(q => q.id === d.item); this.setState({ selId: d.item, narration: it.name + ' picked — resize, turn or take it off on the right. Drag it to move it.', narAt: Date.now() }); this.tick(); } return; }
+        if (s.selId) { this.setState({ selId: null, sizer: null }); return; }
+        if (!armed) { this.toast('Nothing to drop — pick a sticker above first.'); return; }
+        this.placeAt(d.sx, d.sy); },
+      placeCentre: () => { if (!armed) { this.toast('Pick a sticker above first.'); return; } this.placeAt(s.cx, s.cy); }, armed,
+      sizerOpen, sizerLabel: sizerOpen ? '✕ CUSTOM' : (sizerIsPreset ? '# × # CUSTOM' : sel ? sel.w + ' × ' + sel.h + ' CUSTOM' : ''), sizerFg: sizerOpen || !sizerIsPreset ? ON : INK, sizerBg: sizerOpen || !sizerIsPreset ? INK : 'transparent',
+      toggleSizer: () => this.setState({ sizer: sizerOpen ? null : { id: sel.id, w: sel.w, h: sel.h } }),
+      sizerW: sz.w, sizerH: sz.h, sizerArea: sz.w * sz.h, setW: (e) => setSizer(e.target.value, sz.h), setH: (e) => setSizer(sz.w, e.target.value), wUp: () => setSizer(sz.w + 1, sz.h), wDown: () => setSizer(sz.w - 1, sz.h), hUp: () => setSizer(sz.w, sz.h + 1), hDown: () => setSizer(sz.w, sz.h - 1),
+      sizerBlocked: !!sizerWhy, sizerNote: sizerWhy ? 'Won’t fit here — ' + sizerWhy.toLowerCase() : (sel && sizerRect ? (this.headroomAt(sizerRect.x, sizerRect.y, sizerRect.w, sizerRect.h) < sel.hb ? 'Fits the floor, but the branches are only ' + this.headroomAt(sizerRect.x, sizerRect.y, sizerRect.w, sizerRect.h) + ' bricks up here.' : 'Fits where it is.') : ''), sizerNoteColor: sizerWhy ? 'var(--dt-block-deep)' : 'var(--dt-muted)',
+      applySizer: () => { if (!sel || sizerWhy) return; this.act('resize', sel.name + ' set to a custom ' + sz.w + ' × ' + sz.h + ' studs (' + sz.w * sz.h + ').', st => ({ items: st.items.map(it => it.id === sel.id ? Object.assign({}, it, sizerRect, { sizeIdx: -1 }) : it), sizer: null, sent: false }), s.items); },
+      handleOn: !!sel && s.view === 'plan' && s.show.stickers, handleX: sel ? sel.x + sel.w : 0, handleY: sel ? sel.y + sel.h : 0, handleR, handleSw: handleR * 0.25, handleLx: sel ? sel.x + sel.w - 40 * (vw / 112) : 0, handleLy: sel ? sel.y + sel.h + handleR * 1.2 : 0, handleLw: 40 * (vw / 112), handleLh: 3 * (vw / 112), handleFs: (1.8 * vw / 112) + 'px', handleLabel: sel ? sel.w + ' × ' + sel.h : '',
+      voiceItem: voice('item'), listeningItem: s.listening === 'item', micBgItem: s.listening === 'item' ? 'var(--dt-block-bg)' : 'transparent',
+      hasSel: !!selV, noSel: !selV, sel: selV || {}, selCardBorder: selV ? 'var(--dt-accent)' : 'var(--dt-ink)', deselect: () => this.setState({ selId: null, sizer: null }), itemRows,
+      needs, hasStickers, noStickers: !hasStickers, bricks, studs, freeStuds: Math.max(0, 112 * 112 - 16 * 16 - studs).toLocaleString(), aBricks: this.pulse('bricks', bricks), aStuds: this.pulse('studs', studs),
+      trackNote, trackColor: asksTrack ? 'var(--dt-block-deep)' : 'var(--dt-pass)', trackShort: asksTrack ? 'asked' : 'untouched',
+      itemCount: s.items.length, itemWord: s.items.length === 1 ? 'sticker' : 'stickers',
+      sceneName: s.sceneName, setName: (e) => this.setState({ sceneName: e.target.value, sent: false }),
+      lore: s.lore, setLore: (e) => this.setState({ lore: e.target.value, sent: false }),
+      voiceLore: voice('lore'), listeningLore: s.listening === 'lore', micBgLore: s.listening === 'lore' ? 'var(--dt-block-bg)' : 'transparent',
+      // step 4
+      modelRef: this.modelRef, modelCols: s.narrow ? 'repeat(2,minmax(0,1fr))' : 'repeat(3,minmax(0,1fr))', wandSpan: s.narrow ? '1 / -1' : 'auto', wandInner: s.narrow ? 'minmax(0,1.5fr) minmax(0,1fr)' : 'minmax(0,1fr)', wandActionsAlign: s.narrow ? 'end' : 'start',
+      studioTag: hasStudio ? '■ ATTACHED' : '○ NOT YET', studioColor: hasStudio ? 'var(--dt-pass)' : 'var(--dt-muted)', studioBorder: hasStudio ? 'solid' : 'dashed', hasStudio, studioName: m.studio || '',
+      pickStudio: (e) => { const f = e.target.files && e.target.files[0]; if (!f) return; this.setState(st => ({ model: Object.assign({}, st.model, { studio: f.name }), sent: false })); this.act('model', 'Studio file attached: ' + f.name + '.'); },
+      clearStudio: () => this.setState(st => ({ model: Object.assign({}, st.model, { studio: null }), sent: false })),
+      photoTag: hasPhotos ? '■ ' + m.photos.length + (m.photos.length === 1 ? ' PHOTO' : ' PHOTOS') : '○ NOT YET', photoColor: hasPhotos ? 'var(--dt-pass)' : 'var(--dt-muted)', photoBorder: hasPhotos ? 'solid' : 'dashed', hasPhotos, photos: m.photos,
+      pickPhotos: (e) => readFiles(e.target.files, (out) => { this.setState(st => ({ model: Object.assign({}, st.model, { photos: st.model.photos.concat(out) }), sent: false })); this.act('model', out.length + (out.length === 1 ? ' photo added.' : ' photos added.')); }),
+      clearPhotos: () => this.setState(st => ({ model: Object.assign({}, st.model, { photos: [] }), sent: false })),
+      wandTag: m.wandBusy ? '◇ THINKING' : hasWand ? (m.wandKept ? '◇ AI GUESS · KEPT' : '◇ AI GUESS') : '○ NOT YET', wandColor: hasWand || m.wandBusy ? 'var(--dt-accent-deep)' : 'var(--dt-muted)', wandBorder: hasWand ? 'solid' : 'dashed',
+      wandDisabled, wandLabel: m.wandBusy ? 'Looking…' : hasWand ? '✦ Wave it again' : '✦ Wave the wand', wandWhy: !hasStickers ? 'Drop a sticker first — the wand needs to know what and how big.' : !s.lore.trim() ? 'Works better with a story in step 3, but you can try now.' : 'Uses: your story · ' + studs + ' studs · ' + kinds.map(k => this.byKey(k).name.toLowerCase()).join(', ') + '.',
+      wandBusy: m.wandBusy, wandStatus: m.wandStatus, hasWand, wandPrecedents: hasWand ? m.wand.precedents : [], wandProposal: hasWand ? m.wand.proposal : '',
+      runWand: () => { if (wandDisabled) return; const steps = ['Reading your story…', 'Measuring the studs you claimed…', 'Looking at what other builders made…', 'Writing a suggestion…']; let i = 0; const tick = () => { if (i < steps.length) { this.setState(st => ({ model: Object.assign({}, st.model, { wandBusy: true, wandStatus: steps[i] }) })); i++; this._wt = setTimeout(tick, 650); } else { const main = s.items.slice().sort((a, b) => b.w * b.h - a.w * a.h)[0]; const def = this.byKey(main.k); const pre = this.PRECEDENTS.slice().sort(() => 0.5 - Math.random()).slice(0, 3); const proposal = (s.sceneName.trim() || 'Your ' + def.name.toLowerCase()) + ': a ' + main.w + ' × ' + main.h + ' ' + def.name.toLowerCase() + ' in white and light bluish gray with a dark red door, ' + Math.round(main.w * main.h * def.bps * 0.9) + '–' + Math.round(main.w * main.h * def.bps * 1.2) + ' bricks, built on a plate so it lifts off the snow. ' + (s.lore.trim() ? 'To fit "' + s.lore.trim() + '", it puts a door on the side facing the rail.' : 'Add a story in step 3 and it will place the door and details to match.') + ' MOCK — real proposals come from a retrieval backend and get audited.'; this.setState(st => ({ model: Object.assign({}, st.model, { wandBusy: false, wandStatus: '', wand: { precedents: pre, proposal }, wandKept: false }), sent: false })); this.act('model', 'The wand made a suggestion — keep it or try again.'); } }; tick(); },
+      keepWand: () => this.setState(st => ({ model: Object.assign({}, st.model, { wandKept: !st.model.wandKept }), sent: false })), wandKept: m.wandKept, wandKeepBg: m.wandKept ? INK : 'transparent', wandKeepFg: m.wandKept ? ON : INK, wandKeepLabel: m.wandKept ? '■ Kept — goes with the request' : 'Keep this suggestion',
+      // send
+      notSent: !s.sent, sent: s.sent, cantSend,
+      sendHint: !hasStickers ? 'Put at least one sticker down first.' : !named ? 'Give it a name first.' : (attached.length ? 'Goes with ' + attached.join(', ') + ' attached. ' : 'Goes as words and stickers — no model yet; that is fine, it will show as words only. ') + 'Nothing is bought or changed until it is answered.',
+      send: () => { if (!cantSend) this.act('send', 'Sent to James as a proposed scene.', { sent: true }); },
+      reqAsks, attachedWork: attached.length ? attached.join(' · ') : 'stickers + words only — no model yet',
+      reset: () => this.act('reset', 'Fresh snow — started a new scene.', { items: [], selId: null, sceneName: '', lore: '', sent: false, model: { studio: null, photos: [], wand: null, wandBusy: false, wandStatus: '', wandKept: false } }, s.items),
+      narration: s.narration, toastOn: !!s.narration && (Date.now() - s.narAt) < 4200, canUndo: s.log.some(e => e.before), undo: () => this.undo(),
+      statusText: (!!s.narration && (Date.now() - s.narAt) < 4200) ? s.narration : (armed ? 'Adding a ' + this.byKey(s.tool).name.toLowerCase() + ' — tap the snow where it should go. Tap the sticker above again to stop.' : sel ? sel.name + ' picked — drag to move, drag the orange corner to resize, tap it to put down.' : hasStickers ? 'Tap a sticker on the map to pick it. Pick one above to add another.' : 'Pick a sticker above, then tap the snow where it should go.'),
+      statusBg: (!!s.narration && (Date.now() - s.narAt) < 4200) ? 'var(--dt-ink)' : armed ? 'var(--dt-prov-bg)' : 'color-mix(in oklch, var(--dt-ink) 7%, transparent)', statusFg: (!!s.narration && (Date.now() - s.narAt) < 4200) ? 'var(--dt-on-ink)' : armed ? 'var(--dt-prov-deep)' : 'var(--dt-muted)', showUndo: (() => { const last = s.log[s.log.length - 1]; return !!last && !!last.before && last.text === s.narration && (Date.now() - s.narAt) < 4200; })(),
+      hasLog: s.log.length > 0, logCount: s.log.length, logLast: s.log.length ? s.log[s.log.length - 1].text : '',
+      logRows: s.log.slice().reverse().map((e, i, arr) => { const d = new Date(e.t); const isLastUndoable = e.before && s.log.lastIndexOf(e) === s.log.map(x => !!x.before).lastIndexOf(true); return { time: String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ':' + String(d.getSeconds()).padStart(2, '0'), kind: e.kind.toUpperCase(), text: e.text, color: e.kind === 'remove' || e.kind === 'undo' ? 'var(--dt-block-deep)' : e.kind === 'send' ? 'var(--dt-prov-deep)' : 'var(--dt-accent-deep)', canUndo: !!isLastUndoable }; })
+    };
+  }
+}
+</script>
+</body>
+</html>

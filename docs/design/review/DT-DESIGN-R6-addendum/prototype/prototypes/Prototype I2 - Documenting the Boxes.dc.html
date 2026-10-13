@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>What's actually in the boxes — LEGO Village</title>
+<script>document.documentElement.lang="en"</script>
+<script src="../dt/landing.js"></script>
+<script src="../dt/overlay.js"></script>
+<script src="./image-slot.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../dt/tokens.css">
+<link rel="stylesheet" href="../dt/responsive.css">
+<style>@media (max-width:860px){.i2-split{grid-template-columns:minmax(0,1fr) !important}}</style>
+</helmet>
+<div class="dt-responsive-page" style="max-width:1180px;margin:0 auto;padding:28px 28px 48px;font-family:'Libre Franklin',sans-serif">
+  <header role="banner" style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--dt-ink);padding-bottom:10px;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;min-width:0;flex:1 1 320px">
+      <h1 style="font-family:'Spectral',serif;font-size:19px;font-weight:700;font-style:italic;white-space:nowrap;margin:0">What's actually in the boxes</h1>
+      <div style="font-family:'Azeret Mono',monospace;font-size:11px;color:var(--dt-muted);letter-spacing:0.08em">I-02 · DOCUMENTING · PHONE OR DESK · MOCK READS</div>
+    </div>
+    <nav aria-label="Sheet" style="display:flex;align-items:center;gap:12px">
+      <a href="../Hub.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">← HUB</a>
+      <a href="Prototype I - What We Have.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">I-01 INVENTORY</a>
+      <button onClick="{{ toggleTheme }}" aria-pressed="{{ dark }}" style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn)">{{ themeLabel }}</button>
+    </nav>
+  </header>
+
+  <div style="margin-top:16px;font-size:13.5px;line-height:1.6;max-width:74ch;text-wrap:pretty">I-01 says what we have. This sheet is how it finds out. Take a photo of a box — standing at the shelf with a phone, or dropping a photo in at the desk — and I read what I can off it and <strong>ask you about the rest in plain words</strong>. Everything I read is a guess until you confirm it; everything you say is the record. Nothing is overwritten: a new photo is a new row, with the old one kept.</div>
+
+  <div role="status" aria-live="polite" style="margin-top:14px;display:flex;gap:10px 22px;flex-wrap:wrap;align-items:baseline;border:1.5px solid var(--dt-ink);background:var(--dt-sheet);border-radius:var(--dt-r-fillet);padding:10px 14px;box-shadow:var(--dt-shadow)">
+    <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">DOCUMENTED SO FAR</span>
+    <span style="font-size:13px"><strong>{{ nDocumented }}</strong> things have a photo</span>
+    <span style="font-size:13px"><strong>{{ nWaiting }}</strong> still only exist as words</span>
+    <span style="font-size:13px;color:var(--dt-muted)">{{ statusTail }}</span>
+  </div>
+
+  <div class="i2-split" style="margin-top:16px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start">
+    <section aria-labelledby="h-capture" style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);box-shadow:var(--dt-shadow);padding:16px 18px;display:grid;gap:13px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap">
+        <h2 id="h-capture" style="font-family:'Spectral',serif;font-size:16.5px;font-weight:600;margin:0">Document something now</h2>
+        <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)">{{ kindTag }}</span>
+      </div>
+
+      <div role="group" aria-label="What are you documenting" style="display:flex;gap:7px;flex-wrap:wrap">
+        <sc-for list="{{ kinds }}" as="k" hint-placeholder-count="3">
+          <button onClick="{{ k.pick }}" aria-pressed="{{ k.on }}" title="{{ k.tip }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;border:1.5px {{ k.border }} {{ k.stroke }};border-radius:var(--dt-r-pill);padding:7px 14px;cursor:pointer;background:{{ k.bg }};color:{{ k.fg }}">{{ k.label }}</button>
+        </sc-for>
+      </div>
+      <div style="font-size:12.5px;color:var(--dt-muted);line-height:1.5;text-wrap:pretty">{{ kindBlurb }}</div>
+
+      <label onDrop="{{ dropPhoto }}" onDragOver="{{ overPhoto }}" style="position:relative;display:grid;gap:7px;place-items:center;border:1.5px dashed {{ dropStroke }};border-radius:var(--dt-r-fillet);background:var(--dt-bg);padding:{{ dropPad }};cursor:pointer;text-align:center">
+        <sc-if value="{{ hasMain }}" hint-placeholder-val="{{ false }}">
+          <div role="img" aria-label="The photo you took" style="width:100%;height:190px;border-radius:var(--dt-r-fillet);background-color:var(--dt-grid-mid);background-size:cover;background-position:center;background-image:url({{ mainUrl }})"></div>
+        </sc-if>
+        <span style="font-family:'Libre Franklin';font-size:13px;font-weight:600;color:var(--dt-ink)">{{ dropTitle }}</span>
+        <span style="font-size:11.5px;color:var(--dt-muted);line-height:1.45;max-width:44ch;text-wrap:pretty">{{ dropHint }}</span>
+        <input type="file" accept="image/*" onChange="{{ pickPhoto }}" aria-label="{{ dropTitle }}" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer">
+      </label>
+
+      <sc-if value="{{ reading }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;gap:9px;border:1.5px solid var(--dt-prov);background:var(--dt-prov-bg);border-radius:var(--dt-r-fillet);padding:11px 13px">
+          <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline">
+            <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-prov-deep)">◇ WHAT I THINK I SEE — A GUESS, NOT A RECORD</span>
+            <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-prov-deep)">{{ readConf }}</span>
+          </div>
+          <div style="font-size:14px;line-height:1.45;color:var(--dt-ink);text-wrap:pretty"><strong>{{ readLine }}</strong></div>
+          <div style="font-size:11.5px;color:var(--dt-prov-deep);line-height:1.45;text-wrap:pretty">{{ readWhy }}</div>
+          <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center">
+            <button onClick="{{ confirmRead }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;border-radius:var(--dt-r-pill);padding:8px 15px;cursor:pointer;box-shadow:var(--dt-btn-shadow)">{{ confirmLabel }}</button>
+            <label style="display:flex;gap:7px;align-items:center;font-size:12px;color:var(--dt-ink)">or say what it really is
+              <input type="text" value="{{ manual }}" onChange="{{ setManual }}" placeholder="{{ manualPlaceholder }}" aria-label="Correct what I read" style="font-family:'Azeret Mono',monospace;font-size:12.5px;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:6px 9px;width:150px">
+            </label>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ identified }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;gap:12px;border-top:1px dashed var(--dt-grid-mid);padding-top:12px">
+          <div style="font-family:'Spectral',serif;font-size:16px;font-weight:600;line-height:1.3">{{ subjectLine }}</div>
+          <sc-for list="{{ questions }}" as="q" hint-placeholder-count="3">
+            <div style="display:grid;gap:6px">
+              <div style="font-size:13px;line-height:1.4">{{ q.ask }}<sc-if value="{{ q.guessed }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-prov-deep);margin-left:8px">◇ I GUESSED {{ q.guessLabel }}</span></sc-if></div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <sc-for list="{{ q.options }}" as="o" hint-placeholder-count="3">
+                  <button onClick="{{ o.pick }}" aria-pressed="{{ o.on }}" title="{{ o.tip }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;border:1.5px {{ o.border }} {{ o.stroke }};border-radius:var(--dt-r-pill);padding:6px 13px;cursor:pointer;background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+                </sc-for>
+                <sc-if value="{{ q.freeform }}" hint-placeholder-val="{{ false }}">
+                  <input type="text" value="{{ q.freeVal }}" onChange="{{ q.setFree }}" placeholder="{{ q.freePlaceholder }}" aria-label="{{ q.ask }}" style="font-family:'Libre Franklin';font-size:12.5px;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-pill);padding:6px 12px;width:180px">
+                </sc-if>
+              </div>
+              <sc-if value="{{ q.hasSays }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:11.5px;color:var(--dt-accent-deep);line-height:1.45;text-wrap:pretty">{{ q.says }}</div>
+              </sc-if>
+            </div>
+          </sc-for>
+
+          <div style="display:grid;gap:7px">
+            <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">ONE MORE PHOTO — HOW IT SITS RIGHT NOW (OPTIONAL)</span>
+            <sc-for list="{{ extras }}" as="ph" hint-placeholder-count="0">
+              <div style="display:flex;align-items:center;gap:9px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-bg);padding:5px 8px">
+                <div role="img" aria-label="Thumbnail" style="width:30px;height:30px;border-radius:2px;flex:none;background-color:var(--dt-grid-mid);background-size:cover;background-position:center;background-image:url({{ ph.url }})"></div>
+                <span style="font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 auto;min-width:0">{{ ph.name }}</span>
+                <button onClick="{{ ph.drop }}" aria-label="{{ ph.dropAria }}" style="font-family:'Azeret Mono',monospace;font-size:11px;background:transparent;border:0;color:var(--dt-muted);cursor:pointer;flex:none">✕</button>
+              </div>
+            </sc-for>
+            <label style="position:relative;display:flex;align-items:center;justify-content:center;font-family:'Libre Franklin';font-size:12px;font-weight:600;border:1.5px dashed var(--dt-ink);border-radius:var(--dt-r-fillet);padding:8px 10px;cursor:pointer">{{ extraLabel }}
+              <input type="file" accept="image/*" multiple="{{ true }}" onChange="{{ pickExtra }}" aria-label="Add a photo of how it sits now" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer">
+            </label>
+          </div>
+
+          <div style="font-size:12px;color:var(--dt-accent-deep);line-height:1.5;border-top:1px dashed var(--dt-grid-mid);padding-top:10px;text-wrap:pretty">{{ consequence }}</div>
+
+          <div style="display:flex;gap:11px;align-items:end;flex-wrap:wrap">
+            <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">SIGN IT
+              <input type="text" value="{{ sig }}" onChange="{{ setSig }}" placeholder="jfo" maxlength="5" aria-label="Your initials — signs this record" style="font-family:'Azeret Mono',monospace;font-size:13px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:7px 9px;width:76px;box-sizing:border-box">
+            </label>
+            <button onClick="{{ commit }}" disabled="{{ notReady }}" title="{{ commitTitle }}" style="font-family:'Libre Franklin';font-size:13px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;border-radius:var(--dt-r-pill);padding:9px 18px;cursor:{{ commitCursor }};opacity:{{ commitOpacity }};box-shadow:var(--dt-btn-shadow)">Record it</button>
+            <button onClick="{{ reset }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-pill);padding:8px 15px;cursor:pointer">Start over</button>
+          </div>
+        </div>
+      </sc-if>
+      <div aria-live="polite" style="font-size:11.5px;color:var(--dt-muted);min-height:16px;line-height:1.45;text-wrap:pretty">{{ note }}</div>
+    </section>
+
+    <div style="display:grid;gap:16px">
+      <section aria-labelledby="h-waiting" style="display:grid;gap:9px">
+        <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;border-bottom:1px dashed var(--dt-grid-mid);padding-bottom:5px">
+          <h2 id="h-waiting" style="font-family:'Spectral',serif;font-size:15.5px;font-weight:600;margin:0">Still only words</h2>
+          <span style="font-size:11.5px;color:var(--dt-muted);text-wrap:pretty">In I-01 because someone said so. No photo, so no set facts and no proof of its state.</span>
+        </div>
+        <sc-for list="{{ waiting }}" as="w" hint-placeholder-count="3">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;border:1.5px dashed var(--dt-unres);border-radius:var(--dt-r-fillet);padding:9px 11px">
+            <div style="display:grid;gap:3px;min-width:0">
+              <div style="font-size:13.5px;font-weight:600;line-height:1.3;display:flex;flex-wrap:wrap;column-gap:0.35em;align-items:baseline">
+                <span>{{ w.name }}</span>
+                <sc-if value="{{ w.hasRef }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);font-weight:400"><dc-import name="SetRef" num="{{ w.num }}" kind="set" label="{{ w.num }}" hint-size="auto,1em"></dc-import></span></sc-if>
+                <sc-if value="{{ w.noRef }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);font-weight:400">{{ w.num }}</span></sc-if>
+              </div>
+              <div style="font-size:11.5px;color:var(--dt-muted);line-height:1.45;text-wrap:pretty">{{ w.gap }}</div>
+            </div>
+            <button onClick="{{ w.start }}" aria-label="{{ w.aria }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:transparent;color:var(--dt-accent-deep);border:1.5px solid var(--dt-accent);border-radius:var(--dt-r-pill);padding:6px 12px;cursor:pointer;white-space:nowrap;flex:none">Document it →</button>
+          </div>
+        </sc-for>
+      </section>
+
+      <section aria-labelledby="h-done" style="display:grid;gap:9px">
+        <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;border-bottom:1px dashed var(--dt-grid-mid);padding-bottom:5px">
+          <h2 id="h-done" style="font-family:'Spectral',serif;font-size:15.5px;font-weight:600;margin:0">Documented</h2>
+          <span style="font-size:11.5px;color:var(--dt-muted);text-wrap:pretty">Each row is a photo, a signature and a time. A later photo adds a row; it never replaces one.</span>
+        </div>
+        <sc-for list="{{ records }}" as="r" hint-placeholder-count="3">
+          <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:11px;background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:10px 12px">
+            <div role="img" aria-label="{{ r.thumbAria }}" style="width:58px;height:58px;border-radius:2px;flex:none;background-color:var(--dt-grid-mid);background-size:cover;background-position:center;background-image:{{ r.thumb }};display:grid;place-items:center;font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted);text-align:center">{{ r.thumbText }}</div>
+            <div style="display:grid;gap:4px;min-width:0">
+              <div style="font-size:13.5px;font-weight:600;line-height:1.3;display:flex;flex-wrap:wrap;column-gap:0.35em;align-items:baseline">
+                <sc-if value="{{ r.hasRef }}" hint-placeholder-val="{{ false }}"><dc-import name="SetRef" num="{{ r.refNum }}" kind="set" label="{{ r.refLabel }}" hint-size="auto,1em"></dc-import></sc-if>
+                <span>{{ r.tail }}</span>
+              </div>
+              <div style="font-size:11.5px;color:var(--dt-muted);line-height:1.45;text-wrap:pretty">{{ r.facts }}</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:baseline">
+                <sc-for list="{{ r.chips }}" as="c" hint-placeholder-count="2">
+                  <span style="font-family:'Azeret Mono',monospace;font-size:8.5px;letter-spacing:0.06em;color:{{ c.fg }};border:1px solid {{ c.fg }};border-radius:var(--dt-r-pill);padding:2px 7px;white-space:nowrap">{{ c.label }}</span>
+                </sc-for>
+                <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">{{ r.signed }}</span>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </section>
+    </div>
+  </div>
+
+  <footer style="margin-top:26px;border-top:1px solid var(--dt-grid-mid);padding-top:12px;display:grid;gap:6px;font-size:11.5px;color:var(--dt-muted);line-height:1.5">
+    <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em">SCHEMA THIS SHEET NEEDS</div>
+    <div style="text-wrap:pretty;max-width:96ch"><code>Documentation{subject: set·loose_lot·rebuild_gap, photos[{role: box_front·as_it_sits·detail, uri, taken_at}], read: {claim, confidence, model}, confirmed_by, at, location, box_condition: sealed·bags_sealed·bags_opened·no_box, missing_count, note}</code> — a read is <strong>origin:ai</strong> forever, a confirmation is <strong>origin:operator</strong>, and they are two facts, never merged. Location is free text with suggestions, because shelves get renamed.</div>
+    <div>Fidelity: rough. The set-number read is a mock keyed to the photo you attach — in the app a vision call returns the same {claim, confidence} shape and the same confirm step. Photos live only in this tab; nothing uploads.</div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;paper&quot;,&quot;blueprint&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto'|'paper'|'blueprint'&quot;,&quot;section&quot;:&quot;Sheet&quot;}}">
+class Component extends DCLogic {
+  KINDS = [
+    { k: 'set', label: 'A set in a box', tip: 'A boxed or built set — I try to read its number off the box.',
+      blurb: 'Point at the front of the box so the set number is in frame. I read the number, pull the piece count and inventory from it, and ask you only what a photo cannot tell me: where it lives, and whether it is still sealed.' },
+    { k: 'loose', label: 'A bin of loose parts', tip: 'Parts with no set — a bin, a bag, a drawer.',
+      blurb: 'No set number to read, so I will not pretend. One photo, a name you would actually use, and roughly how much is in there. Sorting it into elements is a different job on a different day — this row just means the village knows the bin exists.' },
+    { k: 'gap', label: "What's missing after a rebuild", tip: 'A set that went back together short a few pieces.',
+      blurb: 'When something is rebuilt and pieces are short, this is where the shortfall lives. Photo of the built model, how many are missing and what they were — the parts list then treats those pieces as needed, not owned.' }
+  ];
+  READS = {
+    set: { claim: 'Set 40776 · Hot Chocolate Stand', conf: '0.86 SURE', why: 'I matched the number printed bottom-left on the box front and the box art. 0.86, not 1.0 — glare across the number is the reason. If I am wrong, the number you type wins and I keep my guess on the record as a wrong guess.' },
+    loose: { claim: 'A bin of mixed parts — mostly white and sand-blue plates', conf: 'NO NUMBER TO READ', why: 'There is no set number on a bin, so there is nothing for me to be confident about. I can see the dominant colours; I cannot tell you what is in there. Name it the way you would say it out loud.' },
+    gap: { claim: 'A built model, 6–10 pieces short around the roof', conf: '0.41 SURE', why: 'I can see gaps in the studs but I cannot count what is not there. Treat this as a hint and type the real number — this is exactly the sort of thing I should not decide for you.' }
+  };
+  PLACES = ['Living room shelf', 'The loft', 'Under the tree', 'Workshop bin', 'Boys’ room'];
+  CONDITION = [
+    { k: 'sealed', label: 'Sealed, never opened', says: 'Every piece is known exactly from the set inventory. C-01 may plan on them — but opening it is your call, not the parts list’s.' },
+    { k: 'bags_sealed', label: 'Box open, bags sealed', says: 'Same certainty as sealed; nothing has wandered off. I-01 can say “in the box, not built” with proof.' },
+    { k: 'bags_opened', label: 'Bags opened', says: 'Pieces may be missing. The parts list keeps counting them as owned until someone says otherwise — worth a “what’s missing” pass later.' },
+    { k: 'no_box', label: 'No box any more', says: 'The set facts still import from the number, but there is no packaging evidence. Fine — just say where the pieces live.' }
+  ];
+  BUILD = [
+    { k: 'standing', label: 'Built and standing', says: 'It occupies its footprint. A-01 can place it; its pieces are spoken for.' },
+    { k: 'apart', label: 'Taken apart', says: 'Pieces are loose. Whether C-01 may raid them is the third axis on I-01 — this photo does not decide it.' },
+    { k: 'boxed', label: 'Still in the box', says: 'Never assembled. Its whole inventory is available to plan with.' }
+  ];
+  AMOUNT = ['A handful', 'A bag', 'A shoebox', 'A crate'];
+  SEED = [
+    { id: 's1', title: 'Set 41843 · Family Christmas Tree', facts: 'Box front + the pieces as they sit in two trays. Taken apart, kept for itself — it goes back up as itself.', chips: [{ label: 'BOX + AS IT SITS', fg: 'var(--dt-pass)' }, { label: 'LIVING ROOM SHELF', fg: 'var(--dt-muted)' }], signed: 'jfo · 09-18', thumbText: '41843', thumb: 'none', thumbAria: 'No photo preview in the mock' },
+    { id: 's2', title: 'A crate of mixed winter plates', facts: 'Named by James. Roughly a crate; no element breakdown and none promised. Sits in the loft with the spare baseplates.', chips: [{ label: 'LOOSE LOT', fg: 'var(--dt-info-deep)' }, { label: 'THE LOFT', fg: 'var(--dt-muted)' }], signed: 'jfo · 09-17', thumbText: 'CRATE', thumb: 'none', thumbAria: 'No photo preview in the mock' }
+  ];
+  WAITING = [
+    { id: 'w1', name: 'Hot Chocolate Stand', num: '40776', gap: 'In the house, in the box — but no photo, so year, piece count and its inventory are all uncached. C-01 cannot offer its pieces to anything.' },
+    { id: 'w2', name: 'Holiday Express Train', num: '10361', gap: 'Approved to buy. Nothing to photograph yet — this row closes itself the day the parcel is documented.' },
+    { id: 'w3', name: 'The bin under the workbench', num: 'NO SET', gap: 'Mentioned twice in chat, never recorded. Until it has a row, the parts list assumes those pieces do not exist.' }
+  ];
+  state = { dark: null, kind: 'set', main: null, confirmed: false, manual: '', place: null, placeFree: '', cond: null, build: null, amount: null, missing: '', sig: '', extras: [], records: [], note: 'Nothing recorded yet. One photo is enough to start.' };
+  componentDidMount() { document.body.classList.toggle('dt-blueprint', this.isDark()); }
+  componentDidUpdate() { document.body.classList.toggle('dt-blueprint', this.isDark()); }
+  isDark() { if (this.state.dark !== null) return this.state.dark; if (this.props.theme === 'blueprint') return true; if (this.props.theme === 'paper') return false; return typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches; }
+  take(file) { if (!file) return; this.setState({ main: { name: file.name, url: URL.createObjectURL(file) }, confirmed: false, note: '◇ Photo attached. What I read from it is a guess until you confirm it.' }); }
+  reset(msg) { this.setState({ main: null, confirmed: false, manual: '', place: null, placeFree: '', cond: null, build: null, amount: null, missing: '', sig: '', extras: [], note: msg || 'Cleared. Nothing was recorded.' }); }
+  titleRef(title) {
+    const m = String(title || '').match(/^(Sets?)\s+(\d{4,6})\s*(.*)$/i);
+    if (!m) return { hasRef: false, refNum: '', refLabel: '', tail: title };
+    return { hasRef: true, refNum: m[2], refLabel: m[1] + ' ' + m[2], tail: m[3] };
+  }
+  renderVals() {
+    const dark = this.isDark(), s = this.state, kind = s.kind, read = this.READS[kind];
+    const subject = s.manual.trim() ? (kind === 'set' ? 'Set ' + s.manual.trim() : s.manual.trim()) : read.claim;
+    const place = s.place === '_other' ? s.placeFree.trim() : s.place;
+    const vals = {
+      dark, themeLabel: dark ? '☀ PAPER' : '☾ BLUEPRINT', toggleTheme: () => this.setState({ dark: !this.isDark() }),
+      note: s.note, nDocumented: this.SEED.length + s.records.length, nWaiting: Math.max(0, this.WAITING.length - s.records.length),
+      statusTail: s.records.length ? s.records.length + ' recorded in this session' : 'I-01 reads this sheet — every row here is one fewer remembered fact',
+      kindTag: kind === 'set' ? 'READING A BOX' : kind === 'loose' ? 'NAMING A BIN' : 'COUNTING A SHORTFALL',
+      kindBlurb: this.KINDS.find(k => k.k === kind).blurb,
+      kinds: this.KINDS.map(k => { const on = k.k === kind; return { label: k.label, tip: k.tip, on,
+        pick: () => this.setState({ kind: k.k, main: null, confirmed: false, manual: '', place: null, cond: null, build: null, amount: null, missing: '', extras: [], note: 'Switched to “' + k.label.toLowerCase() + '”. Nothing carried over.' }),
+        bg: on ? 'var(--dt-ink)' : 'transparent', fg: on ? 'var(--dt-on-ink)' : 'var(--dt-ink)', border: on ? 'solid' : 'dashed', stroke: on ? 'var(--dt-ink)' : 'var(--dt-unres)' }; }),
+      hasMain: !!s.main, mainUrl: s.main ? s.main.url : '', dropPad: s.main ? '12px' : '26px 18px', dropStroke: s.main ? 'var(--dt-ink)' : 'var(--dt-accent)',
+      dropTitle: s.main ? '▢ Retake or choose another photo' : kind === 'set' ? '▢ Photograph the box front' : kind === 'loose' ? '▢ Photograph the bin' : '▢ Photograph the built model',
+      dropHint: s.main ? s.main.name + ' — it stays in this tab; nothing uploads.' : 'On a phone this opens the camera. At the desk, drop a photo here or click to choose one.',
+      pickPhoto: e => { const f = (e.target.files || [])[0]; e.target.value = ''; this.take(f); },
+      dropPhoto: e => { e.preventDefault(); const f = e.dataTransfer && e.dataTransfer.files ? e.dataTransfer.files[0] : null; this.take(f); },
+      overPhoto: e => e.preventDefault(),
+      reading: !!s.main && !s.confirmed, readLine: read.claim, readConf: read.conf, readWhy: read.why,
+      confirmLabel: kind === 'set' ? 'Yes, that’s the set' : kind === 'loose' ? 'Close enough — I’ll name it' : 'Noted — I’ll count it myself',
+      manual: s.manual, setManual: e => this.setState({ manual: e.target.value }),
+      manualPlaceholder: kind === 'set' ? '40776' : kind === 'loose' ? 'winter plates' : 'roof slopes',
+      confirmRead: () => this.setState({ confirmed: true, note: s.manual.trim() ? 'Recorded against your correction. My guess stays on the record as a wrong guess — that is how the reads get better.' : 'Confirmed by you. From here on the claim is yours, not mine.' }),
+      identified: !!s.main && s.confirmed, subjectLine: subject,
+      extras: s.extras.map((x, i) => ({ url: x.url, name: x.name, dropAria: 'Remove ' + x.name, drop: () => this.setState(st => ({ extras: st.extras.filter((_, j) => j !== i) })) })),
+      extraLabel: s.extras.length ? '＋ Add another' : '＋ Add a photo of how it sits now',
+      pickExtra: e => { const fs = Array.from(e.target.files || []); e.target.value = ''; if (!fs.length) return; this.setState(st => ({ extras: st.extras.concat(fs.map(f => ({ name: f.name, url: URL.createObjectURL(f) }))) })); },
+      sig: s.sig, setSig: e => this.setState({ sig: e.target.value }),
+      records: s.records.concat(this.SEED).map(r => Object.assign({}, r, this.titleRef(r.title))),
+      waiting: this.WAITING.map(w => ({ name: w.name, num: w.num, gap: w.gap, aria: 'Start documenting ' + w.name, hasRef: w.num !== 'NO SET', noRef: w.num === 'NO SET',
+        start: () => this.setState({ kind: w.num === 'NO SET' ? 'loose' : 'set', main: null, confirmed: false, manual: w.num === 'NO SET' ? '' : w.num, place: null, cond: null, build: null, extras: [], note: 'Ready for ' + w.name + '. Take the photo and I will check it against ' + (w.num === 'NO SET' ? 'nothing — there is no number to check' : w.num) + '.' }) }))
+    };
+    const pickers = (list, cur, key, guessK) => list.map(o => { const on = cur === o.k; return { label: o.label, tip: o.says || '', on,
+      pick: () => this.setState({ [key]: o.k, note: o.says || 'Noted.' }),
+      bg: on ? 'var(--dt-ink)' : 'transparent', fg: on ? 'var(--dt-on-ink)' : 'var(--dt-ink)', border: on ? 'solid' : guessK === o.k ? 'dashed' : 'dashed', stroke: on ? 'var(--dt-ink)' : guessK === o.k ? 'var(--dt-prov)' : 'var(--dt-unres)' }; });
+    const placeOpts = this.PLACES.map(p => ({ k: p, label: p })).concat([{ k: '_other', label: 'Somewhere else…' }]);
+    const qPlace = { ask: 'Where does it live when nobody is using it?', guessed: false, guessLabel: '',
+      options: placeOpts.map(o => { const on = s.place === o.k; return { label: o.label, tip: 'Free text in the real thing — shelves get renamed.', on, pick: () => this.setState({ place: o.k, note: o.k === '_other' ? 'Type the place in your own words.' : 'Kept as “' + o.label + '”. If that shelf gets renamed later, this row keeps the old name and gains the new one.' }),
+        bg: on ? 'var(--dt-ink)' : 'transparent', fg: on ? 'var(--dt-on-ink)' : 'var(--dt-ink)', border: on ? 'solid' : 'dashed', stroke: on ? 'var(--dt-ink)' : 'var(--dt-unres)' }; }),
+      freeform: s.place === '_other', freeVal: s.placeFree, freePlaceholder: 'behind the sofa', setFree: e => this.setState({ placeFree: e.target.value }),
+      hasSays: !!place, says: place ? 'I-01 will show “' + place + '”, and the next person looking for it does not have to ask you.' : '' };
+    const qs = [];
+    if (kind === 'set') {
+      const bSays = (this.BUILD.find(b => b.k === s.build) || {}).says;
+      qs.push({ ask: 'Is it built right now?', guessed: true, guessLabel: 'STILL IN THE BOX', options: pickers(this.BUILD, s.build, 'build', 'boxed'), freeform: false, hasSays: !!bSays, says: bSays || '' });
+      const cSays = (this.CONDITION.find(c => c.k === s.cond) || {}).says;
+      qs.push({ ask: 'What shape is the box and its bags in?', guessed: true, guessLabel: 'SEALED', options: pickers(this.CONDITION, s.cond, 'cond', 'sealed'), freeform: false, hasSays: !!cSays, says: cSays || '' });
+      qs.push(qPlace);
+    } else if (kind === 'loose') {
+      qs.push({ ask: 'Roughly how much is in there?', guessed: false, guessLabel: '',
+        options: this.AMOUNT.map(a => { const on = s.amount === a; return { label: a, tip: 'Rough on purpose — a real count is a different job.', on, pick: () => this.setState({ amount: a, note: 'Rough size is enough. Nothing downstream plans on a bin until it is sorted.' }),
+          bg: on ? 'var(--dt-ink)' : 'transparent', fg: on ? 'var(--dt-on-ink)' : 'var(--dt-ink)', border: on ? 'solid' : 'dashed', stroke: on ? 'var(--dt-ink)' : 'var(--dt-unres)' }; }),
+        freeform: false, hasSays: !!s.amount, says: s.amount ? 'Recorded as “' + s.amount.toLowerCase() + '”. The parts list will not count a single piece of it — it only knows the bin is there to look in.' : '' });
+      qs.push(qPlace);
+    } else {
+      qs.push({ ask: 'How many pieces came up short, and what were they?', guessed: true, guessLabel: '6–10 AROUND THE ROOF',
+        options: [], freeform: true, freeVal: s.missing, freePlaceholder: '8 · white 1×2 slopes', setFree: e => this.setState({ missing: e.target.value }),
+        hasSays: !!s.missing.trim(), says: s.missing.trim() ? 'C-01 stops counting those as owned and moves them into the gap — they will show up in the next order as “replacing what is missing”, not as new.' : '' });
+      qs.push(qPlace);
+    }
+    vals.questions = qs;
+    const needs = kind === 'set' ? (s.build && s.cond && place) : kind === 'loose' ? (s.amount && place) : (s.missing.trim() && place);
+    const sig = s.sig.trim().toLowerCase(), ready = !!(needs && sig);
+    vals.notReady = !ready; vals.commitCursor = ready ? 'pointer' : 'not-allowed'; vals.commitOpacity = ready ? 1 : 0.45;
+    vals.commitTitle = !needs ? 'Answer the questions above first' : sig ? 'Record it under ' + sig : 'Initials first — a record is signed by whoever made it';
+    vals.consequence = !needs ? 'Answer the few things a photo cannot tell me, and this line will say exactly what the other sheets do with it.'
+      : kind === 'set' ? 'I-01 gains a photographed row for ' + subject + (s.build === 'boxed' ? ', in the box' : s.build === 'apart' ? ', taken apart' : ', standing') + ' at ' + place + '. Set facts import from the number, so the piece count and inventory stop being blank — and C-01 can finally say whether its pieces are free.'
+      : kind === 'loose' ? 'A loose lot appears in I-01 at ' + place + ', roughly ' + (s.amount || '').toLowerCase() + '. Nothing plans on it, but “look in the bin first” becomes a real suggestion instead of a memory.'
+      : 'The shortfall (' + s.missing.trim() + ') is attached to ' + subject + '. C-01 moves those pieces from owned into the gap, and the next order has a line explaining why.';
+    vals.commit = () => { if (!ready) return;
+      const rec = { id: 'r' + Date.now(), title: subject, facts: kind === 'set' ? (this.BUILD.find(b => b.k === s.build) || {}).label + ' · ' + (this.CONDITION.find(c => c.k === s.cond) || {}).label + '. ' + (s.extras.length ? s.extras.length + ' extra photo' + (s.extras.length > 1 ? 's' : '') + ' of how it sits.' : 'Box front only.')
+          : kind === 'loose' ? 'Loose lot, roughly ' + (s.amount || '').toLowerCase() + '. No element breakdown, none promised.'
+          : 'Shortfall: ' + s.missing.trim() + '. Moved from owned into the gap on C-01.',
+        chips: [{ label: kind === 'set' ? 'BOX PHOTO' : kind === 'loose' ? 'LOOSE LOT' : 'REBUILD GAP', fg: 'var(--dt-pass)' }, { label: (place || '').toUpperCase(), fg: 'var(--dt-muted)' }].concat(s.manual.trim() ? [{ label: '◇ MY READ WAS WRONG', fg: 'var(--dt-prov-deep)' }] : [{ label: '◇ READ + CONFIRMED', fg: 'var(--dt-prov-deep)' }]),
+        signed: sig + ' · today', thumbText: s.main ? '' : 'NO PHOTO', thumb: s.main ? 'url(' + s.main.url + ')' : 'none', thumbAria: 'The photo you took of ' + subject };
+      this.setState({ records: [rec].concat(s.records), main: null, confirmed: false, manual: '', place: null, placeFree: '', cond: null, build: null, amount: null, missing: '', extras: [], sig: '',
+        note: '■ Recorded: ' + subject + ', signed ' + sig + ', today. I-01 has it with proof now — and the old remembered line is kept, struck through, not replaced.' });
+    };
+    vals.reset = () => this.reset();
+    return vals;
+  }
+}
+</script>
+</body>
+</html>

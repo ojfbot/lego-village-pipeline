@@ -1,0 +1,684 @@
+{
+  "house_widths": [
+    {
+      "width": 320,
+      "height": 740,
+      "ask": {
+        "bottom": 601.03125,
+        "height": 117.5,
+        "left": 16,
+        "right": 304,
+        "top": 483.53125,
+        "width": 288,
+        "x": 16,
+        "y": 483.53125
+      },
+      "client": 320,
+      "find": {
+        "bottom": 98,
+        "height": 44,
+        "left": 16,
+        "right": 181.1953125,
+        "top": 54,
+        "width": 165.1953125,
+        "x": 16,
+        "y": 54
+      },
+      "header": {
+        "bottom": 112,
+        "height": 112,
+        "left": 0,
+        "right": 320,
+        "top": 0,
+        "width": 320,
+        "x": 0,
+        "y": 0
+      },
+      "poster": {
+        "bottom": 291.52532958984375,
+        "height": 139.52532958984375,
+        "left": 22.3984375,
+        "right": 336.12109375,
+        "top": 152,
+        "width": 313.72265625,
+        "x": 22.3984375,
+        "y": 152
+      },
+      "scroll": 320
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "ask": {
+        "bottom": 712.6640625,
+        "height": 101,
+        "left": 16,
+        "right": 374,
+        "top": 611.6640625,
+        "width": 358,
+        "x": 16,
+        "y": 611.6640625
+      },
+      "client": 390,
+      "find": {
+        "bottom": 98,
+        "height": 44,
+        "left": 16,
+        "right": 251.1953125,
+        "top": 54,
+        "width": 235.1953125,
+        "x": 16,
+        "y": 54
+      },
+      "header": {
+        "bottom": 112,
+        "height": 112,
+        "left": 0,
+        "right": 390,
+        "top": 0,
+        "width": 390,
+        "x": 0,
+        "y": 0
+      },
+      "poster": {
+        "bottom": 320.0431213378906,
+        "height": 168.04312133789062,
+        "left": 27.296875,
+        "right": 409.6510925292969,
+        "top": 152,
+        "width": 382.3542175292969,
+        "x": 27.296875,
+        "y": 152
+      },
+      "scroll": 390
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "ask": {
+        "bottom": 890.9375,
+        "height": 103,
+        "left": 38.3984375,
+        "right": 598.3984375,
+        "top": 787.9375,
+        "width": 560,
+        "x": 38.3984375,
+        "y": 787.9375
+      },
+      "client": 768,
+      "find": {
+        "bottom": 94,
+        "height": 44,
+        "left": 20,
+        "right": 596.015625,
+        "top": 50,
+        "width": 576.015625,
+        "x": 20,
+        "y": 50
+      },
+      "header": {
+        "bottom": 106,
+        "height": 106,
+        "left": 0,
+        "right": 768,
+        "top": 0,
+        "width": 768,
+        "x": 0,
+        "y": 0
+      },
+      "poster": {
+        "bottom": 451.1737365722656,
+        "height": 301.1737365722656,
+        "left": 53.7578125,
+        "right": 806.7011108398438,
+        "top": 150,
+        "width": 752.9432983398438,
+        "x": 53.7578125,
+        "y": 150
+      },
+      "scroll": 768
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "ask": {
+        "bottom": 629.0234375,
+        "height": 103,
+        "left": 51.1953125,
+        "right": 611.1953125,
+        "top": 526.0234375,
+        "width": 560,
+        "x": 51.1953125,
+        "y": 526.0234375
+      },
+      "client": 1024,
+      "find": {
+        "bottom": 65.1953125,
+        "height": 44,
+        "left": 526.3203125,
+        "right": 823.2734375,
+        "top": 21.1953125,
+        "width": 296.953125,
+        "x": 526.3203125,
+        "y": 21.1953125
+      },
+      "header": {
+        "bottom": 86.390625,
+        "height": 86.390625,
+        "left": 0,
+        "right": 1024,
+        "top": 0,
+        "width": 1024,
+        "x": 0,
+        "y": 0
+      },
+      "poster": {
+        "bottom": 451.8031311035156,
+        "height": 321.2484436035156,
+        "left": 50.875,
+        "right": 611.2028198242188,
+        "top": 130.5546875,
+        "width": 560.3278198242188,
+        "x": 50.875,
+        "y": 130.5546875
+      },
+      "scroll": 1024
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "ask": {
+        "bottom": 758.421875,
+        "height": 103,
+        "left": 72,
+        "right": 632,
+        "top": 655.421875,
+        "width": 560,
+        "x": 72,
+        "y": 655.421875
+      },
+      "client": 1440,
+      "find": {
+        "bottom": 65.1953125,
+        "height": 44,
+        "left": 830.1171875,
+        "right": 1230.1171875,
+        "top": 21.1953125,
+        "width": 400,
+        "x": 830.1171875,
+        "y": 21.1953125
+      },
+      "header": {
+        "bottom": 86.390625,
+        "height": 86.390625,
+        "left": 0,
+        "right": 1440,
+        "top": 0,
+        "width": 1440,
+        "x": 0,
+        "y": 0
+      },
+      "poster": {
+        "bottom": 604.7606201171875,
+        "height": 451.7606201171875,
+        "left": 71.6796875,
+        "right": 859.642333984375,
+        "top": 153,
+        "width": 787.962646484375,
+        "x": 71.6796875,
+        "y": 153
+      },
+      "scroll": 1440
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "ask": {
+        "bottom": 256.8515625,
+        "height": 54,
+        "left": 448.203125,
+        "right": 828,
+        "top": 202.8515625,
+        "width": 379.796875,
+        "x": 448.203125,
+        "y": 202.8515625
+      },
+      "client": 844,
+      "find": {
+        "bottom": 54,
+        "height": 44,
+        "left": 389.0625,
+        "right": 676.015625,
+        "top": 10,
+        "width": 286.953125,
+        "x": 389.0625,
+        "y": 10
+      },
+      "header": {
+        "bottom": 64,
+        "height": 64,
+        "left": 0,
+        "right": 844,
+        "top": 0,
+        "width": 844,
+        "x": 0,
+        "y": 0
+      },
+      "poster": {
+        "bottom": 291.16375732421875,
+        "height": 191.16375732421875,
+        "left": 41.875,
+        "right": 503.7085876464844,
+        "top": 100,
+        "width": 461.8335876464844,
+        "x": 41.875,
+        "y": 100
+      },
+      "scroll": 844
+    }
+  ],
+  "dashboard_widths": [
+    {
+      "width": 320,
+      "height": 740,
+      "client": 320,
+      "dialog": {
+        "bottom": 744.2483520507812,
+        "height": 736.2123413085938,
+        "left": 0.8189544677734375,
+        "right": 319.18101501464844,
+        "top": 8.0360107421875,
+        "width": 318.362060546875,
+        "x": 0.8189544677734375,
+        "y": 8.0360107421875
+      },
+      "header": {
+        "bottom": 158.76055908203125,
+        "height": 150.72454833984375,
+        "left": 0.8189544677734375,
+        "right": 319.18101501464844,
+        "top": 8.0360107421875,
+        "width": 318.362060546875,
+        "x": 0.8189544677734375,
+        "y": 8.0360107421875
+      },
+      "iframe": {
+        "bottom": 744.2483520507812,
+        "height": 585.48779296875,
+        "left": 0.8189544677734375,
+        "right": 319.18101501464844,
+        "top": 158.76055908203125,
+        "width": 318.362060546875,
+        "x": 0.8189544677734375,
+        "y": 158.76055908203125
+      },
+      "scroll": 320
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "client": 390,
+      "dialog": {
+        "bottom": 844.5401306152344,
+        "height": 843.4139404296875,
+        "left": 0.1353912353515625,
+        "right": 389.86463928222656,
+        "top": 1.126190185546875,
+        "width": 389.729248046875,
+        "x": 0.1353912353515625,
+        "y": 1.126190185546875
+      },
+      "header": {
+        "bottom": 152.52099609375,
+        "height": 151.39480590820312,
+        "left": 0.1353912353515625,
+        "right": 389.86463928222656,
+        "top": 1.126190185546875,
+        "width": 389.729248046875,
+        "x": 0.1353912353515625,
+        "y": 1.126190185546875
+      },
+      "iframe": {
+        "bottom": 844.5401611328125,
+        "height": 692.0191650390625,
+        "left": 0.1353912353515625,
+        "right": 389.86463928222656,
+        "top": 152.52099609375,
+        "width": 389.729248046875,
+        "x": 0.1353912353515625,
+        "y": 152.52099609375
+      },
+      "scroll": 390
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "client": 718,
+      "dialog": {
+        "bottom": 1000,
+        "height": 976,
+        "left": 24,
+        "right": 744,
+        "top": 24,
+        "width": 720,
+        "x": 24,
+        "y": 24
+      },
+      "header": {
+        "bottom": 192.734375,
+        "height": 167.734375,
+        "left": 25,
+        "right": 743,
+        "top": 25,
+        "width": 718,
+        "x": 25,
+        "y": 25
+      },
+      "iframe": {
+        "bottom": 999,
+        "height": 806.265625,
+        "left": 25,
+        "right": 743,
+        "top": 192.734375,
+        "width": 718,
+        "x": 25,
+        "y": 192.734375
+      },
+      "scroll": 718
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "client": 974,
+      "dialog": {
+        "bottom": 744,
+        "height": 720,
+        "left": 24,
+        "right": 1000,
+        "top": 24,
+        "width": 976,
+        "x": 24,
+        "y": 24
+      },
+      "header": {
+        "bottom": 143.09375,
+        "height": 118.09375,
+        "left": 25,
+        "right": 999,
+        "top": 25,
+        "width": 974,
+        "x": 25,
+        "y": 25
+      },
+      "iframe": {
+        "bottom": 743,
+        "height": 599.90625,
+        "left": 25,
+        "right": 999,
+        "top": 143.09375,
+        "width": 974,
+        "x": 25,
+        "y": 143.09375
+      },
+      "scroll": 974
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "client": 1390,
+      "dialog": {
+        "bottom": 876,
+        "height": 852,
+        "left": 24,
+        "right": 1416,
+        "top": 24,
+        "width": 1392,
+        "x": 24,
+        "y": 24
+      },
+      "header": {
+        "bottom": 143.09375,
+        "height": 118.09375,
+        "left": 25,
+        "right": 1415,
+        "top": 25,
+        "width": 1390,
+        "x": 25,
+        "y": 25
+      },
+      "iframe": {
+        "bottom": 875,
+        "height": 731.90625,
+        "left": 25,
+        "right": 1415,
+        "top": 143.09375,
+        "width": 1390,
+        "x": 25,
+        "y": 143.09375
+      },
+      "scroll": 1390
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "client": 794,
+      "dialog": {
+        "bottom": 366,
+        "height": 342,
+        "left": 24,
+        "right": 820,
+        "top": 24,
+        "width": 796,
+        "x": 24,
+        "y": 24
+      },
+      "header": {
+        "bottom": 120.375,
+        "height": 95.375,
+        "left": 25,
+        "right": 819,
+        "top": 25,
+        "width": 794,
+        "x": 25,
+        "y": 25
+      },
+      "iframe": {
+        "bottom": 365,
+        "height": 244.625,
+        "left": 25,
+        "right": 819,
+        "top": 120.375,
+        "width": 794,
+        "x": 25,
+        "y": 120.375
+      },
+      "scroll": 794
+    }
+  ],
+  "sheets_at_390": [
+    {
+      "path": "prototypes/Prototype B - When the AI Isnt Sure.dc.html",
+      "scroll": 390,
+      "wide": [],
+      "width": 390
+    },
+    {
+      "path": "prototypes/Prototype C - Measurement to Procurement.dc.html",
+      "scroll": 390,
+      "wide": [],
+      "width": 390
+    },
+    {
+      "path": "prototypes/Prototype P - Procurement.dc.html",
+      "scroll": 390,
+      "wide": [],
+      "width": 390
+    },
+    {
+      "path": "prototypes/Prototype I - What We Have.dc.html",
+      "scroll": 390,
+      "wide": [],
+      "width": 390
+    },
+    {
+      "path": "prototypes/Prototype I2 - Documenting the Boxes.dc.html",
+      "scroll": 390,
+      "wide": [],
+      "width": 390
+    },
+    {
+      "path": "prototypes/Prototype I3 - One Set.dc.html",
+      "scroll": 390,
+      "wide": [],
+      "width": 390
+    },
+    {
+      "path": "prototypes/Prototype M - Measure and Check.dc.html",
+      "scroll": 390,
+      "wide": [],
+      "width": 390
+    },
+    {
+      "path": "prototypes/Prototype T - The Queue.dc.html",
+      "scroll": 390,
+      "wide": [],
+      "width": 390
+    },
+    {
+      "path": "prototypes/Prototype R - Bringing Things In.dc.html",
+      "scroll": 390,
+      "wide": [],
+      "width": 390
+    },
+    {
+      "path": "F-01 Workbench Junior.dc.html",
+      "scroll": 390,
+      "wide": [],
+      "width": 390
+    },
+    {
+      "path": "J-01 Journey Map.dc.html",
+      "scroll": 390,
+      "wide": [],
+      "width": 390
+    },
+    {
+      "path": "H-01 Handoff.dc.html",
+      "scroll": 390,
+      "wide": [],
+      "width": 390
+    },
+    {
+      "path": "Typology Identity v2.dc.html",
+      "scroll": 390,
+      "wide": [
+        {
+          "cls": "",
+          "style": "position: fixed; inset: -25%; pointer-events: none; background: radial-gradient(ellipse at 50% 50%,color-mix(in oklab,var(--dt-accent) 16%,transparent) 0%,transparent 52%); opacity"
+        },
+        {
+          "cls": "",
+          "style": "position: fixed; inset: -25%; pointer-events: none; background: radial-gradient(ellipse at 50% 50%,color-mix(in oklab,var(--dt-info) 12%,transparent) 0%,transparent 50%); opacity: "
+        }
+      ],
+      "width": 390
+    }
+  ],
+  "sheets_at_320": [
+    {
+      "path": "Hub.dc.html",
+      "scroll": 320,
+      "wide": [],
+      "width": 320
+    },
+    {
+      "path": "prototypes/Prototype B - When the AI Isnt Sure.dc.html",
+      "scroll": 320,
+      "wide": [],
+      "width": 320
+    },
+    {
+      "path": "prototypes/Prototype C - Measurement to Procurement.dc.html",
+      "scroll": 320,
+      "width": 320
+    },
+    {
+      "path": "prototypes/Prototype P - Procurement.dc.html",
+      "scroll": 320,
+      "wide": [],
+      "width": 320
+    },
+    {
+      "path": "prototypes/Prototype I - What We Have.dc.html",
+      "scroll": 320,
+      "width": 320
+    },
+    {
+      "path": "prototypes/Prototype I2 - Documenting the Boxes.dc.html",
+      "scroll": 320,
+      "width": 320
+    },
+    {
+      "path": "prototypes/Prototype I3 - One Set.dc.html",
+      "scroll": 320,
+      "wide": [],
+      "width": 320
+    },
+    {
+      "path": "prototypes/Prototype M - Measure and Check.dc.html",
+      "scroll": 320,
+      "wide": [],
+      "width": 320
+    },
+    {
+      "path": "prototypes/Prototype T - The Queue.dc.html",
+      "scroll": 320,
+      "wide": [],
+      "width": 320
+    },
+    {
+      "path": "prototypes/Prototype R - Bringing Things In.dc.html",
+      "scroll": 320,
+      "width": 320
+    },
+    {
+      "path": "F-01 Workbench Junior.dc.html",
+      "scroll": 320,
+      "width": 320
+    },
+    {
+      "path": "J-01 Journey Map.dc.html",
+      "scroll": 320,
+      "width": 320
+    },
+    {
+      "path": "H-01 Handoff.dc.html",
+      "scroll": 320,
+      "width": 320
+    },
+    {
+      "path": "Typology Identity v2.dc.html",
+      "scroll": 320,
+      "width": 320
+    }
+  ],
+  "interactions": {
+    "finder_enter_opened_real_sheet": true,
+    "back_then_scroll_resumed_tour": true,
+    "scroll_at_end_resumed_tour": true,
+    "drafting_table_default_flight_block": 1,
+    "clicked_other_blocks_forwarded": [
+      5,
+      14,
+      22
+    ],
+    "workbench_expand_retained_cards": true,
+    "ask_bar_inert_during_dialog": true
+  },
+  "final_mobile_header": {
+    "viewport_width": 390,
+    "height": 108,
+    "tabs_width": 366,
+    "subgrid": true
+  }
+}

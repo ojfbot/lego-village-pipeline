@@ -1,0 +1,11 @@
+{
+  "compared_to": "Reviewed local 4200 prototype",
+  "changed_files": [
+    ".gitignore",
+    "README.md",
+    "check-chapters.mjs",
+    "integration-receipt.json",
+    "package.json"
+  ],
+  "reason": "Workspace scripts/name, portable README/provenance paths, build artifact exclusion, and chapter gate. Reviewed UI/model source bytes remain unchanged."
+}

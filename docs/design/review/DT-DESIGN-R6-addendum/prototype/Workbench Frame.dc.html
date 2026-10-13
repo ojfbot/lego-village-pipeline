@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="dt/tokens.css">
+<link rel="stylesheet" href="dt/responsive.css">
+<style>
+html{--vt-dur:.5s;--vt-ease:cubic-bezier(0.4,0.14,0.3,1);--vt-fade:.2s;--ease-std:cubic-bezier(0.2,0,0.38,0.9);--ease-in:cubic-bezier(0,0,0.38,0.9)}
+body{margin:0;background-color:var(--dt-bg);background-image:linear-gradient(var(--dt-grid) 1px,transparent 1px),linear-gradient(90deg,var(--dt-grid) 1px,transparent 1px);background-size:24px 24px;color:var(--dt-ink);font-family:'Libre Franklin',sans-serif;overflow:hidden}
+a{color:var(--dt-accent-deep)}a:hover{color:var(--dt-accent)}
+input{font:inherit;color:inherit}
+::view-transition-group(*){animation-duration:var(--vt-dur);animation-timing-function:var(--vt-ease)}
+::view-transition-old(*),::view-transition-new(*){animation-duration:var(--vt-fade);animation-timing-function:var(--ease-std)}
+::view-transition-old(root),::view-transition-new(root){animation:none}
+@keyframes dt-draw{from{stroke-dashoffset:1;opacity:1}60%{stroke-dashoffset:0;opacity:1}to{stroke-dashoffset:0;opacity:0}}
+@keyframes dt-pulse-a{0%{outline:3px solid var(--dt-accent);outline-offset:0}100%{outline:3px solid transparent;outline-offset:16px}}
+@keyframes dt-pulse-b{0%{outline:3px solid var(--dt-accent);outline-offset:0}100%{outline:3px solid transparent;outline-offset:16px}}
+@keyframes dt-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes dt-breathe{0%{transform:scale(1)}40%{transform:scale(1.025)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important}::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none}}
+</style>
+</helmet>
+<div class="dt-frame-shell" style="height:100vh;box-sizing:border-box;padding:12px 14px 12px;display:grid;grid-template-columns:{{ shellCols }};grid-template-rows:{{ shellRows }};gap:12px">
+
+  <header class="dt-frame-header" style="grid-column:1 / -1;display:grid;grid-template-columns:{{ headerCols }};align-items:center;gap:10px 16px;border-bottom:2px solid var(--dt-ink);padding:4px 4px 10px;view-transition-name:wf-header">
+    <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:'Spectral',serif;font-size:20px;font-weight:700;font-style:italic;line-height:1.1;white-space:nowrap">LEGO Village — Planner</span><span style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.08em;color:var(--dt-muted);white-space:nowrap">FRAME STUDY · MOCK</span><a href="Typology Identity v2.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">ETHOS BOARD →</a></div>
+    <div style="font-size:13px;line-height:1.4;color:{{ headlineColor }};text-wrap:pretty;min-width:0;grid-column:{{ headlineCol }};grid-row:{{ headlineRow }};animation:{{ headlineAnim }}">{{ headline }}</div>
+    <div style="display:flex;gap:6px;align-items:center;justify-self:end">
+      <button onClick="{{ toggleLeft }}" aria-label="{{ leftAria }}" title="{{ leftAria }}" style="font-family:'Azeret Mono',monospace;font-size:10.5px;letter-spacing:0.06em;background:transparent;color:var(--dt-ink);border:1px solid var(--dt-ink);border-radius:var(--dt-r-btn);padding:5px 9px;cursor:pointer;white-space:nowrap" style-hover="background:var(--dt-ink);color:var(--dt-on-ink)">{{ leftBtn }}</button>
+      <button onClick="{{ toggleRight }}" aria-label="{{ rightAria }}" title="{{ rightAria }}" style="font-family:'Azeret Mono',monospace;font-size:10.5px;letter-spacing:0.06em;background:transparent;color:var(--dt-ink);border:1px solid var(--dt-ink);border-radius:var(--dt-r-btn);padding:5px 9px;cursor:pointer;white-space:nowrap" style-hover="background:var(--dt-ink);color:var(--dt-on-ink)">{{ rightBtn }}</button>
+      <button onClick="{{ reset }}" title="Put the demo back to the start" style="font-family:'Azeret Mono',monospace;font-size:10.5px;letter-spacing:0.06em;background:transparent;color:var(--dt-muted);border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-btn);padding:5px 9px;cursor:pointer;white-space:nowrap" style-hover="color:var(--dt-ink);border-color:var(--dt-ink)">↺ RESET</button>
+    </div>
+  </header>
+
+  <sc-if value="{{ hasLeft }}" hint-placeholder-val="{{ true }}">
+  <aside class="dt-frame-rail" ref="{{ leftRef }}" style="display:grid;grid-template-rows:auto minmax(0,1fr);gap:10px;min-height:0;min-width:0;border-right:1px solid var(--dt-grid-mid);padding:4px 12px 4px 2px;view-transition-name:wf-left;overflow:hidden">
+    <div style="display:flex;align-items:center;gap:8px;min-width:0"><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);padding:2px 6px;border-radius:var(--dt-r-fillet);flex:none">T-01</span><sc-if value="{{ leftOpen }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">THE QUEUE · WAITING</span></sc-if><sc-if value="{{ queueDot }}" hint-placeholder-val="{{ false }}"><span title="Something here changed" style="width:9px;height:9px;border-radius:50%;background:var(--dt-accent);flex:none;margin-left:auto"></span></sc-if></div>
+    <div style="display:grid;gap:8px;align-content:start;min-height:0;overflow:auto">
+      <sc-for list="{{ queue }}" as="q" hint-placeholder-count="3">
+        <div ref="{{ q.ref }}" onMouseEnter="{{ q.hover }}" onMouseLeave="{{ hoverOff }}" style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:start;padding:{{ q.pad }};border:1px solid {{ q.border }};border-radius:var(--dt-r-fillet);background:{{ q.bg }};animation:{{ q.anim }};min-width:0">
+          <span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:{{ q.numColor }};line-height:1.5">{{ q.n }}</span>
+          <sc-if value="{{ leftOpen }}" hint-placeholder-val="{{ true }}">
+            <div style="display:grid;gap:3px;min-width:0">
+              <div style="font-size:12.5px;font-weight:600;line-height:1.35;text-decoration:{{ q.strike }};color:{{ q.titleColor }}">{{ q.title }}</div>
+              <div style="font-size:11px;line-height:1.4;color:{{ q.subColor }}">{{ q.sub }}</div>
+              <sc-if value="{{ q.changed }}" hint-placeholder-val="{{ false }}"><button onClick="{{ q.ack }}" style="justify-self:start;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-on-ink);background:var(--dt-accent);border:0;border-radius:var(--dt-r-fillet);padding:2px 6px;cursor:pointer;animation:dt-in .3s var(--ease-in) both">CHANGED BY M-01 · OK</button></sc-if>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </aside>
+  </sc-if>
+
+  <main class="dt-frame-board" style="display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:auto minmax(0,1fr) auto auto {{ row2 }} auto;gap:12px;min-height:0;min-width:0">
+    <sc-for list="{{ cards }}" as="c" hint-placeholder-count="4">
+      <section class="dt-frame-card" data-demoted="{{ c.demoted }}" ref="{{ c.ref }}" onMouseEnter="{{ c.hover }}" onMouseLeave="{{ hoverOff }}" aria-label="{{ c.title }}" style="grid-column:{{ c.col }};grid-row:{{ c.row }};display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:subgrid;gap:10px;view-transition-name:{{ c.vt }};min-height:0;min-width:0;overflow:hidden;background-color:var(--dt-sheet);background-image:{{ c.hatch }};border:{{ c.border }};border-radius:var(--dt-r-card);box-shadow:{{ c.shadow }};padding:12px 14px;animation:{{ c.anim }}">
+        <div style="display:flex;align-items:center;gap:8px;min-width:0">
+          <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);padding:2px 6px;border-radius:var(--dt-r-fillet);flex:none">{{ c.code }}</span>
+          <span style="font-family:'Spectral',serif;font-size:{{ c.titleSize }};font-weight:600;line-height:1.15;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ c.title }}</span>
+          <sc-if value="{{ c.chipInline }}" hint-placeholder-val="{{ false }}"><button onClick="{{ c.ack }}" title="Acknowledge: you’ve seen this change" style="flex:none;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-on-ink);background:var(--dt-accent);border:0;border-radius:var(--dt-r-fillet);padding:3px 7px;cursor:pointer;white-space:nowrap;animation:dt-in .3s var(--ease-in) both">{{ c.chip }}</button></sc-if>
+          <button onClick="{{ c.toggle }}" aria-label="{{ c.toggleAria }}" style="margin-left:auto;flex:none;font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.06em;background:transparent;color:var(--dt-ink);border:1px solid var(--dt-ink);border-radius:var(--dt-r-btn);padding:3px 8px;cursor:pointer;white-space:nowrap" style-hover="background:var(--dt-ink);color:var(--dt-on-ink)">{{ c.toggleLabel }}</button>
+        </div>
+
+        <div style="min-height:0;min-width:0;overflow:auto;display:grid;grid-template-columns:minmax(0,1fr);align-content:start;gap:8px;container-type:inline-size">
+          <sc-if value="{{ c.chipBelow }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:8px;align-items:baseline;min-width:0"><button onClick="{{ c.ack }}" style="flex:none;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-on-ink);background:var(--dt-accent);border:0;border-radius:var(--dt-r-fillet);padding:3px 7px;cursor:pointer;white-space:nowrap;animation:dt-in .3s var(--ease-in) both">CHANGED BY M-01 · OK</button><span style="font-size:11px;color:var(--dt-accent-deep);line-height:1.35;min-width:0">{{ c.changeNote }}</span></div></sc-if>
+          <sc-if value="{{ c.showA }}" hint-placeholder-val="{{ true }}">
+            <div style="font-size:clamp(11px,2.2cqi,13px);line-height:1.45;color:var(--dt-muted)">Six checks against the measured tree. Each row says what it rests on.</div>
+            <div style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 10px;font-size:clamp(10.5px,2cqi,12.5px);align-items:baseline">
+              <sc-for list="{{ checks }}" as="k" hint-placeholder-count="6">
+                <span style="font-family:'Azeret Mono',monospace;font-weight:600;color:{{ k.color }}">{{ k.mark }}</span>
+                <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-decoration:{{ k.strike }}">{{ k.name }}</span>
+                <span style="font-family:'Azeret Mono',monospace;font-size:0.9em;color:{{ k.color }};white-space:nowrap;animation:{{ k.anim }}">{{ k.val }}</span>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ c.showM }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:clamp(11px,2.2cqi,13px);line-height:1.45;color:var(--dt-muted)">Every number the plan leans on, with how we know it. Measure a real thing and type what the tape says.</div>
+            <div style="display:grid;gap:6px">
+              <sc-for list="{{ measures }}" as="m" hint-placeholder-count="3">
+                <div style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 10px;border:1px solid {{ m.border }};border-radius:var(--dt-r-fillet);background:{{ m.bg }}">
+                  <span style="font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;color:{{ m.color }}">{{ m.mark }}</span>
+                  <div style="display:grid;gap:2px;min-width:0"><span style="font-size:12.5px;font-weight:600;line-height:1.3">{{ m.name }}</span><span style="font-size:11px;color:var(--dt-muted);line-height:1.35">{{ m.sub }}</span></div>
+                  <span style="font-family:'Azeret Mono',monospace;font-size:12px;color:{{ m.color }};white-space:nowrap">{{ m.val }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ showSign }}" hint-placeholder-val="{{ true }}">
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:end;padding:10px 12px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background-color:var(--dt-bg);background-image:var(--dt-hatch-tint)">
+                <label style="display:grid;gap:3px;min-width:0"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">RAILHEAD HEIGHT ABOVE MODULE TOP · PLATES</span><input type="number" value="{{ plates }}" onChange="{{ setPlates }}" min="0" max="12" aria-label="Railhead height in plates" style="font-family:'Azeret Mono',monospace;font-size:15px;padding:6px 8px;border:1px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-sheet);width:100%;box-sizing:border-box"></label>
+                <label style="display:grid;gap:3px"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">INITIALS</span><input type="text" value="{{ sig }}" onChange="{{ setSig }}" placeholder="jfo" maxLength="5" aria-label="Your initials" style="font-family:'Azeret Mono',monospace;font-size:15px;padding:6px 8px;border:1px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-sheet);width:64px"></label>
+                <button onClick="{{ sign }}" disabled="{{ cantSign }}" title="{{ signTitle }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:0;border-radius:var(--dt-r-btn);padding:9px 14px;cursor:pointer;box-shadow:var(--dt-btn-shadow);white-space:nowrap;opacity:{{ signOpacity }}" style-hover="background:var(--dt-accent-deep)">Sign it</button>
+              </div>
+              <div style="font-size:11px;color:var(--dt-muted);line-height:1.4">Signing this will re-run the checks that wait on it: <b>A-01 grade &amp; banking</b>, <b>C-01 flush check</b>, and unblock <b>queue #3</b>. You'll see each one change.</div>
+            </sc-if>
+          </sc-if>
+          <sc-if value="{{ c.showC }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:clamp(11px,2.2cqi,13px);line-height:1.45;color:var(--dt-muted)">What the train brings, what to buy. Three checks must pass before you can initial it.</div>
+            <div style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 10px;font-size:clamp(10.5px,2cqi,12.5px);align-items:baseline">
+              <sc-for list="{{ cChecks }}" as="k" hint-placeholder-count="3">
+                <span style="font-family:'Azeret Mono',monospace;font-weight:600;color:{{ k.color }}">{{ k.mark }}</span>
+                <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ k.name }}</span>
+                <span style="font-family:'Azeret Mono',monospace;font-size:0.9em;color:{{ k.color }};white-space:nowrap;animation:{{ k.anim }}">{{ k.val }}</span>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ c.showI }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:clamp(11px,2.2cqi,13px);line-height:1.45;color:var(--dt-muted)">Every set the village can draw on. Nothing here waits on the railhead, so nothing here will change.</div>
+            <div style="display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:4px 10px;font-size:clamp(10.5px,2cqi,12.5px);align-items:baseline">
+              <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">SET</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">HAVE</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">BUILT</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">FREE</span>
+              <sc-for list="{{ sets }}" as="s" hint-placeholder-count="3">
+                <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ s.name }}</span><span style="font-family:'Azeret Mono',monospace">{{ s.have }}</span><span style="font-family:'Azeret Mono',monospace">{{ s.built }}</span><span style="font-family:'Azeret Mono',monospace">{{ s.free }}</span>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline;border-top:1px dashed var(--dt-grid-mid);padding-top:8px;font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.04em;min-width:0">
+          <span style="color:var(--dt-muted);flex:none">STATUS</span>
+          <sc-if value="{{ c.hasOld }}" hint-placeholder-val="{{ false }}"><span title="{{ c.old }}" style="color:var(--dt-muted);text-decoration:line-through;line-height:1.4">{{ c.oldShown }}</span><span style="color:var(--dt-accent);flex:none">→</span></sc-if>
+          <span title="{{ c.status }}" style="color:{{ c.statusColor }};font-weight:600;min-width:0;line-height:1.4;animation:{{ c.statusAnim }}">{{ c.status }}</span>
+        </div>
+      </section>
+    </sc-for>
+  </main>
+
+  <sc-if value="{{ hasRight }}" hint-placeholder-val="{{ true }}">
+  <aside class="dt-frame-rail" ref="{{ rightRef }}" style="display:grid;grid-template-rows:auto minmax(0,1fr);gap:10px;min-height:0;min-width:0;border-left:1px solid var(--dt-grid-mid);padding:4px 2px 4px 12px;view-transition-name:wf-right;overflow:hidden;animation:{{ rightAnim }}">
+    <div style="display:flex;align-items:center;gap:8px;min-width:0"><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);padding:2px 6px;border-radius:var(--dt-r-fillet);flex:none">B-01</span><sc-if value="{{ rightOpen }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">THE TRAIL · SETTLED</span></sc-if><sc-if value="{{ trailDot }}" hint-placeholder-val="{{ false }}"><span title="A new entry" style="width:9px;height:9px;border-radius:50%;background:var(--dt-accent);flex:none;margin-left:auto"></span></sc-if></div>
+    <sc-if value="{{ rightOpen }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;gap:8px;align-content:start;min-height:0;overflow:auto">
+        <div style="font-size:11.5px;line-height:1.4;color:var(--dt-muted)">Every value someone settled, newest first, with how it was settled.</div>
+        <sc-for list="{{ trail }}" as="e" hint-placeholder-count="3">
+          <div style="display:grid;gap:3px;padding:8px 10px;border:1.5px {{ e.borderStyle }} {{ e.border }};border-radius:var(--dt-r-fillet);background:{{ e.bg }};animation:{{ e.anim }}">
+            <div style="display:flex;justify-content:space-between;gap:8px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.06em;color:var(--dt-muted)"><span>{{ e.when }}</span><span style="color:{{ e.color }}">{{ e.how }}</span></div>
+            <div style="font-size:12px;font-weight:600;line-height:1.3">{{ e.what }}</div>
+            <div style="font-size:11px;color:var(--dt-muted);line-height:1.35">{{ e.by }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+  </aside>
+  </sc-if>
+
+  <sc-if value="{{ hasFooter }}" hint-placeholder-val="{{ true }}">
+  <footer style="grid-column:1 / -1;display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start;border-top:1px dashed var(--dt-grid-mid);padding:9px 4px 0;view-transition-name:wf-footer;min-height:50px">
+    <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted);padding-top:3px">LEDGER</span>
+    <div style="display:grid;gap:4px;min-width:0">
+      <sc-for list="{{ ledger }}" as="l" hint-placeholder-count="2">
+        <div style="display:flex;gap:10px;align-items:baseline;font-size:12px;line-height:1.4;color:{{ l.color }};animation:{{ l.anim }};min-width:0"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);flex:none">{{ l.when }}</span><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ l.text }}</span></div>
+      </sc-for>
+    </div>
+  </footer>
+  </sc-if>
+
+  <svg aria-hidden="true" style="position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:40;overflow:visible">
+    <sc-for list="{{ paths }}" as="p" hint-placeholder-count="0">
+      <path d="{{ p.d }}" pathLength="1" fill="none" stroke="var(--dt-accent)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="1" style="stroke-dashoffset:{{ p.offset }};animation:{{ p.anim }}"></path>
+      <circle cx="{{ p.x2 }}" cy="{{ p.y2 }}" r="5" fill="var(--dt-accent)" style="opacity:{{ p.dotOpacity }};animation:{{ p.dotAnim }}"></circle>
+    </sc-for>
+  </svg>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;blueprint&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Theme&quot;},&quot;motion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;expressive&quot;,&quot;options&quot;:[&quot;expressive&quot;,&quot;productive&quot;,&quot;off&quot;],&quot;tsType&quot;:&quot;'expressive'|'productive'|'off'&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;leftBar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Bars on this page&quot;},&quot;rightBar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Bars on this page&quot;},&quot;footerBar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Bars on this page&quot;}}">
+class Component extends DCLogic {
+  state = { left: true, right: true, focus: null, signed: false, plates: 3, sig: '', changed: {}, paths: [], hover: null, pulse: 0, ledger: [{ when: '11:12', text: 'A-01 fit ran against the measured tree: 4 block, 1 pass, 1 not run (grade & banking waits on the railhead height).', color: 'var(--dt-muted)' }], headline: 'Three things waiting. One of them, the railhead height, is holding up two others.' };
+  refs = {};
+  ref(id) { return this.refs[id] || (this.refs[id] = React.createRef()); }
+  componentDidMount() {
+    this.theme();
+    this.onRes = () => { if (innerWidth < 1100 && (this.state.left || this.state.right)) this.setState({ left: false, right: false }); this.forceUpdate(); };
+    addEventListener('resize', this.onRes); this.onRes();
+    this.onKey = (e) => { if (e.key === 'Escape' && this.state.focus) this.swap({ focus: null }); }; addEventListener('keydown', this.onKey);
+  }
+  componentWillUnmount() { removeEventListener('resize', this.onRes); removeEventListener('keydown', this.onKey); this.timers && this.timers.forEach(clearTimeout); }
+  componentDidUpdate() { this.theme(); }
+  theme() { document.body.classList.toggle('dt-blueprint', !!this.props.blueprint); const m = this.props.motion ?? 'expressive'; const d = { expressive: ['.5s', 'cubic-bezier(0.4,0.14,0.3,1)'], productive: ['.28s', 'cubic-bezier(0.2,0,0.38,0.9)'], off: ['0s', 'linear'] }[m] || ['.5s', 'cubic-bezier(0.4,0.14,0.3,1)']; const r = document.documentElement.style; r.setProperty('--vt-dur', d[0]); r.setProperty('--vt-ease', d[1]); }
+  swap(patch) {
+    const run = () => new Promise(res => this.setState(patch, res));
+    const ok = document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches && (this.props.motion ?? 'expressive') !== 'off';
+    ok ? document.startViewTransition(run) : run();
+  }
+  later(fn, ms) { this.timers = this.timers || []; this.timers.push(setTimeout(fn, ms)); }
+  // Connector from element a to element b, in viewport coords. Side chosen by relative position.
+  path(a, b) {
+    if (!a || !b) return null;
+    const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+    const horiz = Math.abs(rb.left + rb.width / 2 - (ra.left + ra.width / 2)) > Math.abs(rb.top + rb.height / 2 - (ra.top + ra.height / 2));
+    let x1, y1, x2, y2;
+    if (horiz) { const toRight = rb.left > ra.left; x1 = toRight ? ra.right : ra.left; y1 = ra.top + ra.height / 2; x2 = toRight ? rb.left : rb.right; y2 = rb.top + rb.height / 2; const mx = (x1 + x2) / 2; return { d: `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`, x2, y2 }; }
+    const down = rb.top > ra.top; x1 = ra.left + ra.width / 2; y1 = down ? ra.bottom : ra.top; x2 = rb.left + rb.width / 2; y2 = down ? rb.top : rb.bottom; const my = (y1 + y2) / 2; return { d: `M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`, x2, y2 };
+  }
+  sign() {
+    if (this.state.signed || !this.state.sig.trim()) return;
+    const when = '11:42', from = this.ref('M').current;
+    const targets = ['A', 'C', 'q3', 'right'];
+    // Beat 1 (0 ms): the source row flips to measured. Beat 2 (120 ms): connectors draw toward everything that depends on it.
+    this.setState({ signed: true, headline: 'You signed the railhead height. Watch: it re-runs two checks and frees one task.' });
+    this.later(() => {
+      const paths = targets.map(t => this.path(from, this.ref(t).current)).filter(Boolean).map((p, i) => Object.assign(p, { offset: 1, anim: `dt-draw 2.2s var(--ease-std) ${i * 90}ms both`, dotOpacity: 0, dotAnim: `dt-in .3s var(--ease-in) ${700 + i * 90}ms both` }));
+      this.setState({ paths });
+    }, 120);
+    // Beat 3 (520 ms): the targets change, pulse once, and wear a CHANGED chip until you acknowledge it.
+    this.later(() => this.setState(s => ({ pulse: s.pulse + 1, changed: { A: 'Grade & banking: NOT RUN → PASS', C: 'Flush check: NOT RUN → PASS', q3: 'Was waiting on #1. Now ready.', trail: '+1 entry' } })), 520);
+    // Beat 4 (900 ms): the ledger says, in words, what just happened.
+    this.later(() => this.setState(s => ({ ledger: [{ when, text: `You signed railhead height = ${s.plates} plates (M-01). Changed: A-01 fit (grade & banking now PASS) · C-01 parts (flush check now PASS) · Queue #3 unblocked · Trail +1.`, color: 'var(--dt-ink)', anim: 'dt-in .4s var(--ease-in) both' }].concat(s.ledger) })), 900);
+    this.later(() => this.setState({ paths: [] }), 2800);
+  }
+  ack(id) { this.setState(s => { const c = Object.assign({}, s.changed); delete c[id]; const left = Object.keys(c).length; return { changed: c, headline: left ? s.headline : 'All caught up. The parts list is one initial away from buying.' }; }); }
+  hoverPaths(id) {
+    // Hovering a changed thing draws the seam back to its cause (Sachs: show the seam).
+    const from = this.ref('M').current, to = this.ref(id).current; if (!from || !to) return this.setState({ paths: [], hover: null });
+    const p = this.path(to, from); if (!p) return;
+    this.setState({ hover: id, paths: [Object.assign(p, { offset: 0, anim: 'none', dotOpacity: 1, dotAnim: 'none' })] });
+  }
+  renderVals() {
+    const S = this.state, acc = 'var(--dt-accent)', pulse = S.pulse % 2 ? 'dt-pulse-a' : 'dt-pulse-b';
+    const pulseOn = (id) => S.changed[id] ? `${pulse} 1.1s var(--ease-std) 2, dt-breathe .9s var(--ease-std) 1` : 'none';
+    const focus = S.focus;
+    const defs = [
+      { id: 'A', code: 'A-01', title: 'Layout canvas: does it fit?' }, { id: 'M', code: 'M-01', title: 'Measure and check' },
+      { id: 'C', code: 'C-01', title: 'The railbed parts list' }, { id: 'I', code: 'I-01', title: 'What we have' }
+    ];
+    const layout = { A: ['1 / span 7', '1 / span 3'], M: ['8 / span 5', '1 / span 3'], C: ['1 / span 6', '4 / span 3'], I: ['7 / span 6', '4 / span 3'] };
+    let slot = 0;
+    const statusOf = {
+      A: S.signed ? { old: '▲ 4 BLOCK · 1 PASS · 1 NOT RUN', status: '▲ 4 BLOCK · 2 PASS', color: 'var(--dt-block-deep)' } : { status: '▲ 4 BLOCK · 1 PASS · 1 NOT RUN', color: 'var(--dt-block-deep)' },
+      M: S.signed ? { old: '○ 1 UNKNOWN · 2 MEASURED', status: '■ 3 MEASURED', color: 'var(--dt-pass)' } : { status: '○ 1 UNKNOWN · 2 MEASURED', color: 'var(--dt-unres-ink)' },
+      C: S.signed ? { old: '3 NOT RUN', status: '2 NOT RUN · 1 PASS', color: 'var(--dt-unres-ink)' } : { status: '3 NOT RUN', color: 'var(--dt-unres-ink)' },
+      I: { status: '28 SETS · 11 BUILT · 6 FREE', color: 'var(--dt-muted)' }
+    };
+    const cards = defs.map(d => {
+      let col = layout[d.id][0], row = layout[d.id][1];
+      if (focus) { if (focus === d.id) { col = '1 / -1'; row = '1 / span 3'; } else { col = (1 + 4 * slot) + ' / span 4'; row = '4 / span 3'; slot++; } }
+      const chrome = {
+        A: { hatch: 'var(--dt-hatch-card)', border: '1px solid var(--dt-ink)', shadow: 'var(--dt-shadow)' },
+        M: S.signed ? { hatch: 'var(--dt-hatch-card)', border: '1px solid var(--dt-ink)', shadow: 'var(--dt-shadow)' } : { hatch: 'none', border: '1.5px dashed var(--dt-unres)', shadow: 'none' },
+        C: { hatch: 'var(--dt-hatch-card)', border: '1px solid var(--dt-ink)', shadow: 'var(--dt-shadow)' },
+        I: { hatch: 'none', border: '1px solid var(--dt-grid-mid)', shadow: 'none' }
+      }[d.id];
+      const st = statusOf[d.id], isFocus = focus === d.id, demoted = !!focus && !isFocus, narrowCard = demoted || (typeof innerWidth === 'number' && innerWidth < 1100);
+      const show = !demoted, changed = !!S.changed[d.id];
+      return { demoted, id: d.id, code: d.code, title: d.title, col, row, vt: 'wf-' + d.id, ref: this.ref(d.id), hatch: chrome.hatch, border: chrome.border, shadow: chrome.shadow,
+        showA: show && d.id === 'A', showM: show && d.id === 'M', showC: show && d.id === 'C', showI: show && d.id === 'I',
+        chipInline: changed && !narrowCard, chipBelow: changed && narrowCard, changeNote: S.changed[d.id] || '',
+        oldShown: demoted ? 'was' : (st.old || ''),
+        changed: !!S.changed[d.id], ack: (e) => { e.stopPropagation(); this.ack(d.id); }, chip: narrowCard ? 'CHANGED · OK' : 'CHANGED BY M-01 · OK', titleSize: isFocus ? '20px' : (narrowCard ? '14px' : '17px'),
+        hover: () => { if (S.changed[d.id]) this.hoverPaths(d.id); }, anim: pulseOn(d.id),
+        toggle: () => this.swap({ focus: isFocus ? null : d.id }), toggleLabel: isFocus ? '✕ BACK' : 'OPEN', toggleAria: isFocus ? 'Collapse ' + d.title : 'Expand ' + d.title,
+        hasOld: !!st.old, old: st.old || '', status: st.status, statusColor: st.color, statusAnim: st.old ? 'dt-in .4s var(--ease-in) both' : 'none' };
+    });
+    const ck = (mark, name, val, color, extra) => Object.assign({ mark, name, val, color, strike: 'none', anim: 'none' }, extra || {});
+    const checks = [
+      ck('▲', 'Ring fits the table', 'BLOCK', 'var(--dt-block-deep)'), ck('▲', 'Nothing under the base', 'BLOCK', 'var(--dt-block-deep)'),
+      ck('▲', '≤ 10 bricks under the branches', 'BLOCK', 'var(--dt-block-deep)'), ck('▲', 'Right-of-way clear', 'BLOCK', 'var(--dt-block-deep)'),
+      ck('■', "Sections' track meets", 'PASS', 'var(--dt-pass)'),
+      S.signed ? ck('■', 'Grade and banking', 'PASS · 3 plates', 'var(--dt-pass)', { anim: 'dt-in .4s var(--ease-in) both' }) : ck('○', 'Grade and banking', 'NOT RUN · waits on M-01', 'var(--dt-unres-ink)')
+    ];
+    const cChecks = [
+      ck('○', 'Circle on 4 modules', 'NOT RUN', 'var(--dt-unres-ink)'),
+      S.signed ? ck('■', 'Ballast keeps the railhead flush', 'PASS', 'var(--dt-pass)', { anim: 'dt-in .4s var(--ease-in) both' }) : ck('○', 'Ballast keeps the railhead flush', 'NOT RUN · waits on M-01', 'var(--dt-unres-ink)'),
+      ck('○', 'Recoloured module reads as snow', 'NOT RUN', 'var(--dt-unres-ink)')
+    ];
+    const ms = (mark, name, sub, val, color, bg, border) => ({ mark, name, sub, val, color, bg, border });
+    const measures = [
+      ms('■', 'Tree base diameter', 'Measured · jfo · 09-18', '112 mm', 'var(--dt-pass)', 'var(--dt-sheet)', 'var(--dt-grid-mid)'),
+      ms('■', 'Table clear span', 'Measured · jfo · 09-18', '1 420 mm', 'var(--dt-pass)', 'var(--dt-sheet)', 'var(--dt-grid-mid)'),
+      S.signed ? ms('■', 'Railhead height above module top', `Measured · ${S.sig.trim()} · 11:42`, `${S.plates} plates`, 'var(--dt-pass)', 'var(--dt-pass-bg)', 'var(--dt-pass)') : ms('○', 'Railhead height above module top', 'Unknown. Nobody has measured this yet. Two checks wait on it.', 'UNKNOWN', 'var(--dt-unres-ink)', 'var(--dt-sheet)', 'var(--dt-unres)')
+    ];
+    const sets = [{ name: '41843 Winter tree', have: 'yes', built: 'yes', free: 'no' }, { name: '10254 Holiday train', have: 'yes', built: 'no', free: 'yes' }, { name: 'bl-741807 MILS curve', have: 'no', built: '—', free: '—' }];
+    const qd = (n, title, sub, extra) => Object.assign({ n, title, sub, ref: this.ref('q' + n), pad: S.left ? '8px 10px' : '8px 6px', border: 'transparent', bg: 'transparent', numColor: 'var(--dt-ink)', titleColor: 'var(--dt-ink)', subColor: 'var(--dt-muted)', strike: 'none', anim: 'none', changed: false, hover: () => {}, ack: () => {} }, extra || {});
+    const queue = [
+      S.signed ? qd(1, 'Measure the railhead height', 'Done 11:42. Frees A-01 grade check and C-01 flush check.', { strike: 'line-through', titleColor: 'var(--dt-muted)', numColor: 'var(--dt-muted)' }) : qd(1, 'Measure the railhead height', 'Waiting on you. Holds up A-01 grade check and C-01 flush check.'),
+      qd(2, 'Confirm the box photo', 'R-01 read the receipt; one line needs your OK.'),
+      S.signed ? qd(3, 'Approve the railbed list', 'Ready: nothing is waiting on it now.', { border: S.changed.q3 ? acc : 'transparent', bg: S.changed.q3 ? 'var(--dt-sheet)' : 'transparent', changed: !!S.changed.q3, anim: pulseOn('q3'), hover: () => { if (S.changed.q3) this.hoverPaths('q3'); }, ack: () => this.ack('q3') }) : qd(3, 'Approve the railbed list', 'Waiting on #1 (the flush check needs the railhead height).', { subColor: 'var(--dt-unres-ink)', border: 'var(--dt-unres)', bg: 'transparent' })
+    ];
+    const tr = (when, how, what, by, color, extra) => Object.assign({ when, how, what, by, color, border: color, borderStyle: 'solid', bg: 'var(--dt-sheet)', anim: 'none' }, extra || {});
+    const trail = (S.signed ? [tr('11:42', '■ MEASURED', `Railhead height = ${S.plates} plates`, `Signed ${S.sig.trim()} · tape on the NE module`, 'var(--dt-pass)', { border: S.changed.trail ? acc : 'var(--dt-pass)', bg: 'var(--dt-pass-bg)', anim: 'dt-in .4s var(--ease-in) both' })] : []).concat([
+      tr('09-20', '◆ CONFIRMED', '“R40 for 4 tracks” means 4 parallel tracks', 'AI read it; jfo confirmed, tap', 'var(--dt-prov-deep)', { border: 'var(--dt-prov)', borderStyle: 'dashed', bg: 'var(--dt-prov-bg)' }),
+      tr('09-18', '■ MEASURED', 'Tree base diameter = 112 mm', 'Signed jfo · calipers', 'var(--dt-pass)')
+    ]);
+    const leftOpen = S.left, rightOpen = S.right;
+    const hasLeft = this.props.leftBar ?? true, hasRight = this.props.rightBar ?? true, hasFooter = this.props.footerBar ?? true;
+    const leftW = leftOpen ? 'clamp(200px,18vw,260px)' : '48px', rightW = rightOpen ? 'clamp(220px,20vw,300px)' : '48px';
+    const shellCols = [hasLeft ? leftW : null, 'minmax(0,1fr)', hasRight ? rightW : null].filter(Boolean).join(' ');
+    const shellRows = hasFooter ? 'auto minmax(0,1fr) auto' : 'auto minmax(0,1fr)';
+    return {
+      hasLeft, hasRight, hasFooter, shellCols, shellRows, leftOpen, rightOpen, row2: focus ? 'auto' : 'minmax(0,1fr)',
+      headerCols: (typeof innerWidth === 'number' && innerWidth < 1000) ? 'auto auto' : 'auto minmax(0,1fr) auto',
+      headlineCol: (typeof innerWidth === 'number' && innerWidth < 1000) ? '1 / -1' : 'auto', headlineRow: (typeof innerWidth === 'number' && innerWidth < 1000) ? '2' : 'auto',
+      leftRef: this.ref('left'), rightRef: this.ref('right'), rightAnim: S.changed.trail ? pulseOn('trail') : 'none',
+      leftBtn: leftOpen ? '◧ QUEUE' : '▯ QUEUE', rightBtn: rightOpen ? 'TRAIL ◨' : 'TRAIL ▯', leftAria: leftOpen ? 'Collapse the queue' : 'Expand the queue', rightAria: rightOpen ? 'Collapse the trail' : 'Expand the trail',
+      toggleLeft: () => this.swap({ left: !S.left }), toggleRight: () => this.swap({ right: !S.right }),
+      reset: () => { this.timers && this.timers.forEach(clearTimeout); this.swap({ focus: null, signed: false, sig: '', changed: {}, paths: [], pulse: 0, ledger: this.constructor.prototype.constructor === Component ? [{ when: '11:12', text: 'A-01 fit ran against the measured tree: 4 block, 1 pass, 1 not run (grade & banking waits on the railhead height).', color: 'var(--dt-muted)' }] : [], headline: 'Three things waiting. One of them, the railhead height, is holding up two others.' }); },
+      headline: S.headline, headlineColor: Object.keys(S.changed).length ? 'var(--dt-accent-deep)' : 'var(--dt-ink)', headlineAnim: 'dt-in .4s var(--ease-in) both',
+      queueDot: !leftOpen && !!S.changed.q3, trailDot: !rightOpen && !!S.changed.trail,
+      cards, checks, cChecks, measures, sets, queue, trail, ledger: S.ledger, paths: S.paths,
+      showSign: !S.signed, plates: S.plates, setPlates: (e) => this.setState({ plates: Math.max(0, Math.min(12, +e.target.value || 0)) }), sig: S.sig, setSig: (e) => this.setState({ sig: e.target.value }),
+      sign: () => this.sign(), cantSign: !S.sig.trim(), signOpacity: S.sig.trim() ? 1 : 0.45, signTitle: S.sig.trim() ? 'Signs the value and re-runs what waits on it' : 'Type your initials first',
+      hoverOff: () => { if (S.hover) this.setState({ hover: null, paths: [] }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

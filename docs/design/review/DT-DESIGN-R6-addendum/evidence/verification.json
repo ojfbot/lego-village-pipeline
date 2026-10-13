@@ -1,0 +1,43 @@
+{
+  "build": "pnpm build passed",
+  "browser": "Chrome",
+  "viewports": [
+    [
+      320,
+      740
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      768,
+      1024
+    ],
+    [
+      1024,
+      768
+    ],
+    [
+      1440,
+      900
+    ],
+    [
+      844,
+      390
+    ]
+  ],
+  "measurements": "responsive-browser-checks.json",
+  "screenshots": [
+    "responsive-phone-dashboard.jpg",
+    "responsive-desktop-landing.jpg"
+  ],
+  "received_exports_modified": false,
+  "limitations": [
+    "Local study using the installed dependency link, not an operative design cut.",
+    "V-01 and V-02 remain explicit unavailable-page routes.",
+    "Safari, physical devices and phone keyboards are unverified.",
+    "Preserved source MOCK MATH and prototype runtime limitations."
+  ],
+  "console_errors_in_review_tab": 0
+}

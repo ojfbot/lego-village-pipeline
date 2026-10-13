@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="ext-resource-dependency" content="../dt/tokens.css">
+<meta name="ext-resource-dependency" content="../dt/overlay.js">
+<meta name="ext-resource-dependency" content="../dt/landing.js">
+<meta name="ext-resource-dependency" content="./image-slot.js">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#F6F2E9"/><rect x="30" y="30" width="140" height="140" rx="8" fill="#3D6B9E"/><text x="100" y="118" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="72" fill="#FDFBF5">P</text></svg></template>
+<x-dc>
+<helmet>
+<title>Buying the gap: which shops, in what order — LEGO Village</title>
+<script>document.documentElement.lang="en"</script>
+<script src="../dt/landing.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../dt/tokens.css">
+<link rel="stylesheet" href="../dt/responsive.css">
+<style>@keyframes dtStampIn{0%{transform:rotate(-14deg) scale(1.6);opacity:0}60%{transform:rotate(-3deg) scale(0.96);opacity:1}100%{transform:rotate(-3deg) scale(1)}} button:disabled{opacity:.45;cursor:not-allowed}</style>
+</helmet>
+<div role="main" class="dt-responsive-page" style="max-width:1280px;margin:0 auto;padding:28px 28px 48px;display:grid;gap:18px">
+  <div class="dt-responsive-heading" style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:center;border-bottom:2px solid var(--dt-ink);padding-bottom:10px">
+    <div style="display:grid;gap:3px;min-width:0">
+      <h1 style="font-family:'Spectral',serif;font-size:19px;font-weight:700;font-style:italic;line-height:1.2;text-wrap:balance;margin:0">Buying the gap</h1>
+      <div style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);letter-spacing:0.08em">P-01 · WHICH SHOPS, IN WHAT ORDER · CONTINUES C-01 · MOCK SHOPS &amp; PRICES</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="Prototype C - Measurement to Procurement.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">← C-01</a>
+      <a href="../Hub.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none">HUB</a>
+      <button onClick="{{ toggleTheme }}" aria-pressed="{{ dark }}" style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn)">{{ themeLabel }}</button>
+    </div>
+  </div>
+  <div style="background:var(--dt-info-bg);border:1.5px solid var(--dt-info);border-radius:var(--dt-r-fillet);padding:11px 15px;font-size:13px;line-height:1.5;text-wrap:pretty;display:grid;gap:8px">
+    <div><strong>This sheet only buys.</strong> What to buy was decided and approved on <a href="Prototype C - Measurement to Procurement.dc.html">C-01</a> — what the train set already brings, what the MILS module adds, what we already own, and whether the railbed fits. Here the approved gap becomes real orders: {{ nParts }} <span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-prov-deep)" title="Naming under review — see brief/RESEARCH-01-nomenclature.md">parts◇</span>, {{ totalPieces }} <span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-prov-deep)" title="Naming under review — see brief/RESEARCH-01-nomenclature.md">pieces◇</span>, across the BrickLink shops that stock them.</div>
+    <div>BrickLink sells them through many small shops, each with its own postage and minimum order — so the cheapest lot for every part is rarely the cheapest order. Pick what matters (01), read the resulting order (02), see who sells what and which lot was chosen (03), then buy on BrickLink and record it (04). The list arrives here already through its release gate (end of C-01). A recorded order means <em>ordered</em>; <em>owned</em> comes only after the parcel is received and inspected.</div>
+    <div style="font-size:11px;color:var(--dt-muted)">◇ "parts" / "pieces" / "lots" are placeholders — a research note (RESEARCH-01) is open to settle LEGO / AFOL / BrickLink vocabulary across every sheet.</div>
+  </div>
+
+  <sc-if value="{{ gateOpen }}" hint-placeholder-val="{{ true }}">
+    <section id="gate" aria-label="Release status" style="background:var(--dt-sheet);border:1.5px dashed var(--dt-block);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:14px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+      <span aria-live="polite" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-block-deep);border:1.5px dashed var(--dt-block);padding:2px 8px;border-radius:var(--dt-r-fillet);white-space:nowrap;transform:rotate(-2deg)">○ NOT RELEASED</span>
+      <span style="font-size:12.5px;line-height:1.5;flex:1;min-width:240px;text-wrap:pretty"><strong>The list hasn’t passed its release gate yet.</strong> That happens at the end of C-01 — evidence, open findings, your initials. Shops and prices here stay read-only until it does; you can look, not buy.</span>
+      <dc-import name="CrossRef" sheet="C-01" card="gate" label="C-01 · the release gate ↖" dir="back" hint-size="auto,1em"></dc-import>
+      <button onClick="{{ simulateRelease }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;background:transparent;color:var(--dt-muted);border:1px dashed var(--dt-unres);border-radius:var(--dt-r-btn);padding:4px 9px;cursor:pointer;white-space:nowrap">DEMO · PRETEND IT PASSED</button>
+    </section>
+  </sc-if>
+  <sc-if value="{{ gatePassed }}" hint-placeholder-val="{{ false }}">
+    <section id="gate" aria-label="Release status" style="background:var(--dt-sheet);border:1.5px solid var(--dt-pass);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:14px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+      <span style="font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;color:var(--dt-pass);border:2px solid var(--dt-pass);padding:5px 12px;transform:rotate(-3deg);animation:dtStampIn .35s ease-out both;display:inline-block;white-space:nowrap">■ RELEASED TO BUY · {{ gateWhen }} · {{ initialsUpper }}</span>
+      <span style="font-size:12.5px;color:var(--dt-muted);line-height:1.5;flex:1;min-width:240px;text-wrap:pretty">{{ gateAfter }} <dc-import name="CrossRef" sheet="C-01" card="gate" label="the record ↖" dir="back" hint-size="auto,1em"></dc-import></span>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ gateOpen }}" hint-placeholder-val="{{ true }}">
+    <div role="status" style="font-size:12.5px;color:var(--dt-muted);text-wrap:pretty;padding:0 4px">If the software isn’t trustworthy by the order-by date, order anyway and <a href="#manual" onClick="{{ openManual }}" style="font-weight:600;color:var(--dt-accent-deep);text-decoration:underline dotted">record it here after the fact</a> — a supported case, not a workaround.</div>
+  </sc-if>
+
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 20px;display:grid;gap:12px">
+    <div style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:2px 12px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted)">01</span><h2 style="font-family:'Spectral',serif;font-size:16px;font-weight:600;margin:0">What matters most?</h2><span></span><span style="grid-column:2 / -1;font-size:12px;color:var(--dt-muted);text-wrap:pretty">Each choice shows the order it would produce before you pick it.</span></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px">
+      <sc-for list="{{ priorities }}" as="o" hint-placeholder-count="3">
+        <button onClick="{{ o.pick }}" disabled="{{ lockedOrFrozen }}" aria-pressed="{{ o.on }}" style="text-align:left;cursor:pointer;font-family:'Libre Franklin',sans-serif;color:var(--dt-ink);border:1.5px solid {{ o.border }};background:{{ o.bg }};border-radius:var(--dt-r-fillet);padding:10px 12px;display:grid;gap:4px;align-content:start">
+          <span style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:600"><span style="width:10px;height:10px;border-radius:50%;border:1.5px solid var(--dt-ink);background:{{ o.dot }};flex:none"></span>{{ o.label }}</span>
+          <span style="font-size:11.5px;color:var(--dt-muted);line-height:1.4">{{ o.desc }}</span>
+          <span style="font-family:'Azeret Mono',monospace;font-size:10px;color:{{ o.resColor }};margin-top:2px">→ {{ o.result }}</span>
+        </button>
+      </sc-for>
+      <button onClick="{{ toggleSplit }}" disabled="{{ lockedOrFrozen }}" aria-pressed="{{ split }}" aria-label="{{ splitAria }}" style="text-align:left;cursor:pointer;font-family:'Libre Franklin',sans-serif;color:var(--dt-ink);border:1.5px dashed {{ splitBorder }};background:transparent;border-radius:var(--dt-r-fillet);padding:10px 12px;display:grid;gap:4px;align-content:start">
+        <span style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:600"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:{{ splitColor }};border:1.5px solid {{ splitColor }};padding:1px 6px;border-radius:var(--dt-r-fillet)">{{ splitState }}</span>Let a part come from two shops</span>
+        <span style="font-size:11.5px;color:var(--dt-muted);line-height:1.4">Split a quantity when no one shop has enough. Two lots, two chances of a wrong colour.</span>
+        <span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);margin-top:2px">→ {{ splitResult }}</span>
+      </button>
+    </div>
+    <sc-if value="{{ frozen }}" hint-placeholder-val="{{ false }}">
+      <div style="font-size:11.5px;color:var(--dt-prov-deep);border:1px solid var(--dt-prov);background:var(--dt-prov-bg);border-radius:var(--dt-r-fillet);padding:7px 10px;text-wrap:pretty">Locked: an order has been placed. Changing the plan now would re-shuffle lots you already bought. Undo the order mark in 04 to unlock.</div>
+    </sc-if>
+  </div>
+
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 20px;display:grid;gap:12px">
+    <div style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:2px 12px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted)">02</span><h2 style="font-family:'Spectral',serif;font-size:16px;font-weight:600;margin:0">The order, in one line</h2><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);white-space:nowrap">{{ combos }} COMBINATIONS · MOCK</span></div>
+    <div style="font-size:14px;line-height:1.5;text-wrap:pretty;border-radius:var(--dt-r-fillet);padding:2px 4px;margin-left:-4px;animation:{{ aSummary }}">{{ summary }}</div>
+    <sc-if value="{{ hasUncovered }}" hint-placeholder-val="{{ false }}">
+      <div style="border:1.5px solid var(--dt-block);background:var(--dt-block-bg);border-radius:var(--dt-r-fillet);padding:9px 13px;font-size:12.5px;line-height:1.5;text-wrap:pretty"><strong style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-block-deep)">■ NOT COVERED</strong> &nbsp;{{ uncoveredText }}</div>
+    </sc-if>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px">
+      <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:8px 10px;animation:{{ aShops }}"><div style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">SHOPS</div><div style="font-family:'Azeret Mono',monospace;font-size:20px;font-weight:600;margin-top:2px">{{ nShops }}</div><div style="font-size:11px;color:var(--dt-muted)">{{ nShopsNote }}</div></div>
+      <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:8px 10px;animation:{{ aTotal }}"><div style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">TOTAL · PARTS + POSTAGE</div><div style="font-family:'Azeret Mono',monospace;font-size:20px;font-weight:600;margin-top:2px">{{ total }}</div><div style="font-size:11px;color:var(--dt-muted)">{{ totalNote }}</div></div>
+      <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:8px 10px;animation:{{ aCover }}"><div style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">PIECES COVERED</div><div style="font-family:'Azeret Mono',monospace;font-size:20px;font-weight:600;margin-top:2px;color:{{ coverColor }}">{{ cover }}</div><div style="font-size:11px;color:var(--dt-muted)">{{ coverNote }}</div></div>
+      <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:8px 10px;animation:{{ aDays }}"><div style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">LAST PARCEL</div><div style="font-family:'Azeret Mono',monospace;font-size:20px;font-weight:600;margin-top:2px">{{ days }}</div><div style="font-size:11px;color:var(--dt-muted)">{{ daysNote }}</div></div>
+    </div>
+    <div style="font-size:11.5px;color:var(--dt-muted);text-wrap:pretty">{{ baseline }}</div>
+  </div>
+
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 20px;display:grid;gap:12px;min-width:0">
+    <div style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:2px 12px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted)">03</span><h2 style="font-family:'Spectral',serif;font-size:16px;font-weight:600;margin:0">Who sells what, and which lot was chosen</h2><span></span><span style="grid-column:2 / -1;font-size:12px;color:var(--dt-muted);text-wrap:pretty">Rows are C-01's parts by basis; columns are shops, {{ pageSize }} at a time. A filled cell is the lot in the plan.</span></div>
+    <div style="border:1.5px dashed var(--dt-accent);border-radius:var(--dt-r-fillet);padding:10px 12px;display:grid;gap:8px;background:var(--dt-bg)">
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px">
+        <input type="text" value="{{ askText }}" onChange="{{ setAsk }}" onKeyDown="{{ askKey }}" aria-label="Ask about the shopping" placeholder="Ask about the shopping — e.g. skip Nordic Bricks · only US shops · fewest parcels · why Brick Depot?" style="font-family:'Libre Franklin';font-size:13px;background:var(--dt-sheet);color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:8px 12px;border-radius:var(--dt-r-btn);min-width:0">
+        <button onClick="{{ askSend }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:0;padding:8px 14px;border-radius:var(--dt-r-btn);cursor:pointer;box-shadow:var(--dt-btn-shadow)">Ask</button>
+      </div>
+      <sc-if value="{{ hasChat }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;gap:4px">
+          <sc-for list="{{ chat }}" as="m" hint-placeholder-count="2">
+            <div style="display:grid;grid-template-columns:34px minmax(0,1fr);gap:8px;font-size:12px;line-height:1.45"><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:{{ m.color }};padding-top:3px">{{ m.who }}</span><span style="text-wrap:pretty">{{ m.text }}</span></div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <div style="font-size:10.5px;color:var(--dt-muted)">Keyword mock — the real one talks to Claude with the plan, your account history and shop reputations in context. It restates what it changed before anything is saved.</div>
+    </div>
+    <div style="display:flex;gap:12px;font-size:11px;color:var(--dt-muted);align-items:center;flex-wrap:wrap">
+      <span style="display:flex;gap:6px;align-items:center;white-space:nowrap"><span style="width:14px;height:10px;border:1.5px solid var(--dt-ink);background:var(--dt-pass-bg);border-radius:2px"></span>chosen lot</span>
+      <span style="display:flex;gap:6px;align-items:center;white-space:nowrap"><span style="width:14px;height:10px;border:1px solid var(--dt-grid-mid);border-radius:2px"></span>stocked, not chosen</span>
+      <span style="display:flex;gap:6px;align-items:center;white-space:nowrap"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-prov-deep)">only 20</span>too few</span>
+      <span style="display:flex;gap:6px;align-items:center;white-space:nowrap"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px">·</span>not stocked</span>
+    </div>
+    <div class="dt-shop-controls" style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center">
+      <button onClick="{{ togglePlanFirst }}" aria-pressed="{{ planFirst }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:{{ planFirstFg }};background:{{ planFirstBg }};border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-pill);padding:4px 10px;cursor:pointer;white-space:nowrap">{{ planFirstLabel }}</button>
+      <span style="font-size:11.5px;color:var(--dt-muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ sortNote }}</span>
+      <div style="display:flex;gap:6px;align-items:center">
+        <button onClick="{{ prevPage }}" disabled="{{ noPrev }}" aria-label="Previous shops" style="font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);width:32px;height:30px;cursor:pointer">‹</button>
+        <span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted);white-space:nowrap">SHOPS {{ pageFrom }}–{{ pageTo }} OF {{ nShopsAll }}</span>
+        <button onClick="{{ nextPage }}" disabled="{{ noNext }}" aria-label="Next shops" style="font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);width:32px;height:30px;cursor:pointer">›</button>
+      </div>
+    </div>
+
+    <div class="dt-shop-matrix">
+      <div style="display:grid;grid-template-columns:minmax(150px,1.1fr) repeat({{ visCount }},minmax(0,1fr));gap:4px;align-items:stretch">
+        <div style="padding:6px 8px;display:flex;align-items:flex-end;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)">PART · NEED</div>
+        <sc-for list="{{ cols }}" as="c" hint-placeholder-count="5">
+          <div style="border:1.5px {{ c.borderStyle }} {{ c.border }};border-radius:var(--dt-r-fillet);padding:8px 9px;display:grid;gap:3px;align-content:start;opacity:{{ c.opacity }};animation:{{ c.anim }}">
+            <span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:{{ c.stateColor }}">{{ c.state }}</span>
+            <span style="font-family:'Spectral',serif;font-size:14px;font-weight:600;line-height:1.15">{{ c.name }}</span>
+            <span style="font-size:10.5px;color:var(--dt-muted);line-height:1.35">{{ c.where }}</span>
+            <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">MIN {{ c.min }} · POST {{ c.ship }}</span>
+            <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:{{ c.repColor }}" title="From account history — mock">{{ c.rep }}</span>
+          </div>
+        </sc-for>
+
+        <div style="grid-column:1 / -1;padding:10px 8px 2px;font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:0.1em;color:var(--dt-info-deep);border-bottom:1px dashed var(--dt-grid-mid)">▤ BUY · ADAPTED — from bl-741807, colours changed to the winter palette</div>
+        <sc-for list="{{ adaptedRows }}" as="r" hint-placeholder-count="6">
+          <div style="padding:7px 8px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;border-bottom:1px dashed var(--dt-grid-mid)"><span style="min-width:0"><div style="font-size:12.5px;font-weight:600">{{ r.name }}</div><div style="font-size:10.5px;color:var(--dt-muted)">{{ r.id }} · {{ r.colour }}</div></span><span style="font-family:'Azeret Mono',monospace;font-size:12px">{{ r.need }}</span></div>
+          <sc-for list="{{ r.cells }}" as="x" hint-placeholder-count="5">
+            <div style="border:{{ x.border }};background:{{ x.bg }};border-radius:var(--dt-r-fillet);padding:6px 8px;display:grid;gap:1px;align-content:center;opacity:{{ x.opacity }};animation:{{ x.anim }}">
+              <span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:{{ x.weight }};color:{{ x.color }}">{{ x.line1 }}</span>
+              <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:{{ x.color2 }}">{{ x.line2 }}</span>
+            </div>
+          </sc-for>
+        </sc-for>
+
+        <div style="grid-column:1 / -1;padding:12px 8px 2px;font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:0.1em;color:var(--dt-prov-deep);border-bottom:1px dashed var(--dt-grid-mid)">◇ BUY · RESEARCH — ballast, in neither source; a choice made on C-01</div>
+        <sc-for list="{{ researchRows }}" as="r" hint-placeholder-count="2">
+          <div style="padding:7px 8px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;border-bottom:1px dashed var(--dt-grid-mid)"><span style="min-width:0"><div style="font-size:12.5px;font-weight:600">{{ r.name }}</div><div style="font-size:10.5px;color:var(--dt-muted)">{{ r.id }} · {{ r.colour }}</div></span><span style="font-family:'Azeret Mono',monospace;font-size:12px">{{ r.need }}</span></div>
+          <sc-for list="{{ r.cells }}" as="x" hint-placeholder-count="5">
+            <div style="border:{{ x.border }};background:{{ x.bg }};border-radius:var(--dt-r-fillet);padding:6px 8px;display:grid;gap:1px;align-content:center;opacity:{{ x.opacity }};animation:{{ x.anim }}">
+              <span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:{{ x.weight }};color:{{ x.color }}">{{ x.line1 }}</span>
+              <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:{{ x.color2 }}">{{ x.line2 }}</span>
+            </div>
+          </sc-for>
+        </sc-for>
+
+        <div style="grid-column:1 / -1;padding:12px 8px 2px;font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:0.1em;color:var(--dt-muted);border-bottom:1px solid var(--dt-ink)">PER SHOP</div>
+        <sc-for list="{{ footRows }}" as="f" hint-placeholder-count="4">
+          <div style="padding:6px 8px;font-size:12px;font-weight:{{ f.weight }};color:{{ f.labelColor }};display:flex;align-items:center;border-bottom:1px dashed var(--dt-grid-mid)">{{ f.label }}</div>
+          <sc-for list="{{ f.cells }}" as="x" hint-placeholder-count="5">
+            <div style="padding:6px 8px;font-family:'Azeret Mono',monospace;font-size:{{ x.size }};font-weight:{{ x.weight }};color:{{ x.color }};opacity:{{ x.opacity }};display:flex;align-items:center;justify-content:flex-end;text-align:right;border-bottom:1px dashed var(--dt-grid-mid);text-wrap:pretty;animation:{{ x.anim }}">{{ x.text }}</div>
+          </sc-for>
+        </sc-for>
+        <div style="padding:8px 8px;font-size:11.5px;color:var(--dt-muted);display:flex;align-items:start">If you drop it</div>
+        <sc-for list="{{ dropCells }}" as="x" hint-placeholder-count="5">
+          <div style="padding:8px 8px;font-size:11px;line-height:1.4;color:var(--dt-ink);opacity:{{ x.opacity }};text-wrap:pretty">{{ x.text }}</div>
+        </sc-for>
+        <div></div>
+        <sc-for list="{{ actionCells }}" as="x" hint-placeholder-count="5">
+          <div style="padding:2px 8px 4px;display:flex"><button onClick="{{ x.act }}" disabled="{{ lockedOrFrozen }}" aria-label="{{ x.aria }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;background:transparent;color:{{ x.color }};border:1px {{ x.borderStyle }} {{ x.color }};border-radius:var(--dt-r-btn);padding:4px 8px;cursor:pointer;width:100%">{{ x.label }}</button></div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 20px;display:grid;gap:12px">
+    <div style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:2px 12px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted)">04</span><h2 style="font-family:'Spectral',serif;font-size:16px;font-weight:600;margin:0">Place the orders</h2><span></span><span style="grid-column:2 / -1;font-size:12px;color:var(--dt-muted);text-wrap:pretty">One parcel per shop. Buying happens on BrickLink; come back and record the order number. Recording an order says <em>ordered</em> — nothing more. Owned comes after the parcel is received and inspected (Tier 2).</span></div>
+    <sc-if value="{{ gateOpen }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;color:var(--dt-muted);border:1px dashed var(--dt-unres);border-radius:var(--dt-r-fillet);padding:8px 11px">Pass the release gate on C-01 to unlock the BrickLink links. Recording an order you already placed elsewhere is always open — below.</div></sc-if>
+    <sc-if value="{{ gatePassed }}" hint-placeholder-val="{{ false }}">
+      <div style="border:1.5px dashed {{ revalBorder }};background:var(--dt-bg);border-radius:var(--dt-r-fillet);padding:10px 12px;display:grid;gap:6px">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:{{ revalColor }}">{{ revalTag }}</span><span style="font-size:12.5px;flex:1;min-width:200px;text-wrap:pretty">{{ revalText }}</span><button onClick="{{ revalidate }}" disabled="{{ revalBusy }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:7px 12px;cursor:pointer;border-radius:var(--dt-r-btn);box-shadow:var(--dt-btn-shadow)">{{ revalBtn }}</button></div>
+        <sc-if value="{{ revalDrift }}" hint-placeholder-val="{{ false }}"><div style="font-size:11.5px;color:var(--dt-block-deep);text-wrap:pretty">{{ revalDriftText }}</div></sc-if>
+      </div>
+    </sc-if>
+    <div style="display:grid;gap:8px">
+      <sc-for list="{{ orders }}" as="s" hint-placeholder-count="2">
+        <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:10px 12px;display:grid;gap:8px;animation:{{ s.anim }}">
+          <div style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;flex-wrap:wrap">
+            <span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:var(--dt-muted)">PARCEL {{ s.n }}</span>
+            <span style="min-width:0"><span style="font-family:'Spectral',serif;font-size:15px;font-weight:600">{{ s.name }}</span> <span style="font-size:11.5px;color:var(--dt-muted)">· {{ s.lineSummary }} · {{ s.total }}</span></span>
+            <span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end">
+              <sc-if value="{{ s.ordered }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);padding:2px 7px;border-radius:var(--dt-r-fillet);animation:dtStampIn .35s ease-out both;display:inline-block">■ ORDERED · {{ s.orderNo }}</span><button onClick="{{ s.unmark }}" style="font-family:'Azeret Mono',monospace;font-size:10px;background:transparent;color:var(--dt-muted);border:1px dashed var(--dt-muted);border-radius:var(--dt-r-btn);padding:5px 9px;cursor:pointer">UNDO</button></sc-if>
+              <sc-if value="{{ s.canMark }}" hint-placeholder-val="{{ true }}"><a href="{{ s.href }}" target="_blank" rel="noopener" aria-disabled="{{ linksLocked }}" aria-label="{{ s.openAria }}" onClick="{{ guardLink }}" style="font-family:'Libre Franklin',sans-serif;font-size:12px;font-weight:600;text-decoration:none;background:var(--dt-ink);color:var(--dt-on-ink);padding:7px 11px;border-radius:var(--dt-r-btn);box-shadow:var(--dt-btn-shadow)">Open on BrickLink ↗</a><button onClick="{{ s.startMark }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);padding:6px 10px;cursor:pointer" aria-label="{{ s.markAria }}">MARK ORDERED</button></sc-if>
+            </span>
+          </div>
+          <sc-if value="{{ s.marking }}" hint-placeholder-val="{{ false }}">
+            <div style="border:1.5px solid var(--dt-accent);border-radius:var(--dt-r-fillet);padding:10px 12px;display:grid;gap:6px;background:var(--dt-bg)">
+              <div style="font-size:12px;text-wrap:pretty">Paste the BrickLink order number. Recording it locks the plan in 01 — undo stays available until a parcel ships.</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap"><input value="{{ orderNo }}" onChange="{{ setOrderNo }}" placeholder="e.g. 24831907" style="font-family:'Azeret Mono',monospace;font-size:12px;padding:6px 9px;border:1px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-sheet);color:var(--dt-ink);flex:1;min-width:120px"><button onClick="{{ s.confirmMark }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:0;border-radius:var(--dt-r-btn);padding:6px 11px;cursor:pointer">RECORD</button><button onClick="{{ cancelMark }}" style="font-family:'Azeret Mono',monospace;font-size:10px;background:transparent;color:var(--dt-ink);border:1px solid var(--dt-ink);border-radius:var(--dt-r-btn);padding:6px 10px;cursor:pointer">CANCEL</button></div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ noPlan }}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px;color:var(--dt-muted)">Nothing to order until the plan covers every part — see 02.</div></sc-if>
+    <section id="manual" style="border-top:1px dashed var(--dt-grid-mid);padding-top:12px;display:grid;gap:8px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h2 style="font-family:'Spectral',serif;font-size:14px;font-weight:600;margin:0;display:inline">Already bought something outside this plan?</h2><button onClick="{{ toggleManual }}" aria-expanded="{{ manualOpen }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:transparent;color:var(--dt-accent-deep);border:1px dashed var(--dt-accent);border-radius:var(--dt-r-fillet);padding:3px 9px;cursor:pointer">{{ manualBtn }}</button></div>
+      <div style="font-size:12px;color:var(--dt-muted);text-wrap:pretty">The physical deadline is hard; the software’s isn’t. An order placed by hand — any shop, any date — is recorded here with honest provenance and counts against the same list. No gate needed to record what already happened.</div>
+      <sc-if value="{{ manualOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="border:1.5px solid var(--dt-accent);border-radius:var(--dt-r-fillet);padding:10px 12px;display:grid;gap:8px;background:var(--dt-bg)">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:8px">
+            <label style="display:grid;gap:3px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">SHOP<input value="{{ mShop }}" onChange="{{ setMShop }}" placeholder="e.g. Brick Depot, or LEGO PaB" style="font-family:'Libre Franklin';font-size:12px;padding:6px 9px;border:1px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-sheet);color:var(--dt-ink)"></label>
+            <label style="display:grid;gap:3px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">ORDER NUMBER<input value="{{ mNo }}" onChange="{{ setMNo }}" placeholder="from the receipt" style="font-family:'Azeret Mono',monospace;font-size:12px;padding:6px 9px;border:1px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-sheet);color:var(--dt-ink)"></label>
+            <label style="display:grid;gap:3px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">PLACED ON<input type="date" value="{{ mDate }}" onChange="{{ setMDate }}" style="font-family:'Azeret Mono',monospace;font-size:12px;padding:6px 9px;border:1px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-sheet);color:var(--dt-ink)"></label>
+            <label style="display:grid;gap:3px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">TOTAL PAID<input value="{{ mTotal }}" onChange="{{ setMTotal }}" placeholder="$0.00" style="font-family:'Azeret Mono',monospace;font-size:12px;padding:6px 9px;border:1px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-sheet);color:var(--dt-ink)"></label>
+          </div>
+          <label style="display:grid;gap:3px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">WHAT’S IN IT · one line per part, “id × qty colour”<textarea value="{{ mLines }}" onChange="{{ setMLines }}" rows="3" placeholder="3703 × 32 dark bluish gray&#10;2780 × 64 black" style="font-family:'Azeret Mono',monospace;font-size:12px;padding:6px 9px;border:1px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-sheet);color:var(--dt-ink);resize:vertical"></textarea></label>
+          <sc-if value="{{ mHasPreview }}" hint-placeholder-val="{{ false }}">
+            <div role="status" aria-live="assertive" style="border:1.5px dashed var(--dt-accent);border-radius:var(--dt-r-fillet);padding:9px 11px;display:grid;gap:8px;background:var(--dt-sheet)">
+              <span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.08em;color:var(--dt-accent-deep)">◇ BEFORE IT’S RECORDED</span>
+              <span style="font-size:12.5px;line-height:1.5;text-wrap:pretty">{{ mPreview }}</span>
+              <span style="display:flex;gap:8px;flex-wrap:wrap"><button onClick="{{ mCommit }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:7px 13px;cursor:pointer;box-shadow:var(--dt-btn-shadow);border-radius:var(--dt-r-btn);white-space:nowrap">Yes, record it</button><button onClick="{{ toggleManual }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:7px 13px;cursor:pointer;border-radius:var(--dt-r-btn)">Not yet</button></span>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+      <sc-if value="{{ hasManual }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;gap:5px">
+          <sc-for list="{{ manualOrders }}" as="mo" hint-placeholder-count="1">
+            <div style="border:1px solid var(--dt-prov);border-radius:var(--dt-r-fillet);padding:8px 11px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 12px;align-items:baseline;font-size:12px">
+              <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-prov-deep);border:1.5px solid var(--dt-prov);padding:2px 7px;border-radius:var(--dt-r-fillet);white-space:nowrap;transform:rotate(-2deg)">■ ORDERED · BY HAND</span>
+              <span style="min-width:0"><strong>{{ mo.shop }}</strong> · {{ mo.no }} · placed {{ mo.date }} · {{ mo.total }}</span>
+              <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted);white-space:nowrap">ENTERED {{ mo.entered }} · {{ mo.by }}</span>
+              <span></span><span style="grid-column:2 / -1;font-size:11.5px;color:var(--dt-muted);line-height:1.5">{{ mo.lines }} · counts against the C-01 list · receipt attach: mock</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </section>
+  </div>
+
+  <div style="border-top:1px dashed var(--dt-grid-mid);padding-top:12px;font-size:11.5px;color:var(--dt-muted);line-height:1.5">
+    <div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.1em">NOTES FOR THE RECORD</div>
+    <ul style="margin:8px 0 0;padding-left:16px;display:grid;gap:4px">
+      <li>How it decides: every combination of candidate shops is priced — each part to the cheapest lot in the combination, a shop's minimum-order shortfall counted as cost, postage as an estimate range. The priority in 01 picks the winner.</li>
+      <li>Shops, stock, prices and postage are design mocks; the search is real but tiny (6 shops). Real values need a BrickLink price-guide fetch in Claude Code plus independent audit.</li>
+      <li>schema_request: VendorLot {shop, part, colour, qty_available, price, min_order, ship_est_lo, ship_est_hi, ship_days, observed_at}</li>
+      <li>schema_request: Order {shop, lots[], external_id, placed_at, placed_by, entered_after_the_fact?} — a manual order placed elsewhere and recorded later is a first-class case (014 §3.4). InventoryLot.lifecycle is <strong>withdrawn</strong> (014 §7.3): ordered → shipped → delivered → received → inspected → available → allocated are separate records, not one enum.</li>
+<li><strong>Procurement-release gate (014 §8, DEC-034 — moved to the end of C-01 after the operator saw it here).</strong> This sheet only reads its result: NOT RELEASED → read-only; RELEASED → live. Formal record underneath — gate_id · subject_ref/candidate_revision · entry_criteria · required_evidence (type, method, freshness) · checks · open_findings (severity, owner, due trigger, disposition) · authority_required · decision (approve / approve-with-waivers / reject / return-for-work) · rationale/waivers · output_baseline_ref · invalidated_by · supersedes. Surface: a quiet card and a friendly stamp. Shops stay read-only until passed; purchase stays outside the app (rung 4). AI stance is analysis, never authority.</li>
+      <li><strong>Revalidate before you leave to buy (014 §5D):</strong> lot availability and prices are re-fetched right before the BrickLink links unlock; drift is shown, not silently absorbed. Mock here.</li>
+      <li><strong>Manual / retroactive order (014 §3.4):</strong> recorded with <span style="font-family:'Azeret Mono',monospace">entered_by · entered_at · placed_at · evidence_ref</span>; needs no gate — it records what already happened; it counts against the same list and shows up as ■ ORDERED · BY HAND.</li>
+      <li>Card 03 pages through shops (3 at a time, chosen first) instead of scrolling sideways; the ask box is a keyword mock of a Claude conversation over the plan. schema_request: VendorProfile {shop, past_orders[], rating, issues[], preference} from account history; Conversation {turns[], changes[]} attached to the plan.</li>
+    </ul>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { dark: false, priority: 'cheapest', split: false, skipped: {}, orders: {}, marking: null, orderNo: '', page: 0, planFirst: true, askText: '', chat: [],
+    gate: 'open', gateWhen: '', initials: '', reval: 'stale', revalBusy: false, manualOpen: false, m: { shop: '', no: '', date: '', total: '', lines: '' }, manualOrders: [] };
+  REP = { depot: { rep: '★ 4.9 · 3 past orders · fast', color: 'var(--dt-pass)' }, nordic: { rep: '★ 4.7 · 1 past order · slow post', color: 'var(--dt-muted)' }, every: { rep: '★ 4.6 · never used · stocks everything, dear', color: 'var(--dt-muted)' }, plate: { rep: 'new to us · ★ 4.8 on BrickLink', color: 'var(--dt-muted)' }, grey: { rep: '★ 4.2 · 1 past order · 1 wrong colour', color: 'var(--dt-prov-deep)' }, pins: { rep: 'new to us · ★ 5.0 on BrickLink', color: 'var(--dt-muted)' } };
+  ask(text) {
+    const s = this.state, q = text.toLowerCase(); const say = (t) => t; let reply = null, patch = {};
+    const shopBy = () => this.SHOPS.find(sh => q.includes(sh.name.toLowerCase())) || this.SHOPS.find(sh => q.includes(sh.key)) || (() => { const hits = this.SHOPS.filter(sh => sh.name.toLowerCase().split(/[^a-z]+/).some(w => w.length >= 4 && !/^bricks?$/.test(w) && new RegExp('\\b' + w + '\\b').test(q))); return hits.length === 1 ? hits[0] : null; })();
+    const sh = shopBy();
+    if (/skip|avoid|not from|drop|without/.test(q) && sh) { patch.skipped = Object.assign({}, s.skipped, { [sh.key]: true }); reply = 'Skipped ' + sh.name + '. The plan below is re-priced without it — see column "SKIPPED" and the "If you drop it" row for what it cost.'; }
+    else if (/bring back|allow|include|use/.test(q) && sh && s.skipped[sh.key]) { const k = Object.assign({}, s.skipped); delete k[sh.key]; patch.skipped = k; reply = sh.name + ' is back in the running.'; }
+    else if (/only (us|domestic|american)|no (overseas|international|foreign)|us shops/.test(q)) { const k = Object.assign({}, s.skipped); this.SHOPS.forEach(x => { if (!/^US/.test(x.where)) k[x.key] = true; }); patch.skipped = k; reply = 'Kept US shops only — skipped ' + this.SHOPS.filter(x => !/^US/.test(x.where)).map(x => x.name).join(' and ') + '. Watch the "not covered" warning if something now has no seller.'; }
+    else if (/fewest|fewer parcels|one shop|single shop/.test(q)) { patch.priority = 'fewest'; reply = 'Priority set to fewest parcels.'; }
+    else if (/cheap|lowest|total/.test(q)) { patch.priority = 'cheapest'; reply = 'Priority set to lowest total.'; }
+    else if (/fast|soon|quick/.test(q)) { patch.priority = 'fastest'; reply = 'Priority set to here soonest.'; }
+    else if (/split/.test(q)) { patch.split = !s.split; reply = 'Splitting a part across two shops is now ' + (patch.split ? 'allowed' : 'off') + '.'; }
+    else if (/why/.test(q) && sh) { const rep = this.REP[sh.key]; reply = sh.name + ' is in the running because it stocks ' + Object.keys(sh.lots).length + ' of the needed parts; minimum ' + (sh.min ? '$' + sh.min : 'none') + ', postage $' + sh.ship[0] + '–' + sh.ship[1] + '. Account history: ' + rep.rep + '. Whether it is chosen depends on your priority in 01.'; }
+    else if (sh) { const rep = this.REP[sh.key]; reply = sh.name + ' — ' + sh.where + '. ' + rep.rep + '. Say "skip ' + sh.name + '" or "why ' + sh.name + '".'; }
+    else reply = 'I heard: “' + text + '” — I can only do a few things yet: skip / bring back a shop, only US shops, fewest parcels / lowest total / soonest, allow splitting, or “why <shop>”.';
+    const frozen = Object.keys(s.orders).length > 0;
+    if (frozen && (patch.skipped || patch.priority || patch.split !== undefined)) { patch = {}; reply = 'The plan is locked because an order is recorded in 04 — undo it first, then ask again.'; }
+    this.setState(st => Object.assign({}, patch, { askText: '', page: 0, chat: st.chat.concat([{ who: 'YOU', text }, { who: 'AI', text: reply }]).slice(-6) }));
+  }
+  _prev = {}; _flip = {}; _anim = {};
+  PARTS = [
+    { id: '3703', name: 'Technic brick 1×16', colour: 'Dark bluish gray', need: 32, basis: 'adapted' },
+    { id: '2780', name: 'Technic pin', colour: 'Black', need: 64, basis: 'adapted' },
+    { id: '92438', name: 'Plate 8×16', colour: 'White (was tan)', need: 8, basis: 'adapted' },
+    { id: '3004', name: 'Brick 1×2', colour: 'White (was tan)', need: 48, basis: 'adapted' },
+    { id: '2431', name: 'Tile 1×4', colour: 'Lt. bluish gray (was dark tan)', need: 24, basis: 'adapted' },
+    { id: '2444', name: 'Plate 2×2 w/ pin hole', colour: 'Dark bluish gray', need: 16, basis: 'adapted' },
+    { id: '3460', name: 'Plate 1×8', colour: 'White', need: 32, basis: 'research' },
+    { id: '3069b', name: 'Tile 1×2', colour: 'Dark bluish gray', need: 64, basis: 'research' }
+  ];
+  SHOPS = [
+    // Seeded so the three priorities visibly diverge (014 §2): lowest total → Nordic + Depot, slow; fewest parcels → Everything Bricks alone, dear; soonest → Depot + Plate & Tile, 5 days.
+    { key: 'depot', name: 'Brick Depot', where: 'US · posts in 2–4 days', days: 4, min: 5, ship: [4.5, 6.5], lots: { '3703': [40, 0.33], '2780': [200, 0.04], '3004': [100, 0.07], '2431': [50, 0.10], '2444': [30, 0.14], '3069b': [120, 0.05] } },
+    { key: 'nordic', name: 'Nordic Bricks', where: 'DK · posts in 7–12 days', days: 12, min: 10, ship: [9.8, 14.0], lots: { '92438': [12, 1.60], '3460': [60, 0.06], '3703': [100, 0.24], '3069b': [200, 0.035], '2431': [100, 0.07] } },
+    { key: 'plate', name: 'Plate & Tile Co', where: 'US · posts in 3–5 days', days: 5, min: 0, ship: [3.9, 5.2], lots: { '92438': [10, 2.90], '3460': [40, 0.10], '3069b': [64, 0.06], '3004': [60, 0.065], '2444': [16, 0.16] } },
+    { key: 'every', name: 'Everything Bricks', where: 'US · posts in 4–6 days', days: 6, min: 0, ship: [6.0, 8.5], lots: { '3703': [60, 0.45], '2780': [300, 0.06], '92438': [20, 3.40], '3004': [200, 0.09], '2431': [80, 0.14], '2444': [50, 0.20], '3460': [80, 0.14], '3069b': [150, 0.08] } },
+    { key: 'grey', name: 'Grey Market Parts', where: 'CA · posts in 5–9 days', days: 9, min: 8, ship: [5.2, 8.0], lots: { '92438': [8, 2.60], '2780': [100, 0.035], '3703': [32, 0.36], '3460': [40, 0.095] } },
+    { key: 'pins', name: 'Pin Pals', where: 'US · posts in 2–3 days', days: 3, min: 0, ship: [3.2, 4.4], lots: { '2780': [500, 0.03], '2444': [40, 0.13] } }
+  ];
+  componentDidMount() {
+    const dark = typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches;
+    this.setState({ dark }); document.body.classList.toggle('dt-blueprint', dark);
+  }
+  pulse(key, val) {
+    const v = JSON.stringify(val), first = !(key in this._prev), changed = !first && this._prev[key] !== v;
+    this._prev[key] = v;
+    if (changed) { this._flip[key] = !this._flip[key]; this._anim[key] = (this._flip[key] ? 'dtChangeB' : 'dtChangeA') + ' .9s ease-out'; }
+    return this._anim[key] || 'none';
+  }
+  fmt(n) { return '$' + n.toFixed(2); }
+  rng(lo, hi) { return this.fmt(lo) + '–' + this.fmt(hi); }
+  plan(shopsAvail, priority, split) {
+    const n = shopsAvail.length; let best = null;
+    for (let mask = 1; mask < (1 << n); mask++) {
+      const sub = shopsAvail.filter((_, i) => mask & (1 << i));
+      const alloc = {}; let ok = true;
+      for (const p of this.PARTS) {
+        const lots = sub.filter(s => s.lots[p.id]).map(s => ({ s, qty: s.lots[p.id][0], price: s.lots[p.id][1] })).sort((a, b) => a.price - b.price);
+        if (!split) { const l = lots.find(l => l.qty >= p.need); if (!l) { ok = false; break; } (alloc[l.s.key] = alloc[l.s.key] || []).push({ p, qty: p.need, price: l.price }); }
+        else { let left = p.need; for (const l of lots) { if (left <= 0) break; const q = Math.min(l.qty, left); (alloc[l.s.key] = alloc[l.s.key] || []).push({ p, qty: q, price: l.price }); left -= q; } if (left > 0) { ok = false; break; } }
+      }
+      if (!ok || sub.some(s => !alloc[s.key])) continue;
+      const shops = sub.map(s => { const sub$ = alloc[s.key].reduce((a, l) => a + l.qty * l.price, 0); const topup = Math.max(0, s.min - sub$); return { s, lines: alloc[s.key], sub: sub$, topup, lo: sub$ + topup + s.ship[0], hi: sub$ + topup + s.ship[1] }; });
+      const lo = shops.reduce((a, x) => a + x.lo, 0), hi = shops.reduce((a, x) => a + x.hi, 0), days = Math.max(...shops.map(x => x.s.days));
+      const score = priority === 'fewest' ? [shops.length, hi] : priority === 'fastest' ? [days, hi] : [hi, shops.length];
+      if (!best || score[0] < best.score[0] || (score[0] === best.score[0] && score[1] < best.score[1])) best = { shops, lo, hi, days, score };
+    }
+    return best;
+  }
+  uncovered(shopsAvail, split) {
+    return this.PARTS.filter(p => { const lots = shopsAvail.filter(s => s.lots[p.id]).map(s => s.lots[p.id]); return split ? lots.reduce((a, l) => a + l[0], 0) < p.need : !lots.some(l => l[0] >= p.need); });
+  }
+  describe(pl, avail, split) {
+    if (!pl) { const u = this.uncovered(avail, split); return 'no complete order — ' + (u.length ? u.map(p => p.name).join(', ') + ' not stocked' : 'no combination covers everything'); }
+    return pl.shops.length + (pl.shops.length === 1 ? ' shop · ' : ' shops · ') + this.rng(pl.lo, pl.hi) + ' · ~' + pl.days + ' days';
+  }
+  renderVals() {
+    const s = this.state, fmt = this.fmt.bind(this), rng = this.rng.bind(this);
+    const avail = this.SHOPS.filter(x => !s.skipped[x.key]);
+    const pl = this.plan(avail, s.priority, s.split);
+    const frozen = Object.keys(s.orders).length > 0;
+    const totalPieces = this.PARTS.reduce((a, p) => a + p.need, 0);
+    // ---- gate result (read from C-01 via ?released=JFO|date, or the demo button) ----
+    const q = new URLSearchParams(location.search), rel = q.get('released');
+    const gatePassed = s.gate === 'passed' || !!rel, gateOpen = !gatePassed, locked = gateOpen;
+    const relInit = rel ? rel.split('|')[0] : s.initials, relWhen = rel ? (rel.split('|')[1] || '') : s.gateWhen;
+    // ---- revalidation (04) ----
+    const reval = s.reval, linksLocked = gateOpen || reval !== 'fresh';
+    // ---- manual order ----
+    const M = s.m, mParsed = M.lines.split(/\n+/).map(l => l.trim()).filter(Boolean), mHasPreview = !!(M.shop.trim() && M.no.trim() && mParsed.length);
+    const mPreview = mHasPreview ? 'I will record an order you placed yourself: ' + M.shop.trim() + ' · #' + M.no.trim() + (M.date ? ' · placed ' + M.date : '') + (M.total ? ' · ' + M.total : '') + ' · ' + mParsed.length + ' line' + (mParsed.length === 1 ? '' : 's') + '. Provenance: entered by James, now, after the fact. It counts against the C-01 list as ORDERED — not owned — and the plan re-computes what is still missing. Nothing else changes.' : '';
+    const unc = pl ? [] : this.uncovered(avail, s.split);
+    const covered = totalPieces - unc.reduce((a, p) => a + p.need, 0);
+    const PRI = [
+      { key: 'cheapest', label: 'Lowest total', desc: 'Parts + postage + any minimum-order shortfall, all in.' },
+      { key: 'fewest', label: 'Fewest parcels', desc: 'One or two shops, even if a little dearer. Fewer things to go wrong.' },
+      { key: 'fastest', label: 'Here soonest', desc: 'Only shops that post quickly. Usually costs more.' }
+    ];
+    const priorities = PRI.map(o => { const p = this.plan(avail, o.key, s.split); const on = s.priority === o.key; return { label: o.label, desc: o.desc, on, result: this.describe(p, avail, s.split), resColor: p ? 'var(--dt-ink)' : 'var(--dt-block-deep)', border: on ? 'var(--dt-accent)' : 'var(--dt-grid-mid)', bg: on ? 'var(--dt-bg)' : 'transparent', dot: on ? 'var(--dt-accent)' : 'transparent', pick: () => this.setState({ priority: o.key }) }; });
+    const alt = this.plan(avail, s.priority, !s.split);
+    const naiveShops = {}; let naiveParts = 0;
+    for (const p of this.PARTS) { const lots = this.SHOPS.filter(x => x.lots[p.id] && x.lots[p.id][0] >= p.need).sort((a, b) => a.lots[p.id][1] - b.lots[p.id][1]); if (lots[0]) { naiveShops[lots[0].key] = 1; naiveParts += p.need * lots[0].lots[p.id][1]; } }
+    const naiveShip = Object.keys(naiveShops).reduce((a, k) => { const sh = this.SHOPS.find(x => x.key === k); return [a[0] + sh.ship[0], a[1] + sh.ship[1]]; }, [0, 0]);
+
+    // per-shop plan lookup
+    const inPlan = {}; if (pl) pl.shops.forEach(x => { inPlan[x.s.key] = x; });
+    const chosenQty = (shopKey, partId) => { const x = inPlan[shopKey]; if (!x) return 0; return x.lines.filter(l => l.p.id === partId).reduce((a, l) => a + l.qty, 0); };
+    const colState = (sh) => s.skipped[sh.key] ? 'skipped' : inPlan[sh.key] ? 'chosen' : 'unused';
+    const PAGE = 3;
+    const rank = (sh) => { const st = colState(sh); return st === 'chosen' ? 0 : st === 'unused' ? 1 : 2; };
+    const sorted = s.planFirst ? this.SHOPS.slice().sort((a, b) => rank(a) - rank(b) || this.SHOPS.indexOf(a) - this.SHOPS.indexOf(b)) : this.SHOPS.slice();
+    const pages = Math.max(1, Math.ceil(sorted.length / PAGE)); const page = Math.min(s.page, pages - 1);
+    const VIS = sorted.slice(page * PAGE, page * PAGE + PAGE);
+    const cols = VIS.map(sh => { const st = colState(sh); return { name: sh.name, where: sh.where, min: sh.min ? fmt(sh.min) : 'none', ship: rng(sh.ship[0], sh.ship[1]), rep: this.REP[sh.key].rep, repColor: this.REP[sh.key].color, state: st === 'chosen' ? '■ IN THE PLAN' : st === 'skipped' ? '○ SKIPPED' : '□ NOT USED', stateColor: st === 'chosen' ? 'var(--dt-pass)' : 'var(--dt-muted)', border: st === 'chosen' ? 'var(--dt-ink)' : 'var(--dt-grid-mid)', borderStyle: st === 'skipped' ? 'dashed' : 'solid', opacity: st === 'chosen' ? 1 : 0.6, anim: this.pulse('col:' + sh.key, st) }; });
+    const mkRow = (p) => ({ name: p.name, id: p.id, colour: p.colour, need: p.need, cells: VIS.map(sh => {
+      const lot = sh.lots[p.id], st = colState(sh), q = chosenQty(sh.key, p.id), dim = st !== 'chosen';
+      if (!lot) return { line1: '·', line2: '', border: '1px solid transparent', bg: 'transparent', color: 'var(--dt-muted)', color2: 'var(--dt-muted)', weight: 400, opacity: 0.5, anim: 'none' };
+      if (q > 0) return { line1: q + ' × ' + fmt(lot[1]), line2: '= ' + fmt(q * lot[1]) + (q < p.need ? ' · part of ' + p.need : ''), border: '1.5px solid var(--dt-ink)', bg: 'var(--dt-pass-bg)', color: 'var(--dt-ink)', color2: 'var(--dt-pass)', weight: 600, opacity: 1, anim: this.pulse('cell:' + sh.key + ':' + p.id, q) };
+      const short = lot[0] < p.need;
+      return { line1: fmt(lot[1]) + ' ea', line2: short ? 'only ' + lot[0] : lot[0] + ' avail', border: '1px solid var(--dt-grid-mid)', bg: 'transparent', color: 'var(--dt-muted)', color2: short ? 'var(--dt-prov-deep)' : 'var(--dt-muted)', weight: 400, opacity: dim ? 0.6 : 0.85, anim: this.pulse('cell:' + sh.key + ':' + p.id, 0) };
+    }) });
+    const adaptedRows = this.PARTS.filter(p => p.basis === 'adapted').map(mkRow);
+    const researchRows = this.PARTS.filter(p => p.basis === 'research').map(mkRow);
+    const foot = (label, fn, opts) => ({ label, weight: opts && opts.bold ? 600 : 400, labelColor: opts && opts.color || 'var(--dt-ink)', cells: VIS.map(sh => { const x = inPlan[sh.key]; const v = x ? fn(x) : null; return { text: v === null ? '—' : v.text, color: v === null ? 'var(--dt-muted)' : (v.color || 'var(--dt-ink)'), weight: opts && opts.bold ? 600 : 400, size: opts && opts.bold ? '12px' : '11px', opacity: x ? 1 : 0.45, anim: this.pulse('foot:' + label + ':' + sh.key, v && v.text) }; }) });
+    const footRows = [
+      foot('Parts', x => ({ text: fmt(x.sub) })),
+      foot('Under the minimum', x => x.topup > 0 ? { text: '+' + fmt(x.topup) + ' short of ' + fmt(x.s.min), color: 'var(--dt-prov-deep)' } : { text: 'met', color: 'var(--dt-muted)' }),
+      foot('Postage, estimated', x => ({ text: rng(x.s.ship[0], x.s.ship[1]) })),
+      foot('Shop total', x => ({ text: rng(x.lo, x.hi) }), { bold: true })
+    ];
+    const without = (sh) => { const a2 = avail.filter(y => y.key !== sh.key); const w = this.plan(a2, s.priority, s.split); if (!w) { const u = this.uncovered(a2, s.split); return 'No one else stocks ' + u.map(p => p.name).join(', ') + '.'; } const d = pl ? w.hi - pl.hi : 0; return (d >= 0 ? '+' : '−') + fmt(Math.abs(d)) + ' at the high end · ' + w.shops.length + (w.shops.length === 1 ? ' shop' : ' shops') + ' · ~' + w.days + ' days.'; };
+    const dropCells = VIS.map(sh => { const st = colState(sh); return { text: st === 'chosen' ? without(sh) : st === 'skipped' ? 'Bringing it back: ' + this.describe(this.plan(avail.concat([sh]), s.priority, s.split), avail.concat([sh]), s.split) : 'Not needed at this priority.', opacity: st === 'chosen' ? 1 : 0.6 }; });
+    const actionCells = VIS.map(sh => { const st = colState(sh); return st === 'skipped'
+      ? { label: 'BRING BACK', aria: 'Bring ' + sh.name + ' back into the plan', color: 'var(--dt-ink)', borderStyle: 'solid', act: () => this.setState(st2 => { const k = Object.assign({}, st2.skipped); delete k[sh.key]; return { skipped: k }; }) }
+      : { label: 'SKIP THIS SHOP', aria: 'Skip ' + sh.name + ' — re-plan without it', color: 'var(--dt-muted)', borderStyle: 'dashed', act: () => this.setState(st2 => ({ skipped: Object.assign({}, st2.skipped, { [sh.key]: true }) })) }; });
+
+    const orders = pl ? pl.shops.map((x, i) => { const ord = s.orders[x.s.key]; return { n: String(i + 1).padStart(2, '0'), name: x.s.name, openAria: 'Open ' + x.s.name + ' on BrickLink' + (gateOpen ? ' — locked until the list is released' : reval !== 'fresh' ? ' — re-check stock and prices first' : ''), markAria: 'Mark the ' + x.s.name + ' order as placed', lineSummary: x.lines.length + (x.lines.length === 1 ? ' lot, ' : ' lots, ') + x.lines.reduce((a, l) => a + l.qty, 0) + ' pieces', total: rng(x.lo, x.hi), href: 'https://www.bricklink.com/v2/search.page?q=' + x.lines.map(l => l.p.id).join('+'), ordered: !!ord, orderNo: ord ? ord.no : '', canMark: !ord && s.marking !== x.s.key, marking: s.marking === x.s.key, anim: this.pulse('order:' + x.s.key, [x.hi, !!ord]),
+      startMark: () => this.setState({ marking: x.s.key, orderNo: '' }), confirmMark: () => this.setState(st2 => ({ orders: Object.assign({}, st2.orders, { [x.s.key]: { no: st2.orderNo || 'no number', at: Date.now() } }), marking: null })), unmark: () => this.setState(st2 => { const o = Object.assign({}, st2.orders); delete o[x.s.key]; return { orders: o }; }) }; }) : [];
+
+    const summary = pl ? 'Buy from ' + pl.shops.map(x => x.s.name).join(pl.shops.length === 2 ? ' and ' : ', ') + ' — ' + rng(pl.lo, pl.hi) + ' for all ' + totalPieces + ' pieces, last parcel in about ' + pl.days + ' days.' + (pl.shops.some(x => x.topup > 0) ? ' One shop is under its minimum; the shortfall is already counted.' : '')
+      : 'No combination of the remaining shops covers everything. Bring a shop back in 03, or allow splitting a part across shops in 01.';
+    return {
+      dark: s.dark, themeLabel: s.dark ? '◐ BLUEPRINT' : '◑ PAPER', toggleTheme: () => { const d = !s.dark; document.body.classList.toggle('dt-blueprint', d); this.setState({ dark: d }); },
+      nParts: this.PARTS.length, totalPieces, combos: (1 << avail.length) - 1,
+      priorities, frozen, lockedOrFrozen: locked || frozen, split: s.split,
+      gateOpen, gatePassed, initialsUpper: (relInit || 'JFO').toUpperCase(), gateWhen: relWhen || new Date().toISOString().slice(0, 10),
+      gateAfter: 'Priorities and shops are unlocked. Before any BrickLink link opens, 04 re-checks stock and prices — a released list is not a promise that the lots are still there.',
+      simulateRelease: () => this.setState({ gate: 'passed', initials: 'JFO', gateWhen: new Date().toISOString().slice(0, 10), reval: 'stale' }),
+      openManual: () => { this.setState({ manualOpen: true }); },
+      linksLocked, guardLink: (e) => { if (linksLocked) { e.preventDefault(); this.setState({ chat: s.chat.concat([{ who: 'AI', text: gateOpen ? 'Pass the release gate at the end of C-01 first — shops are read-only until then.' : 'Re-check stock and prices first (the button above the parcels). Prices are ' + (reval === 'drift' ? 'known to have moved' : '5 days old') + '.' }]).slice(-6) }); } },
+      revalTag: reval === 'fresh' ? '■ CHECKED JUST NOW' : reval === 'drift' ? '▲ PRICES MOVED' : '◇ 5 DAYS OLD', revalColor: reval === 'fresh' ? 'var(--dt-pass)' : reval === 'drift' ? 'var(--dt-block-deep)' : 'var(--dt-prov-deep)', revalBorder: reval === 'fresh' ? 'var(--dt-pass)' : reval === 'drift' ? 'var(--dt-block)' : 'var(--dt-prov)',
+      revalText: reval === 'fresh' ? 'Stock and prices re-fetched; the plan below is what you will actually see on BrickLink. Links are live for the next 30 minutes.' : reval === 'drift' ? 'Two lots changed since the plan was made. The plan was re-priced; read the new total before you buy.' : 'Before any link opens, re-check that the lots are still there at these prices. Lot observations are from 09-12.',
+      revalBtn: s.revalBusy ? 'Checking…' : reval === 'fresh' ? 'Re-check again' : 'Re-check stock and prices', revalBusy: s.revalBusy, revalDrift: reval === 'drift', revalDriftText: 'Nordic Bricks: 92438 Plate 8×16 now $1.75 (was $1.60) · Plate & Tile Co: 3460 stock 40 → 28. Total moved ' + (pl ? '+$1.20–1.80' : '') + '. Everything else held.',
+      revalidate: () => { this.setState({ revalBusy: true }); setTimeout(() => this.setState(st => ({ revalBusy: false, reval: st.reval === 'stale' ? 'drift' : 'fresh' })), 1100); },
+      splitAria: 'Let a part come from two shops — ' + (s.split ? 'on' : 'off') + '. Split a quantity when no one shop has enough.',
+      manualOpen: s.manualOpen, toggleManual: () => this.setState({ manualOpen: !s.manualOpen }), manualBtn: s.manualOpen ? 'CLOSE' : '+ RECORD AN ORDER I PLACED',
+      mShop: M.shop, setMShop: (e) => this.setState({ m: Object.assign({}, M, { shop: e.target.value }) }), mNo: M.no, setMNo: (e) => this.setState({ m: Object.assign({}, M, { no: e.target.value }) }), mDate: M.date, setMDate: (e) => this.setState({ m: Object.assign({}, M, { date: e.target.value }) }), mTotal: M.total, setMTotal: (e) => this.setState({ m: Object.assign({}, M, { total: e.target.value }) }), mLines: M.lines, setMLines: (e) => this.setState({ m: Object.assign({}, M, { lines: e.target.value }) }),
+      mHasPreview, mPreview, mCommit: () => this.setState(st => ({ manualOpen: false, m: { shop: '', no: '', date: '', total: '', lines: '' }, manualOrders: st.manualOrders.concat([{ shop: M.shop.trim(), no: '#' + M.no.trim(), date: M.date || 'date not given', total: M.total || 'total not given', lines: mParsed.join(' · '), entered: 'now', by: 'James · after the fact' }]) })),
+      hasManual: s.manualOrders.length > 0, manualOrders: s.manualOrders, toggleSplit: () => this.setState({ split: !s.split }), splitBorder: s.split ? 'var(--dt-accent)' : 'var(--dt-grid-mid)', splitColor: s.split ? 'var(--dt-accent-deep)' : 'var(--dt-muted)', splitState: s.split ? 'ON' : 'OFF',
+      splitResult: (s.split ? 'Off: ' : 'On: ') + this.describe(alt, avail, !s.split),
+      summary, aSummary: this.pulse('summary', summary),
+      nShops: pl ? pl.shops.length : '—', nShopsNote: pl ? pl.shops.length + (pl.shops.length === 1 ? ' parcel to track' : ' parcels to track') : 'no plan', aShops: this.pulse('nShops', pl && pl.shops.length),
+      total: pl ? rng(pl.lo, pl.hi) : '—', totalNote: pl ? 'parts ' + fmt(pl.shops.reduce((a, x) => a + x.sub + x.topup, 0)) + ' · postage the rest' : '', aTotal: this.pulse('total', pl && pl.hi),
+      cover: covered + ' / ' + totalPieces, coverColor: pl ? 'var(--dt-pass)' : 'var(--dt-block)', coverNote: pl ? 'every part, right colour' : unc.length + (unc.length === 1 ? ' part' : ' parts') + ' missing', aCover: this.pulse('cover', covered),
+      days: pl ? '~' + pl.days + 'd' : '—', daysNote: pl ? 'slowest shop sets the pace' : '', aDays: this.pulse('days', pl && pl.days),
+      baseline: 'For comparison, taking each part from its cheapest shop would mean ' + Object.keys(naiveShops).length + ' shops and ' + rng(naiveParts + naiveShip[0], naiveParts + naiveShip[1]) + ' — the postage eats the savings.',
+      hasUncovered: unc.length > 0, uncoveredText: unc.map(p => p.name + ' (' + p.need + ')').join(', ') + ' — no remaining shop has enough. Bring a shop back or allow splitting.',
+      cols, adaptedRows, researchRows, footRows, dropCells, actionCells, visCount: VIS.length, pageSize: PAGE,
+      pageFrom: page * PAGE + 1, pageTo: page * PAGE + VIS.length, nShopsAll: sorted.length, noPrev: page === 0, noNext: page >= pages - 1, prevPage: () => this.setState({ page: Math.max(0, page - 1) }), nextPage: () => this.setState({ page: Math.min(pages - 1, page + 1) }),
+      planFirst: s.planFirst, togglePlanFirst: () => this.setState({ planFirst: !s.planFirst, page: 0 }), planFirstLabel: s.planFirst ? '■ IN THE PLAN FIRST' : '□ SEARCH ORDER', planFirstFg: s.planFirst ? 'var(--dt-on-ink)' : 'var(--dt-ink)', planFirstBg: s.planFirst ? 'var(--dt-ink)' : 'transparent',
+      sortNote: s.planFirst ? 'Chosen shops come first, then unused, then skipped.' : 'Shops in the order the search found them.',
+      askText: s.askText, setAsk: (e) => this.setState({ askText: e.target.value }), askKey: (e) => { if (e.key === 'Enter' && s.askText.trim()) this.ask(s.askText.trim()); }, askSend: () => { if (s.askText.trim()) this.ask(s.askText.trim()); },
+      hasChat: s.chat.length > 0, chat: s.chat.map(m => ({ who: m.who, text: m.text, color: m.who === 'AI' ? 'var(--dt-accent-deep)' : 'var(--dt-muted)' })),
+      orders, noPlan: !pl,
+      orderNo: s.orderNo, setOrderNo: (e) => this.setState({ orderNo: e.target.value }), cancelMark: () => this.setState({ marking: null })
+    };
+  }
+}
+</script>
+</body>
+</html>

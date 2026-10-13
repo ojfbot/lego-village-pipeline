@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#F6F2E9"/><rect x="30" y="30" width="140" height="140" rx="8" fill="#3D6B9E"/><text x="100" y="118" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="72" fill="#FDFBF5">J</text></svg></template>
+<x-dc>
+<helmet>
+<title>The journeys — LEGO Village</title>
+<script>document.documentElement.lang="en"</script>
+<script src="dt/landing.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="dt/tokens.css">
+<link rel="stylesheet" href="dt/responsive.css">
+</helmet>
+<div class="dt-responsive-page" style="max-width:1240px;margin:0 auto;padding:28px 28px 48px">
+  <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--dt-ink);padding-bottom:10px;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+      <div style="font-family:'Spectral',serif;font-size:19px;font-weight:700;font-style:italic;flex:none;white-space:nowrap">J-01 — The line</div>
+      <div style="font-size:11px;color:var(--dt-muted);letter-spacing:0.08em">FOUR WAYS IN · THIRTEEN STOPS · ONE LOOP · LEGO-PIPE-007-R2 §9</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="Hub.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">← HUB</a>
+      <button onClick="{{ toggleTheme }}" aria-pressed="{{ dark }}" style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn)">{{ themeLabel }}</button>
+    </div>
+  </div>
+  <div style="background:var(--dt-info-bg);border:1.5px solid var(--dt-info);border-radius:var(--dt-r-fillet);padding:11px 15px;margin-top:14px;font-size:13px;line-height:1.5;text-wrap:pretty">
+    <strong>Thirteen journeys, not one.</strong> The loop shows how they hand off to each other — a model comes in on one of four branches, becomes a component, goes round, and the loop is next year. Every stop opens into a <em>full journey with its own line</em>, to be drawn out in this bundle. Tap a stop to see that journey.
+  </div>
+
+  <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:14px 18px 8px;margin-top:16px">
+    <div style="position:relative">
+      <svg viewBox="0 -40 1280 600" style="width:100%;height:auto;display:block" aria-label="Transit map: four origin branches merge into a thirteen-stop loop; the empty right-hand run is the build itself">
+        <g font-family="Azeret Mono" font-size="10" letter-spacing="2" fill="var(--dt-muted)">
+          <text x="20" y="4">WAYS IN</text><line x1="20" y1="12" x2="330" y2="12" stroke="var(--dt-grid-mid)" stroke-width="1.5"></line>
+          <text x="470" y="-16">PLAN IT</text><line x1="470" y1="-8" x2="990" y2="-8" stroke="var(--dt-grid-mid)" stroke-width="1.5"></line>
+          <text x="470" y="546">RECORD IT</text><line x1="470" y1="530" x2="990" y2="530" stroke="var(--dt-grid-mid)" stroke-width="1.5"></line>
+        </g>
+        <text x="364" y="300" font-family="Azeret Mono" font-size="9.5" letter-spacing="1.5" fill="var(--dt-prov-deep)" text-anchor="middle" transform="rotate(-90 364 300)">NEXT YEAR ↺</text>
+        <path d="M170,110 H290 C335,110 335,200 380,200" fill="none" stroke="var(--dt-pass)" stroke-width="5" stroke-linecap="round"></path>
+        <path d="M170,180 H290 C335,180 335,200 380,200" fill="none" stroke="var(--dt-accent)" stroke-width="4" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.8"></path>
+        <path d="M170,250 H290 C335,250 335,200 380,200" fill="none" stroke="var(--dt-accent)" stroke-width="4" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.8"></path>
+        <path d="M170,320 H290 C335,320 335,200 380,200" fill="none" stroke="var(--dt-accent)" stroke-width="4" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.8"></path>
+        <path d="M470,90 H990 A90,90 0 0 1 1080,180 V340 A90,90 0 0 1 990,430 H470 A90,90 0 0 1 380,340 V180 A90,90 0 0 1 470,90 Z" fill="none" stroke="var(--dt-ink)" stroke-width="6"></path>
+        <path d="M470,90 H990 A90,90 0 0 1 1080,180 V340 A90,90 0 0 1 990,430 H470 A90,90 0 0 1 380,340 V180 A90,90 0 0 1 470,90 Z" fill="none" stroke="var(--dt-sheet)" stroke-width="1.5" stroke-dasharray="10 12" opacity="0.9"></path>
+        <path d="M380,300 V240" fill="none" stroke="var(--dt-prov)" stroke-width="6" stroke-linecap="round" stroke-dasharray="6 7"></path>
+        <g transform="translate(1080 260)" aria-label="The build — drawn in crayon over the line">
+          <rect x="-46" y="-52" width="92" height="104" rx="6" fill="var(--dt-sheet)"></rect>
+          <g fill="none" stroke="#E2B92A" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M-30,30 L-31,-6 L-38,-6 L-38,-28 L-28,-28 L-27,-16 L-18,-16 L-18,-4 L-9,-4 L-9,-13 L0,-13 L0,-4 L9,-4 L9,-16 L18,-16 L18,-28 L28,-28 L28,-6 L31,-6 L31,30 Z"></path>
+            <path d="M-8,30 L-8,14 Q0,6 8,14 L8,30"></path>
+            <path d="M-33,-28 L-33,-44 L-22,-40 L-33,-36"></path>
+            <path d="M23,-28 L23,-40 L32,-37 L23,-33"></path>
+            <path d="M-20,8 L-14,8 M14,8 L20,8 M-3,-24 L3,-24"></path>
+          </g>
+          <text x="0" y="46" font-family="Azeret Mono" font-size="9.5" letter-spacing="1.5" fill="#B8931C" text-anchor="middle">BUILD IT</text>
+        </g>
+        <sc-for list="{{ stations }}" as="st" hint-placeholder-count="17">
+          <g onClick="{{ st.pick }}" style="cursor:pointer;outline:none" role="button" tabindex="0" onKeyDown="{{ st.key }}" aria-label="{{ st.aria }}">
+            <circle cx="{{ st.x }}" cy="{{ st.y }}" r="22" fill="transparent"></circle>
+            <circle cx="{{ st.x }}" cy="{{ st.y }}" r="{{ st.ring }}" fill="none" stroke="var(--dt-accent)" stroke-width="2" opacity="{{ st.ringOp }}"></circle>
+            <circle cx="{{ st.x }}" cy="{{ st.y }}" r="{{ st.r }}" fill="{{ st.fill }}" stroke="{{ st.stroke }}" stroke-width="3" stroke-dasharray="{{ st.dash }}"></circle>
+            <circle cx="{{ st.x }}" cy="{{ st.y }}" r="4.5" fill="{{ st.dot }}"></circle>
+            <foreignObject x="{{ st.fx }}" y="{{ st.fy }}" width="{{ st.fw }}" height="26" style="pointer-events:none;overflow:visible"><div style="display:flex;justify-content:{{ st.fj }};gap:6px;align-items:baseline;white-space:nowrap;height:26px;line-height:26px"><span style="display:inline-flex;gap:6px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:{{ st.idColor }}">{{ st.id }}</span><span style="font-family:'Libre Franklin';font-size:13.5px;font-weight:{{ st.weight }};color:{{ st.labelColor }}">{{ st.short }}</span></span></div></foreignObject>
+            <line x1="{{ st.x }}" y1="{{ st.ly1 }}" x2="{{ st.x }}" y2="{{ st.ly2 }}" stroke="var(--dt-ink)" stroke-width="1.5" opacity="{{ st.leadOp }}"></line>
+          </g>
+        </sc-for>
+      </svg>
+    </div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);padding:8px 4px 6px">
+      <span style="display:flex;gap:6px;align-items:center;white-space:nowrap"><span style="width:10px;height:10px;border-radius:50%;background:var(--dt-pass)"></span>HAS A SHEET · {{ nBuilt }}</span>
+      <span style="display:flex;gap:6px;align-items:center;white-space:nowrap"><span style="width:10px;height:10px;border-radius:50%;border:2px solid var(--dt-prov);box-sizing:border-box;background:linear-gradient(90deg,var(--dt-prov) 50%,transparent 50%)"></span>INSIDE ANOTHER SHEET · {{ nPartial }}</span>
+      <span style="display:flex;gap:6px;align-items:center;white-space:nowrap"><span style="width:10px;height:10px;border-radius:50%;border:2px dashed var(--dt-unres);box-sizing:border-box"></span>NOT DRAWN YET · {{ nPlanned }}</span>
+      <span style="display:flex;gap:6px;align-items:center;white-space:nowrap"><span style="width:10px;height:10px;border-radius:50%;border:2px dashed var(--dt-accent);box-sizing:border-box"></span>ON THE HORIZON · {{ nHorizon }}</span>
+      <span style="margin-left:auto;display:flex;gap:6px;align-items:center;white-space:nowrap"><span style="width:12px;height:12px;border-radius:50%;border:2.5px solid var(--dt-accent);box-sizing:border-box"></span>WHERE YOU ARE</span>
+    </div>
+  </div>
+
+  <div class="dt-responsive-split" style="display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,1fr);gap:16px;margin-top:16px;align-items:start">
+    <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:22px 24px;animation:{{ cardAnim }};display:grid;gap:18px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
+        <div style="display:grid;gap:4px;min-width:0">
+          <span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted)">JOURNEY {{ cur.id }} OF 13 · {{ cur.type }}</span>
+          <span style="font-family:'Spectral',serif;font-size:24px;font-weight:600;line-height:1.2;text-wrap:pretty">{{ cur.title }}</span>
+        </div>
+        <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:{{ cur.statusColor }};border:1.5px {{ cur.statusBorder }} {{ cur.statusColor }};padding:4px 9px;border-radius:var(--dt-r-fillet);white-space:nowrap;flex:none">{{ cur.status }}</span>
+      </div>
+      <div style="font-size:15px;line-height:1.6;max-width:62ch;text-wrap:pretty">{{ cur.plain }}</div>
+      <div style="display:grid;gap:8px">
+        <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:var(--dt-muted)">THIS JOURNEY'S OWN LINE</div>
+        <div style="position:relative;display:grid;grid-template-columns:repeat({{ cur.nSteps }},minmax(0,1fr));gap:6px;padding-top:2px">
+          <div style="position:absolute;left:{{ cur.railInset }};right:{{ cur.railInset }};top:35.5px;height:3px;background:var(--dt-ink);border-radius:2px"></div>
+          <sc-for list="{{ cur.mini }}" as="m" hint-placeholder-count="4">
+            <div style="display:grid;grid-template-rows:14px 26px auto;justify-items:center;align-content:start;gap:8px;position:relative;min-width:0">
+              <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.08em;font-weight:600;color:{{ m.whoColor }};height:14px;line-height:14px">{{ m.who }}</div>
+              <div style="width:26px;height:26px;box-sizing:border-box;border:3px solid {{ m.markBorder }};border-radius:{{ m.markRadius }};background:var(--dt-sheet);display:grid;place-items:center;font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:var(--dt-ink)">{{ m.n }}</div>
+              <div style="font-family:'Libre Franklin';font-size:12.5px;line-height:1.35;text-align:center;color:var(--dt-ink);padding:0 2px;text-wrap:balance">{{ m.text }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:grid;gap:4px;font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);margin-top:4px"><div><span style="display:inline-block;width:9px;height:9px;border:2px solid var(--dt-accent);border-radius:2px;vertical-align:-1px;margin-right:5px"></span>SQUARE = A GATE — a decision that gets recorded</div><div>PRODUCES · <span style="color:var(--dt-ink)">{{ cur.produces }}</span></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+        <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:12px 14px;display:grid;gap:8px;align-content:start"><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:var(--dt-muted)">WHO IS IN IT</div><div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ cur.who }}" as="w" hint-placeholder-count="2"><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:{{ w.color }};border:1px solid {{ w.color }};border-radius:var(--dt-r-fillet);padding:3px 8px">{{ w.tag }}</span></sc-for></div></div>
+        <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:12px 14px;display:grid;gap:8px;align-content:start"><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:var(--dt-muted)">THE GATE</div><div style="font-size:13px;line-height:1.55">{{ cur.gate }}</div></div>
+        <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:12px 14px;display:grid;gap:8px;align-content:start"><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:var(--dt-muted)">NEVER HIDDEN</div><div style="font-size:13px;line-height:1.55">{{ cur.visible }}</div></div>
+      </div>
+      <div style="border-left:3px solid var(--dt-accent);padding:8px 14px;display:grid;gap:4px"><div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:var(--dt-muted)">WHERE IT SHOWS UP TODAY</div><div style="font-size:13px;line-height:1.55;text-wrap:pretty">{{ cur.instance }}</div></div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-top:1px dashed var(--dt-grid-mid);padding-top:16px">
+        <sc-for list="{{ cur.links }}" as="l" hint-placeholder-count="1"><a href="{{ l.href }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;text-decoration:none;background:{{ l.bg }};color:{{ l.fg }};border:1.5px solid var(--dt-ink);padding:7px 13px;border-radius:var(--dt-r-btn);box-shadow:{{ l.shadow }};white-space:nowrap">{{ l.label }}</a></sc-for>
+        <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-accent-deep);border:1.5px dashed var(--dt-accent);padding:6px 11px;border-radius:var(--dt-r-btn);white-space:nowrap">{{ cur.buildOut }}</span>
+        <span style="font-size:12px;color:var(--dt-muted);flex:1;min-width:180px;line-height:1.5">{{ cur.openQ }}</span>
+        <div style="display:flex;gap:6px;margin-left:auto"><button onClick="{{ prev }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:7px 12px;cursor:pointer;border-radius:var(--dt-r-btn);white-space:nowrap">← PREV</button><button onClick="{{ next }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:7px 12px;cursor:pointer;border-radius:var(--dt-r-btn);box-shadow:var(--dt-btn-shadow);white-space:nowrap">NEXT →</button></div>
+      </div>
+    </div>
+    <div style="display:grid;gap:12px">
+      <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px">
+        <div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted);margin-bottom:8px">WHICH SHEETS SERVE WHICH STOPS</div>
+        <div style="display:grid;gap:5px;font-size:12.5px">
+          <sc-for list="{{ coverage }}" as="c" hint-placeholder-count="6">
+            <div style="display:flex;gap:10px;align-items:center;border-bottom:1px dashed var(--dt-grid-mid);padding:4px 0"><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;width:40px;flex:none;color:{{ c.color }}">{{ c.code }}</span><span style="flex:1;min-width:0;font-size:12px">{{ c.name }}</span><span style="display:flex;gap:3px;flex:none;flex-wrap:wrap;justify-content:flex-end"><sc-for list="{{ c.stops }}" as="k" hint-placeholder-count="2"><button onClick="{{ k.pick }}" style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:{{ k.fg }};background:{{ k.bg }};border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:1px 5px;cursor:pointer">{{ k.id }}</button></sc-for></span></div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--dt-muted);line-height:1.5;padding:0 4px;text-wrap:pretty">Solid green branch = the way in we have today; dashed orange branches are on the horizon. The empty right-hand run is the real build, in bricks — the one stretch the software only watches; everything before it is planning, everything after it is checking the built thing. Gates everywhere follow one ladder: none → reviewed diff → initials + stamp → outside the app.</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;paper&quot;,&quot;blueprint&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto'|'paper'|'blueprint'&quot;}}">
+class Component extends DCLogic {
+  state = { dark: null, sel: 0, tick: 0 };
+  isDark() {
+    if (this.state.dark !== null) return this.state.dark;
+    if (this.props.theme === 'blueprint') return true;
+    if (this.props.theme === 'paper') return false;
+    return typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  applyBody() { document.body.classList.toggle('dt-blueprint', this.isDark()); }
+  componentDidMount() { this.applyBody(); this.forceUpdate(); }
+  componentDidUpdate() { this.applyBody(); }
+  go(i) { const n = 17; this.setState(s => ({ sel: ((i % n) + n) % n, tick: s.tick + 1 })); }
+  renderVals() {
+    const s = this.state, dark = this.isDark();
+    const PASS = 'var(--dt-pass)', PROV = 'var(--dt-prov)', PROVD = 'var(--dt-prov-deep)', UNRES = 'var(--dt-unres)', UNRESD = 'var(--dt-unres-ink)', ACC = 'var(--dt-accent)', ACCD = 'var(--dt-accent-deep)', INFO = 'var(--dt-info-deep)', INK = 'var(--dt-ink)', ON = 'var(--dt-on-ink)', SHEET = 'var(--dt-sheet)', MUTED = 'var(--dt-muted)';
+    const W = { op: { tag: '@jfo', color: ACCD }, fam: { tag: '@family', color: PROVD }, ai: { tag: 'AI', color: INFO }, tool: { tag: 'TOOL', color: PASS }, future: { tag: 'future self', color: UNRESD } };
+    const A = 'prototypes/Prototype A - Layout Canvas.dc.html', B = 'prototypes/Prototype B - When the AI Isnt Sure.dc.html', C = 'prototypes/Prototype C - Measurement to Procurement.dc.html', D = 'library/Design Library.dc.html', H = 'Hub.dc.html';
+    const S = [
+      { id: 'J1', type: 'REFERENCE INTAKE & TRIAGE', short: 'Find a design', x: 170, y: 110, lbl: 'left', title: 'Take in a design someone else made', plain: 'A link turns up. Check it yourself, record who made it and what we may do with it, then promote it, keep it as inspiration, or reject it.', instance: 'B-01 — the BrickLink MILS quarter-circle (bl-741807): creator credited, download allowed, sharing not, rights review still pending.', flow: [['Paste the link', 'YOU'], ['Open & re-check the page', 'YOU'], ['Record creator & rights', 'YOU', true], ['Promote · inspire · reject', 'YOU', true]], produces: 'ReferenceAsset + RightsRecord', who: ['op', 'ai'], status: 'built', gate: 'Promotion needs a completed rights record. Showing the listing to family is a switch; the file stays operator-only until rights pass.', visible: 'Creator credit, verbatim. Rights chips. The AI\u2019s reading next to the page\u2019s own words.', links: [{ label: 'Open B-01 →', href: B, primary: true }], openQ: 'Still to draw: the library view — many candidates at once.' },
+      { id: 'J2', type: 'SOURCE ACQUISITION', short: 'Bring in the file', x: 265, y: 110, lbl: 'above', title: 'Get the actual file, privately', plain: 'You download it in your own browser and drop it here. It gets a fingerprint, goes in the private cache, and never reaches family view.', instance: 'B-01 FILES & LINKS — drop the .io, see the fingerprint, FILE: OPERATOR-ONLY until rights pass.', flow: [['Download in your browser', 'YOU'], ['Drop the file', 'YOU'], ['Fingerprint & store privately', 'TOOL'], ['Log the acquisition', 'TOOL']], produces: 'AcquisitionEvent (immutable)', who: ['op', 'tool'], status: 'built', gate: 'None. The file and its fingerprint never change; a reference can gather more of them later.', visible: 'FILE: OPERATOR-ONLY until rights pass. Nothing is ever previewed to family.', links: [{ label: 'See it in B-01 →', href: B, primary: false }], openQ: 'Still to draw: bad file, duplicate fingerprint, re-acquire.' },
+      { id: 'O2', type: 'ORIGIN · OUR OWN BUILD', short: 'Import our build', x: 170, y: 180, lbl: 'left', title: 'Bring in something we designed ourselves', plain: 'A model from our Studio or Blender sandbox enters as a candidate. Same trust checks as anything found online — but we are the creator from the start.', instance: 'Not on a sheet yet. Would land in J3\u2019s workbench with design source = ours.', flow: [['Export from Studio / Blender', 'YOU'], ['Import the file', 'TOOL'], ['Mark creator = us', 'TOOL'], ['Hand to Make a component', 'TOOL']], produces: 'Candidate (design source: ours)', who: ['op', 'fam', 'tool'], status: 'horizon', gate: 'None to import. Rights are ours; the file still gets a fingerprint.', visible: 'Design source = ours. Which sandbox, which revision.', links: [], openQ: 'Roadmap. Needs Studio/Blender import adapters.' },
+      { id: 'O3', type: 'ORIGIN · FROM A PHOTO', short: 'From a photo', x: 170, y: 250, lbl: 'left', title: 'Start from a photo of bricks on the table', plain: 'Photograph something already built. The harness proposes a model; every part it guesses reads as a guess until you confirm it.', instance: 'Not on a sheet yet. Every proposed part would carry ◇ AI GUESS, as in C-01\u2019s derived rows.', flow: [['Photograph the build', 'FAMILY'], ['Propose the parts', 'AI'], ['Confirm or correct each', 'YOU', true], ['Hand to Make a component', 'TOOL']], produces: 'Candidate (every part AI GUESS → confirmed)', who: ['op', 'fam', 'ai'], status: 'horizon', gate: 'None to start. Nothing becomes a component until confirmed.', visible: 'Every guessed part as AI GUESS. The photos as evidence.', links: [], openQ: 'Roadmap. Not camera-based measuring (still out of scope).' },
+      { id: 'O4', type: 'ORIGIN · DREAM IT', short: 'Dream it', x: 170, y: 320, lbl: 'left', title: 'Start from words, voice, and pictures', plain: 'Say what you want; drop reference images, real or LEGO. The harness iterates with its tools and knowledge base until there is a candidate to trust.', instance: 'F-01 Family Workbench: stickers claim studs on the 112 \u00d7 112 table, a story, an optional model, then send. The chocolate-shop request in C-01 is its seed.', flow: [['Say it · type it · drop references', 'FAMILY'], ['Iterate with tools + knowledge', 'AI'], ['Review the candidate', 'YOU', true], ['Hand to Make a component', 'TOOL']], produces: 'Candidate (origin: dream)', who: ['fam', 'op', 'ai'], status: 'built', gate: 'None. Every iteration is a proposal with its consequences shown.', visible: 'Origin = dream. Which references it drew on. What the tools checked.', links: [], openQ: 'Roadmap. RAG + MCP tooling.' },
+      { id: 'J3', type: 'COMPONENT EXTRACTION', short: 'Make a component', x: 380, y: 200, lbl: 'right', title: 'Turn a file into a component we can trust', plain: 'Whatever the way in: sort its parts into layers, name the joints and heights, run the checks, read what came back.', instance: 'A-01 layer rig + viewer — 8 strata, planting proposals, synced 3D. Splitting it into its own sheet is a follow-up.', flow: [['Read the file', 'TOOL'], ['Assign parts to layers', 'YOU'], ['Declare joints & heights', 'YOU'], ['Run the checks', 'TOOL'], ['Review results', 'YOU']], produces: 'Component (normalized)', who: ['op', 'tool', 'ai'], status: 'partial', gate: 'None to save. Heights stay provisional until someone measures.', visible: 'The layer tree. Which heights are measured, derived, or guessed. Design source and brick source.', links: [{ label: 'See it in A-01 →', href: A, primary: false }, { label: 'Split follow-up ↗', href: H, primary: false }], openQ: 'Follow-up: split from the canvas; inspect by design source and brick source.' },
+      { id: 'J4', type: 'LAYOUT COMPOSITION', short: 'Lay it out', x: 495, y: 90, lbl: 'above', title: 'Place components and make them fit', plain: 'Place and turn modules on the stud grid. Watch joints match or fail. Save a numbered revision.', instance: 'A-01 — mating two R40 quadrants by drag and by exact numbers; a heading mismatch blocks, then passes; the engine runs.', flow: [['Place & rotate', 'YOU'], ['Match joints', 'TOOL'], ['Check clearances', 'TOOL'], ['Save a revision', 'YOU']], produces: 'Layout r-N (freeze is a separate decision)', who: ['op', 'tool', 'fam'], status: 'built', gate: 'Saving is light. Freezing a physical standard is its own logged decision.', visible: 'Heading Δ, height Δ, gap. Whole vs fraction mode. Proposed vs placed trees.', links: [{ label: 'Open A-01 →', href: A, primary: true }], openQ: 'Still to draw: protected wells, four clearance envelopes, electrical graph, multi-select.' },
+      { id: 'J5', type: 'THEME / COLOUR POLICY', short: 'Colour policy', x: 615, y: 90, lbl: 'above2', title: 'Recolour a design to our palette, line by line', plain: 'A rule per part role ("ground plates → white, trim → light gray") becomes a diff you accept per line. Nothing applies itself.', instance: 'C-01 — bl-741807\u2019s tan module parts recoloured to the winter palette: three rows marked colour_source → colour_chosen.', flow: [['Set a rule per part role', 'YOU'], ['Generate the diff', 'TOOL'], ['Accept or reject each line', 'YOU', true]], produces: 'Recoloured parts (colour_source → colour_chosen)', who: ['op', 'ai'], status: 'partial', gate: 'Reviewed diff — per line or in bulk. Never automatic.', visible: 'Source colour → chosen colour on every adapted row. Availability and price per line.', links: [{ label: 'See it in C-01 →', href: C, primary: false }, { label: 'ThemeDiffRow in D-01 ↗', href: D, primary: false }], openQ: 'Still to draw: the full before/after by role.' },
+      { id: 'J8', type: 'RENDER REVIEW', short: 'Check the render', x: 735, y: 90, lbl: 'above', title: 'Check the digital build before buying', plain: 'Before any bricks are ordered: render the layout, put it beside the previous revision and beside Studio, mark it up, attach it. This is the last look at the plan.', instance: 'C-01 "Does it fit?" — Studio and Blender checks; render slot appears after a run.', flow: [['Render the revision', 'TOOL'], ['Compare with prior & Studio', 'YOU'], ['Annotate', 'YOU'], ['Attach to the revision', 'YOU']], produces: 'Reviewed render on r-N', who: ['op', 'tool'], status: 'partial', gate: 'None.', visible: 'Which revision, which tool, and each fit rule\u2019s status.', links: [{ label: 'See it in C-01 →', href: C, primary: false }], openQ: 'Still to draw: the gallery and compare pane.' },
+      { id: 'J6', type: 'BOM · INVENTORY · SHORTAGE', short: 'Parts & gaps', x: 855, y: 90, lbl: 'above2', title: 'Work out what we have and what we lack', plain: 'Flatten the parts by layer, subtract what we own, see the gap and the swaps on offer.', instance: 'C-01 parts list by basis — 16 curves owned via the train set; module parts and ballast to buy; totals as ranges.', flow: [['Flatten parts by layer', 'TOOL'], ['Allocate from what we own', 'TOOL'], ['Compute the shortage', 'TOOL'], ['Review substitutions', 'YOU']], produces: 'Shortage list by basis', who: ['op', 'tool', 'ai'], status: 'partial', gate: 'None. Swaps are AI proposals and read as such.', visible: 'Basis on every row — own, adapted, research, story. Exact vs flexible colour.', links: [{ label: 'See it in C-01 →', href: C, primary: false }], openQ: 'Inventory ledger is a later layer.' },
+      { id: 'J7', type: 'PROCUREMENT RELEASE', short: 'Release to buy', x: 975, y: 90, lbl: 'above', title: 'Approve the list — and buy somewhere else', plain: 'Review the pack, export it, maybe touch a wishlist, stamp it with your initials. Purchase happens outside. Then the bricks arrive and the real build begins — the empty run on the map.', instance: 'C-01 approval trail — draft → review by basis → initials → cart link; blockers listed on the gate. P-01 takes the vendor split — every shop combination priced, postage and minimums counted, order numbers recorded after buying.', flow: [['Review the pack by basis', 'YOU'], ['Export the list', 'YOU', true], ['Wishlist dry-run', 'TOOL', true], ['Approve with initials', 'YOU', true], ['Buy on BrickLink / LEGO', 'OUTSIDE']], produces: 'ProcurementPack → marked ordered', who: ['op', 'fam'], status: 'built', gate: 'The ladder: none → reviewed diff → initials + stamp → outside the app.', visible: 'What @jfo must do vs did. Stakeholder OKs. Ranged prices. The cart link appears only after the stamp.', links: [{ label: 'Open C-01 →', href: C, primary: true }, { label: 'Open P-01 →', href: 'prototypes/Prototype P - Procurement.dc.html', primary: false }], openQ: 'The wishlist dry-run; real BrickLink price-guide fetch behind P-01.' },
+      { id: 'J9', type: 'MEASUREMENT CAPTURE', short: 'Measure it', x: 960, y: 430, lbl: 'below2', title: 'Measure the physical thing by hand', plain: 'Photo with an overlay to line up; type the numbers yourself. They become physical evidence.', instance: 'Not drawn. The unresolved tree-well footprint and the train\u2019s clearance are the cases.', flow: [['Photo with overlay guide', 'YOU'], ['Type the values', 'YOU'], ['Attach as physical evidence', 'TOOL']], produces: 'Measurement → parity update', who: ['op'], status: 'built', gate: 'None here — but a missing measurement blocks a freeze elsewhere.', visible: 'Measured vs derived vs unverified.', links: [{ label: 'Specimens in D-01 ↗', href: D, primary: false }], openQ: 'Whole sheet to draw. No camera-based measuring.' },
+      { id: 'J10', type: 'AS-BUILT RECONCILIATION', short: 'As built', x: 840, y: 430, lbl: 'below', title: 'Record how the real build differs', plain: 'Walk the list. Note swaps, missing pieces, weak joints, derailments. Make follow-ups.', instance: 'Not drawn. Uses the decision-log pattern for blast radius.', flow: [['Walk the parts list', 'YOU'], ['Record deviations', 'YOU'], ['Update ledger & component', 'TOOL'], ['Create follow-ups', 'YOU']], produces: 'As-built record + follow-ups', who: ['op', 'fam'], status: 'planned', gate: 'None.', visible: 'Which components diverged, and which decisions that touches.', links: [{ label: 'Decision-log pattern ↗', href: H, primary: false }], openQ: 'Whole sheet to draw.' },
+      { id: 'J11', type: 'STORY GRAPH', short: 'Story graph', x: 720, y: 430, lbl: 'below2', title: 'Connect the story to the layout', plain: 'Places, characters, events — and what each one asks of the layout. Story asks become requests with consequences.', instance: 'C-01 — "the village needs a chocolate shop at the end of Lantern Lane" → siding request → declined with reasons. A-01 — the boys\u2019 tree proposal.', flow: [['Add places, people, events', 'FAMILY'], ['Link needs to components', 'YOU'], ['Propose hypotheses + consequences', 'AI'], ['Answer requests', 'YOU', true]], produces: 'StoryGraph + answered Requests', who: ['fam', 'op', 'ai'], status: 'partial', gate: 'A story ask is a request: answered — decline, park, or accept — with reasons and a reply.', visible: 'Requests until answered. Whether work is attached or it\u2019s words only.', links: [{ label: 'See it in C-01 →', href: C, primary: false }, { label: 'Trees in A-01 →', href: A, primary: false }], openQ: 'F-01 Family Workbench: propose a scene as a layout branch.' },
+      { id: 'J12', type: 'AGENT HANDOFF REVIEW', short: 'Review a handoff', x: 600, y: 430, lbl: 'below', title: 'Weigh what an agent handed us', plain: 'A memo arrives. Check its evidence. Accept or push back. Turn it into tasks or a logged decision.', instance: 'Hub decision log — every entry with inputs and blast radius; this brief\u2019s R1 → R2 revision is one.', flow: [['Memo arrives', 'AI'], ['Weigh the evidence axes', 'YOU'], ['Accept or challenge', 'YOU', true], ['Make tasks or a decision', 'YOU']], produces: 'DecisionRecord / tasks', who: ['op', 'ai'], status: 'partial', gate: 'None; accepting is a logged decision.', visible: 'Who wrote it never says how true it is. The blast radius of accepting.', links: [{ label: 'Decision log in Hub →', href: H, primary: false }, { label: 'HandoffCard in D-01 ↗', href: D, primary: false }], openQ: 'Still to draw: handoffs & decisions sheet.' },
+      { id: 'J13', type: 'YEAR OVER YEAR', short: 'Compare years', x: 480, y: 430, lbl: 'below2', title: 'Compare this year with last, then go round again', plain: 'Branch the layout, compare, see what to reuse and which bin it is in. The loop continues into next year\u2019s layout.', instance: 'Not drawn. A-01\u2019s versions list is the seed.', flow: [['Branch the layout', 'YOU'], ['Compare the years', 'TOOL'], ['Reuse report', 'TOOL'], ['Assign bins', 'YOU'], ['Back to Lay it out', 'YOU']], produces: 'Next year\u2019s starting layout', who: ['op', 'future'], status: 'planned', gate: 'None.', visible: 'Years as versions. Swaps and deviations you can recover. Where things are stored.', links: [{ label: 'Versions in A-01 →', href: A, primary: false }], openQ: 'Whole sheet to draw.' }
+    ];
+    const ST = { built: ['■ HAS A SHEET', PASS, 'solid'], partial: ['◇ INSIDE ANOTHER SHEET', PROVD, 'dashed'], planned: ['○ NOT DRAWN YET', UNRESD, 'dashed'], horizon: ['◌ ON THE HORIZON', ACCD, 'dashed'] };
+    const stations = S.map((j, i) => {
+      const sel = i === s.sel, b = j.status === 'built', pa = j.status === 'partial', hz = j.status === 'horizon';
+      const F = {
+        above:  [j.x - 110, j.y - 46, 220, 'center', 0, 0, 0],
+        above2: [j.x - 110, j.y - 78, 220, 'center', j.y - 14, j.y - 50, 1],
+        below:  [j.x - 110, j.y + 20, 220, 'center', 0, 0, 0],
+        below2: [j.x - 110, j.y + 52, 220, 'center', j.y + 14, j.y + 50, 1],
+        right:  [j.x + 20, j.y - 56, 220, 'flex-start', j.y - 14, j.y - 32, 1],
+        left:   [j.x - 22 - 200, j.y - 13, 200, 'flex-end', 0, 0, 0]
+      }[j.lbl];
+      return {
+        id: j.id, short: j.short, x: j.x, y: j.y, r: hz ? 10 : 11,
+        fill: b ? PASS : SHEET, stroke: b ? PASS : pa ? PROV : hz ? ACC : UNRES, dash: b || pa ? 'none' : '4 4', dot: b ? SHEET : pa ? PROV : 'transparent',
+        ring: sel ? 19 : 0, ringOp: sel ? 1 : 0, weight: sel ? 600 : 400, idColor: sel ? ACCD : MUTED, labelColor: hz && !sel ? MUTED : INK,
+        fx: F[0], fy: F[1], fw: F[2], fj: F[3], ly1: F[4], ly2: F[5], leadOp: F[6],
+        aria: j.id + ' ' + j.title + ' — ' + ST[j.status][0],
+        pick: () => this.go(i), key: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.go(i); } }
+      };
+    });
+    const j = S[s.sel];
+    const cur = Object.assign({}, j, {
+      status: ST[j.status][0], statusColor: ST[j.status][1], statusBorder: ST[j.status][2],
+      who: j.who.map(w => W[w]),
+      nSteps: j.flow.length, railInset: 'calc(100% / ' + (j.flow.length * 2) + ')',
+      mini: j.flow.map((st, k) => { const gate = !!st[2]; const WC = { YOU: ACCD, AI: INFO, TOOL: PASS, FAMILY: PROVD, OUTSIDE: UNRESD }; return { text: st[0], who: st[1], whoColor: WC[st[1]] || MUTED, n: String(k + 1), markBorder: gate ? 'var(--dt-accent)' : 'var(--dt-ink)', markRadius: gate ? '4px' : '50%' }; }),
+      buildOut: j.status === 'built' ? '■ FULL JOURNEY TO DRAW · SHEET EXISTS' : j.status === 'partial' ? '◇ FULL JOURNEY TO DRAW · PIECES EXIST' : j.status === 'horizon' ? '◌ ROADMAP · JOURNEY TO DRAW LATER' : '○ FULL JOURNEY TO DRAW · NOTHING YET',
+      links: j.links.map(l => ({ label: l.label, href: l.href, bg: l.primary ? INK : 'transparent', fg: l.primary ? ON : INK, shadow: l.primary ? 'var(--dt-btn-shadow)' : 'none' }))
+    });
+    const mkStops = (ids) => ids.map(id => { const k = S.findIndex(x => x.id === id); return { id, pick: () => this.go(k), fg: k === s.sel ? ON : INK, bg: k === s.sel ? INK : 'transparent' }; });
+    const count = (st) => S.filter(x => x.status === st).length;
+    return {
+      dark, themeLabel: dark ? '☀ PAPER' : '☾ BLUEPRINT', toggleTheme: () => this.setState({ dark: !this.isDark() }),
+      stations, cur,
+      cardAnim: 'dtChange' + (s.tick % 2 ? 'A' : 'B') + ' .6s ease-out',
+      prev: () => this.go(s.sel - 1), next: () => this.go(s.sel + 1),
+      nBuilt: count('built'), nPartial: count('partial'), nPlanned: count('planned'), nHorizon: count('horizon'),
+      coverage: [
+        { code: 'A-01', name: 'Layout Canvas', stops: mkStops(['J3', 'J4', 'J11', 'J13']), color: PASS },
+        { code: 'B-01', name: 'When the AI isn\u2019t sure', stops: mkStops(['J1', 'J2']), color: PASS },
+        { code: 'C-01', name: 'Railbed: own, adapt, buy', stops: mkStops(['J5', 'J6', 'J7', 'J8', 'J11']), color: PASS },
+        { code: 'Hub', name: 'Decision log', stops: mkStops(['J12']), color: PASS },
+        { code: 'P-01', name: 'Buying the gap', stops: mkStops(['J7']), color: PASS },
+        { code: 'F-01', name: 'Family Workbench', stops: mkStops(['J11', 'O4']), color: PASS },
+        { code: 'H-01', name: 'The handoff', stops: mkStops(['J12']), color: PASS },
+        { code: '—', name: 'Not drawn yet', stops: mkStops(['J9', 'J10', 'J13']), color: UNRESD },
+        { code: '◌', name: 'On the horizon — new ways in', stops: mkStops(['O2', 'O3', 'O4']), color: ACCD }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
