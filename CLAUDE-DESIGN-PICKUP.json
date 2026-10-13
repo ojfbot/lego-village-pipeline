@@ -31,5 +31,15 @@
   "authority": "Operator-requested design continuation; supplemental review artifacts remain non-operative",
   "source_archive": "claude-design-r6-pickup.zip",
   "prebuilt_preview_archive": "claude-design-r6-preview.zip",
-  "archive_scope": "Tracked review-source subset plus separate compiled preview"
+  "archive_scope": "Tracked review-source subset plus separate compiled preview",
+  "connector_verification": {
+    "date": "2026-10-13",
+    "branch_named_reads": [
+      "corr/review-dt-design-r6",
+      "feat/house-world-design-brief"
+    ],
+    "model_encoding": "base64",
+    "model_git_blob_sha": "8c63d7fc942c5e2833a227153a6bfa239eb88019",
+    "model_bytes": 755960
+  }
 }

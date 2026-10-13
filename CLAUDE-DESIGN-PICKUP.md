@@ -54,6 +54,8 @@ Open `/prototypes/House%20World.dc.html` on that server. Port 4200 on James's Ma
 
 If using the supplied archives, extract `claude-design-r6-pickup.zip` for the review source, tools, model and Blender assets under `lego-village-r6-pickup/`. It is a tracked review-source subset, not a complete repository clone. The companion `claude-design-r6-preview.zip` contains **`browser-preview/`**, a prebuilt copy for environments that cannot run the source build. Serve `browser-preview/` as the HTTP root and open `/prototypes/House%20World.dc.html`. A `file://` tab does not reproduce the model fetches or module loading. The source `three-modern.js` has package imports that require the Vite build; do not paste that file into an unbundled HTML document and replace the resulting failed model with boxes.
 
+The GitHub connector was independently checked on 2026-10-13: both branch-specific pickup files and the GLB were readable. For a file tool that supports encoded content, request the GLB with `ref: "corr/review-dt-design-r6"` and `encoding: "base64"`, then decode and save the binary bytes. A default UTF-8 read is inappropriate for a GLB.
+
 If the connector cannot fetch the binary GLB, use its direct raw download or ask James to attach the pickup ZIP. Identify binary-fetch access as the blocker. JSON-only access is not evidence that the model is missing. A schematic fallback may explain a load failure, but cannot serve as the visual baseline for this design iteration.
 
 ## Own this design round
