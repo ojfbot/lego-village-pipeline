@@ -2,6 +2,9 @@
 
 ## Deviations
 
+- 2026-10-11 (HOUSE-WORLD transfer): the package check was expected to enforce accepted governing-brief status; its lookup resolves a present, non-superseded row regardless of acceptance. Kept 037 explicitly for review, created no operative instruments row, and documented structural validation separately from design authority.
+- 2026-10-11 (HOUSE-WORLD transfer): source-tree measurement assumed a runnable workspace would stay free of generated files; pnpm and Vite create ignored dependency/build artifacts inside the cut. Added a committed-tree extraction verifier against the external receipt, so reproduction cannot silently change the received digest.
+
 - 2026-09-17 (founding, 019 §1.2): 019 instructed committing REGISTER.md "verbatim from the
   attached copy, version 2026-09-17.5"; the operator-exported copy was version **.6**, which
   supersedes .5 and itself instructs holders of older copies to discard them. Committed .6.
@@ -194,3 +197,6 @@
   failing CI gate; the Hub candidate needs a working gate without changing that design cut.
   Added an app-owned token override and checked all effective text tokens at the same 4.5:1
   threshold. The original source defect remains recorded in H-01 R1.
+
+- 2026-10-12: The suspected extra source brick is the valid lowest exterior step tile in Block 1; preserve the frozen Blender source and correct course grouping in a separate export study rather than delete geometry.
+- 2026-10-12: The published R0 cut is already hash-pinned; publish the corrected GLB, JSON, exporter, and asset verification as a sibling correction rather than mutate the received cut.

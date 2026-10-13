@@ -1,0 +1,100 @@
+{
+  "captured": "2026-10-11",
+  "status": "research intake only; no implementation authority",
+  "issues": [
+    {
+      "number": 33,
+      "title": "Design research: LEGO\u00ae SERIOUS PLAY\u00ae as a precedent for family sessions, teaching and publishing \u2014 synthesis and ten forks",
+      "url": "https://github.com/ojfbot/lego-village-pipeline/issues/33",
+      "state": "OPEN",
+      "updated_at": "2026-10-11T01:47:40Z",
+      "body_sha256": "ef693b1c63c88942a7d1aeb3a8bb2fc0619790972fe6ab4790055712486660a5"
+    },
+    {
+      "number": 34,
+      "title": "Research question: build-and-tell etiquette as enforceable agent policy (meaning never judged, bricks always checked)",
+      "url": "https://github.com/ojfbot/lego-village-pipeline/issues/34",
+      "state": "OPEN",
+      "updated_at": "2026-10-11T01:43:56Z",
+      "body_sha256": "f995f9b252d6f1dba9f99105b31a9abbdb01a1689f4a047ee7489a613ab7b222"
+    },
+    {
+      "number": 35,
+      "title": "Research question: can an AI agent host a family build session \u2014 existing evidence, and how LVP produces its own",
+      "url": "https://github.com/ojfbot/lego-village-pipeline/issues/35",
+      "state": "OPEN",
+      "updated_at": "2026-10-11T01:44:48Z",
+      "body_sha256": "b72f36665775083ef66710c9b5fe998e14b4a5e091c9a46a9093f6f65a4574a1"
+    },
+    {
+      "number": 36,
+      "title": "Research question: which co-design method fits a family with children \u2014 LSP vs Cooperative Inquiry, the Creative Learning Spiral, Six Bricks and others",
+      "url": "https://github.com/ojfbot/lego-village-pipeline/issues/36",
+      "state": "OPEN",
+      "updated_at": "2026-10-11T01:44:51Z",
+      "body_sha256": "f34cf1b830aa553a085e1fa598b431638e3932105e61fc9fc65c20ed3aa3e434"
+    },
+    {
+      "number": 37,
+      "title": "Research question: one village vocabulary \u2014 reconcile build-and-tell terms with the series plan and the H-01 screens",
+      "url": "https://github.com/ojfbot/lego-village-pipeline/issues/37",
+      "state": "OPEN",
+      "updated_at": "2026-10-11T01:45:33Z",
+      "body_sha256": "d8a47f9f3387c80c2306c455203c626d301cfcc3382c270e5887006388980b01"
+    },
+    {
+      "number": 38,
+      "title": "Research question: the build-and-story card and the session record \u2014 prototype the unit shared by the UI, the archive and published posts",
+      "url": "https://github.com/ojfbot/lego-village-pipeline/issues/38",
+      "state": "OPEN",
+      "updated_at": "2026-10-11T01:45:35Z",
+      "body_sha256": "d6b1a8c4596a3a885fe765daffeaca2ae3d2ad5d6d82be59db500f62a02da6db"
+    },
+    {
+      "number": 39,
+      "title": "Research question: seeing everyone's ideas before merging \u2014 compare landscape and merge interactions on the Village Map",
+      "url": "https://github.com/ojfbot/lego-village-pipeline/issues/39",
+      "state": "OPEN",
+      "updated_at": "2026-10-11T01:45:39Z",
+      "body_sha256": "5aefe4177be0126c586fa1ad1bc4dd7e250db5af8fc3096c39239eb7fb52c589"
+    },
+    {
+      "number": 40,
+      "title": "Research question: a What-If deck from LVP's real failure history \u2014 family and developer editions",
+      "url": "https://github.com/ojfbot/lego-village-pipeline/issues/40",
+      "state": "OPEN",
+      "updated_at": "2026-10-11T01:46:23Z",
+      "body_sha256": "ba57f6ba96a0fb14514a4c02383265ee19a478fab295ac78e286ef1c9b2d5276"
+    },
+    {
+      "number": 41,
+      "title": "Research question: teaching the stack by building it \u2014 a hands-on lab for agent harnesses, the agentic stack, and what it delivers",
+      "url": "https://github.com/ojfbot/lego-village-pipeline/issues/41",
+      "state": "OPEN",
+      "updated_at": "2026-10-11T01:46:26Z",
+      "body_sha256": "126afbbdc4de3cc269f7ff361c6129b6c7c78e4974d2a80de19edcb913e1f704"
+    },
+    {
+      "number": 42,
+      "title": "Research question: licence and name posture for an open method, open code, and a family's own stories",
+      "url": "https://github.com/ojfbot/lego-village-pipeline/issues/42",
+      "state": "OPEN",
+      "updated_at": "2026-10-11T01:46:29Z",
+      "body_sha256": "906cb05a0d57f02993dfe2b72317d40664aeb382db2a5959ed911cb1d23a1581"
+    },
+    {
+      "number": 43,
+      "title": "Research question: from session record to published post \u2014 a layered, consent-gated path through the village article workflow to BlogEngine",
+      "url": "https://github.com/ojfbot/lego-village-pipeline/issues/43",
+      "state": "OPEN",
+      "updated_at": "2026-10-11T01:46:52Z",
+      "body_sha256": "effbdf22f551c7fce3346d5043c8a224b45026539a010f1e7a504110aa4f47e6"
+    }
+  ],
+  "selfco_query": {
+    "repo": "ojfbot/selfco",
+    "query": "\"SERIOUS PLAY\"",
+    "matches": 0,
+    "private_synthesis": "not verified or included"
+  }
+}

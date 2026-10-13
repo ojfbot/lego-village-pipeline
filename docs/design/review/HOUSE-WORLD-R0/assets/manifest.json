@@ -1,0 +1,42 @@
+{
+  "captured": "2026-10-11",
+  "source_files_preserved": true,
+  "files": [
+    {
+      "path": "assets/blender/legoHouse.blend",
+      "bytes": 23817384,
+      "sha256": "6c0f6f3bb757370979df0a7d6c5951df1f0ef51716f56412b9d2e55338cc0541",
+      "role": "source"
+    },
+    {
+      "path": "assets/blender/legoHouse.blend1",
+      "bytes": 23817608,
+      "sha256": "cd5c84828422da57e0ef90a168f1929aa30b9d70461bef7aecc615ecc547be0d",
+      "role": "source"
+    },
+    {
+      "path": "assets/blender/audit.json",
+      "bytes": 464,
+      "sha256": "03368e9c2f76a559f46a38f8c679b21072d09e0e46b2ed43c3010bcf259a07ec",
+      "role": "audit or derived asset"
+    },
+    {
+      "path": "prototype/house.glb",
+      "bytes": 756868,
+      "sha256": "52a3efbcc906d6c33582c949255c6b86e5b3b41b3dde7afe35c770cd6b70513f",
+      "role": "audit or derived asset"
+    },
+    {
+      "path": "prototype/house-metadata.json",
+      "bytes": 39565,
+      "sha256": "a3a4449ae10441b14a9cf587ad02d64a6d7796a3b382b0141a64469bf7dc527d",
+      "role": "audit or derived asset"
+    },
+    {
+      "path": "prototype/export_house.py",
+      "bytes": 7941,
+      "sha256": "5c6e26dbc38257b4e28a9bcdb5ccf52fa5c135483cee19e310cc3461fdce7020",
+      "role": "audit or derived asset"
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+@font-face { font-family: DynaPuff; src: url('/fonts/DynaPuff.ttf') format('truetype'); font-weight: 400 700; font-display: swap; }
+:root { scrollbar-gutter: stable; }
+body.studio-landing { --studio-bg:#172B40; --studio-white:#FFF4D6; --studio-red:#FF533D; --studio-ink:#142438; background:var(--studio-bg); overflow:auto; }
+body.studio-landing:not(.dt-blueprint) { --studio-bg:#EAE8DA; --studio-white:#172B40; }
+.studio-landing .app-shell { height:auto; min-height:100svh; display:block; }
+.studio-landing .app-header { position:fixed; top:0; inset-inline:0; z-index:15; height:94px; align-items:center; padding:22px 38px; border:0; background:transparent; pointer-events:none; }
+.app-header > * { pointer-events:auto; }
+.studio-mark { background:var(--studio-bg); padding:8px 12px; margin-left:-12px; border-radius:16px; display:flex; gap:12px; align-items:center; color:var(--studio-white); text-decoration:none; font-size:12px; font-weight:500; line-height:1.35; }
+.studio-mark svg { width:32px; height:32px; color:var(--studio-red); }
+.studio-mark:hover { color:var(--studio-white); }
+.landing-nav { display:flex; align-items:center; gap:12px; }
+.landing-nav button { color:var(--studio-white); background:var(--studio-bg); border:1px solid color-mix(in srgb,var(--studio-white) 45%,transparent); border-radius:999px; padding:12px 18px; font-size:13px; }
+.landing-nav button:hover { background:var(--studio-white); color:var(--studio-bg); }
+#settings-toggle { padding:11px; width:42px; height:42px; }
+#settings-toggle svg { width:20px; height:20px; }
+.scene-settings { position:absolute; top:80px; right:38px; width:320px; padding:22px; background:var(--dt-sheet); border:1px solid var(--dt-muted); border-radius:16px; color:var(--dt-ink); box-shadow:0 15px 40px #0003; }
+.scene-settings h2 { font:500 24px/1.2 Georgia,serif; margin:0 0 8px; }
+.scene-settings p { font-size:12px; line-height:1.5; }
+.scene-settings .header-actions { max-width:none; display:flex; flex-wrap:wrap; justify-content:start; margin:18px 0; }
+.scene-settings label { display:block; font-size:12px; margin-bottom:7px; }
+.scene-settings select { max-width:none; width:100%; margin-bottom:12px; }
+.scene-settings .settings-note { margin-bottom:0; color:var(--dt-muted); }
+.studio-landing .work-area { display:block; }
+.studio-landing #module-list { display:block; }
+.studio-landing .world-main { display:block; }
+.scene-scroll { position:relative; height:800svh; }
+.scene-sticky { position:sticky; top:0; height:100svh; overflow:hidden; }
+.studio-landing .world-figure { position:absolute; inset:0; height:100%; display:block; }
+.studio-landing #house-stage { position:absolute; inset:0; height:100%; background-color:var(--studio-bg); background-image:linear-gradient(#95ADC608 1px,transparent 1px),linear-gradient(90deg,#95ADC608 1px,transparent 1px); background-size:70px 70px; }
+.studio-landing #house-stage canvas { touch-action:pan-y; }
+.studio-landing #model-status { top:auto; bottom:100px; left:auto; right:38px; color:var(--dt-muted); background:transparent; border:0; padding:0; font:11px/1.4 inherit; max-width:230px; text-align:right; pointer-events:none; }
+.landing-poster { position:absolute; top:21%; left:5%; width:47%; z-index:3; pointer-events:none; transform-origin:left center; }
+.landing-poster h1 { display:inline-flex; flex-direction:column; color:var(--studio-white); font:700 clamp(110px,14vw,245px)/.9 DynaPuff,'Arial Rounded MT Bold',sans-serif; letter-spacing:-.065em; transform:rotate(-6deg); text-shadow:1px 1px 0 var(--studio-red),2px 2px 0 var(--studio-red),3px 3px 0 var(--studio-red),4px 4px 0 var(--studio-red),5px 5px 0 var(--studio-red),6px 6px 0 var(--studio-red),7px 7px 0 var(--studio-red),8px 8px 0 var(--studio-red),9px 9px 0 var(--studio-red),10px 10px 0 var(--studio-red); }
+.landing-poster h1 span:nth-child(2) { margin-left:20px; }
+.landing-deck { margin:42px 0 18px 14px; color:var(--studio-white); font-size:16px; line-height:1.5; max-width:27ch; }
+.studio-landing #start-demo { pointer-events:auto; background:var(--studio-white); border:0; color:var(--studio-bg); padding:14px 21px; margin-left:14px; font-size:13px; border-radius:999px; }
+#start-demo span { padding-left:16px; }
+.studio-landing #start-demo:hover { background:var(--studio-red); color:white; }
+.flight-caption { position:absolute; left:5%; bottom:120px; color:var(--studio-white); pointer-events:none; max-width:400px; opacity:0; padding:18px 22px; margin-left:-22px; border-radius:18px; background:linear-gradient(100deg,rgba(23,43,64,.94),rgba(23,43,64,.72) 70%,transparent); }
+#chapter-title { font:500 clamp(28px,3.4vw,52px)/1.15 DynaPuff,sans-serif; letter-spacing:-.03em; margin:0 0 12px; }
+#world-instruction { font-size:13px; line-height:1.5; max-width:32ch; margin:0; }
+.studio-landing .world-footer { position:absolute; inset-inline:38px; bottom:24px; border:0; background:transparent; padding:0; align-items:center; display:flex; color:var(--studio-white); }
+.prototype-note { font-size:11px; opacity:.7; }
+.flight-scrubber { display:flex; align-items:center; gap:12px; background:var(--studio-bg); border:1px solid color-mix(in srgb,var(--studio-white) 35%,transparent); padding:12px 18px; border-radius:999px; }
+.flight-scrubber label { font-size:11px; white-space:nowrap; }
+.flight-scrubber input { width:120px; border:0; accent-color:var(--studio-red); }
+#flight-percent { font-size:10px; width:28px; font-variant-numeric:tabular-nums; }
+#restart-flight { border:0; background:transparent; color:var(--studio-white); font-size:11px; padding:8px 0; }
+.studio-landing #landscape { position:absolute; inset:110px 5% 90px; background:var(--studio-bg); color:var(--studio-white); border:0; }
+body.builder-landscape .scene-scroll { height:100svh; }
+body.builder-landscape .landing-poster, body.builder-landscape .flight-caption, body.builder-landscape .flight-scrubber { display:none; }
+/* Sheets occupy the title's space; the architecture retains its exact view beside them. */
+.studio-landing .dashboard { inset:0 auto 0 0; width:min(900px,57vw); padding:0; display:block; background:transparent; opacity:1; transition:none; }
+.studio-landing .dashboard-sheet { min-height:100%; max-height:100%; height:100%; width:100%; border:0; border-right:1px solid var(--dt-ink); box-shadow:12px 0 40px #0002; padding:25px 32px; transform:none; transition:none; }
+.studio-landing .dashboard-title-row h2 { font-size:clamp(28px,3.5vw,48px); }
+.studio-landing .dashboard-content { grid-template-columns:minmax(0,1.5fr) minmax(170px,.8fr); }
+.studio-landing .dashboard-main { padding-right:20px; }
+.studio-landing .dashboard-rail { padding-left:20px; }
+.studio-landing .dashboard-description { font-size:14px; }
+.studio-landing .dashboard-title-row { padding-top:24px; }
+.studio-landing .dashboard-footer { flex-direction:column; }
+.studio-landing .benny-panel { left:calc(min(900px,57vw) + 14px); right:auto; top:100px; bottom:25px; }
+.studio-landing.sheet-open { overflow:hidden; }
+.studio-landing :focus-visible { outline:3px solid var(--studio-red); outline-offset:4px; }
+@media (max-width:1000px) { .studio-landing .dashboard { width:70vw; } .studio-landing .dashboard-content { display:block; } .studio-landing .dashboard-rail { padding:20px 0; border-left:0; border-top:1px solid var(--dt-grid-mid); } .studio-landing .benny-panel { left:auto; right:18px; } .landing-poster h1 { font-size:15vw; } .prototype-note { display:none; } }
+@media (max-width:740px) {
+  .studio-landing .app-header { height:80px; padding:16px 20px; flex-direction:row; align-items:center; gap:8px; }
+  .studio-mark { font-size:10px; gap:8px; }
+  .studio-mark svg { width:26px; height:26px; }
+  .landing-nav { gap:8px; }
+  .landing-nav button { font-size:11px; padding:10px 13px; }
+  .scene-settings { right:20px; top:75px; width:calc(100vw - 40px); }
+  .landing-poster { top:14%; left:7%; width:86%; }
+  .landing-poster h1 { font-size:18vw; flex-direction:row; gap:.13em; transform:rotate(-4deg); text-shadow:1px 1px 0 var(--studio-red),2px 2px 0 var(--studio-red),3px 3px 0 var(--studio-red),4px 4px 0 var(--studio-red); }
+  .landing-poster h1 span:nth-child(2) { margin:0; }
+  .landing-deck { font-size:13px; margin:22px 0 12px; }
+  .studio-landing #start-demo { margin:0; padding:10px 14px; font-size:11px; }
+  .studio-landing .world-footer { inset-inline:20px; bottom:20px; justify-content:center; }
+  .flight-scrubber { gap:8px; padding:10px 12px; }
+  .flight-scrubber label { font-size:10px; }
+  .flight-scrubber input { width:85px; }
+  #restart-flight { display:none; }
+  .flight-caption { bottom:105px; left:7%; max-width:270px; }
+  #chapter-title { font-size:32px; }
+  .studio-landing #model-status { right:20px; bottom:80px; font-size:9px; }
+  .studio-landing .dashboard { width:100%; }
+  .studio-landing .dashboard-sheet { padding:18px; border:0; }
+  .studio-landing .dashboard-title-row h2 { font-size:34px; }
+  .studio-landing #landscape { inset:90px 0 80px; padding:20px; }
+}
+
+.prototype-note, #restart-flight, #model-status { background:var(--studio-bg); padding:6px 8px; border-radius:8px; }
+
+@media (max-width:739px) { .landing-deck { background:color-mix(in srgb,var(--studio-bg) 94%,transparent); padding:8px; margin-left:-8px; width:max-content; border-radius:8px; } }
+
+/* Editable room finding borrows Hailstone's input/suggestions interaction. */
+.room-finder { position:relative; width:280px; margin:0; color:var(--studio-white); }
+.room-search-icon { position:absolute; left:15px; top:13px; width:18px; height:18px; pointer-events:none; }
+.studio-landing .room-finder input { width:100%; height:44px; padding:10px 18px 10px 43px; background:var(--studio-bg); color:var(--studio-white); border:1px solid color-mix(in srgb,var(--studio-white) 55%,transparent); border-radius:999px; font-size:13px; }
+.room-finder input::placeholder { color:var(--studio-white); opacity:.8; }
+.room-popup { position:absolute; top:calc(100% + 12px); right:0; width:390px; max-width:calc(100vw - 40px); padding:14px; background:var(--dt-sheet); color:var(--dt-ink); border:1px solid var(--dt-muted); border-radius:18px; box-shadow:0 18px 60px #0005; }
+.room-popup-heading { display:flex; justify-content:space-between; gap:12px; padding:4px 4px 10px; font-size:10px; color:var(--dt-muted); }
+.studio-landing #module-list { margin:0; max-height:min(55svh,440px); overflow-y:auto; overscroll-behavior:contain; scroll-padding:5px; }
+#module-list .room-option { display:grid; grid-template-columns:43px minmax(0,1fr); gap:3px 9px; border:0; border-left:3px solid transparent; padding:12px 9px; border-radius:8px; cursor:pointer; }
+#module-list .room-option[aria-selected="true"] { border-left-color:var(--studio-red); background:color-mix(in srgb,var(--dt-ink) 10%,var(--dt-sheet)); }
+.room-option .module-title { font-size:14px; }
+.room-option .module-sub { font-size:11px; }
+#room-help { font-size:10px; color:var(--dt-muted); margin:12px 4px 2px; padding-top:10px; border-top:1px solid var(--dt-grid-mid); }
+#room-empty { font-size:13px; line-height:1.5; padding:10px 4px; }
+@media (max-width:740px) {
+  .studio-mark span { display:none; }
+  .studio-mark { padding:8px; margin-left:-8px; }
+  .room-finder { width:min(56vw,240px); }
+  .room-popup { position:fixed; top:74px; left:20px; right:20px; width:auto; max-width:none; }
+  .studio-landing #module-list { max-height:calc(100svh - 180px); }
+  .studio-landing .room-finder input { font-size:16px; }
+}
+
+/* The wordmark settles first; the camera and architecture continue behind it. */
+.landing-poster h1 { text-shadow:none; filter:drop-shadow(8px 8px 0 var(--studio-red)); transform-origin:left center; }
+.landing-poster h1 span { color:transparent; -webkit-text-fill-color:transparent; background:linear-gradient(110deg,#FFF4D6 0%,#FFF4D6 20%,#FFE17D 50%,#FFF4D6 80%,#FFF4D6 100%); background-size:400% 100%; background-position:var(--wordmark-gradient,0%) 50%; background-clip:text; -webkit-background-clip:text; }
+body:not(.dt-blueprint) .landing-poster h1 span { background-image:linear-gradient(110deg,#172B40 0%,#172B40 20%,#FFE17D 50%,#172B40 80%,#172B40 100%); }
+@media (max-width:740px) { .landing-poster h1 { filter:drop-shadow(4px 4px 0 var(--studio-red)); } }
+
+.landing-deck, #start-demo { position:relative; z-index:1; }
+.landing-deck { background:var(--studio-bg); padding:8px 10px; border-radius:10px; width:max-content; }
+
+/* One chapter at a time; the wordmark owns the opening. */
+.studio-landing .flight-caption { display:block; z-index:4; bottom:42px; width:max-content; max-width:90vw; padding:18px 22px; background:none; border-radius:0; }
+.studio-landing #chapter-title { font-size:clamp(28px,3vw,44px); line-height:1.12; font-weight:500; letter-spacing:-.025em; text-shadow:2px 2px 0 var(--studio-red),0 2px 6px #102239cc,0 0 18px #10223980; }
+.studio-landing #world-instruction { max-width:none; text-shadow:0 1px 2px #102239,0 0 7px #102239; }
+.studio-landing.sheet-open .flight-caption,
+.studio-landing.builder-landscape .flight-caption,
+.studio-landing:has(.room-popup:not([hidden])) .flight-caption,
+.studio-landing:has(.scene-settings:not([hidden])) .flight-caption { visibility:hidden; }
+.studio-landing #model-status { width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+.scene-settings .flight-scrubber { margin:16px 0 10px; padding:0; border:0; background:transparent; border-radius:0; display:block; }
+.scene-settings .flight-scrubber label { white-space:normal; margin-bottom:5px; }
+.scene-settings .flight-scrubber input { width:calc(100% - 40px); vertical-align:middle; }
+.scene-settings #restart-flight { display:inline-block; color:var(--dt-ink); background:var(--dt-sheet); padding:8px 12px; border:1px solid var(--dt-muted); font-size:12px; }
+
+/* Bubble accents connect the room list and sheets to PLAY WELL. */
+.studio-landing .scene-settings h2,
+.studio-landing .dashboard-title-row h2,
+.studio-landing .benny-panel h3 { font-family:DynaPuff,'Arial Rounded MT Bold',sans-serif; font-weight:500; line-height:1.18; letter-spacing:-.025em; }
+.studio-landing .dashboard-content h3,
+.studio-landing .dashboard-content h4 { font-family:DynaPuff,'Arial Rounded MT Bold',sans-serif; font-weight:400; line-height:1.35; letter-spacing:-.015em; }
+.room-option .module-title { font-family:DynaPuff,'Arial Rounded MT Bold',sans-serif; font-weight:400; font-size:14px; line-height:1.4; letter-spacing:-.015em; }
+@media (max-width:740px) {
+  .studio-landing .flight-caption { left:7%; bottom:28px; max-width:calc(86vw + 18px); padding:14px 18px; margin-left:-18px; }
+  .studio-landing #chapter-title { font-size:clamp(20px,5.6vw,28px); }
+  .studio-landing .dashboard-title-row h2 { font-size:30px; }
+}
