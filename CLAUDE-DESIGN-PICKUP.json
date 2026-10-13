@@ -28,5 +28,8 @@
   "separate_research_task": "R6-NEXT-RENDER",
   "archive_preview_root": "browser-preview",
   "archive_source_root": "lego-village-r6-pickup",
-  "authority": "Operator-requested design continuation; supplemental review artifacts remain non-operative"
+  "authority": "Operator-requested design continuation; supplemental review artifacts remain non-operative",
+  "source_archive": "claude-design-r6-pickup.zip",
+  "prebuilt_preview_archive": "claude-design-r6-preview.zip",
+  "archive_scope": "Tracked review-source subset plus separate compiled preview"
 }
