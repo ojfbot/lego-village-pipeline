@@ -474,7 +474,18 @@ allocations:
   state: landed
   thread: cluster
   type: CORR
-next_free: 37
+- actor: Claude (claude.ai, Lego Village Pipeline project)
+  allocated_by: 'James, 2026-10-13 — "take the next available registration" (claude.ai Lego Village Pipeline session); 037 already allocated to HANDOFF-LEGO-PIPE-037 on feat/house-world-design-brief, so next available was 038'
+  basis: 'operator-only findings memo on BrickBench (arXiv 2610.12452); landed ahead of 037, whose ledger entry lives on its own unlanded branch'
+  date: '2026-10-13'
+  identity: CORR-LEGO-PIPE-038
+  key: 038-R0
+  landed_version: null
+  number: 38
+  state: in_flight
+  thread: cluster
+  type: CORR
+next_free: 39
 purpose: every memo number ever allocated, with its lifecycle (reserved | in_flight | landed | withdrawn); numbers are never recycled (rules 2, 3); next_free is derived, never hand-maintained; no landing_pr field exists (RR-32-R2-03)
 schema: register-allocations/v1
 seeded_from: the correspondence table's first column at the migration base (R0 §4 item 4) plus the operator's Q-01 reservations
