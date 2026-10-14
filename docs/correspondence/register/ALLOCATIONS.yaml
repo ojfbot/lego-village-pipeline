@@ -475,14 +475,14 @@ allocations:
   thread: cluster
   type: CORR
 - actor: Claude (claude.ai, Lego Village Pipeline project)
-  allocated_by: 'James, 2026-10-13 — "take the next available registration" (claude.ai Lego Village Pipeline session); 037 already allocated to HANDOFF-LEGO-PIPE-037 on feat/house-world-design-brief, so next available was 038'
-  basis: 'operator-only findings memo on BrickBench (arXiv 2610.12452); landed ahead of 037, whose ledger entry lives on its own unlanded branch'
+  allocated_by: James, 2026-10-13 — "take the next available registration" (claude.ai Lego Village Pipeline session); 037 already allocated to HANDOFF-LEGO-PIPE-037 on feat/house-world-design-brief, so next available was 038
+  basis: operator-only findings memo on BrickBench (arXiv 2610.12452); landed ahead of 037, whose ledger entry lives on its own unlanded branch
   date: '2026-10-13'
   identity: CORR-LEGO-PIPE-038
   key: 038-R0
-  landed_version: null
+  landed_version: 2026-09-18.34
   number: 38
-  state: in_flight
+  state: landed
   thread: cluster
   type: CORR
 next_free: 39
