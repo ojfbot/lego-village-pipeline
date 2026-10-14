@@ -647,12 +647,12 @@ class LedgerSetPointer(unittest.TestCase):
             root = copy_tree(tmp)
             lp = os.path.join(root, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml")
             def mut(d):
-                for n in range(40, 45):
+                for n in range(36, 41):
                     d["allocations"].append({"key": f"{n:03d}", "number": n, "identity": f"CORR-LEGO-PIPE-{n:03d}", "type": "CORR", "thread": "cluster", "actor": "x", "allocated_by": "James", "date": "2026-09-21", "state": "reserved", "landed_version": None, "basis": "test"})
-                d["next_free"] = 45
+                d["next_free"] = 41
             edit_yaml(lp, mut)
             regp = os.path.join(root, RL.REGISTER_REL)
-            RL.write_bytes(regp, RL.read_bytes(regp).replace(b"| 036+ |", b"| 045+ |"))
+            RL.write_bytes(regp, RL.read_bytes(regp).replace(b"| 036+ |", b"| 041+ |"))
             errs, _, _ = lint_errs(root)
             self.assertEqual(errs_for("RL-02", errs), [], errs)
 
@@ -662,6 +662,15 @@ class LedgerSetPointer(unittest.TestCase):
             edit_yaml(os.path.join(root, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"), lambda d: d["allocations"].append(dict(d["allocations"][-1])))
             errs, _, _ = lint_errs(root)
             self.assertTrue(any("duplicate ledger key" in e for e in errs_for("RL-02", errs)), errs)
+
+    def test_mutation_rl02_missing_number_below_next_free(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = copy_tree(tmp)
+            edit_yaml(os.path.join(root, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"),
+                      lambda d: d.update(allocations=[e for e in d["allocations"] if e["number"] != 34]))
+            errs, _, _ = lint_errs(root)
+            self.assertTrue(any("allocation ledger skips number(s) below next_free: 034" in e
+                                for e in errs_for("RL-02", errs)), errs)
 
     def test_mutation_rl02_landed_without_row(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -1482,11 +1491,24 @@ class TempRepo:
                        RL.record_bytes({"affected_memos": [memo], "allocations_consumed": [key]}, body))
 
     def reserve(self, repo, key, number):
-        edit_yaml(os.path.join(repo, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"), lambda d: (
+        def reserve_contiguously(d):
+            # High-number keys keep Git-tier scenarios visually distinct. Retain every
+            # intervening number as a withdrawn battery allocation so those fixtures satisfy
+            # RL-02 continuity without adding unrelated correspondence-table rows.
+            existing = {e["number"] for e in d["allocations"] if isinstance(e.get("number"), int)}
+            for skipped in range(d["next_free"], number):
+                if skipped in existing:
+                    continue
+                d["allocations"].append({"key": f"{skipped:03d}-BATTERY-WITHDRAWN", "number": skipped,
+                                         "identity": f"CORR-LEGO-PIPE-{skipped:03d}-BATTERY-WITHDRAWN", "type": "CORR",
+                                         "thread": "cluster", "actor": "battery", "allocated_by": "James (battery)",
+                                         "date": "2026-09-21", "state": "withdrawn", "landed_version": None,
+                                         "basis": "battery continuity filler; not the scenario under test"})
             d["allocations"].append({"key": key, "number": number, "identity": f"CORR-LEGO-PIPE-{number:03d}", "type": "CORR",
                                      "thread": "cluster", "actor": "battery", "allocated_by": "James (battery)", "date": "2026-09-21",
-                                     "state": "in_flight", "landed_version": None, "basis": "battery"}),
-            d.update(next_free=max(d["next_free"], number + 1))))
+                                     "state": "in_flight", "landed_version": None, "basis": "battery"})
+            d["next_free"] = max(d["next_free"], number + 1)
+        edit_yaml(os.path.join(repo, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"), reserve_contiguously)
         regp = os.path.join(repo, RL.REGISTER_REL)
         txt = RL.read_bytes(regp).decode()
         nf = RL.next_free_row_number(txt)

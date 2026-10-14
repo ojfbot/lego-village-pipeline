@@ -552,6 +552,12 @@ class Lint:
                 self.err("RL-02", f"table row {key} has no ledger entry")
         nf = next_free_row_number(self.reg.regtxt)
         derived = (max(numbers) + 1) if numbers else None
+        if numbers:
+            allocated = set(numbers)
+            missing = sorted(set(range(min(allocated), derived)) - allocated)
+            if missing:
+                rendered = ", ".join(f"{n:03d}" for n in missing)
+                self.err("RL-02", f"allocation ledger skips number(s) below next_free: {rendered}")
         if nf is None:
             self.err("RL-02", "no next-free row (NNN+) in the correspondence table")
         elif derived is not None and nf != derived:
