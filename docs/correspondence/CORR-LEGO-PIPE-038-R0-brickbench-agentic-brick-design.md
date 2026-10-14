@@ -19,13 +19,16 @@ argument: >
   general coding agents are found to out-build the purpose-made brick models, but only while a
   validator stands beside them; the validator is found to buy soundness and nothing else, the
   design gap to a human set remaining wide; an earlier research report is corrected on two
-  numbers and on a creator it had no business re-identifying; and the consequences are laid
+  numbers; two Blender precedents are put on the shelf, one confirmed and one awaiting a source; and the consequences are laid
   out for the operator alone, for brick_bench, brickcore and the inventory rooms, with nothing
   decided and the order gate left untouched.
 provenance:
   source_artifacts:
     - {name: "arXiv 2610.12452v1 — Kulits, Xu, Jones, Schmid, Wu, 'BrickBench: Evaluating Agentic Brick Design', submitted 2026-10-08", role: "primary source, read section by section from https://arxiv.org/html/2610.12452v1 (Sections 1–7, Tables 1, 2 and A1, Appendix C)"}
     - {name: "http://www.brickben.ch", role: "the paper's stated release location; NOT read — the fetch permission timed out, so nothing here rests on it"}
+    - {name: "YouTube KPYpZEr5c6E — 'This LEGO Animation Hack in BLENDER Changed My Life | Trevor Carlee' (The VFX Process)", role: "operator-supplied 2026-10-13; confirms Carlee as a Blender-native LEGO precedent (oEmbed metadata read; video not transcribed)"}
+    - {name: "YouTube a0PYJRo4NVE — 'How to Build a Big 3D LEGO City (without blowing up your computer) | Blender Tutorial' (TiNKLe, @TiNKLeFilms)", role: "operator-supplied 2026-10-13; city-scale Blender performance precedent (oEmbed metadata read; video not transcribed)"}
+    - {name: "reddit r/lego thread 1vntuwu — 'Been building a digital LEGO city for the past 2…' (attributed to crazytakeharu)", role: "operator-supplied lead; NOT read — the site is blocked to this session, and no other source for the handle was found"}
     - {name: "Claude Advanced Research report, claude.ai, 2026-10-13 ('Play-Well Research Extension: Blender LEGO Craft, Procedural Snow and Terrain, and Instructions-to-Build Groups')", role: "the secondary summary this memo corrects in §3; not committed"}
     - {name: "Dia research seeds, 2026-10-13 (not committed; hashes only)", role: "operator's starting briefs — Digital LEGO in Blender sha256 b3b5ecd47eb1d35e107c5117d638d6f15d93950538c8e62b8d513247f8d4a876; Procedural Generation for the Village Pipeline sha256 71e7e2da3485f8e1d6c9f4cff20a2b64562e10229b949261c6dea4dee138dd4f; From Instructions to Buildable Groups sha256 e21f00f347aab1234af6f2d55dc1e8f3da3bb51f6c80813aaf7dfedec101d49e"}
     - {name: "docs/correspondence/CORR-LEGO-PIPE-036-R0-lego-software-ecosystem-research.md", role: "prior intake that named BrickNet the reference generator; this memo updates that framing"}
@@ -50,7 +53,8 @@ findings:
   - {id: N-06, summary: "A VLM pairwise design judge was validated against 102 human raters (Kendall tau 0.89); the pattern transfers to judging snow/roof variants if calibrated to the operator's own picks"}
   - {id: N-07, summary: "A full design run costs roughly $0.31–$18.80 per assembly at list price (Claude Opus 5.5: $6.33 average) — squarely in the restricted token-intensive subset for family play"}
   - {id: N-08, summary: "The release surface (tool API, language, licence) is undocumented in the paper; brickben.ch was not read — adoption claims wait on it"}
-  - {id: Q-01, summary: "Which link, handle or clip did Dia show for the Blender 'LEGO Brooklyn' creator, so the precedent can be studied from the source?"}
+  - {id: N-09, summary: "Two Blender LEGO precedents join the shelf: Trevor Carlee (confirmed, VFX Process interview) for shot-scale craft, and a Studio-modelled, Blender-rendered digital LEGO city attributed to crazytakeharu (unverified) for village-scale craft; TiNKLe's big-city performance tutorial bears on R6-NEXT-RENDER"}
+  - {id: Q-01, summary: "Can you supply crazytakeharu's channel or a video link, so the city precedent can be studied from the source?"}
   - {id: Q-02, summary: "Approve a read of brickben.ch to establish what is actually released and under what licence?"}
   - {id: Q-03, summary: "After ORDER-BY, should brickcore adopt BrickBench's validity definition as its floor check set, extended with MILS checks and clutch-unknown?"}
   - {id: Q-04, summary: "After ORDER-BY, should a small inventory-constrained winter-village prompt set become brick_bench's regression benchmark?"}
@@ -137,7 +141,7 @@ Recorded, not repaired — the report stands as it was delivered; these are the 
 
 1. **BrickNet's 26%** is its *validity* in the Model setting — part requirement, collisions and stability together — not "collision-free on 26% of prompts".
 2. **It missed the most useful result.** It read the ablation as "outputs collapse without the validator". The fuller reading is §2's second table: without the environment, soundness collapses *but prompt match and design rating do not fall* (Astra's ELO is nominally higher without it). The environment is a floor, not a designer.
-3. **The creator.** You asked Dia about a person who builds LEGO Brooklyn in Blender; Dia named him Trevor Carlee. The report could not find Brooklyn streetscape work under that name and concluded you had misremembered a *Brooklyn Nine-Nine* scene recreation. That replaced your first-hand description with an inference from one interview, which it had no grounds to do. What is actually known: Carlee is a real Blender LEGO creator with a BCON25 talk; whether he is the Brooklyn builder you saw is **unconfirmed** either way — Dia may have attached the wrong name. Q-01 asks for the source.
+3. **The creators.** The report's account of Trevor Carlee stands: he is a real Blender-native LEGO creator, and the VFX Process interview you supplied ("This LEGO Animation Hack in BLENDER Changed My Life") confirms him. He is a good data point for shot-scale craft (build only what the camera sees, Python for the repetitive work). The city builder you were actually thinking of is a different person, attributed to **crazytakeharu** (sometimes "Takeharu"). That is a reddit thread about two-plus years spent building a whole digital LEGO city, modelled in BrickLink Studio and rendered in Blender. I could not open the thread or find any other source for the handle, so he is **unverified** (N-09, Q-01). One correction to the note that came with it: the "How to Build a Big 3D LEGO City" video is by **TiNKLe** (@TiNKLeFilms), not crazytakeharu.
 
 ## §4 What it means for play-well
 
@@ -153,6 +157,8 @@ Recorded, not repaired — the report stands as it was delivered; these are the 
 
 **Cost places full design in the restricted subset (N-07).** At list price a complete design run costs between about $0.31 and $18.80 per assembly (Opus 5.5 averages $6.33). That fits the standing rule that ordinary play runs for long stretches on minimal tokens and only a small, named set of token-intensive actions is restricted: "design me a whole building" belongs in that set; "move this tree two studs left" does not.
 
+**Precedent, not just papers (N-09).** If confirmed, the crazytakeharu city is the closest public match to play-well's own split: Studio as the modelling surface, Blender as the render venue, at village scale, sustained for years. It is worth studying for how a city is cut into modules and how part counts are kept renderable. TiNKLe's "without blowing up your computer" tutorial is direct input to R6-NEXT-RENDER's instancing-versus-batching measurement. Carlee is the shot-scale counterpart. None of the three videos has been transcribed for this memo.
+
 **Claude Opus 5.5 was benchmarked through Claude Code** — the same harness this cluster already runs — and placed third overall (valid 0.99, ELO 1249), behind two GPT-6 models and ahead of Opus 5. That is a fact about the paper's runs, not a recommendation to switch anything.
 
 ## §5 What it does not decide
@@ -161,12 +167,12 @@ Recorded, not repaired — the report stands as it was delivered; these are the 
 - It does not adopt BrickAgent, BrickNet or any code — the release terms are unread (N-08).
 - It does not amend any ADR, the BuildDoc, or the verdict vocabulary.
 - It does not make the earlier report's build plan a work order; that plan stays an unratified suggestion.
-- It does not settle who the Brooklyn creator is.
+- It does not verify the crazytakeharu precedent; that waits on a source (Q-01).
 - Every BrickBench number is a five-day-old preprint's, unreviewed, and its model names are the authors' reporting.
 
 ## §6 Questions
 
-- **Q-01** — Which link, handle or clip did Dia show you for the Blender "LEGO Brooklyn" creator? With the source in hand the precedent can be studied properly rather than guessed at.
+- **Q-01** — Can you supply crazytakeharu's channel or a video link? The only lead is a reddit thread this session cannot open. With a source, the city precedent can be studied properly rather than guessed at.
 - **Q-02** — Approve a read of brickben.ch, so the next note can say what is actually released (tools, environment, licence) instead of what the paper says will be?
 - **Q-03** — After ORDER-BY: should `brickcore` adopt BrickBench's validity definition as its floor check set, extended with the MILS checks and a clutch-dependent `unknown(coverage)`?
 - **Q-04** — After ORDER-BY: should a small inventory-constrained winter-village prompt set become `brick_bench`'s regression benchmark, in the Alt-Build style?
