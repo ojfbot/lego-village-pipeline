@@ -19,7 +19,7 @@ argument: >
   general coding agents are found to out-build the purpose-made brick models, but only while a
   validator stands beside them; the validator is found to buy soundness and nothing else, the
   design gap to a human set remaining wide; an earlier research report is corrected on two
-  numbers; two Blender precedents are put on the shelf, one confirmed and one awaiting a source; and the consequences are laid
+  numbers; three Blender precedents are put on the shelf, one of them a procedural building generator whose maker teaches its method in public; and the consequences are laid
   out for the operator alone, for brick_bench, brickcore and the inventory rooms, with nothing
   decided and the order gate left untouched.
 provenance:
@@ -28,6 +28,10 @@ provenance:
     - {name: "http://www.brickben.ch", role: "the paper's stated release location; NOT read — the fetch permission timed out, so nothing here rests on it"}
     - {name: "YouTube KPYpZEr5c6E — 'This LEGO Animation Hack in BLENDER Changed My Life | Trevor Carlee' (The VFX Process)", role: "operator-supplied 2026-10-13; confirms Carlee as a Blender-native LEGO precedent (oEmbed metadata read; video not transcribed)"}
     - {name: "YouTube a0PYJRo4NVE — 'How to Build a Big 3D LEGO City (without blowing up your computer) | Blender Tutorial' (TiNKLe, @TiNKLeFilms)", role: "operator-supplied 2026-10-13; city-scale Blender performance precedent (oEmbed metadata read; video not transcribed)"}
+    - {name: "TiNKLe (Tino Klein, Germany) — YouTube @TiNKLeFilms (channel UCc8mnA7qTsr_TOu5wOvCxsg), TikTok @tinklefilms, Instagram @kleinertino / @tinkle_films, shop tinkle-shop.fourthwall.com", role: "creator profile; identity joined by the shop's own links and the 80.lv credit"}
+    - {name: "BRiCKiTECT listings — tinkle-shop.fourthwall.com/products/brickitect, tinkle.gumroad.com/l/brickitect, superhivemarket.com/products/brickitect (+ /docs, user guide v1.0.1)", role: "product description, full parameter surface, compatibility and licence label (Superhive: Royalty Free; Fourthwall ToS: generic, reverse-engineering clause)"}
+    - {name: "YouTube lQRQNwmZQFA 'How to Make a Free LEGO Building Generator | Blender Tutorial 1/3' and d2Q29iH9sf4 'Making a LEGO City Generator with Blender | Building Generator Tutorial 3/3' (TiNKLe)", role: "the public tutorial series that teaches the generator's method; part 2/3 not located; metadata only, not transcribed"}
+    - {name: "80.lv — 'Breakdown: LEGO-style construction site with a collapsing crane' (Tino Klein, interview) and 'Create modular LEGO-style buildings with this Blender tool' (2025-07-03); Fox Render Farm — 'Chasm's Call Top 5: a chat with LEGO animator Tino Klein'", role: "workflow, performance and authorship evidence for Trouble in LEGO Town and BRiCKiTECT"}
     - {name: "reddit r/lego thread 1vntuwu — 'Been building a digital LEGO city for the past 2…' (attributed to crazytakeharu)", role: "operator-supplied lead; NOT read — the site is blocked to this session, and no other source for the handle was found"}
     - {name: "Claude Advanced Research report, claude.ai, 2026-10-13 ('Play-Well Research Extension: Blender LEGO Craft, Procedural Snow and Terrain, and Instructions-to-Build Groups')", role: "the secondary summary this memo corrects in §3; not committed"}
     - {name: "Dia research seeds, 2026-10-13 (not committed; hashes only)", role: "operator's starting briefs — Digital LEGO in Blender sha256 b3b5ecd47eb1d35e107c5117d638d6f15d93950538c8e62b8d513247f8d4a876; Procedural Generation for the Village Pipeline sha256 71e7e2da3485f8e1d6c9f4cff20a2b64562e10229b949261c6dea4dee138dd4f; From Instructions to Buildable Groups sha256 e21f00f347aab1234af6f2d55dc1e8f3da3bb51f6c80813aaf7dfedec101d49e"}
@@ -54,6 +58,9 @@ findings:
   - {id: N-07, summary: "A full design run costs roughly $0.31–$18.80 per assembly at list price (Claude Opus 5.5: $6.33 average) — squarely in the restricted token-intensive subset for family play"}
   - {id: N-08, summary: "The release surface (tool API, language, licence) is undocumented in the paper; brickben.ch was not read — adoption claims wait on it"}
   - {id: N-09, summary: "Two Blender LEGO precedents join the shelf: Trevor Carlee (confirmed, VFX Process interview) for shot-scale craft, and a Studio-modelled, Blender-rendered digital LEGO city attributed to crazytakeharu (unverified) for village-scale craft; TiNKLe's big-city performance tutorial bears on R6-NEXT-RENDER"}
+  - {id: N-10, summary: "BRiCKiTECT (TiNKLe / Tino Klein) is the shipped form of play-well's sub-typology-plus-levers idea: buildings decomposed into ground, middle and roof slots with seeded variants, height randomness and extras; render-first (Mecabricks inputs, Geometry Nodes instances, no LDraw, no BOM), and its method is taught in a free three-part tutorial series"}
+  - {id: N-11, summary: "Tino Klein's viewport rule is a measured precedent for R6-NEXT-RENDER: merging instanced bricks with an Is-Viewport switch took one building from ~27,000 objects at 10–12 FPS to 6 objects (~25M vertices) at 60 FPS"}
+  - {id: Q-05, summary: "Learn BRiCKiTECT's method from the free tutorials and rebuild it in brick_bench on LDraw floor modules; buy the add-on from the Superhive listing (royalty-free) only as a behaviour reference — or something else?"}
   - {id: Q-01, summary: "Can you supply crazytakeharu's channel or a video link, so the city precedent can be studied from the source?"}
   - {id: Q-02, summary: "Approve a read of brickben.ch to establish what is actually released and under what licence?"}
   - {id: Q-03, summary: "After ORDER-BY, should brickcore adopt BrickBench's validity definition as its floor check set, extended with MILS checks and clutch-unknown?"}
@@ -159,6 +166,27 @@ Recorded, not repaired — the report stands as it was delivered; these are the 
 
 **Precedent, not just papers (N-09).** If confirmed, the crazytakeharu city is the closest public match to play-well's own split: Studio as the modelling surface, Blender as the render venue, at village scale, sustained for years. It is worth studying for how a city is cut into modules and how part counts are kept renderable. TiNKLe's "without blowing up your computer" tutorial is direct input to R6-NEXT-RENDER's instancing-versus-batching measurement. Carlee is the shot-scale counterpart. None of the three videos has been transcribed for this memo.
 
+**BRiCKiTECT is the closest shipped precedent for the procedural levers (N-10).** It is a $12.50 Geometry Nodes add-on by **TiNKLe**, who is Tino Klein: a German video editor turned Blender LEGO animator, at @TiNKLeFilms on YouTube, @tinklefilms on TikTok and @kleinertino on Instagram. His *Trouble in LEGO Town* placed fifth in Clint's Chasm's Call render challenge. The add-on has 80+ sales on Superhive and was released around July 2025. Its user guide (v1.0.1) gives the full parameter set, and it lines up almost one-to-one with the procedural levers already planned for mils-integrator:
+
+| BRiCKiTECT | Play-well equivalent |
+|---|---|
+| Building Template collection split into ground / middle / roof (with A/B variants) | sub-typology slots in the BuildDoc; roof is where snow-on-roof attaches |
+| Building, Corner, Wall ("Start/End with CB"), Block (Depth) generators | module, corner module, street run, MILS block — corner pieces are the documented pain point for non-rectangular lots |
+| X Size 255.95 = a Mecabricks baseplate at scale 1; Z Size = floor pitch | stud and plate pitch on the 32×32 baseplate grid |
+| Height, Width, Max Height Difference, Height Randomness, Height Seed, Height Factor | bounded levers with seeds, so every result can be reproduced |
+| Building Variant / Seed; Extras amount per ground, floor and roof; Extras Seed | known-good variants with weights |
+| Join Parts, Preview cubes, Hide | performance modes (N-11) |
+
+What it lacks is exactly what play-well adds. Its inputs come from Mecabricks, which cannot export LDraw. Its output is instanced meshes, so it has no part list, no buildability check and no build steps. So the plan is to **rebuild the idea, not port the add-on.** Use LDraw floor modules carrying `0 STEP`, run brickcore checks behind every lever, and the generated street becomes orderable and can produce instructions.
+
+**No black-box reverse engineering is needed.** The 80.lv credit says he published the generator's construction as a tutorial series ("How to Make a Free LEGO Building Generator", 1/3; "Making a LEGO City Generator", 3/3; I could not find 2/3). Learning from those is a clean-room route. On licensing:
+- Superhive labels the add-on "Royalty Free".
+- The Fourthwall shop's terms are a generic template that forbids "reverse engineering … any portion of the Service" and transferring "Materials", but they never address purchased files specifically.
+
+The safe line is: buy from Superhive, use the add-on as a behaviour reference, learn the method from the tutorials, and keep none of its node groups in the repo (Q-05). Two small inconsistencies are worth noting. The Gumroad page claims both "Blender 4.0 to 4.4" and "up to Blender 5.0"; the docs say 4.0–5.0. And his shop's homepage does not list BRiCKiTECT at all.
+
+**His performance numbers are R6-NEXT-RENDER input (N-11).** Instanced bricks are still separate objects in Blender. Klein built a Geometry Nodes merge with an Is-Viewport switch: merged while working, unmerged at render. That took one building from about 27,000 objects at 10–12 FPS to 6 objects, around 25 million vertices, at 60 FPS. His other habits are practical too: lay the streets first, then fill in houses; use placeholders while animating; reuse one or two building designs early on to protect performance; and place bricks slightly crooked on purpose so the build looks hand-made rather than computer-perfect. That last one cuts against a validator that snaps everything to the stud grid, which suggests a separate render-only "jitter" layer on top of the canonical, buildable pose.
+
 **Claude Opus 5.5 was benchmarked through Claude Code** — the same harness this cluster already runs — and placed third overall (valid 0.99, ELO 1249), behind two GPT-6 models and ahead of Opus 5. That is a fact about the paper's runs, not a recommendation to switch anything.
 
 ## §5 What it does not decide
@@ -168,6 +196,7 @@ Recorded, not repaired — the report stands as it was delivered; these are the 
 - It does not amend any ADR, the BuildDoc, or the verdict vocabulary.
 - It does not make the earlier report's build plan a work order; that plan stays an unratified suggestion.
 - It does not verify the crazytakeharu precedent; that waits on a source (Q-01).
+- It does not buy, open or adopt BRiCKiTECT; that is Q-05.
 - Every BrickBench number is a five-day-old preprint's, unreviewed, and its model names are the authors' reporting.
 
 ## §6 Questions
@@ -176,5 +205,6 @@ Recorded, not repaired — the report stands as it was delivered; these are the 
 - **Q-02** — Approve a read of brickben.ch, so the next note can say what is actually released (tools, environment, licence) instead of what the paper says will be?
 - **Q-03** — After ORDER-BY: should `brickcore` adopt BrickBench's validity definition as its floor check set, extended with the MILS checks and a clutch-dependent `unknown(coverage)`?
 - **Q-04** — After ORDER-BY: should a small inventory-constrained winter-village prompt set become `brick_bench`'s regression benchmark, in the Alt-Build style?
+- **Q-05** — Learn BRiCKiTECT's method from the free tutorials and rebuild it in `brick_bench` on LDraw floor modules, buying the add-on from the Superhive listing (royalty-free) only as a behaviour reference — or something else?
 
 *Source: Kulits, Xu, Jones, Schmid, Wu. "BrickBench: Evaluating Agentic Brick Design." arXiv:2610.12452v1, 8 Oct 2026. https://arxiv.org/abs/2610.12452*
