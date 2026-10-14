@@ -647,12 +647,12 @@ class LedgerSetPointer(unittest.TestCase):
             root = copy_tree(tmp)
             lp = os.path.join(root, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml")
             def mut(d):
-                for n in range(40, 45):
+                for n in range(36, 41):
                     d["allocations"].append({"key": f"{n:03d}", "number": n, "identity": f"CORR-LEGO-PIPE-{n:03d}", "type": "CORR", "thread": "cluster", "actor": "x", "allocated_by": "James", "date": "2026-09-21", "state": "reserved", "landed_version": None, "basis": "test"})
-                d["next_free"] = 45
+                d["next_free"] = 41
             edit_yaml(lp, mut)
             regp = os.path.join(root, RL.REGISTER_REL)
-            RL.write_bytes(regp, RL.read_bytes(regp).replace(b"| 036+ |", b"| 045+ |"))
+            RL.write_bytes(regp, RL.read_bytes(regp).replace(b"| 036+ |", b"| 041+ |"))
             errs, _, _ = lint_errs(root)
             self.assertEqual(errs_for("RL-02", errs), [], errs)
 
@@ -662,6 +662,15 @@ class LedgerSetPointer(unittest.TestCase):
             edit_yaml(os.path.join(root, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"), lambda d: d["allocations"].append(dict(d["allocations"][-1])))
             errs, _, _ = lint_errs(root)
             self.assertTrue(any("duplicate ledger key" in e for e in errs_for("RL-02", errs)), errs)
+
+    def test_mutation_rl02_missing_number_below_next_free(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = copy_tree(tmp)
+            edit_yaml(os.path.join(root, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"),
+                      lambda d: d.update(allocations=[e for e in d["allocations"] if e["number"] != 34]))
+            errs, _, _ = lint_errs(root)
+            self.assertTrue(any("allocation ledger skips number(s) below next_free: 034" in e
+                                for e in errs_for("RL-02", errs)), errs)
 
     def test_mutation_rl02_landed_without_row(self):
         with tempfile.TemporaryDirectory() as tmp:

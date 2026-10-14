@@ -18,8 +18,9 @@ argument: >
   In which a paper posted five days ago is read whole rather than through a summary; eleven
   general coding agents are found to out-build the purpose-made brick models, but only while a
   validator stands beside them; the validator is found to buy soundness and nothing else, the
-  design gap to a human set remaining wide; an earlier research report is corrected on two
-  numbers; three Blender precedents are put on the shelf, one of them a procedural building generator whose maker teaches its method in public; and the consequences are laid
+  design gap to a human set remaining wide; an earlier research report is checked against
+  the primary source, its headline 26% claim confirmed and its validator inference narrowed;
+  three Blender precedents are put on the shelf, one of them a procedural building generator whose maker teaches its method in public; and the consequences are laid
   out for the operator alone, for brick_bench, brickcore and the inventory rooms, with nothing
   decided and the order gate left untouched.
 provenance:
@@ -33,7 +34,7 @@ provenance:
     - {name: "YouTube lQRQNwmZQFA 'How to Make a Free LEGO Building Generator | Blender Tutorial 1/3' and d2Q29iH9sf4 'Making a LEGO City Generator with Blender | Building Generator Tutorial 3/3' (TiNKLe)", role: "the public tutorial series that teaches the generator's method; part 2/3 not located; metadata only, not transcribed"}
     - {name: "80.lv — 'Breakdown: LEGO-style construction site with a collapsing crane' (Tino Klein, interview) and 'Create modular LEGO-style buildings with this Blender tool' (2025-07-03); Fox Render Farm — 'Chasm's Call Top 5: a chat with LEGO animator Tino Klein'", role: "workflow, performance and authorship evidence for Trouble in LEGO Town and BRiCKiTECT"}
     - {name: "reddit r/lego thread 1vntuwu — 'Been building a digital LEGO city for the past 2…' (attributed to crazytakeharu)", role: "operator-supplied lead; NOT read — the site is blocked to this session, and no other source for the handle was found"}
-    - {name: "Claude Advanced Research report, claude.ai, 2026-10-13 ('Play-Well Research Extension: Blender LEGO Craft, Procedural Snow and Terrain, and Instructions-to-Build Groups')", role: "the secondary summary this memo corrects in §3; not committed"}
+    - {name: "Claude Advanced Research report, claude.ai, 2026-10-13 ('Play-Well Research Extension: Blender LEGO Craft, Procedural Snow and Terrain, and Instructions-to-Build Groups')", role: "the secondary summary this memo checks against the primary source in §3; not committed"}
     - {name: "Dia research seeds, 2026-10-13 (not committed; hashes only)", role: "operator's starting briefs — Digital LEGO in Blender sha256 b3b5ecd47eb1d35e107c5117d638d6f15d93950538c8e62b8d513247f8d4a876; Procedural Generation for the Village Pipeline sha256 71e7e2da3485f8e1d6c9f4cff20a2b64562e10229b949261c6dea4dee138dd4f; From Instructions to Buildable Groups sha256 e21f00f347aab1234af6f2d55dc1e8f3da3bb51f6c80813aaf7dfedec101d49e"}
     - {name: "docs/correspondence/CORR-LEGO-PIPE-036-R0-lego-software-ecosystem-research.md", role: "prior intake that named BrickNet the reference generator; this memo updates that framing"}
   method: >
@@ -49,7 +50,7 @@ register:
   allocated_by: "James, 2026-10-13 — 'Take the next available registration' (claude.ai Lego Village Pipeline session). 037 is allocated to HANDOFF-LEGO-PIPE-037 (House World, James 2026-10-11) on the unlanded branch feat/house-world-design-brief, so the next available number is 038"
 register_version_read: 2026-09-18.33
 findings:
-  - {id: N-01, summary: "General coding agents inside a validator environment subsume the task-specific brick models: top agents reach validity 1.00 and VQA ~0.95; BrickNet-14B scores validity 0.26, BrickGPT VQA 0.024 (Model setting)"}
+  - {id: N-01, summary: "General coding agents inside a validator environment subsume the task-specific brick models: top agents reach validity 1.00 and VQA ~0.95; BrickNet-14B is collision-free on 26% of Model prompts (its reported Valid metric excludes stability), while BrickGPT scores VQA 0.024"}
   - {id: N-02, summary: "The environment buys physical validity and nothing else: removing BrickAgent drops GPT-6 Astra's validity 1.00 → 0.40 while its VQA (0.954 → 0.940) and ELO (1297 → 1309) hold"}
   - {id: N-03, summary: "The gap to human design is wide and open: raters picked the human build in 323 of 360 comparisons; no agent passed for human more than one time in five"}
   - {id: N-04, summary: "BrickBench's stability test is a rigid-body proxy with no stud clutch; anything that depends on clutch must come back from brickcore as unknown(coverage), not valid"}
@@ -69,7 +70,7 @@ parts:
   "0": "Orientation"
   "1": "The paper, read whole"
   "2": "What it found"
-  "3": "What the earlier report got wrong"
+  "3": "What the earlier report got right and wrong"
   "4": "What it means for play-well"
   "5": "What it does not decide"
   "6": "Questions"
@@ -123,7 +124,7 @@ Averaged across the three settings:
 | GPT-5.6 Luna | 1.00 | 0.792 | 898 ± 16 | 0.75 |
 | GLM 5.3 Flash | 0.92 | 0.590 | 752 ± 23 | 0.54 |
 
-The two purpose-made models were scored in the Model setting only: **BrickNet-14B** valid 0.26, VQA 0.180, ELO 731, $0.0006; **BrickGPT** valid 1.00, VQA 0.024, ELO 338, $0.04. BrickGPT is always sound because its eight-brick grid can hardly be otherwise; it almost never builds what was asked.
+The two purpose-made models were scored in the Model setting only: **BrickNet-14B** reported Valid 0.26 — for BrickNet this metric excludes stability, and the authors describe it as collision-free on 26% of prompts — VQA 0.180, ELO 731, $0.0006; **BrickGPT** valid 1.00, VQA 0.024, ELO 338, $0.04. BrickGPT is always sound because its eight-brick grid can hardly be otherwise; it almost never builds what was asked.
 
 **The one ablation** removes the whole BrickAgent environment — the agent keeps its harness, container and task but gets only the LDraw library and a primer on the file format:
 
@@ -142,11 +143,11 @@ There is no finer ablation — validator, rendering and subassemblies were not r
 
 The authors' own summary: *"The domain gives the task a floor that a simulator can verify and an open ceiling on design quality."*
 
-## §3 What the earlier report got wrong
+## §3 What the earlier report got right and wrong
 
-Recorded, not repaired — the report stands as it was delivered; these are the corrections.
+Recorded, not repaired — the report stands as it was delivered; these are the checks and corrections.
 
-1. **BrickNet's 26%** is its *validity* in the Model setting — part requirement, collisions and stability together — not "collision-free on 26% of prompts".
+1. **BrickNet's 26% was reported correctly.** The paper's Table 1 footnote says BrickNet's reported Valid metric excludes stability, and the text describes the result as collision-free on 26% of Model prompts. The earlier report's "collision-free on 26% of prompts" wording therefore stands.
 2. **It missed the most useful result.** It read the ablation as "outputs collapse without the validator". The fuller reading is §2's second table: without the environment, soundness collapses *but prompt match and design rating do not fall* (Astra's ELO is nominally higher without it). The environment is a floor, not a designer.
 3. **The creators.** The report's account of Trevor Carlee stands: he is a real Blender-native LEGO creator, and the VFX Process interview you supplied ("This LEGO Animation Hack in BLENDER Changed My Life") confirms him. He is a good data point for shot-scale craft (build only what the camera sees, Python for the repetitive work). The city builder you were actually thinking of is a different person, attributed to **crazytakeharu** (sometimes "Takeharu"). That is a reddit thread about two-plus years spent building a whole digital LEGO city, modelled in BrickLink Studio and rendered in Blender. I could not open the thread or find any other source for the handle, so he is **unverified** (N-09, Q-01). One correction to the note that came with it: the "How to Build a Big 3D LEGO City" video is by **TiNKLe** (@TiNKLeFilms), not crazytakeharu.
 

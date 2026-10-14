@@ -474,15 +474,27 @@ allocations:
   state: landed
   thread: cluster
   type: CORR
+- actor: ChatGPT (Codex)
+  allocated_by: James (@ojfbot), direct Codex instruction 2026-10-11
+  basis: Operator approved HANDOFF-LEGO-PIPE-037-R0, HOUSE-WORLD R0 as a separate experimental package, and package-local decision IDs.
+  date: '2026-10-11'
+  identity: HANDOFF-LEGO-PIPE-037
+  key: 037-R0
+  landed_version: null
+  number: 37
+  revision: R0
+  state: in_flight
+  thread: drafting-table
+  type: HANDOFF
 - actor: Claude (claude.ai, Lego Village Pipeline project)
   allocated_by: James, 2026-10-13 — "take the next available registration" (claude.ai Lego Village Pipeline session); 037 already allocated to HANDOFF-LEGO-PIPE-037 on feat/house-world-design-brief, so next available was 038
   basis: operator-only findings memo on BrickBench (arXiv 2610.12452); landed ahead of 037, whose ledger entry lives on its own unlanded branch
   date: '2026-10-13'
   identity: CORR-LEGO-PIPE-038
   key: 038-R0
-  landed_version: 2026-09-18.34
+  landed_version: null
   number: 38
-  state: landed
+  state: in_flight
   thread: cluster
   type: CORR
 next_free: 39
