@@ -1491,11 +1491,24 @@ class TempRepo:
                        RL.record_bytes({"affected_memos": [memo], "allocations_consumed": [key]}, body))
 
     def reserve(self, repo, key, number):
-        edit_yaml(os.path.join(repo, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"), lambda d: (
+        def reserve_contiguously(d):
+            # High-number keys keep Git-tier scenarios visually distinct. Retain every
+            # intervening number as a withdrawn battery allocation so those fixtures satisfy
+            # RL-02 continuity without adding unrelated correspondence-table rows.
+            existing = {e["number"] for e in d["allocations"] if isinstance(e.get("number"), int)}
+            for skipped in range(d["next_free"], number):
+                if skipped in existing:
+                    continue
+                d["allocations"].append({"key": f"{skipped:03d}-BATTERY-WITHDRAWN", "number": skipped,
+                                         "identity": f"CORR-LEGO-PIPE-{skipped:03d}-BATTERY-WITHDRAWN", "type": "CORR",
+                                         "thread": "cluster", "actor": "battery", "allocated_by": "James (battery)",
+                                         "date": "2026-09-21", "state": "withdrawn", "landed_version": None,
+                                         "basis": "battery continuity filler; not the scenario under test"})
             d["allocations"].append({"key": key, "number": number, "identity": f"CORR-LEGO-PIPE-{number:03d}", "type": "CORR",
                                      "thread": "cluster", "actor": "battery", "allocated_by": "James (battery)", "date": "2026-09-21",
-                                     "state": "in_flight", "landed_version": None, "basis": "battery"}),
-            d.update(next_free=max(d["next_free"], number + 1))))
+                                     "state": "in_flight", "landed_version": None, "basis": "battery"})
+            d["next_free"] = max(d["next_free"], number + 1)
+        edit_yaml(os.path.join(repo, RL.REGISTER_DIR_REL, "ALLOCATIONS.yaml"), reserve_contiguously)
         regp = os.path.join(repo, RL.REGISTER_REL)
         txt = RL.read_bytes(regp).decode()
         nf = RL.next_free_row_number(txt)
