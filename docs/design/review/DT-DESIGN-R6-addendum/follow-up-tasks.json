@@ -1,0 +1,113 @@
+{
+  "status": "Assigned owner roles for future dedicated sessions; not dispatched to live chats",
+  "requested_by": "James, Codex session 2026-10-12",
+  "authority_boundary": "Dedicated future prototype and technical-design session. Production and schema authority remain with the existing work orders and James.",
+  "tasks": [
+    {
+      "id": "R6-NEXT-GRID",
+      "title": "Robust Grid and Subgrid across every page",
+      "owner_role": "Claude Code, dedicated layout session",
+      "reviewer_roles": [
+        "Codex, independent layout and accessibility review",
+        "James, composition acceptance"
+      ],
+      "priority": "next",
+      "depends_on": [],
+      "scope": "Dedicated future prototype and technical-design session. Production and schema authority remain with the existing work orders and James.",
+      "deliverables": [
+        "Complete page and state inventory covering every room sheet, standalone typology study, Workbench Frame and linked design-library page. Missing V-01/V-02 sources are explicit inventory gaps, not silent exclusions.",
+        "Layout contract per page kind: named regions, container-driven breakpoints, track ownership, and title/content/status subgrid alignment. Preserve distinct typology skeletons and verbs.",
+        "Responsive prototype pass across all available pages and their expanded, collapsed, empty, error and loading states. Replace fragile inline overrides with explicit layout structure in the derivative.",
+        "Coverage matrix with page-level overflow results, aligned-band checks, screenshots and accessibility-tree comparisons."
+      ],
+      "acceptance": [
+        "Every available page has a recorded layout/state review at 320, 390, 768, 1024 and 1440 pixels, plus short landscape.",
+        "Long labels, realistic counts, larger text and 200% zoom do not clip work or obscure controls.",
+        "No page-wide horizontal overflow; intentional diagram/table scrolling is bounded, reachable and explained.",
+        "Subgrid alignment holds after expansion, filtering, sidebar changes and page entry. Related status bands remain aligned.",
+        "Validate Chrome, Safari and Firefox behavior and document fallbacks for unsupported layout/motion features.",
+        "Keep keyboard focus and reading order meaningful through every reflow."
+      ]
+    },
+    {
+      "id": "R6-NEXT-NAV",
+      "title": "Navigation controls and room-to-sheet state",
+      "owner_role": "Codex, dedicated navigation session",
+      "reviewer_roles": [
+        "Claude Design, flow and control review",
+        "James, wayfinding acceptance"
+      ],
+      "priority": "next",
+      "depends_on": [
+        "R6-NEXT-GRID layout-region contract"
+      ],
+      "scope": "Dedicated future prototype and technical-design session. Production and schema authority remain with the existing work orders and James.",
+      "deliverables": [
+        "Interaction and state model for tour, selected block, room flight, finder, dashboard, sheet tabs, room switcher, cancellation, return and browser Back.",
+        "Control redesign with touch, keyboard and direct-page equivalents. Preview/focus must remain distinct from opening a sheet.",
+        "Explicit entry-block, bookmark, scroll-progress and draft-lifetime contracts. Derive destinations from the clicked block; Drafting Table must not force the lobby.",
+        "End-to-end navigation check that starts at a block, edits a mock sheet, switches sheets/rooms, returns, resumes scrolling and exercises Back."
+      ],
+      "acceptance": [
+        "Finder and sheet tabs work without a pointer; all controls have useful names and reachable focus.",
+        "Escape, Back and stop have defined behavior inside and outside an iframe. Focus restoration does not scroll the document.",
+        "Test small scroll deltas, both page boundaries, rapid repeated activation, interrupted flights and no-WebGL entry.",
+        "Room and sheet switching preserve drafts according to the agreed contract, with visible consequences if a draft cannot be retained.",
+        "Phone controls remain usable with the virtual keyboard, orientation change and safe-area insets.",
+        "A person can reach every page without completing the cinematic tour."
+      ]
+    },
+    {
+      "id": "R6-NEXT-MOTION",
+      "title": "Motion and transformation build for cards, sheets and house pieces",
+      "owner_role": "Codex, dedicated motion/transformation session",
+      "reviewer_roles": [
+        "Claude Design, choreography and typology review",
+        "James, comfort and legibility acceptance"
+      ],
+      "priority": "after layout/navigation contracts",
+      "depends_on": [
+        "R6-NEXT-GRID layout-region contract",
+        "R6-NEXT-NAV state/ownership contract"
+      ],
+      "scope": "Dedicated future prototype and technical-design session. Production and schema authority remain with the existing work orders and James.",
+      "deliverables": [
+        "Transition inventory covering Grid/Subgrid expansion, card transformation, finder preview, room flight, dashboard entry/exit, room switching and scroll resumption.",
+        "Motion specifications with a single owner per transition, easing/acceleration, interruption rules, transform origins, snapshot clipping and focus/live-region behavior.",
+        "Comparison of native View Transitions and transform/opacity approaches. Use R4 Typology Identity v2 and Workbench Frame as measured precedents.",
+        "Assembly-path audit for wall/roof courses, stairs/supports and tree pieces, plus a comfortable simplified camera route."
+      ],
+      "acceptance": [
+        "No hover lift/scale or adjacent-room opacity shifts that alter perceived depth.",
+        "No stretched or unreadable text snapshots during layout transforms.",
+        "No abrupt starts, whip turns or unowned overlap between scroll and room-flight animation.",
+        "Pieces approach along plausible attachment paths, align before seating and avoid visible body intersections.",
+        "Provide explicit reduced-motion behavior for each transition and an equivalent direct route.",
+        "Test forward/backward scroll, interruption and reversal across all layout widths, including short landscape."
+      ]
+    },
+    {
+      "id": "R6-NEXT-RENDER",
+      "title": "Efficient render structure before production",
+      "owner_role": "Claude Code, dedicated render research session",
+      "reviewer_roles": [
+        "Codex, measurement review",
+        "James, visual fidelity acceptance"
+      ],
+      "priority": "before production implementation",
+      "depends_on": [
+        "R6-NEXT-MOTION representative choreography"
+      ],
+      "scope": "Dedicated future prototype and technical-design session. Production and schema authority remain with the existing work orders and James.",
+      "deliverables": [
+        "Compare current GLB hierarchy, static geometry batching, instanced repeated parts and invalidation-driven rendering while preserving block/course/tree/stair picking and assembly identities.",
+        "Record CPU/GPU frame time, draw calls, decode time and memory on representative integrated GPUs and phones with matched viewports and camera paths."
+      ],
+      "acceptance": [
+        "Measurements identify device, browser, asset bytes, active work and limiting factor.",
+        "Recommendations retain the reviewed model quality and animation identities.",
+        "Document context-loss recovery and adaptive pixel-ratio/detail choices."
+      ]
+    }
+  ]
+}

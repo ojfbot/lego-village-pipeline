@@ -1,0 +1,75 @@
+/* Local R6 study: keep page diagrams intact and let the surrounding work reflow. */
+.dt-responsive-page{box-sizing:border-box}
+.dt-responsive-split>*{min-width:0}
+@media(max-width:900px){
+ .dt-responsive-split,.i2-split,.i3-split,.r-main{grid-template-columns:minmax(0,1fr)!important}
+ .dt-responsive-page{padding:20px 20px 36px!important}
+}
+@media(max-width:600px){
+ .dt-responsive-page{padding:18px 14px 32px!important}
+ .dt-responsive-heading{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+ .i3-ident,.r-receipt{grid-template-columns:minmax(0,1fr)!important}
+ [role=main] h1,main h1{white-space:normal!important;line-height:1.25}
+ .dt-now-row{gap:10px!important;border-radius:18px!important}
+ .r-field{grid-template-columns:minmax(0,1fr)!important;gap:6px!important;padding:12px 0!important}
+ .dt-responsive-split{gap:16px!important}
+ .dt-responsive-page input,.dt-responsive-page select{max-width:100%;box-sizing:border-box}
+ .dt-responsive-page [role=tablist]{max-width:100%;overflow-x:auto}
+}
+@media(pointer:coarse){
+ .dt-responsive-page button,.dt-responsive-page select{min-height:36px}
+}
+@media(max-width:1000px){
+ body:has(.dt-frame-shell),body:has(.dt-typology-shell){overflow:auto!important}
+ .dt-frame-shell{height:auto!important;min-height:100svh;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto!important}
+ .dt-frame-header{grid-template-columns:minmax(0,1fr) auto!important}
+ .dt-frame-header>div:first-child{flex-wrap:wrap}
+ .dt-frame-header>div:nth-child(2){grid-column:1 / -1!important;grid-row:auto!important}
+ .dt-frame-header>div:last-child{flex-wrap:wrap}
+ .dt-frame-board{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(9,auto)!important;grid-row:2!important}
+ .dt-frame-card{grid-column:auto!important;grid-row:auto / span 3!important;overflow:visible!important}
+ .dt-frame-rail{max-height:340px;padding:12px!important;border:1px solid var(--dt-grid-mid)!important;border-radius:var(--dt-r-card)}
+ .dt-frame-shell>footer{grid-template-columns:minmax(0,1fr)!important}
+ .dt-typology-main{height:auto!important;min-height:100svh;grid-template-rows:auto auto!important;padding:20px!important}
+ .dt-typology-header{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+ .dt-typology-header>div:last-child{justify-content:start!important;white-space:normal!important}
+ .dt-typology-board{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:auto!important}
+ .dt-typology-card{grid-area:auto!important;min-height:180px!important}
+ .dt-typology-card:has(.dt-typology-census){grid-column:1 / -1!important}
+ .dt-typology-census{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:auto!important}
+ .dt-typology-kind{grid-area:auto!important;min-height:140px!important}
+ .dt-typology-kind:has(.dt-typology-specimen){grid-column:1 / -1!important}
+}
+@media(max-width:600px){
+ .dt-frame-header{grid-template-columns:minmax(0,1fr)!important}
+ .dt-frame-header>div:last-child{justify-self:start!important}
+ .dt-frame-board{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:repeat(18,auto)!important}
+ .dt-frame-card{min-height:240px!important}
+ .dt-typology-shell{grid-template-columns:minmax(0,1fr)!important;height:auto!important}
+ .dt-typology-shell>aside{position:fixed!important;z-index:70;top:0;left:0;width:min(340px,86vw);transform:translateX(-100%);transition:transform .3s var(--vt-ease)}
+ .dt-typology-shell[style*="340px"]>aside{transform:none}
+ .dt-typology-main{padding:18px 22px 24px 32px!important}
+ .dt-typology-board,.dt-typology-census{grid-template-columns:minmax(0,1fr)!important}
+ .dt-typology-specimen{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto!important;overflow:visible!important}
+ .dt-typology-specimen>div{grid-column:1 / -1!important;grid-row:auto!important}
+ .dt-queue-item{grid-template-columns:auto auto minmax(0,1fr)!important}
+ .dt-queue-item>div:last-child{grid-column:2 / -1;justify-content:start!important}
+}
+.dt-responsive-page :is(div,section,main,header,aside,form,.sc-host){min-width:0}
+@media(max-width:600px){
+ .dt-responsive-page :is(h1,h2){white-space:normal!important;line-height:1.25}
+ .dt-responsive-comparison{grid-template-columns:minmax(0,1fr)!important}
+ .dt-crossref{white-space:normal!important;max-width:100%;box-sizing:border-box;line-height:1.5}
+ .dt-queue-item span[style*="white-space"]{white-space:normal!important}
+ .dt-shop-controls{grid-template-columns:minmax(0,1fr)!important}
+ .dt-shop-controls>div{justify-content:space-between}
+ .dt-shop-matrix{overflow-x:auto;max-width:100%;padding-bottom:10px;scrollbar-width:thin}
+ .dt-shop-matrix>div{min-width:560px}
+ .dt-responsive-page #touch{box-sizing:border-box;max-width:100%;overflow-wrap:anywhere}
+}
+@media(max-width:600px){
+ .dt-measure-row{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+ .dt-measure-row>span:last-child{justify-items:start!important;text-align:left!important;border-top:1px dashed var(--dt-grid-mid);padding-top:8px}
+ .dt-measure-row>span:last-child>span:last-child{max-width:none!important}
+}
+@media(max-width:1000px){.dt-frame-card[data-demoted=true]{min-height:100px!important}.dt-typology-card[data-rail=true]{min-height:80px!important}.dt-typology-card{overflow:visible!important}}

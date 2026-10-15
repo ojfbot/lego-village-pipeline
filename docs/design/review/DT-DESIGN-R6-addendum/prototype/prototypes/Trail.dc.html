@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../dt/tokens.css">
+<link rel="stylesheet" href="../dt/responsive.css">
+<script src="../dt/overlay.js"></script>
+</helmet>
+<span ref="{{ anchorRef }}" tabindex="0" role="button" onMouseEnter="{{ show }}" onMouseLeave="{{ hideSoon }}" onFocus="{{ show }}" onBlur="{{ hideSoon }}" onKeyDown="{{ key }}" aria-describedby="{{ descId }}" style="color:inherit;font:inherit;text-decoration:{{ strike }};border-bottom:1px dotted var(--dt-muted);cursor:help">{{ labelText }}</span>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;420px&quot;,&quot;height&quot;:&quot;120px&quot;},&quot;label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Choose the winter palette&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Trail&quot;},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Choose the winter palette&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Trail&quot;},&quot;status&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;closed&quot;,&quot;parked&quot;],&quot;default&quot;:&quot;closed&quot;,&quot;tsType&quot;:&quot;'closed'|'parked'&quot;,&quot;section&quot;:&quot;Trail&quot;},&quot;steps&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;09-14 :: Added by you after the first C-01 pass. | 09-16 :: Closed itself when C-01 recorded the palette.&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Trail&quot;},&quot;foot&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { phase: 'closed' };
+  anchorRef = React.createRef(); _uid = 'tr' + Math.random().toString(36).slice(2, 7);
+  ov() { if (!this._ov) this._ov = window.dtOverlay.attach(this, { anchor: () => this.anchorRef.current, render: () => this.card(this.renderVals()), width: 340 }); return this._ov; }
+  componentDidUpdate() { if (this._ov) { this._ov.paint(); this._ov.place(); } }
+  componentWillUnmount() { if (this._ov) this._ov.destroy(); this.setState = () => {}; }
+  card(v) {
+    const h = React.createElement, mono = "'Azeret Mono',monospace";
+    return h('span', { role: 'tooltip', id: v.descId, onMouseEnter: v.show, onMouseLeave: v.hideSoon, style: { position: 'fixed', top: 0, left: 0, width: 340, boxSizing: 'border-box', display: 'grid', gap: 8, background: 'var(--dt-sheet)', color: 'var(--dt-ink)', border: '1.5px solid var(--dt-ink)', boxShadow: 'var(--dt-shadow)', borderRadius: 'var(--dt-r-card)', padding: '12px 14px', fontFamily: "'Libre Franklin',sans-serif", textAlign: 'left', fontWeight: 400, fontSize: 12, lineHeight: 1.45, whiteSpace: 'normal', ...window.dtOverlay.style(v.isOpen) } },
+      h('span', { style: { display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'baseline', fontFamily: mono, fontSize: 9, letterSpacing: '0.1em', color: 'var(--dt-muted)' } },
+        h('span', null, 'HOW THIS GOT HERE'), h('span', { style: { color: v.statusColor, fontWeight: 600, letterSpacing: 0 } }, v.statusText)),
+      h('span', { style: { fontFamily: "'Spectral',serif", fontSize: 14.5, fontWeight: 600, lineHeight: 1.25 } }, v.titleText),
+      h('span', { style: { display: 'grid', gap: 7 } }, v.steps.map((s, i) => h('span', { key: i, style: { display: 'grid', gridTemplateColumns: '58px minmax(0,1fr)', gap: 9, alignItems: 'baseline' } },
+        h('span', { style: { fontFamily: mono, fontSize: 9, color: 'var(--dt-muted)', whiteSpace: 'nowrap' } }, s.when),
+        h('span', { style: { fontSize: 11.5, lineHeight: 1.45, color: i === v.steps.length - 1 ? 'var(--dt-ink)' : 'var(--dt-muted)' } }, s.what)))),
+      v.footText ? h('span', { style: { fontFamily: mono, fontSize: 9, color: 'var(--dt-muted)', borderTop: '1px dashed var(--dt-grid-mid)', paddingTop: 7, lineHeight: 1.5 } }, v.footText) : null);
+  }
+  renderVals() {
+    const ph = this.state.phase, status = String(this.props.status ?? 'closed');
+    const steps = String(this.props.steps ?? '').split('|').map(x => x.trim()).filter(Boolean).map(x => { const p = x.split('::'); return { when: (p[0] || '').trim(), what: (p[1] || p[0] || '').trim() }; });
+    return {
+      anchorRef: this.anchorRef, descId: this._uid, labelText: this.props.label ?? 'a task', titleText: this.props.title ?? this.props.label ?? 'a task',
+      strike: status === 'closed' ? 'line-through' : 'none',
+      statusText: status === 'closed' ? '■ CLOSED' : status === 'parked' ? '○ STEPPED ASIDE' : status.toUpperCase(),
+      statusColor: status === 'closed' ? 'var(--dt-pass)' : 'var(--dt-muted)',
+      steps: steps.length ? steps : [{ when: '—', what: 'No trail recorded yet. In the app every task keeps one: who added it, what it waited on, and what finally closed it.' }],
+      footText: this.props.foot ?? 'Nothing is deleted — reopening adds a step, it does not erase these.',
+      isOpen: ph === 'open', show: () => this.ov().open(), hideSoon: () => this.ov().close(false),
+      key: (e) => { if (e.key === 'Escape') this.ov().close(true); if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.ov().open(); } }
+    };
+  }
+}
+</script>
+</body>
+</html>

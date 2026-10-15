@@ -1,0 +1,17 @@
+{
+  "name": "house-world-r6-addendum",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "pnpm run check:chapters && vite build && node build-static.mjs",
+    "preview": "vite preview --host 127.0.0.1",
+    "check:chapters": "node check-chapters.mjs"
+  },
+  "dependencies": {
+    "three": "0.186.1"
+  },
+  "devDependencies": {
+    "vite": "8.3.4"
+  }
+}

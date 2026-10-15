@@ -1,0 +1,45 @@
+{
+  "base": "DT-DESIGN R6 at defff46251f3e98c44ba3a2f3ddada768e9328a0",
+  "overlay_sources": [
+    "R2 rev-b archive",
+    "R4 sources",
+    "R6 sources"
+  ],
+  "archive_sha256": "521101a0d6d16ac3ca9156da9e58fcada0c673e18a91ff377dc7a4eed71bbd5c",
+  "render_reference": "GPT house-world at 4188; Three 0.186.1, ACES/sRGB, original lights, roughness .72, no environment-map or shadow pass",
+  "scope": "Local responsive R6 follow-up. Adaptive header, finder, overview framing, dashboard and inherited sheet layouts. Focus keeps neighboring block opacity and geometry steady. Back resumes scrolling and activation forwards the clicked block, including Drafting Table.",
+  "missing_inherited_sheets": [
+    "Prototype V - Reading the Instructions.dc.html",
+    "Prototype V2 - Deriving Fitment from the Build.dc.html"
+  ],
+  "r6_interface_exact_except_three_bootstrap": false,
+  "r6_camera_and_interaction_methods_unchanged": {
+    "sampleFlight": true,
+    "setProgress": false,
+    "roomPose": true,
+    "lobbyPose": true,
+    "flyTo": false,
+    "cancelFlight": true,
+    "slideTo": true,
+    "tweenTo": true,
+    "returnFrom": true,
+    "landAt": true,
+    "startBlend": true,
+    "freeze": true,
+    "pick": true,
+    "onMove": true,
+    "frame": false
+  },
+  "unavailable_routes": [
+    "Prototype V - Reading the Instructions.dc.html",
+    "Prototype V2 - Deriving Fitment from the Build.dc.html"
+  ],
+  "route_fallbacks_are_not_claude_sheets": true,
+  "predecessor": "Local R6 renderer integration, reconstructed from the source pins in ../manifest.json",
+  "model_assets_unchanged_from_render_study": {
+    "house.glb": "7932e86c69229f78eed135163161e12ebf158f8d07c7eb57f527ae4f357bb140",
+    "house-metadata.json": "a4fcf44231688102eceade279f490c216decc101061bcf88c5e108c519423a75"
+  },
+  "responsive_checks": "../evidence/responsive-browser-checks.json",
+  "publication_destination": "PR #46 R6 addendum"
+}

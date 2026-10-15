@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="ext-resource-dependency" content="../dt/tokens.css">
+<meta name="ext-resource-dependency" content="../dt/overlay.js">
+<meta name="ext-resource-dependency" content="../dt/landing.js">
+<meta name="ext-resource-dependency" content="./image-slot.js">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#F6F2E9"/><rect x="30" y="30" width="140" height="140" rx="8" fill="#B07C10"/><text x="100" y="118" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="72" fill="#FDFBF5">B</text></svg></template>
+<x-dc>
+<helmet>
+<title>When the AI isn’t sure — LEGO Village</title>
+<script>document.documentElement.lang="en"</script>
+<script src="../dt/landing.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../dt/tokens.css">
+<link rel="stylesheet" href="../dt/responsive.css">
+<style>@keyframes dtStampIn{0%{transform:rotate(-14deg) scale(1.6);opacity:0}60%{transform:rotate(-3deg) scale(0.96);opacity:1}100%{transform:rotate(-3deg) scale(1)}}</style>
+</helmet>
+<div class="dt-responsive-page" style="max-width:1200px;margin:0 auto;padding:28px 28px 48px">
+  <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--dt-ink);padding-bottom:10px;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;min-width:0;flex:1 1 320px">
+      <h1 style="font-family:'Spectral',serif;font-size:19px;font-weight:700;font-style:italic;white-space:nowrap;margin:0">When the AI isn't sure</h1>
+      <div style="font-size:11px;color:var(--dt-muted);letter-spacing:0.08em">SLICE B · REFERENCE bl-741807 · MOCK DATA, ILLUSTRATIVE</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="../Hub.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none">← HUB</a>
+      <button onClick="{{ toggleTheme }}" aria-pressed="{{ dark }}" style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn)">{{ themeLabel }}</button>
+    </div>
+  </div>
+  <div style="background:var(--dt-info-bg);border:1.5px solid var(--dt-info);border-radius:var(--dt-r-fillet);padding:11px 15px;margin-top:14px;font-size:13px;line-height:1.5;text-wrap:pretty">
+    The AI hit an ambiguous phrase while reading a builder's page. It shows its work, asks once, and your answer — tap, type, or talk — becomes the record.
+  </div>
+  <div class="dt-responsive-split" style="display:grid;grid-template-columns:minmax(280px,1fr) minmax(0,1.6fr);gap:16px;margin-top:16px;align-items:start">
+    <div style="display:grid;gap:14px;min-width:0">
+      <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap">
+          <div style="font-family:'Spectral',serif;font-size:16px;font-weight:600">The design in question</div>
+          <button onClick="{{ toggleFam }}" aria-pressed="{{ famVisible }}" title="Toggle family visibility of this listing" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:{{ famColor }};border:1.5px solid {{ famColor }};background:transparent;padding:3px 8px;border-radius:var(--dt-r-fillet);cursor:pointer">{{ famLabel }}</button>
+        </div>
+        <div style="font-family:'Azeret Mono',monospace;font-size:12px;background:var(--dt-bg);border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:10px 12px;margin-top:12px;line-height:1.5">"MILS quarter circle R40 for 4 tracks 53400 ..."</div>
+        <div style="font-size:11px;color:var(--dt-muted);margin-top:6px">Creator's words, verbatim, always with credit. The listing can be shown to family; the downloaded file stays operator-only until the rights check passes.</div>
+        <div style="margin-top:14px">
+          <div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted);margin-bottom:8px">FILES &amp; LINKS</div>
+          <div style="display:grid;gap:6px;font-size:12.5px">
+            <div style="display:flex;gap:8px;align-items:center"><a href="#" onClick="{{ openSource }}" style="font-weight:600">↗ Original page</a><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);margin-left:auto">BRICKLINK · MOCK</span></div>
+            <div style="display:flex;gap:8px;align-items:center"><a href="#" onClick="{{ openSnapshot }}" style="font-weight:600">▤ Saved page snapshot</a><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);margin-left:auto">2026-09-02</span></div>
+            <sc-if value="{{ fileMissing }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;gap:8px;align-items:center;border:1.5px dashed var(--dt-unres);border-radius:var(--dt-r-fillet);padding:7px 10px">
+                <span style="color:var(--dt-muted)">⬇ .io design file — download it in your browser, then drop it here</span>
+                <button onClick="{{ mockDrop }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;background:transparent;color:var(--dt-accent-deep);border:1px solid var(--dt-accent);padding:3px 8px;border-radius:var(--dt-r-btn);cursor:pointer;margin-left:auto;flex:none">SIMULATE DROP</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ fileHave }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><a href="#" onClick="{{ openFile }}" style="font-weight:600">⬒ quarter-r40.io</a><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-pass)">■ FINGERPRINT a1b2c3…</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-block-deep);border:1px solid var(--dt-block);padding:2px 6px;border-radius:var(--dt-r-fillet);margin-left:auto">FILE: OPERATOR-ONLY</span></div>
+            </sc-if>
+          </div>
+        </div>
+        <div style="display:grid;gap:7px;margin-top:14px;font-size:12.5px">
+          <div style="display:flex;gap:10px"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);width:92px;flex:none">CREATOR</span><span>BrickLink user <em>(named verbatim in real data)</em></span></div>
+          <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);width:92px;flex:none">PERMISSIONS</span><span style="display:flex;gap:6px;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);background:var(--dt-pass-bg);padding:2px 7px;border-radius:var(--dt-r-fillet)">■ MAY DOWNLOAD</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-prov-deep);border:1.5px dashed var(--dt-prov);padding:2px 7px;border-radius:var(--dt-r-fillet)">◇ MAY NOT SHARE</span></span></div>
+        </div>
+        <div style="margin-top:16px">
+          <div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted);margin-bottom:8px">WHERE IT IS IN THE PIPELINE</div>
+          <div style="display:grid;gap:0">
+            <div style="display:flex;gap:10px;align-items:center;padding:5px 0"><span style="width:10px;height:10px;border-radius:50%;background:var(--dt-pass);flex:none"></span><span style="font-size:12.5px">Found online</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);margin-left:auto">2026-08-30</span></div>
+            <div style="display:flex;gap:10px;align-items:center;padding:5px 0"><span style="width:10px;height:10px;border-radius:50%;background:var(--dt-pass);flex:none"></span><span style="font-size:12.5px">Checked by you</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);margin-left:auto">2026-09-02</span></div>
+            <div style="display:flex;gap:10px;align-items:center;padding:5px 0"><span style="width:10px;height:10px;border-radius:50%;border:2px solid var(--dt-prov);box-sizing:border-box;flex:none"></span><span style="font-size:12.5px">Usage-rights check</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-prov-deep);margin-left:auto">PENDING</span></div>
+            <div style="display:flex;gap:10px;align-items:center;padding:5px 0"><span style="width:10px;height:10px;border-radius:50%;border:{{ fileDotBorder }};background:{{ fileDotBg }};box-sizing:border-box;flex:none"></span><span style="font-size:12.5px;color:{{ fileRowColor }}">File downloaded &amp; fingerprinted</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:{{ fileStatusColor }};margin-left:auto">{{ fileStatus }}</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px">
+        <div style="font-family:'Spectral',serif;font-size:15px;font-weight:600;margin-bottom:8px">Paper trail for this value <span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);font-weight:400">TRACK COUNT</span></div>
+        <div style="display:grid;gap:6px;font-size:12.5px">
+          <div style="display:flex;gap:10px"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);width:96px;flex:none">WHO WROTE IT</span><span>the AI, reading the title — this never gets erased</span></div>
+          <div style="display:flex;gap:10px"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);width:96px;flex:none">HOW</span><span>traced the rail path in the reconstructed geometry</span></div>
+          <div style="display:flex;gap:10px"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);width:96px;flex:none">HOW SURE</span><span style="color:{{ verColor }};font-weight:600">{{ verText }}</span></div>
+          <div style="display:flex;gap:10px"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);width:96px;flex:none">WHO DECIDED</span><span style="font-weight:600">{{ authText }}</span></div>
+          <div style="display:flex;gap:10px"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);width:96px;flex:none">STATUS</span><span style="color:{{ wfColor }};font-weight:600">{{ wfText }}</span></div>
+        </div>
+        <div style="font-size:11px;color:var(--dt-muted);margin-top:10px;text-wrap:pretty">Answers set STATUS and WHO DECIDED; the AI's authorship stays on record.</div>
+      </div>
+    </div>
+    <div style="display:grid;gap:14px;min-width:0">
+      <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px">
+        <div style="font-family:'Spectral',serif;font-size:16px;font-weight:600;margin-bottom:12px">What the page said vs. what the AI wrote down</div>
+        <div class="dt-responsive-comparison" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px">
+          <div style="border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:12px 14px">
+            <div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--dt-muted);margin-bottom:8px">THE PAGE SAID</div>
+            <div style="font-size:13px;line-height:1.6">"…for <mark style="background:var(--dt-prov-bg);color:var(--dt-prov-deep);padding:0 3px;border-radius:2px;font-weight:600">4 tracks</mark> 53400…"</div>
+            <div style="font-size:11.5px;color:var(--dt-muted);margin-top:8px">Four track <em>pieces</em>? Or four tracks <em>side by side</em>? English won't say.</div>
+          </div>
+          <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:12px 14px">
+            <div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--dt-muted);margin-bottom:8px">THE AI WROTE DOWN</div>
+            <div style="display:grid;gap:8px;font-size:12.5px">
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:11.5px">tracks side by side: {{ ptcVal }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:{{ ptcChipColor }};border:{{ ptcChipBorder }};padding:2px 6px;border-radius:var(--dt-r-fillet)">{{ ptcChip }}</span></div>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:11.5px">curved pieces used: 4 × 53400</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);background:var(--dt-pass-bg);padding:2px 6px;border-radius:var(--dt-r-fillet)">■ MACHINE-CHECKED</span></div>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:11.5px">total curve: 90°</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);background:var(--dt-pass-bg);padding:2px 6px;border-radius:var(--dt-r-fillet)">■ MACHINE-CHECKED</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+          <div style="font-family:'Spectral',serif;font-size:16px;font-weight:600">The conversation</div>
+          <span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">TAP · TYPE · OR TALK</span>
+        </div>
+        <div style="display:grid;gap:10px">
+          <sc-for list="{{ messages }}" as="msg" hint-placeholder-count="1">
+            <div style="display:flex;justify-content:{{ msg.justify }}">
+              <div style="max-width:85%;background:{{ msg.bg }};color:{{ msg.color }};border:{{ msg.border }};border-radius:{{ msg.radius }};padding:11px 14px;font-size:13.5px;line-height:1.55;text-wrap:pretty">
+                <div style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;opacity:0.65;margin-bottom:4px">{{ msg.who }}</div>
+                {{ msg.text }}
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ undecided }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+            <button onClick="{{ quickPieces }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:8px 14px;cursor:pointer;border-radius:var(--dt-r-pill)">Yes — 4 pieces, one track</button>
+            <button onClick="{{ quickParallel }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:8px 14px;cursor:pointer;border-radius:var(--dt-r-pill)">No — 4 tracks side by side</button>
+            <button onClick="{{ quickLater }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:transparent;color:var(--dt-muted);border:1px dashed var(--dt-unres);padding:8px 14px;cursor:pointer;border-radius:var(--dt-r-pill)">Not sure — ask me after the file downloads</button>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+            <input type="text" value="{{ draft }}" onChange="{{ setDraft }}" onKeyDown="{{ draftKey }}" placeholder="…or answer in your own words" aria-label="Answer the AI in your own words" style="flex:1;min-width:0;font-family:'Libre Franklin';font-size:13.5px;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:9px 12px;border-radius:var(--dt-r-btn)">
+            <button onClick="{{ toggleVoice }}" aria-pressed="{{ listening }}" aria-label="Answer by voice" title="Answer by voice" style="font-size:15px;background:{{ micBg }};color:{{ micColor }};border:1.5px solid var(--dt-ink);width:38px;height:38px;cursor:pointer;border-radius:var(--dt-r-pill);flex:none">{{ micGlyph }}</button>
+            <button onClick="{{ send }}" style="font-family:'Libre Franklin';font-size:13px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:9px 16px;cursor:pointer;box-shadow:var(--dt-btn-shadow);border-radius:var(--dt-r-btn);flex:none">Send</button>
+          </div>
+          <div style="font-size:11px;color:var(--dt-muted);margin-top:7px;text-wrap:pretty">{{ voiceHint }} Low-stakes: this changes a note in the plan — orders nothing, freezes nothing.</div>
+        </sc-if>
+        <sc-if value="{{ decided }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:16px;border:1.5px solid {{ recBorder }};border-radius:var(--dt-r-fillet);padding:14px 16px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;background:var(--dt-bg)">
+            <span style="display:inline-block;font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;color:{{ recColor }};border:2.5px solid {{ recColor }};padding:5px 14px;border-radius:var(--dt-r-fillet);animation:dtStampIn .35s ease-out both">{{ stampText }}</span>
+            <div style="display:grid;gap:3px;font-size:12.5px;min-width:200px;flex:1">
+              <div style="font-family:'Azeret Mono',monospace;font-size:10.5px;font-weight:600">SAVED TO THE RECORD · DEC-NORM-741807</div>
+              <div>{{ recNote }}</div>
+              <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">DECIDED BY: YOU · 2026-09-16 · MOCK</div>
+            </div>
+            <button onClick="{{ reset }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:transparent;color:var(--dt-muted);border:1px dashed var(--dt-unres);padding:5px 10px;cursor:pointer;border-radius:var(--dt-r-btn)">RESET DEMO</button>
+          </div>
+        </sc-if>
+      </div>
+      <div aria-live="polite" style="font-family:'Azeret Mono',monospace;font-size:11px;color:var(--dt-muted);min-height:15px">{{ narration }}</div>
+      <div style="background:var(--dt-sheet);border:1px dashed var(--dt-unres);border-radius:var(--dt-r-card);padding:14px 18px;font-size:11.5px;color:var(--dt-muted)">
+        <span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.1em">PROTOTYPE ASSUMPTIONS</span>
+        <ul style="margin:8px 0 0;padding-left:16px;display:grid;gap:4px">
+          <li>Agent questions arrive as structured clarification requests with evidence refs — schema_request: ClarificationRequest {field, question, options[], evidence_refs[]}</li>
+          <li>Free-text/voice answers are interpreted by the agent and echoed back before committing — the echo, not the raw parse, is what gets saved</li>
+          <li>Decision writes {status, decided_by, decided_at, answer_text} — schema_request: DecisionRecord ↔ field-level link</li>
+          <li>Voice uses the browser's speech recognition when available; falls back to typing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;paper&quot;,&quot;blueprint&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto'|'paper'|'blueprint'&quot;}}">
+class Component extends DCLogic {
+  state = {
+    dark: null, decision: null, draft: '', listening: false, narration: '', famVisible: true, fileHave: false,
+    messages: [{ who: 'ai', text: 'The title says "for 4 tracks 53400". My trace found one continuous track — four curved pieces, two ends, 90°. Four pieces of one track, or four tracks side by side?' }]
+  };
+  isDark() {
+    if (this.state.dark !== null) return this.state.dark;
+    if (this.props.theme === 'blueprint') return true;
+    if (this.props.theme === 'paper') return false;
+    return typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  applyBody() { document.body.classList.toggle('dt-blueprint', this.isDark()); }
+  componentDidMount() { this.applyBody(); this.forceUpdate(); }
+  componentDidUpdate() { this.applyBody(); }
+  componentWillUnmount() { if (this.rec) try { this.rec.stop(); } catch (e) {} }
+  decide(kind, userText) {
+    const replies = {
+      accepted: 'Saved: four pieces, one track — your words attached. I won\u2019t ask again.',
+      rejected: 'Corrected to four parallel tracks. My trace disagrees (two rail ends), so a re-check is queued.',
+      deferred: 'On hold. I\u2019ll re-ask once the file is here and I can read real geometry, not the title.'
+    };
+    this.setState(s => ({
+      decision: kind,
+      draft: '', listening: false,
+      messages: s.messages.concat([{ who: 'you', text: userText }, { who: 'ai', text: replies[kind] }]),
+      narration: 'Answer saved. Status: ' + kind + ', decided by you.'
+    }));
+  }
+  interpret(text) {
+    const t = text.toLowerCase();
+    if (/(parallel|side by side|4 tracks side|four tracks side|no[, ].*(4|four) tracks)/.test(t)) return 'rejected';
+    if (/(later|not sure|don.t know|defer|hold|wait)/.test(t)) return 'deferred';
+    return 'accepted';
+  }
+  renderVals() {
+    const d = this.state.decision, dark = this.isDark();
+    const map = {
+      accepted: { stamp: '■ AGREED', color: 'var(--dt-pass)', border: 'var(--dt-pass)', note: 'One track, four pieces — confirmed by you; matches the machine checks.', wf: 'settled', wfColor: 'var(--dt-pass)', ver: 'confirmed', verColor: 'var(--dt-pass)', auth: 'you', chip: '■ CONFIRMED', chipColor: 'var(--dt-pass)', chipBorder: '1.5px solid var(--dt-pass)', val: '1' },
+      rejected: { stamp: '▲ CORRECTED', color: 'var(--dt-block-deep)', border: 'var(--dt-block)', note: 'Corrected to 4 parallel tracks; re-check queued (trace disagrees).', wf: 'corrected — re-check queued', wfColor: 'var(--dt-block-deep)', ver: 'in conflict with trace', verColor: 'var(--dt-block-deep)', auth: 'you', chip: '▲ CORRECTED → 4', chipColor: 'var(--dt-block-deep)', chipBorder: '1.5px solid var(--dt-block)', val: '4' },
+      deferred: { stamp: '○ ON HOLD', color: 'var(--dt-unres-ink)', border: 'var(--dt-unres)', note: 'Held until the file is here — the AI re-asks with real geometry.', wf: 'on hold', wfColor: 'var(--dt-unres-ink)', ver: 'still a guess', verColor: 'var(--dt-prov-deep)', auth: 'no one yet', chip: '◇ ON HOLD', chipColor: 'var(--dt-prov-deep)', chipBorder: '1.5px dashed var(--dt-prov)', val: '1?' }
+    };
+    const cur = d ? map[d] : null;
+    const msgVals = this.state.messages.map(m => m.who === 'ai'
+      ? { who: 'THE AI', text: m.text, justify: 'flex-start', bg: 'var(--dt-bg)', color: 'var(--dt-ink)', border: '1px solid var(--dt-grid-mid)', radius: '2px 12px 12px 12px' }
+      : { who: 'YOU', text: m.text, justify: 'flex-end', bg: 'var(--dt-ink)', color: 'var(--dt-on-ink)', border: 'none', radius: '12px 2px 12px 12px' });
+    const speechOk = typeof window !== 'undefined' && (window.SpeechRecognition || window.webkitSpeechRecognition);
+    return {
+      dark, themeLabel: dark ? '☀ PAPER' : '☾ BLUEPRINT',
+      toggleTheme: () => this.setState({ dark: !this.isDark() }),
+      undecided: !d, decided: !!d,
+      messages: msgVals,
+      draft: this.state.draft,
+      setDraft: (e) => this.setState({ draft: e.target.value }),
+      draftKey: (e) => { if (e.key === 'Enter' && this.state.draft.trim()) this.decide(this.interpret(this.state.draft), this.state.draft.trim()); },
+      send: () => { if (this.state.draft.trim()) this.decide(this.interpret(this.state.draft), this.state.draft.trim()); },
+      quickPieces: () => this.decide('accepted', 'Yes — 4 pieces, one track.'),
+      quickParallel: () => this.decide('rejected', 'No — 4 tracks side by side.'),
+      quickLater: () => this.decide('deferred', 'Not sure — ask me after the file downloads.'),
+      listening: this.state.listening,
+      micGlyph: this.state.listening ? '◉' : '🎙',
+      micBg: this.state.listening ? 'var(--dt-block-bg)' : 'transparent',
+      micColor: this.state.listening ? 'var(--dt-block-deep)' : 'var(--dt-ink)',
+      voiceHint: this.state.listening ? 'Listening — speak your answer, it lands in the box.' : (speechOk ? 'Tap the mic to talk instead of typing.' : 'Voice needs browser speech support — typing works everywhere.'),
+      toggleVoice: () => {
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SR) { this.setState({ narration: 'Speech recognition not available in this browser — type instead.' }); return; }
+        if (this.state.listening) { try { this.rec.stop(); } catch (e) {} this.setState({ listening: false }); return; }
+        this.rec = new SR(); this.rec.lang = 'en-US'; this.rec.interimResults = false;
+        this.rec.onresult = (ev) => { const t = ev.results[0][0].transcript; this.setState({ draft: t, listening: false, narration: 'Heard: ' + t }); };
+        this.rec.onerror = () => this.setState({ listening: false, narration: 'Mic unavailable — type instead.' });
+        this.rec.onend = () => { if (this.state.listening) this.setState({ listening: false }); };
+        this.rec.start(); this.setState({ listening: true, narration: 'Listening…' });
+      },
+      stampText: cur ? cur.stamp : '', recColor: cur ? cur.color : 'var(--dt-ink)', recBorder: cur ? cur.border : 'var(--dt-ink)', recNote: cur ? cur.note : '',
+      wfText: cur ? cur.wf : 'open — waiting on you', wfColor: cur ? cur.wfColor : 'var(--dt-prov-deep)',
+      verText: cur ? cur.ver : 'a guess — checks lean "one track"', verColor: cur ? cur.verColor : 'var(--dt-prov-deep)',
+      authText: cur ? cur.auth : 'no one yet',
+      famVisible: this.state.famVisible,
+      famLabel: this.state.famVisible ? '👁 LISTING: FAMILY CAN SEE' : '⛉ LISTING: OPERATOR ONLY',
+      famColor: this.state.famVisible ? 'var(--dt-pass)' : 'var(--dt-block-deep)',
+      toggleFam: () => this.setState(s => ({ famVisible: !s.famVisible, narration: s.famVisible ? 'Listing hidden from family view.' : 'Listing visible to family. The downloaded file stays operator-only until rights pass.' })),
+      fileMissing: !this.state.fileHave, fileHave: this.state.fileHave,
+      fileDotBorder: this.state.fileHave ? 'none' : '2px dashed var(--dt-unres)',
+      fileDotBg: this.state.fileHave ? 'var(--dt-pass)' : 'transparent',
+      fileRowColor: this.state.fileHave ? 'var(--dt-ink)' : 'var(--dt-muted)',
+      fileStatus: this.state.fileHave ? '2026-09-16 · a1b2c3…' : 'NOT YET',
+      fileStatusColor: this.state.fileHave ? 'var(--dt-muted)' : 'var(--dt-unres-ink)',
+      mockDrop: (e) => { e.preventDefault(); this.setState({ fileHave: true, narration: 'File stored and fingerprinted. It stays operator-only until the rights check passes.' }); },
+      openSource: (e) => { e.preventDefault(); this.setState({ narration: 'Would open the original listing in a new tab (mock).' }); },
+      openSnapshot: (e) => { e.preventDefault(); this.setState({ narration: 'Would open the saved snapshot (mock).' }); },
+      openFile: (e) => { e.preventDefault(); this.setState({ narration: 'Would open the design file in the component workbench (mock).' }); },
+      ptcVal: cur ? cur.val : '1?',
+      ptcChip: cur ? cur.chip : '◇ AI GUESS — ASKING',
+      ptcChipColor: cur ? cur.chipColor : 'var(--dt-prov-deep)',
+      ptcChipBorder: cur ? cur.chipBorder : '1.5px dashed var(--dt-prov)',
+      narration: this.state.narration,
+      reset: () => this.setState({ decision: null, narration: 'Demo reset.', messages: this.state.messages.slice(0, 1) })
+    };
+  }
+}
+</script>
+</body>
+</html>

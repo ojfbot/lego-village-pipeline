@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="ext-resource-dependency" content="../dt/tokens.css">
+<meta name="ext-resource-dependency" content="../dt/overlay.js">
+<meta name="ext-resource-dependency" content="../dt/landing.js">
+<meta name="ext-resource-dependency" content="./image-slot.js">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#F6F2E9"/><rect x="30" y="30" width="140" height="140" rx="8" fill="#2E6B4F"/><text x="100" y="118" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="72" fill="#FDFBF5">C</text></svg></template>
+<x-dc>
+<helmet>
+<title>James's railbed plan — and what LH attached to it — LEGO Village</title>
+<script>document.documentElement.lang="en"</script>
+<script src="../dt/landing.js"></script>
+<script src="../dt/overlay.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../dt/tokens.css">
+<link rel="stylesheet" href="../dt/responsive.css">
+<style>@keyframes dtStampIn{0%{transform:rotate(-14deg) scale(1.6);opacity:0}60%{transform:rotate(-3deg) scale(0.96);opacity:1}100%{transform:rotate(-3deg) scale(1)}} details>summary{list-style:none} details>summary::-webkit-details-marker{display:none}</style>
+</helmet>
+<div role="main" class="dt-responsive-page" style="max-width:1320px;margin:0 auto;padding:28px 28px 48px">
+  <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--dt-ink);padding-bottom:10px;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;min-width:0;flex:1 1 320px">
+      <h1 style="font-family:'Spectral',serif;font-size:19px;font-weight:700;font-style:italic;white-space:nowrap;margin:0">The railbed — James's plan</h1>
+      <div style="font-size:11px;color:var(--dt-muted);letter-spacing:0.08em">SLICE C · SHEET C-01 · ONE FACET · MOCK QUANTITIES &amp; PRICES</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="../Hub.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none">← HUB</a>
+      <button onClick="{{ toggleTheme }}" aria-pressed="{{ dark }}" style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn)">{{ themeLabel }}</button>
+    </div>
+  </div>
+  <div style="background:var(--dt-info-bg);border:1.5px solid var(--dt-info);border-radius:var(--dt-r-fillet);padding:11px 15px;margin-top:14px;font-size:13px;line-height:1.5;text-wrap:pretty;display:grid;gap:6px">
+    <div>One plan sheet — the page a builder sees for one thing they've set out to build. It turns a design, plus whatever others attached to it, into a parts list you can approve and hand to buying. Every plan in the village gets this same sheet; the railbed is the worked example.</div>
+    <div style="display:flex;gap:6px 12px;flex-wrap:wrap;align-items:center;font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">
+      <a href="../J-01 Journey Map.dc.html" style="font-weight:600">JOURNEY · PLAN → BUY ↗</a>
+      <span>A-01 layout → <a href="Prototype B - When the AI Isnt Sure.dc.html">B-01 rights</a> → <strong style="color:var(--dt-ink)">C-01 this sheet</strong> → <a href="Prototype M - Measure and Check.dc.html">M-01 measure</a> → <a href="Prototype P - Procurement.dc.html">P-01 buy</a></span>
+      <span>TYPE · PLAN SHEET, GENERIC</span>
+      <span>FIDELITY · FLOWS REAL, DATA MOCK</span>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:10px;margin-top:14px">
+    <div style="background:var(--dt-sheet);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:11px 15px;font-size:13px;line-height:1.5;text-wrap:pretty">
+      <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:var(--dt-muted);margin-bottom:4px">WHAT JAMES SET OUT TO BUILD</div>
+      A MILS baseplate that carries the train's circle of track, with ballast under the rail. The track arrives with the train (owned). The module frame comes from a BrickLink design (bought, recoloured for snow). Ballast is in neither — a choice to make here. Everyone's plans are open, so others can attach to this one.
+    </div>
+    <div style="background:var(--dt-sheet);border:1.5px {{ reqBorder }} {{ reqColor }};border-radius:var(--dt-r-fillet);padding:11px 15px;font-size:13px;line-height:1.5;text-wrap:pretty">
+      <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:{{ reqColor }};margin-bottom:4px">WHAT LH ATTACHED · VIA HIS HELPER · 09-12</div>
+      “While you're building the railbed, can Nils's chocolate shop go at the end of Lantern Lane, with a rail siding so the train can deliver?” Words only — no model, no fit check. Your call sits in <a href="#req" style="font-weight:600">In one line ↓</a>; it's {{ reqTagPlain }}.
+    </div>
+  </div>
+
+  <div class="dt-responsive-split" style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px;margin-top:16px;display:grid;grid-template-columns:minmax(220px,0.9fr) minmax(260px,1.2fr) minmax(240px,1fr);gap:20px;align-items:start">
+    <div style="display:grid;gap:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+        <div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted)">WHAT WE'RE BUILDING · RAILBED v1</div>
+        <div style="display:flex;border:1px solid var(--dt-ink);border-radius:var(--dt-r-btn);overflow:hidden;flex:none" role="group" aria-label="What the schematic shows">
+          <button onClick="{{ ctxOff }}" aria-pressed="{{ ctxIsNew }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;padding:4px 8px;border:0;cursor:pointer;white-space:nowrap;background:{{ ctxNewBg }};color:{{ ctxNewFg }}">NEW ONLY</button>
+          <button onClick="{{ ctxOn }}" aria-pressed="{{ ctxIsCtx }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;padding:4px 8px;border:0;border-left:1px solid var(--dt-ink);cursor:pointer;white-space:nowrap;background:{{ ctxCtxBg }};color:{{ ctxCtxFg }}">IN THE VILLAGE</button>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--dt-muted);line-height:1.4;text-wrap:pretty">{{ ctxExplain }}</div>
+      <svg viewBox="0 0 240 190" style="width:100%;height:auto;display:block;border-radius:var(--dt-r-fillet);background:{{ ctxSvgBg }}" aria-label="Schematic: four MILS modules holding a full circle of track">
+        <sc-if value="{{ ctxIsCtx }}" hint-placeholder-val="{{ true }}">
+          <rect x="16" y="14" width="208" height="150" fill="none" stroke="var(--dt-muted)" stroke-width="1" opacity="0.55"></rect>
+          <text x="220" y="160" font-family="Azeret Mono" font-size="6.5" fill="var(--dt-muted)" opacity="0.9" text-anchor="end">VILLAGE TABLE · AS BUILT 2025</text>
+          <rect x="106" y="76" width="28" height="28" fill="var(--dt-muted)" opacity="0.28"></rect>
+          <rect x="106" y="76" width="28" height="28" fill="none" stroke="var(--dt-muted)" stroke-width="1.5"></rect>
+          <rect x="24" y="112" width="32" height="44" fill="var(--dt-muted)" opacity="0.18"></rect>
+          <rect x="24" y="112" width="32" height="44" fill="none" stroke="var(--dt-muted)" stroke-width="1.2"></rect>
+          <text x="40" y="136" font-family="Azeret Mono" font-size="6" fill="var(--dt-muted)" text-anchor="middle">STATION</text>
+          <text x="40" y="144" font-family="Azeret Mono" font-size="5.5" fill="var(--dt-muted)" text-anchor="middle">BUILT</text>
+          <text x="120" y="92" font-family="Azeret Mono" font-size="6" fill="var(--dt-ink)" text-anchor="middle">TREE 41843</text>
+          <text x="120" y="99" font-family="Azeret Mono" font-size="5.5" fill="var(--dt-muted)" text-anchor="middle">BUILT · FIXED</text>
+        </sc-if>
+        <rect x="64" y="34" width="56" height="56" fill="none" stroke="var(--dt-info)" stroke-width="2.5" stroke-dasharray="6 4"></rect>
+        <rect x="120" y="34" width="56" height="56" fill="none" stroke="var(--dt-info)" stroke-width="2.5" stroke-dasharray="6 4"></rect>
+        <rect x="64" y="90" width="56" height="56" fill="none" stroke="var(--dt-info)" stroke-width="2.5" stroke-dasharray="6 4"></rect>
+        <rect x="120" y="90" width="56" height="56" fill="none" stroke="var(--dt-info)" stroke-width="2.5" stroke-dasharray="6 4"></rect>
+        <sc-if value="{{ hasBallast }}" hint-placeholder-val="{{ false }}">
+          <circle cx="120" cy="90" r="{{ ballastR }}" fill="none" stroke="var(--dt-prov)" stroke-width="{{ ballastW }}" stroke-dasharray="5 4" opacity="0.8"></circle>
+        </sc-if>
+        <circle cx="120" cy="90" r="40" fill="none" stroke="var(--dt-pass)" stroke-width="6"></circle>
+        <sc-if value="{{ siding }}" hint-placeholder-val="{{ false }}">
+          <path d="M160,90 L214,90" fill="none" stroke="var(--dt-accent)" stroke-width="5" stroke-linecap="round" stroke-dasharray="7 5"></path>
+          <circle cx="160" cy="90" r="5" fill="var(--dt-accent)"></circle>
+          <text x="188" y="82" font-family="Azeret Mono" font-size="6.5" fill="var(--dt-accent-deep)" text-anchor="middle">SIDING → SHOP · LH</text>
+        </sc-if>
+        <text x="120" y="22" font-family="Azeret Mono" font-size="8" fill="var(--dt-info-deep)" text-anchor="middle">4 × MILS 32×32 · BUY, ADAPTED</text>
+        <text x="120" y="66" font-family="Azeret Mono" font-size="8" fill="var(--dt-pass)" text-anchor="middle">16 CURVES · OWN</text>
+        <text x="120" y="{{ ballastLabelY }}" font-family="Azeret Mono" font-size="8" fill="{{ ballastLabelColor }}" text-anchor="middle">{{ ballastLabel }}</text>
+        <text x="120" y="182" font-family="Azeret Mono" font-size="7.5" fill="var(--dt-muted)" text-anchor="middle">{{ ctxCaption }}</text>
+      </svg>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:10.5px;color:var(--dt-muted);align-items:center">
+        <span style="display:flex;gap:5px;align-items:center"><span style="width:16px;height:0;border-top:2.5px dashed var(--dt-info)"></span>new · to buy</span>
+        <span style="display:flex;gap:5px;align-items:center"><span style="width:16px;height:0;border-top:3px solid var(--dt-pass)"></span>new · already owned</span>
+        <sc-if value="{{ ctxIsCtx }}" hint-placeholder-val="{{ true }}"><span style="display:flex;gap:5px;align-items:center"><span style="width:12px;height:9px;background:var(--dt-muted);opacity:0.35;border:1px solid var(--dt-muted)"></span>already built · unchanged</span></sc-if>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><a href="#" onClick="{{ openStudio }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600">STUDIO RENDER ↗</a><a href="../prototypes/Prototype A - Layout Canvas.dc.html" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600">LAYOUT A-01 ↗</a></div>
+    </div>
+    <div style="display:grid;gap:8px">
+      <div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted)">SOURCES · BY BASIS</div>
+      <details open="{{ true }}" style="border:1px solid var(--dt-pass);border-radius:var(--dt-r-fillet);padding:8px 11px">
+        <summary aria-label="Source 1, own: Holiday Express Train 10361 — full circle of track, 16 curves. Expand for details." style="cursor:pointer;display:flex;gap:8px;align-items:flex-start;font-size:12.5px;line-height:1.5"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-pass);flex:none">■ OWN</span><span style="font-weight:600;flex:1;min-width:0;display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:0 4px"><dc-import name="SetRef" num="10361" kind="set" label="Holiday Express Train 10361" hint-size="auto,1em"></dc-import><span>— full circle of track</span></span><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">16 CURVES</span></summary>
+        <div style="font-size:11.5px;color:var(--dt-muted);margin-top:6px">Ordering from LEGO this week. Track arrives with it; nothing to buy.</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px"><a href="https://www.lego.com/en-us/product/holiday-express-train-10361" target="_blank" rel="noopener" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600">LEGO.COM ↗</a><a href="#" onClick="{{ openSetInv }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600">SET INVENTORY ↗</a></div>
+      </details>
+      <details style="border:1px solid var(--dt-info);border-radius:var(--dt-r-fillet);padding:8px 11px">
+        <summary aria-label="Source 2, buy adapted: bl-741807 MILS quarter-circle module, times 4. Expand for details." style="cursor:pointer;display:flex;gap:8px;align-items:flex-start;font-size:12.5px;line-height:1.5"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-info-deep);flex:none">▤ BUY · ADAPTED</span><span style="font-weight:600;flex:1;min-width:0;display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:0 4px"><dc-import name="SetRef" num="741807" kind="moc" label="bl-741807" hint-size="auto,1em"></dc-import><span>· MILS quarter-circle module</span></span><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">×4</span></summary>
+        <div style="font-size:11.5px;color:var(--dt-muted);margin-top:6px">Technic frame + track-attachment pieces. Not bought as listed — {{ adaptedRows }} rows recoloured to the winter palette.</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px"><a href="https://www.bricklink.com/v3/studio/design.page?idModel=741807" target="_blank" rel="noopener" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600">BRICKLINK ↗</a><a href="../prototypes/Prototype B - When the AI Isnt Sure.dc.html" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600">RIGHTS (B-01) ↗</a><button onClick="{{ filterAdapted }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:transparent;border:none;padding:0;cursor:pointer;color:var(--dt-accent-deep)">SHOW ROWS ↓</button></div>
+      </details>
+      <details style="border:1px solid var(--dt-prov);border-radius:var(--dt-r-fillet);padding:8px 11px">
+        <summary aria-label="Source 3, buy from research: ballast — not in either source, single. Expand for details." style="cursor:pointer;display:flex;gap:8px;align-items:flex-start;font-size:12.5px;line-height:1.5"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-prov-deep);flex:none">◇ BUY · RESEARCH</span><span style="font-weight:600;flex:1;min-width:0">Ballast — not in either source</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">{{ ballastShort }}</span></summary>
+        <div style="font-size:11.5px;color:var(--dt-muted);margin-top:6px">Single or double plate under the rail. A choice, below. <a href="Prototype M - Measure and Check.dc.html?from=C-01&what=Single%20ballast%20keeps%20the%20railhead%20flush" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;white-space:nowrap">◇ CHECK THE FLUSH CLAIM → M-01</a></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px"><a href="#" onClick="{{ openResearch }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600">RESEARCH NOTES ↗</a></div>
+      </details>
+    </div>
+    <div style="display:grid;gap:8px;align-content:start">
+      <div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted)">CHANGED VS. SOURCE</div>
+      <sc-for list="{{ deltas }}" as="d" hint-placeholder-count="4">
+        <div style="display:flex;gap:8px;align-items:flex-start;border-bottom:1px dashed var(--dt-grid-mid);padding:5px 4px;margin:0 -4px;border-radius:var(--dt-r-fillet);animation:{{ d.anim }}">
+          <span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:{{ d.color }};width:64px;flex:none;margin-top:2px">{{ d.by }}</span>
+          <span style="font-size:12px;flex:1;min-width:0;line-height:1.4">{{ d.text }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div class="dt-responsive-split" style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(380px,1fr);gap:16px;margin-top:16px;align-items:stretch">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px;min-width:0">
+
+      <section id="req" style="grid-column:{{ spanSum }};height:auto;overflow:visible;background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px;box-sizing:border-box">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h2 style="font-family:'Spectral',serif;font-size:15px;font-weight:600;margin:0">In one line</h2><div style="display:flex;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">JAMES'S PLAN · FROZEN 09-16</span></div></div>
+        <div style="font-size:14px;margin-top:8px;line-height:1.5;text-wrap:pretty;border-radius:var(--dt-r-fillet);padding:2px 4px;margin-left:-4px;animation:{{ aSummary }}">{{ summary }}</div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px;border:1.5px {{ reqBorder }} {{ reqColor }};border-radius:var(--dt-r-fillet);padding:8px 12px;font-size:12.5px">
+          <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:{{ reqColor }};flex:none">{{ reqTag }}</span>
+          <span style="flex:1;min-width:200px">{{ reqLine }}</span>
+          <span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:var(--dt-unres-ink);border:1px dashed var(--dt-unres);padding:2px 6px;border-radius:var(--dt-r-fillet)">{{ reqModeled }}</span>
+          <button onClick="{{ toggleReq }}" style="font-family:'Libre Franklin';font-size:11.5px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:4px 11px;cursor:pointer;border-radius:var(--dt-r-btn);flex:none">{{ reqBtn }}</button>
+        </div>
+        <sc-if value="{{ reqOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:10px;border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:12px 14px;display:grid;gap:10px;font-size:12.5px">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px">
+              <div><div style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">WHO · HOW</div><div>LH, through his helper (AI), attached it to this plan · 09-12</div></div>
+              <div><div style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">ASKS</div><div>Nils's chocolate shop at the end of Lantern Lane, with a rail siding — built alongside the railbed.</div></div>
+              <div><div style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">WORK ATTACHED</div><div>None — words only. No model, no fit check.</div></div>
+              <div><div style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">IF ACCEPTED</div><div>Here: 1 switch + 2 straights (~$8), LH's OK on placement, a fit check. The shop itself becomes its own plan, linked to this one.</div></div>
+            </div>
+            <sc-if value="{{ reqPending }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <sc-for list="{{ reasons }}" as="r" hint-placeholder-count="4"><button onClick="{{ r.toggle }}" aria-pressed="{{ r.on }}" style="font-family:'Libre Franklin';font-size:11.5px;font-weight:600;color:{{ r.fg }};background:{{ r.bg }};border:1.5px solid var(--dt-ink);padding:5px 11px;border-radius:var(--dt-r-pill);cursor:pointer">{{ r.label }}</button></sc-for>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                <button onClick="{{ declineReq }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:7px 14px;cursor:pointer;border-radius:var(--dt-r-btn);box-shadow:var(--dt-btn-shadow)">Decline</button>
+                <button onClick="{{ deferReq }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:7px 14px;cursor:pointer;border-radius:var(--dt-r-btn)">Park</button>
+                <button onClick="{{ acceptReq }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:transparent;color:var(--dt-muted);border:1px dashed var(--dt-unres);padding:7px 14px;cursor:pointer;border-radius:var(--dt-r-btn)">Accept</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ reqAnswered }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid;gap:8px">
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span style="display:inline-block;font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:{{ reqColor }};border:2.5px solid {{ reqColor }};padding:4px 12px;border-radius:var(--dt-r-fillet);animation:dtStampIn .35s ease-out both">{{ reqStamp }}</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">@jfo · 12:12 · {{ reqReasonCount }}</span><button onClick="{{ reopenReq }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;background:transparent;color:var(--dt-muted);border:1px dashed var(--dt-unres);padding:3px 8px;cursor:pointer;border-radius:var(--dt-r-btn);margin-left:auto">REOPEN</button></div>
+                <div style="border-left:2px solid var(--dt-grid-mid);padding:6px 12px;font-size:12.5px;line-height:1.5"><div style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted);margin-bottom:3px">REPLY TO THE BOYS</div>{{ reqReply }}</div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr));gap:10px;margin-top:12px">
+          <sc-for list="{{ tiles }}" as="tl" hint-placeholder-count="4">
+            <button onMouseEnter="{{ tl.show }}" onMouseLeave="{{ tl.hide }}" onFocus="{{ tl.show }}" onBlur="{{ tl.hide }}" onKeyDown="{{ tl.key }}" aria-label="{{ tl.aria }}" style="animation:{{ tl.anim }};border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:8px 10px;background:transparent;color:inherit;font-family:inherit;text-align:left;width:100%;display:block;cursor:help;box-sizing:border-box">
+              <span style="display:block;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.06em;color:var(--dt-muted)">{{ tl.label }}</span>
+              <span style="display:block;font-family:'Azeret Mono',monospace;font-size:18px;font-weight:600;margin-top:2px;color:{{ tl.valueColor }}">{{ tl.value }}<span style="font-size:11px;color:var(--dt-muted)">{{ tl.sub }}</span></span>
+              <span style="display:block;height:4px;background:var(--dt-grid-mid);margin-top:6px;border-radius:2px;overflow:hidden"><span style="display:block;height:100%;width:{{ tl.barPct }};background:{{ tl.barColor }}"></span></span>
+              <span style="display:block;font-size:10.5px;color:{{ tl.noteColor }};margin-top:4px">{{ tl.note }}</span>
+              <span style="display:block;font-family:'Azeret Mono',monospace;font-size:8.5px;letter-spacing:0.08em;color:{{ tl.cueColor }};margin-top:5px">{{ tl.cue }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </section>
+
+      <section id="choices" style="grid-column:{{ spanCho }};height:100%;max-height:{{ hCho }};overflow:auto;transition:max-height .3s ease;background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px;display:grid;gap:12px;align-content:start;box-sizing:border-box">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><h2 style="font-family:'Spectral',serif;font-size:14px;font-weight:600;margin:0">Choices — and how far each is worked out</h2><button onClick="{{ xCho }}" aria-label="Expand choices" aria-expanded="{{ exCho }}" title="Expand card" style="font-family:'Azeret Mono',monospace;font-size:11px;background:transparent;color:var(--dt-muted);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);width:22px;height:22px;cursor:pointer;padding:0">{{ gCho }}</button></div>
+        <div style="display:grid;gap:6px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-size:12.5px;font-weight:600">Ballast under the rail</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-prov-deep)">RESEARCH</span></div>
+          <div style="display:grid;gap:5px">
+            <sc-for list="{{ ballastOpts }}" as="o" hint-placeholder-count="3">
+              <button onClick="{{ o.pick }}" aria-pressed="{{ o.active }}" aria-label="{{ o.aria }}" style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;font-family:'Libre Franklin';background:{{ o.bg }};color:{{ o.fg }};border:1.5px {{ o.borderStyle }} {{ o.borderColor }};padding:8px 11px;border-radius:var(--dt-r-fillet);cursor:pointer;animation:{{ o.anim }}">
+                <span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;min-width:60px">{{ o.label }}</span>
+                <span style="display:flex;gap:5px;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;font-weight:600;color:{{ o.modColor }};border:1px solid {{ o.modColor }};padding:1px 5px;border-radius:var(--dt-r-fillet)">{{ o.modeled }}</span><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;font-weight:600;color:{{ o.fitColor }};border:1px solid {{ o.fitColor }};padding:1px 5px;border-radius:var(--dt-r-fillet)">{{ o.fit }}</span></span>
+                <span style="font-family:'Azeret Mono',monospace;font-size:10px">{{ o.delta }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <sc-if value="{{ doubleOn }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px dashed var(--dt-prov);background:var(--dt-prov-bg);border-radius:var(--dt-r-fillet);padding:7px 10px">
+              <span style="font-size:11.5px;color:var(--dt-prov-deep);line-height:1.45;text-wrap:pretty;flex:1;min-width:180px">{{ gapLede }}</span>
+              <dc-import name="GapCloser" subject="double ballast" on-status="{{ onGapStatus }}" hint-size="180px,26px"></dc-import>
+            </div>
+          </sc-if>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;border-radius:var(--dt-r-fillet);padding:3px 4px;margin-left:-4px;animation:{{ aBallastStance }}">
+            <sc-for list="{{ ballastStances }}" as="st" hint-placeholder-count="3"><span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:{{ st.color }};border:1px {{ st.border }} {{ st.color }};padding:2px 6px;border-radius:var(--dt-r-fillet)">{{ st.text }}</span></sc-for>
+          </div>
+        </div>
+        <div style="display:grid;gap:6px;border-top:1px dashed var(--dt-grid-mid);padding-top:10px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-size:12.5px;font-weight:600">Lantern Lane siding — LH's request</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-accent-deep)">ATTACHED TO THIS PLAN</span></div>
+          <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 12px;font-size:12px;align-items:center">
+            <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">STATUS</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:{{ reqColor }}">{{ reqTag }}</span>
+            <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">WORK LH ATTACHED</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-unres-ink)">○ NOT MODELED · ○ NO FIT CHECK</span>
+            <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">DEPENDS ON</span><span>Circle built and running first · the shop is a separate plan</span>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;border-radius:var(--dt-r-fillet);padding:3px 4px;margin-left:-4px;animation:{{ aSidingStance }}">
+            <sc-for list="{{ sidingStances }}" as="st" hint-placeholder-count="3"><span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:{{ st.color }};border:1px {{ st.border }} {{ st.color }};padding:2px 6px;border-radius:var(--dt-r-fillet)">{{ st.text }}</span></sc-for>
+          </div>
+        </div>
+        <div style="font-size:10.5px;color:var(--dt-muted)">Per option: modeled? fit-checked? who's for / against. Machine-readable as well as human.</div>
+      </section>
+
+      <div style="grid-column:{{ spanAsk }};height:100%;max-height:{{ hAsk }};overflow:auto;transition:max-height .3s ease;background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px;display:grid;gap:8px;align-content:start;box-sizing:border-box">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><h2 style="font-family:'Spectral',serif;font-size:14px;font-weight:600;margin:0">Needed from you</h2><div style="display:flex;gap:8px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-accent-deep)">{{ needCount }} OPEN</span><button onClick="{{ xAsk }}" aria-label="Expand needed from you" aria-expanded="{{ exAsk }}" title="Expand card" style="font-family:'Azeret Mono',monospace;font-size:11px;background:transparent;color:var(--dt-muted);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);width:22px;height:22px;cursor:pointer;padding:0">{{ gAsk }}</button></div></div>
+        <sc-for list="{{ asks }}" as="a" hint-placeholder-count="2">
+          <details open="{{ a.isFirst }}" style="border:1px {{ a.border }} {{ a.color }};border-radius:var(--dt-r-fillet);padding:7px 10px;animation:{{ a.anim }}">
+            <summary style="cursor:pointer;display:flex;gap:8px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:{{ a.color }};flex:none">{{ a.tag }}</span><span style="font-size:12.5px;flex:1;min-width:0">{{ a.what }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted);flex:none">{{ a.when }}</span></summary>
+            <div style="font-size:11.5px;color:var(--dt-muted);margin-top:6px;line-height:1.5">{{ a.why }}</div>
+            <sc-if value="{{ a.hasBtn }}" hint-placeholder-val="{{ false }}"><button onClick="{{ a.go }}" style="margin-top:8px;font-family:'Libre Franklin';font-size:11.5px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:5px 11px;cursor:pointer;border-radius:var(--dt-r-btn);box-shadow:var(--dt-btn-shadow)">{{ a.btn }}</button></sc-if>
+          </details>
+        </sc-for>
+        <div style="font-size:10.5px;color:var(--dt-muted)">◇ needed · ■ done · ○ waiting on someone else</div>
+      </div>
+
+      <div style="grid-column:{{ spanPro }};height:100%;max-height:{{ hPro }};overflow:auto;transition:max-height .3s ease;background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px;display:grid;gap:8px;align-content:start;box-sizing:border-box">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><h2 style="font-family:'Spectral',serif;font-size:14px;font-weight:600;margin:0">In progress</h2><button onClick="{{ xPro }}" aria-label="Expand in progress" aria-expanded="{{ exPro }}" title="Expand card" style="font-family:'Azeret Mono',monospace;font-size:11px;background:transparent;color:var(--dt-muted);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);width:22px;height:22px;cursor:pointer;padding:0">{{ gPro }}</button></div>
+        <sc-for list="{{ progress }}" as="p" hint-placeholder-count="4">
+          <div style="display:flex;gap:8px;align-items:center;border-bottom:1px dashed var(--dt-grid-mid);padding:5px 4px;margin:0 -4px;border-radius:var(--dt-r-fillet);animation:{{ p.anim }}">
+            <span style="width:9px;height:9px;border-radius:50%;background:{{ p.dot }};flex:none"></span>
+            <span style="font-size:12.5px;flex:1;min-width:0;display:flex;gap:6px;align-items:center;flex-wrap:wrap">{{ p.what }}<sc-if value="{{ p.hasPart }}" hint-placeholder-val="{{ false }}"><button onClick="{{ p.pop }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-accent-deep);background:transparent;border:1px dashed var(--dt-accent);border-radius:var(--dt-r-fillet);padding:1px 6px;cursor:pointer">{{ p.part }}</button></sc-if><sc-if value="{{ p.hasLink }}" hint-placeholder-val="{{ false }}"><a href="{{ p.href }}" target="_blank" rel="noopener" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600">{{ p.vendor }} ↗</a></sc-if></span>
+            <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:{{ p.color }};flex:none">{{ p.state }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <section id="fit" style="grid-column:{{ spanFit }};height:100%;max-height:{{ hFit }};overflow:auto;transition:max-height .3s ease;background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px;display:grid;gap:8px;align-content:start;box-sizing:border-box">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><h2 style="font-family:'Spectral',serif;font-size:14px;font-weight:600;margin:0">Does it fit?</h2><div style="display:flex;gap:8px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">{{ fitSummary }}</span><button onClick="{{ xFit }}" aria-label="Expand does it fit" aria-expanded="{{ exFit }}" title="Expand card" style="font-family:'Azeret Mono',monospace;font-size:11px;background:transparent;color:var(--dt-muted);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);width:22px;height:22px;cursor:pointer;padding:0">{{ gFit }}</button></div></div>
+        <sc-for list="{{ fits }}" as="f" hint-placeholder-count="3">
+          <div style="display:flex;gap:8px;align-items:center;border-bottom:1px dashed var(--dt-grid-mid);padding:5px 4px;margin:0 -4px;border-radius:var(--dt-r-fillet);animation:{{ f.anim }}"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:{{ f.color }};width:76px;flex:none">{{ f.status }}</span><span style="font-size:12px;flex:1;min-width:0">{{ f.what }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted);flex:none">{{ f.tool }}</span></div>
+        </sc-for>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button onClick="{{ runFit }}" style="font-family:'Libre Franklin';font-size:11.5px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn);box-shadow:var(--dt-btn-shadow)">{{ fitBtn }}</button><a href="#" onClick="{{ openStudio }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600">STUDIO ↗</a><a href="#" onClick="{{ openBlender }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600">BLENDER ↗</a></div>
+      </section>
+
+    </div>
+
+    <div style="display:grid;gap:14px;min-width:0;grid-template-rows:auto minmax(0,1fr)">
+      <section id="parts" style="max-height:{{ hPar }};overflow:auto;transition:max-height .3s ease;background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px;box-sizing:border-box">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+<h2 style="font-family:'Spectral',serif;font-size:15px;font-weight:600;margin:0">Parts list — what to buy, and why we think so</h2>
+          <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">TAP A PART FOR DETAILS</span><button onClick="{{ xPar }}" aria-label="Expand the parts list" aria-expanded="{{ exPar }}" title="Expand card" style="font-family:'Azeret Mono',monospace;font-size:11px;background:transparent;color:var(--dt-muted);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);width:22px;height:22px;cursor:pointer;padding:0">{{ gPar }}</button></div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+          <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4"><button onClick="{{ f.pick }}" aria-pressed="{{ f.active }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:{{ f.fg }};background:{{ f.bg }};border:1px solid var(--dt-ink);padding:4px 10px;border-radius:var(--dt-r-pill);cursor:pointer">{{ f.label }}</button></sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:minmax(100px,1fr) 32px 32px 32px 65px;gap:6px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted);padding:0 10px 6px">
+          <span>PART · WHERE IT COMES FROM</span><span style="text-align:right">NEED</span><span style="text-align:right">OWN</span><span style="text-align:right">BUY</span><span style="text-align:right">BL RANGE</span>
+        </div>
+        <div style="display:grid;gap:4px">
+          <sc-for list="{{ parts }}" as="p" hint-placeholder-count="6">
+            <details style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);animation:{{ p.anim }}">
+              <summary aria-label="{{ p.aria }}" style="cursor:pointer;display:grid;grid-template-columns:minmax(100px,1fr) 32px 32px 32px 65px;gap:6px;align-items:center;padding:8px 10px;font-size:12.5px">
+                <span style="min-width:0"><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><button onClick="{{ p.pop }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;color:var(--dt-ink);background:transparent;border:none;border-bottom:1px dashed var(--dt-accent);padding:0;cursor:pointer;text-align:left">{{ p.name }}</button></div><div style="display:flex;gap:6px;align-items:center;margin-top:2px;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">{{ p.id }}</span><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;font-weight:600;color:{{ p.color }}">{{ p.basis }}</span><sc-if value="{{ p.adapted }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;color:var(--dt-info-deep)">{{ p.colourFrom }} → {{ p.colourTo }}</span></sc-if></div></span>
+                <span style="text-align:right">{{ p.need }}</span>
+                <span style="text-align:right;color:var(--dt-pass)">{{ p.own }}</span>
+                <span style="text-align:right;font-weight:600;color:{{ p.buyColor }}">{{ p.buy }}</span>
+                <span style="text-align:right;font-family:'Azeret Mono',monospace;font-size:10.5px">{{ p.range }}</span>
+              </summary>
+              <div style="padding:4px 10px 10px;display:grid;gap:6px;font-size:11.5px;border-top:1px dashed var(--dt-grid-mid)">
+                <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px"><a href="{{ p.blHref }}" target="_blank" rel="noopener" style="font-weight:600">BrickLink ↗</a><a href="#" onClick="{{ p.openHist }}" style="font-weight:600">6-mo {{ p.trend }} ↗</a><a href="#" onClick="{{ p.openInv }}" style="font-weight:600;color:var(--dt-muted)">Inventory (later) ↗</a></div>
+                <div style="color:var(--dt-muted);line-height:1.5">{{ p.note }}</div>
+                <div style="line-height:1.5;text-wrap:pretty"><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">IN PLAIN WORDS · </span>{{ p.plain }}</div>
+                <details style="border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:6px 9px">
+                  <summary style="cursor:pointer;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">THE SIX AXES BEHIND THAT SENTENCE</summary>
+                  <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 12px;margin-top:6px;font-family:'Azeret Mono',monospace;font-size:9.5px">
+                    <sc-for list="{{ p.axisRows }}" as="ax" hint-placeholder-count="6"><span style="color:var(--dt-muted)">{{ ax.k }}</span><span>{{ ax.v }}</span></sc-for>
+                  </div>
+                  <div style="font-size:10.5px;color:var(--dt-muted);margin-top:6px;line-height:1.45">↑ = derived from the parent design or request, not stored on this row. Whether “why it exists” must ever be per-row is open (Q11).</div>
+                </details>
+                <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">FROM: {{ p.from }} · BY: {{ p.author }}</div>
+              </div>
+            </details>
+          </sc-for>
+        </div>
+        <sc-if value="{{ needDerive }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:10px;border:1.5px dashed var(--dt-prov);border-radius:var(--dt-r-fillet);padding:9px 12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12px">
+            <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-prov-deep)">◇ BALLAST ROWS NOT DERIVED</span>
+            <button onClick="{{ derive }}" style="font-family:'Libre Franklin';font-size:11.5px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:5px 11px;cursor:pointer;border-radius:var(--dt-r-btn);margin-left:auto">Derive</button>
+          </div>
+        </sc-if>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end;margin-top:12px;background:var(--dt-bg);border:1px solid var(--dt-ink);border-radius:var(--dt-r-card);padding:14px 16px;animation:{{ aTotal }}">
+          <div>
+            <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">TO BUY · {{ totalBuy }} PIECES · BRICKLINK RANGE</div>
+            <div style="font-family:'Azeret Mono',monospace;font-size:26px;font-weight:600;line-height:1.1;margin-top:4px">{{ totalCost }}</div>
+            <div style="font-size:11px;color:var(--dt-muted);margin-top:4px">{{ costSplit }}</div>
+          </div>
+          <a href="../Hub.dc.html#P-01" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;text-decoration:none;background:var(--dt-ink);color:var(--dt-on-ink);padding:9px 14px;border-radius:var(--dt-r-btn);box-shadow:var(--dt-btn-shadow);white-space:nowrap">Order smart →</a>
+        </div>
+      </section>
+
+      <div style="height:100%;max-height:{{ hTrl }};overflow:auto;transition:max-height .3s ease;background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px;box-sizing:border-box">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+          <h2 style="font-family:'Spectral',serif;font-size:15px;font-weight:600;margin:0">Approval trail</h2>
+          <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">{{ gateLabel }}</span><button onClick="{{ xTrl }}" aria-label="Expand the approval trail" aria-expanded="{{ exTrl }}" title="Expand card" style="font-family:'Azeret Mono',monospace;font-size:11px;background:transparent;color:var(--dt-muted);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);width:22px;height:22px;cursor:pointer;padding:0">{{ gTrl }}</button></div>
+        </div>
+        <div style="display:grid;gap:4px">
+          <sc-for list="{{ trail }}" as="t" hint-placeholder-count="4">
+            <details open="{{ t.isNext }}" style="border:1px {{ t.boxBorder }};border-radius:var(--dt-r-fillet);animation:{{ t.anim }}">
+              <summary style="cursor:pointer;display:flex;gap:10px;align-items:center;padding:8px 11px">
+                <span style="width:12px;height:12px;border-radius:50%;background:{{ t.dotBg }};border:2px {{ t.dotBorder }};box-sizing:border-box;flex:none"></span>
+                <span style="font-size:12.5px;font-weight:600;flex:1;min-width:0">{{ t.gate }}</span>
+                <span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:{{ t.tagColor }};border:1.5px {{ t.tagBorder }} {{ t.tagColor }};padding:2px 6px;border-radius:var(--dt-r-fillet);flex:none">{{ t.tag }}</span>
+              </summary>
+              <div style="padding:2px 11px 11px;display:grid;gap:8px;font-size:12px;border-top:1px dashed var(--dt-grid-mid)">
+                <div style="margin-top:8px;color:var(--dt-muted);line-height:1.5">{{ t.text }}</div>
+                <sc-if value="{{ t.blocked }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-block-deep)"><span>BLOCKED BY</span><sc-for list="{{ t.blockerList }}" as="b" hint-placeholder-count="2"><dc-import name="Blocker" label="{{ b.label }}" sheet="{{ b.sheet }}" card="{{ b.card }}" title="{{ b.title }}" summary="{{ b.summary }}" status="{{ b.status }}" action-label="{{ b.actionLabel }}" action-note="{{ b.actionNote }}" link-label="{{ b.linkLabel }}" on-action="{{ b.onAction }}" hint-size="auto,1.4em"></dc-import></sc-for><span style="display:none">{{ t.blockers }}</div></sc-if>
+                <sc-if value="{{ t.show }}" hint-placeholder-val="{{ false }}"><div><button onClick="{{ t.action }}" style="font-family:'Libre Franklin';font-size:11.5px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn);box-shadow:var(--dt-btn-shadow)">{{ t.btn }}</button></div></sc-if>
+                <sc-if value="{{ t.done }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)"><span style="color:var(--dt-pass);font-weight:600">{{ t.stamp }}</span><span>{{ t.time }}</span><a href="#" onClick="{{ t.openEv }}" style="font-weight:600">evidence ↗</a></div></sc-if>
+              </div>
+            </details>
+          </sc-for>
+        </div>
+        <sc-if value="{{ allPass }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:12px;border:1.5px solid var(--dt-pass);border-radius:var(--dt-r-fillet);background:var(--dt-pass-bg);padding:10px 14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+            <span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:var(--dt-pass);animation:dtStampIn .35s ease-out both;display:inline-block">■ APPROVED</span>
+            <a href="#gate" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;margin-left:auto">Now the release gate ↓</a>
+          </div>
+        </sc-if>
+        <button onClick="{{ reset }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;background:transparent;color:var(--dt-muted);border:1px dashed var(--dt-unres);padding:4px 9px;cursor:pointer;border-radius:var(--dt-r-btn);margin-top:10px">RESET DEMO</button>
+      </div>
+    </div>
+      <div aria-live="polite" style="grid-column:1 / -1;font-family:'Azeret Mono',monospace;font-size:11px;color:var(--dt-muted);min-height:15px;margin-top:-4px">{{ narration }}</div>
+      <div style="grid-column:1 / -1;height:100%;max-height:{{ hChn }};overflow:auto;transition:max-height .3s ease;background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:14px 18px;box-sizing:border-box">
+        <details open="{{ chnOpen }}">
+          <summary aria-label="How this plan got here: James's plan, LH's wish, his helper attached it, James's call. Expand to see the four links." style="cursor:pointer;display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h2 style="font-family:'Spectral',serif;font-size:14px;font-weight:600;margin:0;display:inline">How this plan got here</h2><div style="display:flex;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">@jfo → LH → HIS HELPER → @jfo</span><button onClick="{{ xChn }}" aria-label="Expand chain back to the story" aria-expanded="{{ exChn }}" title="Expand card" style="font-family:'Azeret Mono',monospace;font-size:11px;background:transparent;color:var(--dt-muted);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);width:22px;height:22px;cursor:pointer;padding:0">{{ gChn }}</button></div></summary>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:10px;margin-top:12px">
+            <sc-for list="{{ chain }}" as="c" hint-placeholder-count="4">
+              <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:9px 11px;display:grid;gap:4px"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)">{{ c.step }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:{{ c.color }}">{{ c.who }}</span></div><div style="font-size:12px;line-height:1.45">{{ c.text }}</div><a href="#" onClick="{{ c.open }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600">{{ c.link }}</a></div>
+            </sc-for>
+          </div>
+        </details>
+      </div>
+  </div>
+
+  <sc-if value="{{ popOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;right:24px;top:84px;width:300px;max-width:calc(100vw - 48px);background:var(--dt-sheet);border:1.5px solid var(--dt-accent);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:14px 16px;z-index:50;display:grid;gap:10px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><div style="font-family:'Spectral',serif;font-size:15px;font-weight:600">{{ pop.name }}</div><button onClick="{{ closePop }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;background:transparent;color:var(--dt-ink);border:1px solid var(--dt-ink);border-radius:var(--dt-r-btn);padding:2px 8px;cursor:pointer">✕</button></div>
+      <div style="height:110px;border:1.5px dashed var(--dt-unres);border-radius:var(--dt-r-fillet);display:grid;place-items:center;font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">PIECE IMAGE · {{ pop.id }}</div>
+      <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 12px;font-size:12px;align-items:baseline">
+        <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">PART</span><span style="font-family:'Azeret Mono',monospace;font-size:11px">{{ pop.id }}</span>
+        <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">COLOUR</span><span>{{ pop.colour }}</span>
+        <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">BASIS</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:{{ pop.color }}">{{ pop.basis }}</span>
+        <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">USED FOR</span><span>{{ pop.use }}</span>
+        <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">QTY</span><span>need {{ pop.need }} · own {{ pop.own }} · buy {{ pop.buy }}</span>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><a href="{{ pop.blHref }}" target="_blank" rel="noopener" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600">BRICKLINK ↗</a><a href="{{ pop.rbHref }}" target="_blank" rel="noopener" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600">REBRICKABLE ↗</a><a href="#" onClick="{{ pop.openInv }}" style="font-family:'Azeret Mono',monospace;font-size:10px;font-weight:600;color:var(--dt-muted)">INVENTORY (LATER) ↗</a></div>
+      <div style="font-size:10.5px;color:var(--dt-muted)">Data and flows TBD — this is the shape of the part popover.</div>
+    </div>
+  </sc-if>
+
+    </div>
+  </sc-if>
+
+  <section id="gate" style="margin-top:16px;grid-column:1 / -1">
+    <sc-if value="{{ gateReady }}" hint-placeholder-val="{{ true }}">
+      <dc-import name="ReleaseGate" step-no="→ P-01" question="Is this list ready to spend money on?" subject-title="Shortage list — this sheet" subject-rev="{{ gateRev }}" subject-line="{{ gateSubjectLine }}" subject-sheet="C-01" subject-card="parts" subject-link="the list ↑" approve-label="Release to buy" return-label="Back to the list" on-change="{{ onGate }}" hint-size="100%,520px"></dc-import>
+    </sc-if>
+    <sc-if value="{{ gateNotReady }}" hint-placeholder-val="{{ false }}">
+      <div style="background:var(--dt-sheet);border:1.5px dashed var(--dt-unres);border-radius:var(--dt-r-card);padding:14px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--dt-muted)">→ P-01</span><span style="font-size:12.5px;color:var(--dt-muted);flex:1;min-width:240px;text-wrap:pretty"><strong>The release gate opens once the list is approved with initials</strong> (the trail above). It lays out the evidence and open findings, takes your call on each, and hands a released list to P-01.</span></div>
+    </sc-if>
+    <sc-if value="{{ gateReleased }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:10px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:12.5px"><span style="color:var(--dt-muted)">Released. Continue to</span><a href="{{ p01Href }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;text-decoration:none;background:var(--dt-ink);color:var(--dt-on-ink);padding:8px 14px;border-radius:var(--dt-r-btn);box-shadow:var(--dt-btn-shadow)">P-01 · Buying the gap →</a></div>
+    </sc-if>
+  </section>
+  <div style="background:var(--dt-sheet);border:1px dashed var(--dt-unres);border-radius:var(--dt-r-card);padding:14px 18px;font-size:11.5px;color:var(--dt-muted);margin-top:16px">
+    <span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:0.1em">MOCK DATA · SCHEMA REQUESTS</span>
+    <ul style="margin:8px 0 0;padding-left:16px;display:grid;gap:4px">
+      <li>All quantities, part ids, colours and prices are design mocks — real values need Claude Code implementation plus independent agent audit</li>
+<li><strong>Basis is split (014 §7.2).</strong> Stored on the row: acquisition · transformation · epistemic_state · disposition. Derived from the parent Design / Request: need_origin · design_origin. The chip on each row is <em>composed</em> from these — users never meet the enums; expand a row → "the six axes" to see the plumbing. A row is a demand; it never becomes "received" (§7.3). Filters read axes, not the old basis enum.</li>
+      <li>Vendor is per asset (LEGO direct vs BrickLink) and drives every link. schema_request: Asset {vendor, product_url}</li>
+      <li>Options carry worked-out state {modeled, fit_checked, stances[]}. schema_request: Option {modeled_ref, fit_ref, stances}</li>
+      <li>Plans are open by default; anyone in the village — or their helper — can attach a Request to someone else's plan. schema_request: Plan {owner, open, attached_requests[]}; Request {on_behalf_of, via_agent, attached_to_plan}</li>
+      <li>Requests carry attached work {model_ref, fit_ref} so "words only" is visible. schema_request: Request {attached_work[]}</li>
+      <li>Prices are low–high across available BrickLink lots. Vendor-smart ordering → P-01</li>
+    </ul>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;paper&quot;,&quot;blueprint&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto'|'paper'|'blueprint'&quot;}}">
+class Component extends DCLogic {
+  state = { ins: null, phase: 'closed', ctx: true, dark: null, ballast: 'single', derived: false, fitRun: false, boysOk: false, gates: [false, false, false], filter: 'all', narration: '', req: 'open', reqOpen: false, reasonsOn: [], expanded: null, pop: null , gap: {} , gateState: 'open', gateInitials: '' };
+  REASONS = ['Not defined enough', 'Too broad for this facet', 'Circle isn\u2019t built yet', 'Would fail fit today'];
+  isDark() {
+    if (this.state.dark !== null) return this.state.dark;
+    if (this.props.theme === 'blueprint') return true;
+    if (this.props.theme === 'paper') return false;
+    return typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  applyBody() { document.body.classList.toggle('dt-blueprint', this.isDark()); }
+  componentDidMount() { this.applyBody(); this.forceUpdate(); }
+  componentDidUpdate() { this.applyBody(); if (this._ov) { this._ov.paint(); this._ov.place(); } }
+  pulse(key, val) {
+    this.prev = this.prev || {}; this.pulseAt = this.pulseAt || {}; this.pulseTog = this.pulseTog || {};
+    const v = JSON.stringify(val), now = Date.now();
+    if (key in this.prev && this.prev[key] !== v) { this.pulseAt[key] = now; this.pulseTog[key] = !this.pulseTog[key]; }
+    this.prev[key] = v;
+    return (now - (this.pulseAt[key] || 0) < 900) ? 'dtChange' + (this.pulseTog[key] ? 'A' : 'B') + ' .8s ease-out' : 'none';
+  }
+  ov() { if (!this._ov) this._ov = window.dtOverlay.attach(this, { anchor: () => this._anchorEl, render: () => this.insCard(), width: 320 }); return this._ov; }
+  componentWillUnmount() { if (this._ov) this._ov.destroy(); }
+  insCard() {
+    const d = this._ins, h = React.createElement, mono = "'Azeret Mono',monospace";
+    if (!d) return null;
+    const color = d.done ? 'var(--dt-pass)' : 'var(--dt-unres-ink)';
+    return h('span', { role: 'tooltip', onMouseEnter: () => this.ov().open(), onMouseLeave: () => this.ov().close(false),
+      style: { position: 'fixed', top: 0, left: 0, width: 320, boxSizing: 'border-box', display: 'grid', gap: 9, alignContent: 'start', background: 'var(--dt-sheet)', color: 'var(--dt-ink)', border: '1.5px ' + (d.done ? 'solid' : 'dashed') + ' ' + color, boxShadow: 'var(--dt-shadow)', borderRadius: 'var(--dt-r-card)', padding: '13px 15px', fontFamily: "'Libre Franklin',sans-serif", fontSize: 12, lineHeight: 1.5, textAlign: 'left', whiteSpace: 'normal', ...window.dtOverlay.style(this.state.phase === 'open') } },
+      h('span', { style: { fontFamily: "'Spectral',serif", fontSize: 14.5, fontWeight: 600, lineHeight: 1.25 } }, d.title),
+      h('span', { style: { fontFamily: mono, fontSize: 9.5, letterSpacing: '0.1em', fontWeight: 600, color } }, d.tag),
+      h('span', null, d.lede),
+      h('span', { style: { display: 'grid', gridTemplateColumns: 'auto minmax(0,1fr)', gap: '6px 12px', alignItems: 'baseline', borderTop: '1px dashed var(--dt-grid-mid)', paddingTop: 8, fontSize: 11.5 } },
+        (d.rows || []).map((p, i) => [
+          h('span', { key: 'k' + i, style: { fontFamily: mono, fontSize: 9, letterSpacing: '0.06em', color: 'var(--dt-muted)', whiteSpace: 'nowrap' } }, p[0]),
+          h('span', { key: 'v' + i, style: { lineHeight: 1.45 } }, p[1])
+        ])),
+      d.done ? h('span', { style: { display: 'grid', gap: 4, border: '1.5px solid var(--dt-pass)', borderRadius: 'var(--dt-r-fillet)', padding: '8px 10px' } },
+        h('span', { style: { fontFamily: mono, fontSize: 9, letterSpacing: '0.1em', color: 'var(--dt-pass)' } }, 'WHAT BACKS IT'),
+        h('span', { style: { fontFamily: mono, fontSize: 11, fontWeight: 600 } }, d.artifact),
+        h('span', { style: { color: 'var(--dt-muted)', fontSize: 11, lineHeight: 1.45 } }, d.artifactHow),
+        h('span', { style: { fontFamily: mono, fontSize: 9, color: 'var(--dt-muted)' } }, d.artifactRef)) : null,
+      d.todo ? h('span', { style: { display: 'grid', gap: 4, border: '1.5px dashed var(--dt-unres)', borderRadius: 'var(--dt-r-fillet)', padding: '8px 10px' } },
+        h('span', { style: { fontFamily: mono, fontSize: 9, letterSpacing: '0.1em', color: 'var(--dt-unres-ink)' } }, 'TASK DEFINITION · NOT DRAWN YET'),
+        h('span', { style: { color: 'var(--dt-muted)', fontSize: 11, lineHeight: 1.45 } }, d.todoWhy)) : null,
+      d.href ? h('a', { href: d.href, style: { fontFamily: mono, fontSize: 9.5, fontWeight: 600 } }, d.linkLabel) : null);
+  }
+  hoverIns(k) {
+    return {
+      show: (e) => { if (e && e.currentTarget) this._anchorEl = e.currentTarget; this.setState({ ins: k }, () => this.ov().open()); },
+      hide: () => this.ov().close(false),
+      key: (e) => { if (e.key === 'Escape') this.ov().close(true); }
+    };
+  }
+  say(msg, extra) { return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState(Object.assign({ narration: msg }, extra || {})); }; }
+  cardVals() {
+    const ids = { Sum: ['1 / -1', '520px'], Cho: ['auto', '420px'], Ask: ['auto', '420px'], Pro: ['auto', '300px'], Fit: ['auto', '300px'], Chn: ['1 / -1', '360px'], Par: ['auto', '720px'], Trl: ['auto', '100%'] };
+    const out = {}, ex = this.state.expanded;
+    Object.keys(ids).forEach(k => {
+      const isX = ex === k;
+      out['span' + k] = isX ? '1 / -1' : ids[k][0];
+      out['h' + k] = isX ? 'min(80vh, 900px)' : (ex ? '72px' : ids[k][1]);
+      out['g' + k] = isX ? '⤡' : '⤢'; out['ex' + k] = isX;
+      out['x' + k] = () => this.setState(s => ({ expanded: s.expanded === k ? null : k }));
+    });
+    out.chnOpen = ex === 'Chn';
+    return out;
+  }
+  renderVals() {
+    const s = this.state, dark = this.isDark();
+    const PASS = 'var(--dt-pass)', PROV = 'var(--dt-prov-deep)', BLOCK = 'var(--dt-block-deep)', UNRES = 'var(--dt-unres-ink)', ACC = 'var(--dt-accent-deep)', INFO = 'var(--dt-info-deep)', INK = 'var(--dt-ink)', ON = 'var(--dt-on-ink)';
+    const mock = (m) => this.say(m + ' (mock link)');
+    const siding = s.req === 'accepted';
+    const bl = (id) => 'https://www.bricklink.com/v2/catalog/catalogitem.page?P=' + id;
+    const rb = (id) => 'https://rebrickable.com/parts/' + id + '/';
+    // ---- parts, by basis ----
+    const own = [
+      { name: 'Curved track R40', id: '53400', need: 16, own: 16, buy: 0, price: 2.10, basis: '■ OWN · SET', color: PASS, key: 'own', colour: 'Dark bluish gray', use: 'Full circle — the train\u2019s own track', from: 'Holiday Express Train (LEGO)', author: 'set inventory', trend: '↗ +6%', note: 'Arrives with the train. Not bought.' }
+    ];
+    const adapted = [
+      { name: 'Technic brick 1×16', id: '3703', need: 32, own: 0, buy: 32, price: 0.35, basis: '▤ BUY · ADAPTED', color: INFO, key: 'adapted', adapted: false, colour: 'Dark bluish gray (as source)', use: 'MILS module frame', from: 'bl-741807', author: 'source model', trend: '→ flat', note: 'Hidden frame — source colour kept.' },
+      { name: 'Technic pin', id: '2780', need: 64, own: 0, buy: 64, price: 0.04, basis: '▤ BUY · ADAPTED', color: INFO, key: 'adapted', adapted: false, colour: 'Black', use: 'Frame joins, module-to-module', from: 'bl-741807', author: 'source model', trend: '→ flat', note: 'No colour change.' },
+      { name: 'Plate 8×16', id: '92438', need: 8, own: 0, buy: 8, price: 2.40, basis: '▤ BUY · ADAPTED', color: INFO, key: 'adapted', adapted: true, colourFrom: 'Tan', colourTo: 'White', colour: 'White (source: tan)', use: 'Module top surface', from: 'bl-741807', author: 'AI recolour · you confirm', trend: '↘ −2%', note: 'Recoloured for snow. Price is for white.' },
+      { name: 'Brick 1×2', id: '3004', need: 48, own: 0, buy: 48, price: 0.07, basis: '▤ BUY · ADAPTED', color: INFO, key: 'adapted', adapted: true, colourFrom: 'Tan', colourTo: 'White', colour: 'White (source: tan)', use: 'Module edge wall', from: 'bl-741807', author: 'AI recolour · you confirm', trend: '→ flat', note: 'Recoloured for snow.' },
+      { name: 'Tile 1×4', id: '2431', need: 24, own: 0, buy: 24, price: 0.10, basis: '▤ BUY · ADAPTED', color: INFO, key: 'adapted', adapted: true, colourFrom: 'Dark tan', colourTo: 'Lt. bluish gray', colour: 'Light bluish gray (source: dark tan)', use: 'Module edge trim', from: 'bl-741807', author: 'AI recolour · you confirm', trend: '→ flat', note: 'Recoloured to the winter palette.' },
+      { name: 'Plate 2×2 w/ pin hole', id: '2444', need: 16, own: 0, buy: 16, price: 0.15, basis: '▤ BUY · ADAPTED', color: INFO, key: 'adapted', adapted: false, colour: 'Dark bluish gray (as source)', use: 'Track attachment to module', from: 'bl-741807', author: 'source model', trend: '↗ +4%', note: 'The piece that holds the track. Under ballast — colour kept.' }
+    ];
+    const plates = s.ballast === 'double' ? 64 : 32;
+    const research = s.ballast === 'none' ? [] : [
+      { name: 'Plate 1×8', id: '3460', need: plates, own: 0, buy: plates, price: 0.09, basis: '◇ BUY · RESEARCH', color: PROV, key: 'research', colour: 'White', use: 'Ballast riser under rail — ' + s.ballast, from: 'ballast research', author: 'AI · unconfirmed', trend: '→ flat', note: (s.ballast === 'double' ? '4' : '2') + ' per curve. Follows the ballast choice.' },
+      { name: 'Tile 1×2', id: '3069b', need: 64, own: 0, buy: 64, price: 0.05, basis: '◇ BUY · RESEARCH', color: PROV, key: 'research', colour: 'Dark bluish gray', use: 'Ballast edge along rail', from: 'ballast research', author: 'AI · unconfirmed', trend: '↘ −3%', note: '4 per curve. Colour is a guess.' }
+    ];
+    const story = siding ? [
+      { name: 'Switch track, right', id: '53407', need: 1, own: 0, buy: 1, price: 6.50, basis: '◇ BUY · STORY', color: ACC, key: 'story', colour: 'Dark bluish gray', use: 'Siding to the shop', from: 'LH’s request (via his helper)', author: 'AI suggestion', trend: '↗ +9%', note: 'Exists only because James accepted LH’s attached request.' },
+      { name: 'Straight track', id: '53401', need: 2, own: 0, buy: 2, price: 0.75, basis: '◇ BUY · STORY', color: ACC, key: 'story', colour: 'Dark bluish gray', use: 'Siding', from: 'LH’s request (via his helper)', author: 'AI suggestion', trend: '→ flat', note: 'Siding straights.' }
+    ] : [];
+    // §7.2 axis split (DEC · 014): four stored axes + two derived from the parent Design/Request. The chip users see is COMPOSED from these; the axes are plumbing.
+    const AX = {
+      own: { acquisition: 'included_with_set', transformation: 'unchanged', epistemic: 'verified', disposition: 'approved', need_origin: 'design', design_origin: 'official' },
+      adapted: { acquisition: 'buy', transformation: 'unchanged', epistemic: 'inferred', disposition: 'reviewed', need_origin: 'design', design_origin: 'external_moc' },
+      research: { acquisition: 'buy', transformation: 'unchanged', epistemic: 'asserted', disposition: 'proposed', need_origin: 'design', design_origin: 'generated' },
+      story: { acquisition: 'buy', transformation: 'unchanged', epistemic: 'inferred', disposition: s.req === 'accepted' ? 'reviewed' : 'proposed', need_origin: 'story', design_origin: 'generated' }
+    };
+    const WORDS = { acquisition: { inventory: 'from our bins', included_with_set: 'arrives with the set', buy: 'to buy', fabricate: 'we make it' }, transformation: { unchanged: 'as designed', recoloured: 'recoloured', substituted: 'substituted', adapted: 'adapted' }, epistemic: { asserted: 'a guess', inferred: 'worked out', measured: 'measured', computed: 'computed', verified: 'checked' }, disposition: { proposed: 'proposed', reviewed: 'reviewed', approved: 'approved' }, need_origin: { story: 'because of a story', design: 'because the design needs it', operational: 'to keep it running', replacement: 'a replacement', policy: 'policy' }, design_origin: { official: 'LEGO’s design', external_moc: 'a builder’s design', own: 'our own design', generated: 'a suggestion', reconstructed: 'reconstructed' } };
+    const withAxes = (p) => { const a = Object.assign({}, AX[p.key]); if (p.adapted) a.transformation = 'recoloured'; if (p.adapted && s.derived) a.epistemic = 'inferred'; if (p.key === 'research' && s.derived) a.epistemic = 'computed';
+      const compose = (a.acquisition === 'included_with_set' ? 'Arrives with the set' : a.acquisition === 'buy' ? 'To buy' : WORDS.acquisition[a.acquisition]) + (a.transformation !== 'unchanged' ? ', ' + WORDS.transformation[a.transformation] : '') + ' · ' + WORDS.epistemic[a.epistemic] + ' · ' + WORDS.disposition[a.disposition] + ' · ' + WORDS.need_origin[a.need_origin] + ' from ' + WORDS.design_origin[a.design_origin] + '.';
+      return Object.assign({}, p, { axes: a, plain: compose, axisRows: [['ACQUISITION', a.acquisition], ['TRANSFORMATION', a.transformation], ['HOW WE KNOW', a.epistemic], ['DISPOSITION', a.disposition], ['WHY IT EXISTS ↑', a.need_origin + ' (derived)'], ['WHOSE DESIGN ↑', a.design_origin + ' (derived)']].map(([k, v]) => ({ k, v })) }); };
+    const allParts = own.concat(adapted, s.derived ? research : [], story).map(withAxes);
+    const rng = (p) => [p.price * 0.78, p.price * 1.35];
+    const openPop = (p) => (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ pop: p }); };
+    const AXF = { all: () => true, own: p => p.axes.acquisition !== 'buy', buy: p => p.axes.acquisition === 'buy', recoloured: p => p.axes.transformation !== 'unchanged', story: p => p.axes.need_origin === 'story', proposed: p => p.axes.disposition === 'proposed' };
+    const parts = allParts.filter(p => (AXF[s.filter] || AXF.all)(p)).map(p => Object.assign({}, p, {
+      aria: p.name + ', part ' + p.id + ' — ' + (p.basisLabel || p.basis || '').toString().replace(/^[■▤◇○▲] /, '').toLowerCase() + '. Need ' + p.need + ', have ' + (p.need - p.buy) + ', buy ' + p.buy + (p.buy > 0 ? ', about $' + rng(p)[0].toFixed(2) + ' to ' + rng(p)[1].toFixed(2) + ' each' : '') + '. Expand for the axes and sources.',
+      anim: this.pulse('part:' + p.id, [p.need, p.buy, p.basis]), buyColor: p.buy > 0 ? p.color : 'var(--dt-muted)',
+      range: p.buy > 0 ? '$' + rng(p)[0].toFixed(2) + '–' + rng(p)[1].toFixed(2) : '—', blHref: bl(p.id),
+      pop: openPop(p), openHist: mock('Would open 6-month price history for ' + p.name), openInv: mock('Inventory layer not built yet')
+    }));
+    const sum = (arr, f) => arr.reduce((n, p) => n + f(p), 0);
+    const totalBuy = sum(allParts, p => p.buy);
+    const costLo = sum(allParts, p => p.buy * rng(p)[0]), costHi = sum(allParts, p => p.buy * rng(p)[1]);
+    const costOf = (arr) => '$' + sum(arr, p => p.buy * rng(p)[0]).toFixed(0) + '–' + sum(arr, p => p.buy * rng(p)[1]).toFixed(0);
+    const modulePcs = sum(adapted, p => p.buy), adaptedRows = adapted.filter(p => p.adapted).length;
+    const ballastPcs = s.derived ? sum(research, p => p.buy) : 0;
+    const filters = [['all', 'ALL'], ['own', 'ARRIVES WITH SET'], ['buy', 'TO BUY'], ['recoloured', 'RECOLOURED'], ['proposed', 'NOT YET REVIEWED']].concat(siding ? [['story', 'FROM LH’S REQUEST']] : []).map(([k, label]) => ({ label, active: s.filter === k, fg: s.filter === k ? ON : INK, bg: s.filter === k ? INK : 'transparent', pick: () => this.setState({ filter: k }) }));
+    // ---- choices with worked-out state ----
+    const G = s.gap || {}, gDone = (k) => G[k] === 'done' || G[k] === 'manual', dModeled = gDone('model') && gDone('studio'), dFit = dModeled && gDone('validate') && gDone('fit'), dPriced = gDone('parts');
+    const optDefs = [
+      { k: 'none', label: 'NONE', modeled: '■ MODELED (source)', modColor: PASS, fit: '■ FIT (source-proven)', fitColor: PASS, delta: '$0' },
+      { k: 'single', label: 'SINGLE', modeled: '■ MODELED · Studio v2', modColor: PASS, fit: s.fitRun ? '■ FIT' : '○ NOT RUN', fitColor: s.fitRun ? PASS : UNRES, delta: '+' + costOf(research.length ? [{ buy: 32, price: 0.09 }, { buy: 64, price: 0.05 }] : [{ buy: 32, price: 0.09 }, { buy: 64, price: 0.05 }]) },
+      { k: 'double', label: 'DOUBLE', modeled: dModeled ? '■ MODELED · Blender→Studio' : '○ NOT MODELED', modColor: dModeled ? PASS : UNRES, fit: dFit ? '■ FIT' : dModeled ? '○ NOT RUN' : '○ CAN\u2019T RUN YET', fitColor: dFit ? PASS : UNRES, delta: '+' + costOf([{ buy: 64, price: 0.09 }, { buy: 64, price: 0.05 }]) }
+    ];
+    const ballastOpts = optDefs.map(o => { const active = s.ballast === o.k; return Object.assign(o, { active, aria: o.label.charAt(0) + o.label.slice(1).toLowerCase() + ' ballast — ' + o.modeled.replace(/^[■○◇▲] /, '').toLowerCase() + ', ' + o.fit.replace(/^[■○◇▲] /, '').toLowerCase() + ', cost ' + o.delta + (active ? ' — chosen' : ''), bg: active ? INK : 'transparent', fg: active ? ON : INK, borderStyle: active ? 'solid' : 'dashed', borderColor: active ? INK : 'var(--dt-grid-mid)', anim: this.pulse('opt:' + o.k, [o.fit, active]), pick: this.say('Ballast: ' + o.label.toLowerCase() + '.', { ballast: o.k }) }); });
+    const ballastStances = s.ballast === 'double'
+      ? [{ text: 'FOR · HH, LH — "real ballast look"', color: PASS, border: 'solid' }, dFit ? { text: 'NEUTRAL · @jfo — modeled and fits; cost is the question', color: UNRES, border: 'dashed' } : { text: 'AGAINST · @jfo — not modeled, breaks MILS flush', color: BLOCK, border: 'solid' }, { text: 'CAUTION · AI — model it before pricing', color: PROV, border: 'dashed' }]
+      : s.ballast === 'single'
+        ? [{ text: 'FOR · @jfo — flush, MILS standard', color: PASS, border: 'solid' }, { text: 'NEUTRAL · EH', color: UNRES, border: 'dashed' }, { text: 'FOR · AI — modeled + checkable', color: PASS, border: 'solid' }]
+        : [{ text: 'FOR · AI — cheapest, source-proven', color: PASS, border: 'solid' }, { text: 'AGAINST · @jfo — bare rail on snow', color: BLOCK, border: 'solid' }, { text: 'NEUTRAL · EH', color: UNRES, border: 'dashed' }];
+    const nR = s.reasonsOn.length;
+    const sidingStances = siding
+      ? [{ text: 'FOR · LH, HH', color: PASS, border: 'solid' }, { text: 'FOR · AI', color: PASS, border: 'solid' }, { text: 'ACCEPTED · @jfo', color: PASS, border: 'solid' }]
+      : [{ text: 'ASKED · LH', color: PROV, border: 'dashed' }, { text: 'ATTACHED HERE · LH’S HELPER', color: PROV, border: 'dashed' }, { text: s.req === 'declined' ? 'DECLINED · @jfo · ' + nR : s.req === 'deferred' ? 'PARKED · @jfo' : 'UNDECIDED · @jfo', color: s.req === 'declined' ? BLOCK : ACC, border: s.req === 'open' ? 'dashed' : 'solid' }];
+    // ---- fits ----
+    const fits = [
+      { what: 'Circle sits on 4 modules; attachment plates line up', tool: 'STUDIO', status: s.fitRun ? '■ FITS' : '○ NOT RUN', color: s.fitRun ? PASS : UNRES },
+      { what: 'Ballast (' + s.ballast + ') keeps railhead flush with module top', tool: 'STUDIO', status: s.ballast === 'double' ? (dFit ? '■ FITS' : dModeled ? '○ NOT RUN' : '○ NOT MODELED') : (s.fitRun ? '■ FITS' : '○ NOT RUN'), color: s.ballast === 'double' ? UNRES : (s.fitRun ? PASS : UNRES) },
+      { what: 'Recoloured module reads as snow next to the built tree', tool: 'BLENDER', status: s.fitRun ? '■ LOOKS RIGHT' : '○ NOT RUN', color: s.fitRun ? PASS : UNRES }
+    ];
+    fits.forEach((f, i) => { f.anim = this.pulse('fit:' + i, f.status); });
+    // ---- asks ----
+    const asks = [];
+    if (s.req === 'open') asks.push({ tag: '◇ @jfo', color: ACC, border: 'dashed', what: 'Answer LH’s attached request (shop + siding)', when: 'NOW', why: 'Open requests on your plan block approval. Words only — no model attached.', hasBtn: true, btn: 'Respond', go: this.say('', { reqOpen: true }) });
+    else asks.push({ tag: '■ @jfo', color: PASS, border: 'solid', what: s.req === 'declined' ? 'Declined the siding request (' + nR + ')' : s.req === 'deferred' ? 'Parked the siding request' : 'Accepted the siding request', when: '12:12', why: 'Reply sent. Kept on record.', hasBtn: false, btn: '', go: () => {} });
+    asks.push(s.derived
+      ? { tag: '■ @jfo', color: PASS, border: 'solid', what: 'Confirmed ' + adaptedRows + ' recolours to winter palette', when: '12:06', why: 'Tan → white, dark tan → light bluish gray.', hasBtn: false, btn: '', go: () => {} }
+      : { tag: '◇ @jfo', color: ACC, border: 'dashed', what: 'Confirm ' + adaptedRows + ' recolours; derive ballast rows', when: 'NOW', why: 'AI proposed the palette swaps. Ballast rows follow the choice.', hasBtn: true, btn: 'Confirm + derive', go: this.say('Recolours confirmed; ballast rows derived.', { derived: true }) });
+    if (s.ballast === 'double' && !dModeled) asks.push({ tag: '◇ @jfo', color: ACC, border: 'dashed', what: 'Model double ballast in Studio', when: 'BEFORE FIT', why: 'Only single is modeled. Double can\u2019t be fit-checked or approved until it is.', hasBtn: true, btn: 'Open Studio', go: mock('Would open Studio at the ballast module') });
+    if (!s.fitRun) asks.push({ tag: '◇ @jfo', color: ACC, border: 'dashed', what: 'Run fitment', when: 'BEFORE BUY', why: 'Studio: geometry. Blender: colour read.', hasBtn: true, btn: 'Run', go: this.say('Fitment run.', { fitRun: true }) });
+    if (siding) asks.push(s.boysOk ? { tag: '■ LH', color: PASS, border: 'solid', what: 'OK\u2019d the siding placement', when: '12:09', why: 'Recorded.', hasBtn: false, btn: '', go: () => {} } : { tag: '○ LH', color: UNRES, border: 'dashed', what: 'OK the siding placement', when: 'WAITING', why: 'Their request; they see where it lands.', hasBtn: true, btn: 'Simulate OK', go: this.say('The boys OK\u2019d it.', { boysOk: true }) });
+    let firstOpen = true;
+    asks.forEach(a => { a.anim = this.pulse('ask:' + a.what, a.tag); a.isFirst = false; if (firstOpen && a.tag.startsWith('◇')) { a.isFirst = true; firstOpen = false; } });
+    const needCount = asks.filter(a => a.tag.startsWith('◇')).length;
+    // ---- progress ----
+    const progress = [
+      { what: 'Train order', vendor: 'LEGO.COM', href: 'https://www.lego.com/en-us/product/holiday-express-train-10361', hasLink: true, state: 'DECIDED · NOT PLACED', color: PROV, dot: 'var(--dt-prov)' },
+      { what: 'Source model rights check', vendor: 'BRICKLINK', href: 'https://www.bricklink.com/v3/studio/design.page?idModel=741807', hasLink: true, state: 'PENDING (B-01)', color: PROV, dot: 'var(--dt-prov)' },
+      { what: 'Palette adaptation', state: s.derived ? adaptedRows + ' CONFIRMED' : adaptedRows + ' PROPOSED', color: s.derived ? PASS : ACC, dot: s.derived ? PASS : 'var(--dt-accent)' },
+      { what: 'Price watch', hasPart: true, part: '92438 plate 8×16', partObj: adapted[2], state: '↘ −2% 6-MO', color: 'var(--dt-muted)', dot: 'var(--dt-unres)' },
+      { what: 'Fitment', state: s.fitRun ? (s.ballast === 'double' ? '1 UNMODELED' : 'CLEAR') : 'NOT RUN', color: s.fitRun ? (s.ballast === 'double' ? ACC : PASS) : UNRES, dot: s.fitRun ? (s.ballast === 'double' ? 'var(--dt-accent)' : PASS) : 'var(--dt-unres)' }
+    ].map((p, i) => Object.assign(p, { anim: this.pulse('prog:' + i, p.state), pop: p.partObj ? openPop(p.partObj) : () => {} }));
+    // ---- trail ----
+    const g = s.gates, BL = [];
+    if (s.req === 'open') BL.push({ label: 'open request', sheet: 'C-01', card: 'req', title: 'Lantern Lane siding — LH’s request is unanswered', summary: 'A story request with no model and no fit check attached. Approval waits until you decline, park or accept it — each with reasons and a reply in LH’s words.', status: '◇ OPEN', actionLabel: 'Park it until the circle runs', actionNote: 'Parks with the standard reason; you can change the reply on the card.', linkLabel: 'the request card', onAction: () => this.setState({ req: 'deferred', boysOk: false, narration: 'Request parked from the blocker popover — reply sent in LH’s words.' }) });
+    if (!s.derived) BL.push({ label: 'recolours unconfirmed', sheet: 'C-01', card: 'parts', title: 'Ballast rows not derived · 3 recolours unconfirmed', summary: 'The AI proposed tan → white on three rows and the ballast rows follow your choice. Nothing is in the list until you derive it.', status: '◇ NOT DERIVED', actionLabel: 'Derive the rows', actionNote: 'Adds the ballast rows and confirms the recolours as “worked out”.', linkLabel: 'the parts list', onAction: () => this.setState({ derived: true, narration: 'Ballast rows derived from the blocker popover.' }) });
+    if (s.ballast === 'double' && !dModeled) BL.push({ label: 'double ballast not modeled', sheet: 'C-01', card: 'choices', title: 'Double ballast has no model', summary: 'Two strikes stand against it. The GapCloser chip on the DOUBLE option queues the Blender → Studio work; results come back as evidence.', status: '○ NOT MODELED', linkLabel: 'the ballast choice' });
+    if (s.ballast === 'double' && dModeled && !dFit) BL.push({ label: 'double ballast fit not proven', sheet: 'C-01', card: 'choices', title: 'Double ballast is modeled but fit is unproven', summary: 'Queue the geometry check and fit proof from the GapCloser chip.', status: '○ FIT UNPROVEN', linkLabel: 'the ballast choice' });
+    if (!s.fitRun) BL.push({ label: 'fit not run', sheet: 'C-01', card: 'fit', title: 'Does it fit? — 3 checks not run', summary: 'Circle on 4 modules · ballast keeps the railhead flush · recoloured module reads as snow. Deterministic; takes a moment. MOCK.', status: '○ 3 NOT RUN', actionLabel: 'Run fitment now', actionNote: 'Same as the button on the card.', linkLabel: 'Does it fit?', onAction: () => this.setState({ fitRun: true, narration: 'Fitment run from the blocker popover.' }) });
+    if (siding && !s.boysOk) BL.push({ label: 'LH’s OK', sheet: 'C-01', card: 'req', title: 'LH hasn’t OK’d the siding placement', summary: 'The siding was accepted; where it goes still needs the requester’s yes. Ask on the request card.', status: '◇ WAITING', linkLabel: 'the request card' });
+    const blockers = BL.map(b => b.label);
+    const mk = (gate, text, done, ready, who, btn, stamp, time, action, blocked, blockersTxt) => ({ gate, text, done, dotBg: done ? PASS : 'transparent', dotBorder: done ? 'solid ' + PASS : 'dashed var(--dt-unres)', tag: done ? '■ ' + who + ' DID' : (ready ? '◇ ' + who : '○ LATER'), tagColor: done ? PASS : (ready ? ACC : UNRES), tagBorder: done ? 'solid' : 'dashed', show: ready && !done && !blocked, blocked: ready && !done && blocked, blockers: blockersTxt || '', btn, stamp, time, action, openEv: mock('Would open evidence for "' + gate + '"') });
+    const trail = [
+      mk('Save draft list', 'No gate.', g[0], true, '@jfo', 'Save draft', '■ SAVED', '12:05', this.say('Draft saved.', { gates: [true, false, false] }), false),
+      Object.assign(mk('Review by basis', 'Own vs adapted vs research vs story.', g[1], g[0], '@jfo', 'Reviewed', '■ REVIEWED', '12:08', this.say('Reviewed.', { gates: [true, true, false] }), !s.derived, 'recolours unconfirmed'), { blockerList: BL.filter(b => b.label === 'recolours unconfirmed') }),
+      Object.assign(mk('Approve with initials', 'Opens the release gate.', g[2], g[1], '@jfo', 'Approve as JFO', '■ APPROVED · JFO', '12:11', this.say('Approved. The release gate is open below.', { gates: [true, true, true] }), blockers.length > 0, blockers.join(' · ')), { blockerList: BL }),
+      Object.assign(mk('Release gate → then buy on P-01', 'Evidence, findings, initials — below.', false, false, '', '', '', '', () => {}, false), { tag: g[2] ? (s.gateState === 'passed' ? '■ RELEASED' : '◇ GATE OPEN') : '○ LOCKED', tagColor: g[2] ? PASS : UNRES, tagBorder: g[2] ? 'solid' : 'dashed' })
+    ];
+    let nextFound = false;
+    trail.forEach((t, i) => { t.isNext = !t.done && !nextFound && (t.show || t.blocked); if (t.isNext) nextFound = true; t.boxBorder = t.isNext ? 'dashed var(--dt-accent)' : 'solid var(--dt-grid-mid)'; t.anim = this.pulse('trail:' + i, [t.tag, t.blockers]); });
+    // ---- request ----
+    const reqMap = {
+      open: { tag: '◇ OPEN REQUEST', color: ACC, border: 'dashed', line: 'LH’s helper attached: Nils’s chocolate shop + a siding, built alongside', stamp: '', reply: '' },
+      declined: { tag: '▲ DECLINED', color: BLOCK, border: 'solid', line: 'Siding declined · ' + nR + ' reason' + (nR === 1 ? '' : 's') + ' · kept on record', stamp: '▲ DECLINED', reply: 'Not yet — let\u2019s finish the circle and watch the train run first. Then we\u2019ll plan Nils\u2019s shop.' },
+      deferred: { tag: '○ PARKED', color: UNRES, border: 'dashed', line: 'Siding parked until the circle is built', stamp: '○ PARKED', reply: 'Parked, not forgotten — once the circle runs, we look at the siding together.' },
+      accepted: { tag: '■ ACCEPTED', color: PASS, border: 'solid', line: 'Siding in the plan · boys OK where it lands', stamp: '■ ACCEPTED', reply: 'Yes — the siding is in. You pick where it goes before we buy the switch.' }
+    };
+    const rq = reqMap[s.req];
+    const reasons = this.REASONS.map((label, i) => { const on = s.reasonsOn.includes(i); return { label, on, fg: on ? ON : INK, bg: on ? INK : 'transparent', toggle: () => this.setState(st => ({ reasonsOn: on ? st.reasonsOn.filter(x => x !== i) : st.reasonsOn.concat(i) })) }; });
+    const deltas = [
+      { by: 'YOU', color: ACC, text: 'Source is one module; used ×4 to carry the full circle.' },
+      { by: 'YOU', color: ACC, text: adaptedRows + ' rows recoloured to the winter palette (tan → white, dark tan → light gray).' },
+      { by: 'SET', color: PASS, text: 'Track comes from the train (LEGO), not bought — source assumes you bring track.' },
+      { by: 'RESEARCH', color: PROV, text: s.ballast === 'none' ? 'No ballast (source has none).' : (s.ballast === 'single' ? 'Single' : 'Double') + ' ballast added — not in source.' }
+    ];
+    if (siding) deltas.push({ by: 'LH ASKED', color: ACC, text: 'Siding + switch off the E side toward Nils\u2019s shop — from the request LH attached.' });
+    deltas.forEach((d, i) => { d.anim = this.pulse('delta:' + i, d.text); });
+    const chain = [
+      { step: '01 · THE PLAN', who: '@jfo', color: INFO, text: 'James opens a plan: a MILS baseplate with railbed and ballast for the train’s circle. Open — others can attach to it.', link: 'Plan record ↗', open: mock('Would open the plan record') },
+      { step: '02 · THE WISH', who: 'LH', color: PROV, text: '“The village needs a chocolate shop owned by Nils at the end of Lantern Lane.”', link: 'Story record ↗', open: mock('Would open the story record') },
+      { step: '03 · ATTACHED HERE', who: 'LH’S HELPER', color: PROV, text: 'Turns the wish into a request on James’s open plan: a siding so the shop gets deliveries, built alongside. No model attached.', link: 'Request ↗', open: mock('Would open the request') },
+      { step: '04 · JAMES’S CALL', who: '@jfo', color: ACC, text: s.req === 'declined' ? 'Declined · ' + nR + ' reasons. Kept; boys replied to.' : s.req === 'deferred' ? 'Parked until the circle is built.' : s.req === 'accepted' ? 'Accepted — rows added, boys OK placement.' : 'Unanswered.', link: 'Decision ↗', open: mock('Would open the decision') }
+    ];
+    // ---- tile inspectors: task definition (not run) vs verification artifact (done) ----
+    const INS = {
+      track: { title: 'Track for the circle', done: true, tag: '■ RECORDED · NOTHING TO RUN',
+        lede: 'No task produced this — the track arrives inside the set, so the number is read off the set’s own parts list.',
+        rows: [['WHAT', '16 curved rails, R40'], ['HOW WE KNOW', 'Published set inventory for 10361'], ['READ BY', '@jfo · 09-14']],
+        artifact: 'inventory-10361.json', artifactHow: 'Fetched from the vendor inventory, so a re-fetch can check it.', artifactRef: 'fetched 09-14 12:04 · 62 lines · unchanged since',
+        href: 'https://www.lego.com/en-us/product/holiday-express-train-10361', linkLabel: 'SET PAGE ↗' },
+      module: { title: 'Module parts from bl-741807', done: true, tag: '■ RECORDED · THEN ADAPTED BY HAND',
+        lede: 'An export gave the base list; ' + adaptedRows + ' rows were recoloured on top of it. The export is the artifact, the recolours are your edits.',
+        rows: [['WHAT', modulePcs + ' pieces across 4 modules'], ['HOW WE KNOW', 'Parts export from the BrickLink design'], ['CHANGED BY', '@jfo · ' + adaptedRows + ' colour swaps']],
+        artifact: 'railbed-v1 · parts export', artifactHow: 'Every recoloured row keeps its original colour beside it.', artifactRef: 'export 09-15 · ' + adaptedRows + ' rows differ from source',
+        href: 'https://www.bricklink.com/v3/studio/design.page?idModel=741807', linkLabel: 'SOURCE DESIGN ↗' },
+      ballast: s.derived
+        ? { title: 'Ballast under the rail', done: true, tag: '■ DERIVED · YOU CONFIRMED IT',
+            lede: 'The helper worked the counts out from the ' + s.ballast + ' ballast and you confirmed them — a derivation, not a measurement.',
+            rows: [['WHAT', ballastPcs + ' pieces — plates and edge tiles'], ['HOW WE KNOW', 'Derived from the ' + s.ballast + ' ballast choice'], ['CONFIRMED BY', '@jfo · on the record']],
+            artifact: 'ballast-' + s.ballast + ' · derived rows', artifactHow: 'Counts follow from plate depth × rail length; a measured railhead may change them.', artifactRef: 'derived 09-16 · helper · your confirm attached',
+            href: 'Prototype M - Measure and Check.dc.html?from=C-01', linkLabel: 'CHECK THE FLUSH CLAIM → M-01 ↗' }
+        : { title: 'Ballast under the rail', todo: true, tag: '◇ A TASK THAT HAS NOT RUN',
+            lede: 'Zero because the task behind it has not run — and that task is not written down yet.',
+            rows: [['WOULD PRODUCE', 'a list of plates and edge tiles, with counts'], ['NEEDS FIRST', 'railhead height measured (M-01) · single or double chosen'], ['WHO RUNS IT', 'the helper, with your say-so']],
+            todoWhy: 'What it takes in, what it emits, and what counts as done is owed a design session. Done means counts you confirmed, with the working shown.',
+            href: 'Prototype M - Measure and Check.dc.html?from=C-01&what=Single%20ballast%20keeps%20the%20railhead%20flush', linkLabel: 'MEASURE THE RAILHEAD → M-01 ↗' },
+      asks: needCount
+        ? { title: 'Open for you', todo: true, tag: '◇ WAITING ON YOU',
+            lede: needCount + (needCount === 1 ? ' thing is' : ' things are') + ' open. Each names who waits and what it unblocks; closing one takes your answer on the record.',
+            rows: [['WHAT', 'see “Needed from you”'], ['WHY IT WAITS', 'a decision or a measurement only you can give'], ['BLOCKS', 'the release gate for this plan']],
+            todoWhy: 'How an item is raised, chased and closed is not drawn yet — this card shows the shape, not the flow.' }
+        : { title: 'Open for you', done: true, tag: '■ NOTHING OPEN',
+            lede: 'Every open item has an answer on the record. New ones appear here the moment something needs you.',
+            rows: [['WHAT', 'nothing waiting'], ['LAST CLOSED', 'the siding request · @jfo']],
+            artifact: 'decision log · this plan', artifactHow: 'Each answer keeps its reasons and timestamp, so a reopen shows what changed.', artifactRef: 'all items closed · signed @jfo' },
+    };
+    const tileFace = {
+      track: { label: 'TRACK · OWN', value: '16', sub: ' / 16', barPct: '100%', barColor: PASS, note: '■ arrives with the train', noteColor: PASS },
+      module: { label: 'MODULE PARTS · BUY', value: modulePcs, sub: ' pcs', barPct: '100%', barColor: 'var(--dt-info)', note: '▤ ' + adaptedRows + ' rows recoloured', noteColor: 'var(--dt-info-deep)', anim: this.pulse('gMod', modulePcs) },
+      ballast: { label: 'BALLAST · RESEARCH', value: ballastPcs, sub: ' pcs', barPct: s.derived && s.ballast !== 'none' ? '100%' : '0%', barColor: 'var(--dt-prov)', note: s.ballast === 'none' ? '— none chosen' : (s.derived ? '◇ ' + s.ballast + ' · AI guess' : '▲ not derived'), noteColor: s.ballast === 'none' ? 'var(--dt-muted)' : (s.derived ? 'var(--dt-prov-deep)' : 'var(--dt-unres-ink)'), anim: this.pulse('gBal', [s.ballast, ballastPcs]) },
+      asks: { label: 'OPEN · FOR YOU', value: needCount, sub: '', valueColor: needCount ? ACC : PASS, barPct: Math.min(100, needCount * 25) + '%', barColor: 'var(--dt-accent)', note: needCount ? 'see "Needed from you"' : 'nothing open', noteColor: 'var(--dt-muted)', anim: this.pulse('gAsk', needCount) }
+    };
+    const tiles = ['track', 'module', 'ballast', 'asks'].map(k => Object.assign({}, tileFace[k], INS[k], this.hoverIns(k), {
+      cue: INS[k].done ? '⤢ WHAT BACKS THIS' : '⤢ TASK NOT DEFINED', cueColor: INS[k].done ? 'var(--dt-muted)' : 'var(--dt-unres-ink)',
+      valueColor: tileFace[k].valueColor || 'var(--dt-ink)',
+      aria: INS[k].title + ' — ' + (INS[k].done ? 'what backs this number' : 'what this task would be')
+    }));
+    this._ins = s.ins && INS[s.ins] ? Object.assign({}, INS[s.ins]) : null;
+    const pop = s.pop ? Object.assign({}, s.pop, { blHref: bl(s.pop.id), rbHref: rb(s.pop.id), openInv: mock('Inventory layer not built yet') }) : {};
+    return Object.assign(this.cardVals(), {
+      dark, themeLabel: dark ? '☀ PAPER' : '☾ BLUEPRINT', toggleTheme: () => this.setState({ dark: !this.isDark() }),
+      ctxIsCtx: s.ctx, ctxIsNew: !s.ctx, ctxOn: () => this.setState({ ctx: true }), ctxOff: () => this.setState({ ctx: false }),
+      ctxNewBg: s.ctx ? 'transparent' : 'var(--dt-ink)', ctxNewFg: s.ctx ? 'var(--dt-ink)' : 'var(--dt-on-ink)', ctxCtxBg: s.ctx ? 'var(--dt-ink)' : 'transparent', ctxCtxFg: s.ctx ? 'var(--dt-on-ink)' : 'var(--dt-ink)',
+      ctxSvgBg: s.ctx ? 'var(--dt-bg)' : 'transparent',
+      ctxExplain: s.ctx ? 'Colour is new work; grey is what already stands on the table and does not change. The railbed wraps the built tree.' : 'Only the new work. Nothing already built is drawn — switch to see it in place.',
+      ctxCaption: s.ctx ? 'NEW WORK IN GREY CONTEXT · NOT TO SCALE' : 'NEW WORK ONLY · NOT TO SCALE',
+      ballastLabelY: 160,
+      siding, hasBallast: s.ballast !== 'none', ballastR: s.ballast === 'double' ? 47 : 45, ballastW: s.ballast === 'double' ? 6 : 3,
+      ballastLabel: s.ballast === 'none' ? 'NO BALLAST' : (s.ballast.toUpperCase() + ' BALLAST · BUY, RESEARCH'), ballastLabelColor: s.ballast === 'none' ? 'var(--dt-muted)' : 'var(--dt-prov-deep)',
+      ballastShort: s.ballast === 'none' ? 'NONE' : s.ballast.toUpperCase(),
+      adaptedRows, modulePcs, ballastPcs, ballastPct: s.derived && s.ballast !== 'none' ? '100%' : '0%',
+      ballastNote: s.ballast === 'none' ? '— none chosen' : (s.derived ? '◇ ' + s.ballast + ' · AI guess' : '▲ not derived'), ballastNoteColor: s.ballast === 'none' ? 'var(--dt-muted)' : (s.derived ? PROV : BLOCK),
+      needColor: needCount ? ACC : PASS, needPct: Math.min(100, needCount * 25) + '%', needNote: needCount ? 'see "Needed from you"' : 'nothing open',
+      summary: 'Own: 16 curves arrive with the train. Buy: ' + modulePcs + ' module pieces from the source, ' + adaptedRows + ' rows recoloured. Ballast: ' + (s.ballast === 'none' ? 'none' : s.ballast + (s.derived ? ', ' + ballastPcs + ' pcs' : ', not derived')) + '.' + (siding ? ' Plus a story siding.' : ''),
+      aSummary: this.pulse('summary', [modulePcs, s.ballast, s.derived, siding]), aModules: this.pulse('gMod', modulePcs), aBallast: this.pulse('gBal', [s.ballast, ballastPcs]), aAsks: this.pulse('gAsk', needCount), aTotal: this.pulse('total', [totalBuy, costLo]),
+      aBallastStance: this.pulse('bStance', s.ballast), aSidingStance: this.pulse('sStance', [siding, s.req]),
+      deltas, ballastOpts, ballastStances, sidingStances, asks, needCount, progress, fits, chain, doubleOn: s.ballast === 'double',
+      gapLede: dFit && dPriced ? 'Every strike is closed with evidence — modeled, checked, in Studio, priced, fit-proven. It is a real option now; pick it on cost and look.' : dModeled ? 'Modeled and in Studio. Fit and pricing still owe evidence; the chip shows what is running.' : 'You want it — fair. Two strikes stand against it until someone does the work. Queue that work here; it comes back as evidence on this option.',
+      onGapStatus: (status, id, to) => { const names = { model: 'Model', validate: 'Geometry check', studio: 'Studio import', parts: 'Parts research', fit: 'Fit proof' }; this.setState({ gap: status, narration: (names[id] || id) + ' → ' + to + (to === 'done' ? '. Evidence attached to the double-ballast option.' : '.') }); },
+      fitSummary: s.fitRun ? (s.ballast === 'double' && !dFit ? (dModeled ? '2 FIT · 1 NOT RUN' : '2 FIT · 1 UNMODELED') : 'ALL FIT') : '3 NOT RUN', fitBtn: s.fitRun ? 'Re-run' : 'Run fitment', runFit: this.say('Fitment run.', { fitRun: true }),
+      openStudio: mock('Would open the railbed in Studio'), openBlender: mock('Would open the scene in Blender'), openSetInv: mock('Would open the set inventory'), openResearch: mock('Would open the ballast research notes'),
+      filters, parts, filterAdapted: (e) => { e.preventDefault(); this.setState({ filter: 'adapted', narration: 'Parts list filtered to adapted rows.' }); },
+      needDerive: !s.derived && s.ballast !== 'none', derive: this.say('Ballast rows derived; recolours confirmed.', { derived: true }),
+      totalBuy, totalCost: '$' + costLo.toFixed(2) + '–' + costHi.toFixed(2),
+      costSplit: 'Adapted ' + costOf(adapted) + (s.derived && research.length ? ' · Research ' + costOf(research) : '') + (siding ? ' · Story ' + costOf(story) : '') + ' · Train separate (LEGO)',
+      gateReady: g[2], gateNotReady: !g[2], gateReleased: g[2] && s.gateState === 'passed', gateRev: 'r3 · ' + (s.ballast) + ' ballast' + (siding ? ' · siding' : ''), gateSubjectLine: totalBuy + ' pieces◇ to buy · ' + allParts.length + ' rows · approved by initials JFO above',
+      p01Href: 'Prototype P - Procurement.dc.html?released=' + encodeURIComponent((s.gateInitials || 'JFO') + '|' + new Date().toISOString().slice(0, 10)),
+      onGate: (e) => { if (e.kind === 'passed') this.setState({ gateState: 'passed', gateInitials: e.initials, narration: 'Released to buy · ' + e.decision + ' · ' + e.initials + '. P-01 is live.' }); else if (e.kind === 'reopened') this.setState({ gateState: 'open', narration: 'Gate reopened; P-01 is read-only again.' }); else if (e.kind === 'returned') this.setState({ gateState: 'open', gates: [true, true, false], narration: 'Returned for work with ' + e.open + ' open finding(s). Approval withdrawn; the list is editable.' }); else if (e.kind === 'finding') this.setState({ narration: 'Finding ' + e.id + ' → ' + e.to + '.' }); },
+      trail, gateLabel: g[2] ? (s.gateState === 'passed' ? 'RELEASED' : 'APPROVED · GATE BELOW') : (g[1] ? (blockers.length ? blockers.length + ' BLOCKER(S)' : 'READY FOR INITIALS') : (g[0] ? 'REVIEW PENDING' : 'DRAFT NOT SAVED')), allPass: g[2], openCart: mock('Would open the BrickLink cart'),
+      reqTag: rq.tag, reqTagPlain: s.req === 'open' ? 'still unanswered' : s.req === 'declined' ? 'declined, with a reply to LH' : s.req === 'deferred' ? 'parked until the circle runs' : 'accepted — the siding is in', reqColor: rq.color, reqBorder: rq.border, reqLine: rq.line, reqStamp: rq.stamp, reqReply: rq.reply, reqModeled: '○ NOT MODELED',
+      reqOpen: s.reqOpen, reqBtn: s.reqOpen ? 'Close' : (s.req === 'open' ? 'Respond' : 'Inspect'), toggleReq: () => this.setState(st => ({ reqOpen: !st.reqOpen })),
+      reqPending: s.req === 'open', reqAnswered: s.req !== 'open', reqReasonCount: nR + ' REASON' + (nR === 1 ? '' : 'S'), reasons,
+      declineReq: nR === 0 ? this.say('Pick at least one reason.') : this.say('Declined. Reply sent.', { req: 'declined', boysOk: false }),
+      deferReq: this.say('Parked.', { req: 'deferred', boysOk: false }), acceptReq: this.say('Accepted — siding rows added.', { req: 'accepted' }), reopenReq: this.say('Reopened.', { req: 'open', boysOk: false }),
+      tiles,
+      popOpen: !!s.pop, pop, closePop: () => this.setState({ pop: null }),
+      narration: s.narration,
+      reset: () => this.setState({ ballast: 'single', derived: false, fitRun: false, boysOk: false, gates: [false, false, false], filter: 'all', gap: {}, gateState: 'open', gateInitials: '', narration: 'Demo reset.', req: 'open', reqOpen: false, reasonsOn: [], expanded: null, pop: null })
+    });
+  }
+}
+</script>
+</body>
+</html>

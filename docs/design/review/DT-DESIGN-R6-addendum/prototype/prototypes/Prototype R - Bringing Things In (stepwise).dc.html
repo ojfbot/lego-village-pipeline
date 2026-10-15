@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Bringing things into the house — LEGO Village</title>
+<script>document.documentElement.lang="en"</script>
+<script src="../dt/landing.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../dt/tokens.css">
+<link rel="stylesheet" href="../dt/responsive.css">
+<style>button:disabled{opacity:.45;cursor:not-allowed} a{color:var(--dt-info-deep)} a:hover{color:var(--dt-accent-deep)} input,select{font:inherit;color:var(--dt-ink)} @media (max-width:900px){.r-main,.r-receipt{grid-template-columns:minmax(0,1fr) !important}} @media (max-width:640px){.r-line{grid-template-columns:minmax(0,1fr) auto !important}.r-line>.r-route{grid-column:1 / -1}}</style>
+</helmet>
+<div role="main" class="dt-responsive-page" style="max-width:1180px;margin:0 auto;padding:28px 28px 48px;display:grid;gap:18px;font-family:'Libre Franklin',sans-serif;color:var(--dt-ink)">
+  <header style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--dt-ink);padding-bottom:10px;gap:16px;flex-wrap:wrap">
+    <div style="display:grid;gap:3px;min-width:0;flex:1 1 320px">
+      <h1 style="font-family:'Spectral',serif;font-size:19px;font-weight:700;font-style:italic;margin:0">Bringing things into the house</h1>
+      <div style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);letter-spacing:0.08em">R-01 · ONE RECEIPT · THREE WAYS IN · DRAFT</div>
+    </div>
+    <nav aria-label="Sheet" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <a href="../Hub.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none">← HUB</a>
+      <a href="Prototype I - What We Have.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none">I-01 WHAT WE HAVE</a>
+      <a href="Prototype P - Procurement.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none">P-01 MILS ORDER</a>
+      <button onClick="{{ toggleTheme }}" aria-pressed="{{ dark }}" style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn)">{{ themeLabel }}</button>
+    </nav>
+  </header>
+
+  <div style="background:var(--dt-info-bg);border:1.5px solid var(--dt-info);border-radius:var(--dt-r-fillet);padding:11px 15px;font-size:13px;line-height:1.5;text-wrap:pretty;max-width:860px">One trip to the LEGO Store brought home three different kinds of thing: a set we'd planned for, a set nobody planned, and loose parts. <strong>Each comes in its own way, and all three end the same way</strong> — counted, signed, and showing up in <a href="Prototype I - What We Have.dc.html">I-01</a>. Start from the receipt; tap a line to bring it in.</div>
+
+  <section aria-label="Today's receipt" class="r-receipt" style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:18px;align-items:start;background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);box-shadow:var(--dt-shadow);padding:16px 18px">
+    <a href="assets/r01-receipt.png" target="_blank" title="Open the receipt photo" style="display:block;border-radius:var(--dt-r-fillet);overflow:hidden;border:1px solid var(--dt-grid-mid);max-height:300px">
+      <img src="assets/r01-receipt.png" alt="Photo of the LEGO Store receipt, 10 October 2026" style="width:100%;display:block;object-fit:cover;object-position:top;height:300px">
+    </a>
+    <div style="display:grid;gap:12px;min-width:0">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline">
+        <h2 style="font-family:'Spectral',serif;font-size:18px;font-weight:600;margin:0">LEGO Store, Stonebriar · Frisco TX</h2>
+        <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-prov-deep);border:1px solid var(--dt-prov);border-radius:var(--dt-r-fillet);padding:2px 6px">AI READ THIS — CHECK IT AGAINST THE PHOTO</span>
+      </div>
+      <div style="font-family:'Azeret Mono',monospace;font-size:11px;color:var(--dt-muted);display:flex;gap:6px 16px;flex-wrap:wrap"><span>10-10-2026 · 11:28 AM</span><span>LEGO0067208499</span><span>12 ITEMS</span><span style="color:var(--dt-ink);font-weight:600">PAID $227.20 · VISA</span></div>
+      <div style="display:grid;gap:8px">
+        <sc-for list="{{ lines }}" as="l" hint-placeholder-count="3">
+          <div class="r-line" style="display:grid;grid-template-columns:auto minmax(0,1fr) auto minmax(150px,auto);gap:6px 14px;align-items:center;border:1.5px {{ l.stroke }} {{ l.border }};border-radius:var(--dt-r-fillet);padding:9px 12px;background:{{ l.bg }}">
+            <span style="font-family:'Azeret Mono',monospace;font-size:13px;font-weight:600;min-width:3ch">{{ l.qty }}×</span>
+            <span style="display:grid;gap:1px;min-width:0"><span style="font-weight:600;font-size:13.5px">{{ l.name }}</span><span style="font-size:11.5px;color:var(--dt-muted)">{{ l.sub }}</span></span>
+            <span style="display:grid;gap:1px;text-align:right"><span style="font-family:'Azeret Mono',monospace;font-size:12px">{{ l.list }}</span><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-muted)">{{ l.share }}</span></span>
+            <button class="r-route" onClick="{{ l.pick }}" style="justify-self:end;font-family:'Libre Franklin';font-size:12px;font-weight:600;cursor:pointer;padding:7px 13px;border-radius:999px;border:1.5px solid var(--dt-ink);background:{{ l.btnBg }};color:{{ l.btnFg }};white-space:nowrap">{{ l.action }}</button>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:grid;gap:8px;border-top:1px dashed var(--dt-grid-mid);padding-top:10px">
+        <div style="display:flex;gap:8px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-prov-deep);border:1px solid var(--dt-prov);border-radius:var(--dt-r-fillet);padding:1px 5px;flex:none">AI ASKS</span><span style="font-size:13px;line-height:1.5;text-wrap:pretty">There's a $40.00 Insiders discount — almost exactly the gingerbread house's $39.99. Was the house free with the train, or did you spend points on the whole bag?</span></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <sc-for list="{{ discOpts }}" as="o" hint-placeholder-count="3">
+            <button onClick="{{ o.pick }}" aria-pressed="{{ o.on }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;cursor:pointer;padding:7px 13px;border-radius:999px;border:1.5px solid var(--dt-ink);background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+          </sc-for>
+        </div>
+        <div style="font-size:11.5px;color:var(--dt-muted);line-height:1.45">{{ discNote }}</div>
+      </div>
+    </div>
+  </section>
+
+  <div role="radiogroup" aria-label="How is it coming in?" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px">
+    <sc-for list="{{ doors }}" as="d" hint-placeholder-count="3">
+      <button role="radio" aria-checked="{{ d.on }}" onClick="{{ d.pick }}" style="text-align:left;cursor:pointer;display:grid;gap:5px;padding:14px 16px;background-color:var(--dt-sheet);background-image:{{ d.hatch }};border:{{ d.border }};border-radius:var(--dt-r-card);box-shadow:{{ d.shadow }};color:var(--dt-ink)">
+        <span style="display:flex;justify-content:space-between;gap:8px;font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)"><span>{{ d.code }}</span><span style="color:{{ d.stateColor }}">{{ d.state }}</span></span>
+        <span style="font-family:'Spectral',serif;font-size:17px;font-weight:600;line-height:1.25">{{ d.label }}</span>
+        <span style="font-size:12px;color:var(--dt-muted)">{{ d.eg }}</span>
+        <span style="font-size:11.5px;color:var(--dt-accent-deep)">{{ d.joins }}</span>
+      </button>
+    </sc-for>
+  </div>
+
+  <ol aria-label="Steps" style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px dashed var(--dt-grid-mid);border-bottom:1px dashed var(--dt-grid-mid)">
+    <sc-for list="{{ strip }}" as="s" hint-placeholder-count="4">
+      <li style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:center;padding:12px 10px;opacity:{{ s.opacity }}">
+        <span aria-hidden="true" style="width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;background:{{ s.dotBg }};color:{{ s.dotFg }};border:1.5px {{ s.dotStroke }} {{ s.dotBorder }}">{{ s.glyph }}</span>
+        <span style="font-family:'Libre Franklin';font-size:13px;font-weight:600;text-decoration:{{ s.strike }}">{{ s.label }}</span>
+        <span></span>
+        <span style="font-size:11px;color:var(--dt-muted);line-height:1.35">{{ s.note }}</span>
+      </li>
+    </sc-for>
+  </ol>
+
+  <div class="r-main" style="display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:start">
+    <section aria-label="This step" style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);box-shadow:var(--dt-shadow);padding:18px 20px;display:grid;gap:14px">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap">
+        <h2 style="font-family:'Spectral',serif;font-size:18px;font-weight:600;margin:0">{{ panelTitle }}</h2>
+        <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">{{ panelCode }}</span>
+      </div>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:var(--dt-ink);text-wrap:pretty;max-width:60ch">{{ panelLede }}</p>
+
+      <sc-if value="{{ isOrder }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;gap:10px">
+          <div style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:10px 12px;background:var(--dt-bg)">
+            <span style="font-family:'Azeret Mono',monospace;font-size:13px;font-weight:600">10361</span>
+            <span style="display:grid;gap:2px"><span style="font-weight:600;font-size:13.5px">Holiday Express Train</span><span style="font-size:11.5px;color:var(--dt-muted)">Bought in the store, so there's no order to wait on — the receipt is the order.</span></span>
+            <span style="font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600">$129.99</span>
+          </div>
+          <label style="display:grid;gap:4px;font-size:11.5px;color:var(--dt-muted);max-width:320px">Receipt / order number
+            <input value="{{ orderNo }}" onChange="{{ setOrderNo }}" style="padding:7px 10px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);background:var(--dt-sheet);font-family:'Azeret Mono',monospace;font-size:12.5px">
+          </label>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isArriveP }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;justify-content:space-between;gap:12px;font-size:12.5px;border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:10px 12px;background:var(--dt-bg)"><span>Carried home from the store on <strong>10-10-2026</strong></span><span style="font-family:'Azeret Mono',monospace;color:var(--dt-pass)">◆ RECEIPT</span></div>
+      </sc-if>
+
+      <sc-if value="{{ isArriveU }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;gap:12px">
+          <div style="display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;align-items:start">
+            <img src="assets/r01-40809-box.png" alt="The 40809 Festive Gingerbread House box" style="width:120px;height:160px;object-fit:cover;border-radius:var(--dt-r-fillet);border:1px solid var(--dt-grid-mid)">
+            <div style="display:grid;gap:6px;font-size:12.5px">
+              <div style="display:flex;justify-content:space-between;gap:10px"><span>40809 Festive Gingerbread House</span><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-pass)">◆ BOX + RECEIPT</span></div>
+              <div style="display:flex;justify-content:space-between;gap:10px;color:var(--dt-muted)"><span>498 pieces · ages 10+</span><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-pass)">◆ BOX</span></div>
+              <div style="display:flex;justify-content:space-between;gap:10px;color:var(--dt-muted)"><span>About 16 × 15 studs, 15 cm tall</span><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-prov-deep)">◇ CONVERTED FROM LEGO.COM CM</span></div>
+              <div style="display:flex;justify-content:space-between;gap:10px;color:var(--dt-muted)"><span>Still sold on lego.com at $39.99</span><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-pass)">◆ LEGO.COM 10-10</span></div>
+            </div>
+          </div>
+          <div style="display:grid;gap:8px;border-top:1px dashed var(--dt-grid-mid);padding-top:12px">
+            <div style="display:flex;gap:8px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-prov-deep);border:1px solid var(--dt-prov);border-radius:var(--dt-r-fillet);padding:1px 5px;flex:none">AI ASKS</span><span style="font-size:13px;line-height:1.5">This wasn't on any plan. Is it for the village, or its own thing on the table at Christmas?</span></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <sc-for list="{{ villageOpts }}" as="o" hint-placeholder-count="3">
+                <button onClick="{{ o.pick }}" aria-pressed="{{ o.on }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;cursor:pointer;padding:7px 13px;border-radius:999px;border:1.5px solid var(--dt-ink);background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+              </sc-for>
+            </div>
+            <div style="font-size:12px;color:var(--dt-accent-deep);line-height:1.45">{{ villageNote }}</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCountSet }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;gap:10px">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <sc-for list="{{ sealOpts }}" as="o" hint-placeholder-count="2">
+              <button onClick="{{ o.pick }}" aria-pressed="{{ o.on }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;cursor:pointer;padding:7px 13px;border-radius:999px;border:1.5px solid var(--dt-ink);background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+            </sc-for>
+          </div>
+          <div style="font-size:12.5px;line-height:1.5;text-wrap:pretty">{{ sealNote }}</div>
+          <sc-if value="{{ showTrackPhoto }}" hint-placeholder-val="{{ false }}">
+            <figure style="margin:0;display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;align-items:start;border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:10px;background:var(--dt-bg)">
+              <a href="assets/r01-track-on-plates.png" target="_blank" title="Open the photo"><img src="assets/r01-track-on-plates.png" alt="The train's track circle laid out on nine white baseplates" style="width:150px;height:150px;object-fit:cover;border-radius:var(--dt-r-fillet);display:block"></a>
+              <figcaption style="display:grid;gap:6px;font-size:12px;line-height:1.45">
+                <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">PHOTO · 10-10 · SEEN, NOT MEASURED</span>
+                <span>The track from this box, closed into a full circle, sitting on nine of today's baseplates in a 3 × 3 square — with a margin left all the way round.</span>
+                <span style="color:var(--dt-accent-deep)">That's the first real look at how much table the circle takes. A-01 can use it as a rough footprint until it's measured.</span>
+              </figcaption>
+            </figure>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCountLoose }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;gap:12px">
+          <div style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:10px 12px;background:var(--dt-bg)">
+            <span style="display:flex;align-items:center;gap:4px">
+              <button onClick="{{ plateDown }}" aria-label="One fewer" style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--dt-ink);background:transparent;color:var(--dt-ink);cursor:pointer">−</button>
+              <span style="font-family:'Azeret Mono',monospace;font-size:15px;font-weight:600;min-width:2.5ch;text-align:center">{{ plates }}</span>
+              <button onClick="{{ plateUp }}" aria-label="One more" style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--dt-ink);background:transparent;color:var(--dt-ink);cursor:pointer">+</button>
+            </span>
+            <span style="display:grid;gap:2px"><span style="font-weight:600;font-size:13.5px">White baseplates · {{ sizeLabel }}</span><span style="font-size:11.5px;color:var(--dt-muted)">{{ plateCountNote }}</span></span>
+            <select value="{{ cond }}" onChange="{{ setCond }}" aria-label="Condition" style="padding:6px 8px;border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-btn);background:var(--dt-sheet);font-size:12px">
+              <option value="flat">All lie flat</option>
+              <option value="warped">Some warped</option>
+              <option value="unknown">Haven't checked</option>
+            </select>
+          </div>
+          <div style="display:grid;gap:8px;border-top:1px dashed var(--dt-grid-mid);padding-top:12px">
+            <div style="display:flex;gap:8px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-prov-deep);border:1px solid var(--dt-prov);border-radius:var(--dt-r-fillet);padding:1px 5px;flex:none">AI ASKS</span><span style="font-size:13px;line-height:1.5;text-wrap:pretty">You called these 16 × 16, but in the photo the train's circle fits inside nine of them. A circle of standard curves is roughly 88 studs across, and nine 16 × 16 plates only make 48 — so they look like 32 × 32 to me. Could you count the studs along one edge?</span></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <sc-for list="{{ sizeOpts }}" as="o" hint-placeholder-count="3">
+                <button onClick="{{ o.pick }}" aria-pressed="{{ o.on }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;cursor:pointer;padding:7px 13px;border-radius:999px;border:1.5px solid var(--dt-ink);background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+              </sc-for>
+            </div>
+            <div style="font-size:12px;color:var(--dt-accent-deep);line-height:1.45">{{ sizeNote }}</div>
+          </div>
+          <label style="display:grid;gap:4px;font-size:11.5px;color:var(--dt-muted);border-top:1px dashed var(--dt-grid-mid);padding-top:10px">Counting these for
+            <select value="{{ against }}" onChange="{{ setAgainst }}" style="padding:7px 10px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);background:var(--dt-sheet);font-size:13px">
+              <option value="mils">The open question: what do the MILS modules sit on?</option>
+              <option value="none">Nothing in particular — just so we know</option>
+            </select>
+          </label>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;gap:10px">
+          <div style="border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:10px 12px;background:var(--dt-bg);display:grid;gap:4px">
+            <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">I-01 WILL SHOW</span>
+            <span style="font-size:13.5px;font-weight:600">{{ homeLine }}</span>
+            <span style="font-size:12px;color:var(--dt-muted)">{{ homeSub }}</span>
+          </div>
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--dt-muted);flex-wrap:wrap">Your initials — signing says you saw it yourself
+            <input value="{{ sig }}" onChange="{{ setSig }}" placeholder="jfo" maxlength="5" style="width:70px;padding:6px 8px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-btn);background:var(--dt-sheet);font-family:'Azeret Mono',monospace;font-size:12.5px">
+          </label>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;gap:12px">
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--dt-pass-bg);border:1.5px solid var(--dt-pass);border-radius:var(--dt-r-fillet);padding:10px 12px"><span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:var(--dt-pass);transform:rotate(-3deg);border:1.5px solid var(--dt-pass);padding:2px 7px;border-radius:var(--dt-r-fillet)">✓ IN THE HOUSE</span><span style="font-size:12.5px">{{ homeLine }}</span></div>
+          <div style="font-size:12.5px;line-height:1.5">{{ doneNext }}</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <sc-for list="{{ nextDoors }}" as="n" hint-placeholder-count="2">
+              <button onClick="{{ n.pick }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;cursor:pointer;padding:7px 13px;border-radius:999px;border:1.5px solid var(--dt-ink);background:transparent;color:var(--dt-ink)">{{ n.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showActions }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-top:1px dashed var(--dt-grid-mid);padding-top:12px">
+          <button onClick="{{ advance }}" disabled="{{ cantAdvance }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;cursor:pointer;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:9px 16px;border-radius:999px;box-shadow:var(--dt-btn-shadow)">{{ advanceLabel }}</button>
+          <sc-if value="{{ canBack }}" hint-placeholder-val="{{ false }}"><button onClick="{{ back }}" style="font-family:'Libre Franklin';font-size:12px;cursor:pointer;background:transparent;color:var(--dt-ink);border:none;text-decoration:underline">Back a step</button></sc-if>
+          <span style="font-size:11.5px;color:var(--dt-muted)">{{ advanceWhy }}</span>
+        </div>
+      </sc-if>
+    </section>
+
+    <aside aria-label="What this changes" style="display:grid;gap:14px">
+      <div style="background-color:var(--dt-sheet);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);padding:14px 16px;display:grid;gap:10px">
+        <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">WHAT THIS CHANGES</div>
+        <sc-for list="{{ effects }}" as="e" hint-placeholder-count="3">
+          <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:baseline;font-size:12.5px;line-height:1.45">
+            <span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;color:{{ e.color }}">{{ e.glyph }}</span>
+            <span><strong>{{ e.where }}</strong> {{ e.text }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);border-radius:var(--dt-r-card);padding:14px 16px;display:grid;gap:8px">
+        <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">FROM THIS RECEIPT · {{ ledgerCount }} OF 3 IN THE HOUSE</div>
+        <sc-if value="{{ ledgerEmpty }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;color:var(--dt-muted);line-height:1.45">Nothing signed in yet. Each line you finish lands here, with the steps it took.</div></sc-if>
+        <sc-for list="{{ ledger }}" as="l" hint-placeholder-count="0">
+          <div style="display:grid;gap:2px;border-top:1px dashed var(--dt-grid-mid);padding-top:7px">
+            <div style="display:flex;justify-content:space-between;gap:8px;font-size:12.5px"><strong>{{ l.title }}</strong><span style="font-family:'Azeret Mono',monospace;font-size:10.5px;color:var(--dt-pass)">✓ {{ l.who }}</span></div>
+            <div style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">{{ l.path }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </aside>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  FLOWS = {
+    planned: { code: '01 · PLANNED', label: "We planned it and bought it", eg: '10361 Holiday Express Train', joins: 'Bought in store — the receipt covers ordering and arriving', stages: ['order', 'arrive', 'count', 'home'], start: 2 },
+    unplanned: { code: '02 · UNPLANNED', label: "We bought something we didn't plan", eg: '40809 Festive Gingerbread House', joins: 'No plan to match — say what it is and where it goes', stages: ['arrive', 'count', 'home'], start: 0 },
+    loose: { code: '03 · LOOSE PARTS', label: 'We have loose parts to count', eg: '10 white baseplates', joins: 'Not a set — straight to counting', stages: ['count', 'home'], start: 0 }
+  };
+  STAGES = [['order', 'Ordered'], ['arrive', 'Here'], ['count', 'Counted'], ['home', 'In the house']];
+  state = { dark: false, flow: 'planned', step: { planned: 2, unplanned: 0, loose: 0 }, done: {},
+    orderNo: 'LEGO0067208499', disc: null, village: null, seal: { planned: 'open', unplanned: 'sealed' },
+    plates: 10, size: null, cond: 'unknown', against: 'mils', sig: '', ledger: [] };
+  componentDidMount() {
+    const dark = typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches;
+    document.body.classList.toggle('dt-blueprint', dark);
+    const f = new URLSearchParams(location.search).get('flow');
+    this.setState({ dark, ...(this.FLOWS[f] ? { flow: f } : {}) });
+  }
+  set(k) { return e => this.setState({ [k]: e.target.value }); }
+  pills(opts, cur, key) {
+    return opts.map(([k, label]) => { const on = cur === k; return { label, on, bg: on ? 'var(--dt-ink)' : 'transparent', fg: on ? 'var(--dt-on-ink)' : 'var(--dt-ink)', pick: () => this.setState(typeof key === 'function' ? key(k) : { [key]: k }) }; });
+  }
+  renderVals() {
+    const s = this.state, F = this.FLOWS[s.flow], step = s.step[s.flow], done = !!s.done[s.flow];
+    const stage = done ? 'done' : F.stages[step];
+    const go = flow => () => this.setState({ flow, sig: '' });
+    // what each line actually cost, depending on what the $40 was
+    const share = s.disc === 'gift' ? { planned: 140.72, unplanned: 0, loose: 86.48 } : { planned: 118.19, unplanned: 36.36, loose: 72.65 };
+    const money = n => '$' + n.toFixed(2);
+    const shareTxt = k => s.disc ? (k === 'unplanned' && s.disc === 'gift' ? 'free with the train' : money(share[k]) + ' paid') : '≈ ' + money(share[k]) + ' paid';
+    const LINES = { planned: ['1', 'Holiday Express Train', '10361 · planned for since the railbed'], unplanned: ['1', 'Festive Gingerbread House', '40809 · not on any plan'], loose: ['10', 'White Baseplate', 'Loose parts · $7.99 each'] };
+    const listP = { planned: '$129.99', unplanned: '$39.99', loose: '$79.90' };
+    const lines = Object.keys(LINES).map(k => {
+      const [qty, name, sub] = LINES[k], on = k === s.flow, fin = !!s.done[k];
+      return { qty, name, sub, list: listP[k], share: shareTxt(k), pick: go(k), stroke: on ? 'solid' : 'dashed', border: fin ? 'var(--dt-pass)' : on ? 'var(--dt-ink)' : 'var(--dt-grid-mid)', bg: fin ? 'var(--dt-pass-bg)' : 'var(--dt-sheet)',
+        action: fin ? '✓ In the house' : on ? 'Bringing it in ↓' : 'Bring it in →', btnBg: on && !fin ? 'var(--dt-ink)' : 'transparent', btnFg: on && !fin ? 'var(--dt-on-ink)' : 'var(--dt-ink)' };
+    });
+    const discOpts = this.pills([['gift', 'The house was free'], ['points', 'Points on the whole bag'], ['unsure', 'Not sure']], s.disc, 'disc');
+    const discNote = s.disc === 'gift' ? 'Then the gingerbread house cost nothing, and the train and baseplates carry all the tax.' : s.disc === 'points' ? 'Then the $40 and the tax are spread over everything by price.' : s.disc === 'unsure' ? "Fine — it's spread by price for now, and marked as a guess. The Insiders app will say which it was." : "Until you answer, each line's cost is spread by price and shown with ≈. The receipt total ($227.20) is right either way.";
+    const doors = Object.entries(this.FLOWS).map(([k, f]) => {
+      const on = k === s.flow, fin = !!s.done[k], mid = !fin && s.step[k] > f.start;
+      return { ...f, on, pick: go(k), hatch: on ? 'var(--dt-hatch-draft)' : 'none',
+        border: on ? '2px solid var(--dt-ink)' : '1px solid var(--dt-grid-mid)', shadow: on ? 'var(--dt-shadow)' : 'none',
+        state: fin ? '✓ IN THE HOUSE' : mid ? '◐ PART WAY' : '', stateColor: fin ? 'var(--dt-pass)' : 'var(--dt-prov-deep)' };
+    });
+    const strip = this.STAGES.map(([k, label], i) => {
+      const idx = F.stages.indexOf(k), skip = idx < 0, isDone = done || (!skip && idx < step), now = !done && idx === step;
+      const byReceipt = s.flow === 'planned' && idx < F.start;
+      return { label, glyph: skip ? '–' : isDone ? '✓' : String(i + 1), opacity: skip ? 0.5 : 1, strike: skip ? 'line-through' : 'none',
+        dotBg: now ? 'var(--dt-ink)' : isDone ? 'var(--dt-pass)' : 'transparent', dotFg: now || isDone ? 'var(--dt-on-ink)' : 'var(--dt-muted)',
+        dotBorder: now ? 'var(--dt-ink)' : isDone ? 'var(--dt-pass)' : 'var(--dt-grid-mid)', dotStroke: skip ? 'dashed' : 'solid',
+        note: skip ? 'Not needed this way' : now ? 'You are here' : isDone ? (byReceipt ? 'Done — the receipt shows it' : 'Done') : 'Comes next' };
+    });
+    // baseplates
+    const perModule = s.size === 32 ? 1 : s.size === 16 ? 4 : null;
+    const modules = perModule ? Math.floor(s.plates / perModule) : null, spare = perModule ? s.plates % perModule : 0;
+    const sizeLabel = s.size ? `${s.size} × ${s.size}` : 'size not counted yet';
+    const sealed = s.seal[s.flow] === 'sealed';
+    const P = {
+      order: ['Bought in the store', 'RECEIPT = ORDER', 'There was nothing to order online — the receipt number stands in for an order number.'],
+      arrive: s.flow === 'planned' ? ['Carried home', 'HERE', 'It came home with you, so there was no wait.'] : ["Say where it's going", 'NOT PLANNED', "The box and receipt already say what it is. The only thing missing is a decision only you can make."],
+      count: s.flow === 'loose' ? ['Count the baseplates', 'COUNTED BY HAND', "Loose parts don't come with a parts list, so the count and the size are whatever you see. Say what they're for — that's what lets the count change a plan."]
+        : ['Is the box still sealed?', 'COUNT OR SKIP', 'A sealed box is trusted as listed. An opened one still signs in today; I-02 gets a task to document what was in it.'],
+      home: ['Sign it into the house', 'IN THE HOUSE', 'This is the one step every way in shares. Once signed, I-01 shows it and anything that was waiting on it stops waiting.'],
+      done: ['Done', 'SIGNED', '']
+    }[stage];
+    const villageOpts = this.pills([['for', 'For the village'], ['own', 'Its own thing'], ['later', 'Ask James later']], s.village, 'village');
+    const villageNote = { for: "It becomes a sticker idea on F-01. At about 16 × 15 studs it fits on a quarter of a 32 × 32 plate — it still needs a spot before it goes on the layout.", own: 'Logged as ours, and kept off every layout sheet.', later: "It goes on the T-01 queue as one question for James, so it isn't forgotten." }[s.village] || 'Your answer decides which sheets hear about it. Nothing is assumed.';
+    const sealOpts = this.pills([['sealed', 'Still sealed'], ['open', "It's been opened"]], s.seal[s.flow], k => ({ seal: { ...s.seal, [s.flow]: k } }));
+    const sealNote = sealed ? "Nothing to count. The set's own parts list stands in until someone opens it."
+      : s.flow === 'planned' ? "Opened — the track is already out on the floor. It still signs in today; I-02 gets a task to check the rest of the box against its list." : "Opened boxes go missing pieces. It still signs in today — I-02 gets a 'document this box' task.";
+    const sizeOpts = this.pills([[32, '32 along an edge'], [16, '16 along an edge']], s.size, 'size');
+    const sizeNote = s.size === 32 ? `Then each plate is a whole MILS module base by itself — ${s.plates} plates, ${s.plates} modules.` : s.size === 16 ? `Then it takes four for one 32 × 32 module — ${s.plates} plates make ${modules}, with ${spare} spare. (And the photo would need a second look.)` : "Until it's counted, nothing downstream uses these plates. This one answer moves the MILS order a lot.";
+    const plateCountNote = s.plates === 10 ? 'The receipt says 10. The photo shows 9 — the tenth is just somewhere else?' : `The receipt says 10; you've counted ${s.plates}.`;
+    const villageWhere = s.village === 'for' ? 'F-01' : s.village === 'later' ? 'T-01' : 'Village';
+    const effects = {
+      planned: [
+        { glyph: '◐', color: 'var(--dt-prov-deep)', where: 'A-01', text: "— the circle is in the house and photographed on the plates. The corner fit check can use the photo as a rough footprint; it's still not measured." },
+        { glyph: '◐', color: 'var(--dt-prov-deep)', where: 'C-01', text: '— the ballast count can now use what this box actually brought, once I-02 checks it.' },
+        { glyph: '◐', color: 'var(--dt-prov-deep)', where: "Boys' siding", text: '— the engine and circle are here; it stops waiting on the purchase.' },
+        { glyph: '·', color: 'var(--dt-muted)', where: 'P-01', text: '— not touched. It stays the MILS parts order.' }],
+      unplanned: [
+        { glyph: '◆', color: 'var(--dt-pass)', where: 'I-01', text: '— a new row: in the house, in the box, not planned for anything.' },
+        { glyph: s.village ? '◐' : '◇', color: 'var(--dt-prov-deep)', where: villageWhere, text: s.village === 'for' ? '— a sticker idea, about 16 × 15 studs, no spot yet.' : s.village === 'later' ? '— one question for James.' : s.village === 'own' ? '— nothing changes.' : '— waits on your answer.' },
+        { glyph: s.disc && s.disc !== 'unsure' ? '◆' : '◇', color: s.disc && s.disc !== 'unsure' ? 'var(--dt-pass)' : 'var(--dt-unres)', where: 'Spending', text: s.disc === 'gift' ? '— cost nothing; free with the train.' : `— about ${money(share.unplanned)}, outside any plan's budget.` }],
+      loose: s.against === 'mils' ? [
+        { glyph: modules == null ? '◇' : '◐', color: modules == null ? 'var(--dt-unres)' : 'var(--dt-prov-deep)', where: 'MILS question', text: modules == null ? "— still open, and these can't count toward it until their size is known." : `— still open, but if it's baseplates, these are bases for ${modules} module${modules === 1 ? '' : 's'}${spare ? ' with ' + spare + ' spare' : ''}.` },
+        { glyph: s.cond === 'warped' ? '!' : s.cond === 'unknown' ? '◇' : '◆', color: s.cond === 'warped' ? 'var(--dt-block)' : s.cond === 'unknown' ? 'var(--dt-unres)' : 'var(--dt-pass)', where: 'Condition', text: s.cond === 'warped' ? "— warped plates rock and break MILS joins; only the flat ones count." : s.cond === 'unknown' ? "— check they lie flat; a warped plate can't base a module." : '— all flat, all usable.' },
+        { glyph: modules == null ? '◇' : '◐', color: modules == null ? 'var(--dt-unres)' : 'var(--dt-prov-deep)', where: 'P-01', text: modules == null ? '— nothing changes until the size is counted.' : `— the MILS order could drop ${modules} module base${modules === 1 ? '' : 's'} — but only once the question is answered.` }]
+        : [{ glyph: '◆', color: 'var(--dt-pass)', where: 'I-01', text: '— loose parts on hand. No plan reads them yet.' }]
+    }[s.flow];
+    let can = true, why = '', label = 'Next step →';
+    if (stage === 'order') { can = !!s.orderNo.trim(); label = 'Next →'; }
+    if (stage === 'arrive' && s.flow === 'planned') label = 'Next →';
+    if (stage === 'arrive' && s.flow === 'unplanned') { can = !!s.village; why = can ? 'Ready.' : 'Answer the question first.'; label = 'Next →'; }
+    if (stage === 'count') { label = s.flow === 'loose' ? "That's the count →" : sealed ? 'Skip counting →' : 'Hand the box to I-02 →'; if (s.flow === 'loose') { can = s.plates > 0; why = s.size ? '' : "You can go on without the size — it'll stay marked as not counted."; } }
+    if (stage === 'home') { can = !!s.sig.trim(); why = can ? 'Signs it in.' : 'Needs your initials.'; label = 'Sign it in'; }
+    const setName = s.flow === 'planned' ? '10361 Holiday Express Train' : '40809 Festive Gingerbread House';
+    const homeLine = s.flow === 'loose' ? `${s.plates} × white baseplate, ${sizeLabel}` : `${setName} — in the house · ${sealed ? 'in the box' : 'opened'}`;
+    const homeSub = s.flow === 'loose' ? (s.against === 'mils' ? 'Loose parts, held for the MILS question' : 'Loose parts, not held for anything') + ' · receipt LEGO0067208499' : s.flow === 'planned' ? `Receipt ${s.orderNo} · LEGO Store Stonebriar · 10-10-2026` : `Unplanned · LEGO Store Stonebriar · ${s.disc === 'gift' ? 'free with the train' : '≈ ' + money(share.unplanned)}`;
+    const advance = () => {
+      if (stage === 'home') {
+        const path = F.stages.map((k, i) => this.STAGES.find(x => x[0] === k)[1] + (s.flow === 'planned' && i < F.start ? ' (receipt)' : '')).join(' → ');
+        const title = s.flow === 'loose' ? `${s.plates} × white baseplate` : setName;
+        this.setState({ done: { ...s.done, [s.flow]: true }, ledger: [...s.ledger, { title, path, who: s.sig.trim().toUpperCase() }] });
+      } else this.setState({ step: { ...s.step, [s.flow]: step + 1 } });
+    };
+    const others = Object.keys(this.FLOWS).filter(k => k !== s.flow && !s.done[k]);
+    const nextLabel = { planned: 'Next line: the train →', unplanned: 'Next line: the gingerbread house →', loose: 'Next line: the baseplates →' };
+    const doneNext = others.length ? { planned: 'The track is on the plates in the photo — the baseplates are the natural next line.', unplanned: 'Two other lines on the same receipt still need bringing in.', loose: s.against === 'mils' ? 'The count is held against the MILS question. When it is answered, P-01 reads this number.' : 'Counted and on hand.' }[s.flow] : 'Everything on the receipt is in the house.';
+    return {
+      dark: s.dark, themeLabel: s.dark ? '◐ BLUEPRINT' : '◑ PAPER', toggleTheme: () => { const d = !s.dark; document.body.classList.toggle('dt-blueprint', d); this.setState({ dark: d }); },
+      lines, discOpts, discNote, doors, strip, panelTitle: P[0], panelCode: P[1], panelLede: stage === 'done' ? '' : P[2],
+      isOrder: stage === 'order', isArriveP: stage === 'arrive' && s.flow === 'planned', isArriveU: stage === 'arrive' && s.flow === 'unplanned',
+      isCountSet: stage === 'count' && s.flow !== 'loose', isCountLoose: stage === 'count' && s.flow === 'loose', isHome: stage === 'home', isDone: stage === 'done',
+      showTrackPhoto: s.flow === 'planned',
+      orderNo: s.orderNo, setOrderNo: this.set('orderNo'),
+      villageOpts, villageNote, sealOpts, sealNote,
+      plates: s.plates, plateUp: () => this.setState({ plates: s.plates + 1 }), plateDown: () => this.setState({ plates: Math.max(0, s.plates - 1) }),
+      sizeLabel, sizeOpts, sizeNote, plateCountNote, cond: s.cond, setCond: this.set('cond'),
+      against: s.against, setAgainst: this.set('against'),
+      homeLine, homeSub, sig: s.sig, setSig: this.set('sig'),
+      doneNext, nextDoors: others.map(k => ({ label: nextLabel[k], pick: go(k) })),
+      showActions: stage !== 'done', advance, cantAdvance: !can, advanceWhy: why, advanceLabel: label,
+      canBack: step > 0 && stage !== 'done', back: () => this.setState({ step: { ...s.step, [s.flow]: step - 1 } }),
+      effects, ledger: s.ledger, ledgerCount: s.ledger.length, ledgerEmpty: !s.ledger.length
+    };
+  }
+}
+</script>
+</body>
+</html>

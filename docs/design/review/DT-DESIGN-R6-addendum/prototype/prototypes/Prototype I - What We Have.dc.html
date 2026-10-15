@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>What we have, and what shape it's in — LEGO Village</title>
+<script>document.documentElement.lang="en"</script>
+<script src="../dt/landing.js"></script>
+<script src="../dt/ledger.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../dt/tokens.css">
+<link rel="stylesheet" href="../dt/responsive.css">
+</helmet>
+<div class="dt-responsive-page" style="max-width:1180px;margin:0 auto;padding:28px 28px 48px;font-family:'Libre Franklin',sans-serif">
+  <header role="banner" style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--dt-ink);padding-bottom:10px;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;min-width:0;flex:1 1 320px">
+      <h1 style="font-family:'Spectral',serif;font-size:19px;font-weight:700;font-style:italic;white-space:nowrap;margin:0">What we have, and what shape it's in</h1>
+      <div style="font-size:11px;color:var(--dt-muted);letter-spacing:0.08em">I-01 · SETS · CANONICAL FOR DOGFOODING · SAID BY JAMES 09-18</div>
+    </div>
+    <nav aria-label="Sheet" style="display:flex;align-items:center;gap:12px">
+      <a href="../Hub.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">← HUB</a>
+      <a href="Prototype I2 - Documenting the Boxes.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">I-02 DOCUMENT A BOX</a>
+      <button onClick="{{ toggleTheme }}" aria-pressed="{{ dark }}" style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn)">{{ themeLabel }}</button>
+    </nav>
+  </header>
+
+  <div style="margin-top:16px;font-size:13.5px;line-height:1.6;max-width:72ch;text-wrap:pretty">Every set the village can draw on. Three facts per set, kept apart on purpose: <strong>do we have it</strong>, <strong>is it built</strong>, and — because a set can be in pieces and still not be yours to raid — <strong>can its pieces be used elsewhere</strong>. Tap any of them; the line underneath says what changes on the other sheets before you commit. Keeping pieces for a set is meant to be rare: every set held back is a set the parts list has to buy around.</div>
+
+  <div role="status" aria-live="polite" style="margin-top:14px;display:flex;gap:10px 22px;flex-wrap:wrap;align-items:baseline;border:1.5px solid var(--dt-ink);background:var(--dt-sheet);border-radius:var(--dt-r-fillet);padding:10px 14px;box-shadow:var(--dt-shadow)">
+    <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">RIGHT NOW</span>
+    <span style="font-size:13px"><strong>{{ nInHouse }}</strong> in the house</span>
+    <span style="font-size:13px"><strong>{{ nApproved }}</strong> approved to buy</span>
+    <span style="font-size:13px"><strong>{{ nStanding }}</strong> built and standing</span>
+    <span style="font-size:13px"><strong>{{ nFree }}</strong> with pieces free for other builds</span>
+    <span style="font-size:13px"><strong>{{ nKept }}</strong> held back</span>
+    <span style="font-size:11.5px;color:var(--dt-muted);margin-left:auto;text-wrap:pretty">{{ note }}</span>
+  </div>
+
+  <main style="margin-top:18px;display:grid;gap:12px">
+    <sc-for list="{{ sets }}" as="s" hint-placeholder-count="3">
+      <section id="{{ s.id }}" aria-labelledby="{{ s.hid }}" style="background-color:var(--dt-sheet);background-image:{{ s.hatch }};border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px;display:grid;grid-template-columns:minmax(0,1fr);gap:12px">
+        <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline">
+          <h2 id="{{ s.hid }}" style="font-family:'Spectral',serif;font-size:17px;font-weight:600;margin:0;display:flex;flex-wrap:wrap;gap:0 8px;align-items:baseline"><dc-import name="SetRef" num="{{ s.num }}" kind="set" label="{{ s.name }}" hint-size="auto,1em"></dc-import><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);font-weight:400">SET {{ s.num }}</span></h2>
+          <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:{{ s.provColor }};letter-spacing:0.06em">{{ s.provMark }} {{ s.prov }}</span>
+        </div>
+        <div style="font-size:12.5px;color:var(--dt-muted);line-height:1.5;text-wrap:pretty;max-width:80ch">{{ s.role }}</div>
+        <sc-if value="{{ s.hasGate }}" hint-placeholder-val="{{ false }}"><div style="display:inline-flex;justify-self:start;font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-pass);border:1.5px solid var(--dt-pass);border-radius:var(--dt-r-fillet);padding:3px 9px;letter-spacing:0.04em">{{ s.gateText }}</div></sc-if>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:10px 20px">
+          <sc-for list="{{ s.axes }}" as="a" hint-placeholder-count="3">
+            <div style="display:grid;gap:5px;align-content:start;opacity:{{ a.opacity }}">
+              <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">{{ a.question }}</div>
+              <div style="display:flex;gap:8px;align-items:baseline;flex-wrap:wrap">
+                <span style="font-family:'Spectral',serif;font-size:15px;font-weight:600;line-height:1.25">{{ a.current }}</span>
+                <sc-if value="{{ a.canChange }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ a.toggle }}" aria-expanded="{{ a.editing }}" aria-label="{{ a.editAria }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:var(--dt-accent-deep);background:transparent;border:1px solid var(--dt-accent);border-radius:var(--dt-r-fillet);padding:2px 8px;cursor:pointer">{{ a.editLabel }}</button>
+                </sc-if>
+              </div>
+              <sc-if value="{{ a.locked }}" hint-placeholder-val="{{ false }}"><div style="font-size:11px;color:var(--dt-muted);line-height:1.4;text-wrap:pretty">{{ a.lockWhy }}</div></sc-if>
+              <sc-if value="{{ a.editing }}" hint-placeholder-val="{{ false }}">
+                <div role="radiogroup" aria-label="{{ a.aria }}" style="display:grid;gap:4px;border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:7px 8px;margin-top:2px">
+                  <sc-for list="{{ a.opts }}" as="o" hint-placeholder-count="3">
+                    <button role="radio" aria-checked="{{ o.on }}" onClick="{{ o.pick }}" style="display:grid;gap:2px;text-align:left;font-family:'Libre Franklin';font-size:12px;padding:6px 9px;border-radius:var(--dt-r-fillet);cursor:pointer;border:1.5px solid {{ o.stroke }};background:{{ o.bg }};color:{{ o.fg }}">
+                      <span style="font-weight:600">{{ o.mark }} {{ o.label }}</span>
+                      <span style="font-size:11px;line-height:1.4;opacity:0.85;text-wrap:pretty">{{ o.tip }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ showConsequences }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;gap:5px;border-top:1px dashed var(--dt-grid-mid);padding-top:10px">
+            <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">WHAT THIS MEANS FOR THE PLAN</div>
+            <div style="font-size:12.5px;line-height:1.55;text-wrap:pretty;max-width:84ch">{{ s.means }}</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600">
+              <sc-for list="{{ s.links }}" as="l" hint-placeholder-count="2"><a href="{{ l.href }}" style="border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 8px;text-decoration:none;color:var(--dt-ink)">{{ l.label }}</a></sc-for>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ s.hasTrail }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;gap:3px;font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);border-top:1px dashed var(--dt-grid-mid);padding-top:8px">
+            <sc-for list="{{ s.trail }}" as="t" hint-placeholder-count="1"><span style="display:flex;gap:6px;flex-wrap:wrap"><span>{{ t.axis }} · was</span><span style="text-decoration:line-through">{{ t.was }}</span><span>→ now <strong>{{ t.now }}</strong> · {{ t.meta }}</span></span></sc-for>
+          </div>
+        </sc-if>
+      </section>
+    </sc-for>
+
+    <section aria-labelledby="h-parts" style="border:1.5px dashed var(--dt-grid-mid);border-radius:var(--dt-r-card);padding:14px 18px;display:grid;gap:6px">
+      <h2 id="h-parts" style="font-family:'Spectral',serif;font-size:15px;font-weight:600;margin:0">Parts on the way for the railbed — not sets</h2>
+      <div style="font-size:12.5px;color:var(--dt-muted);line-height:1.55;max-width:84ch;display:flex;flex-wrap:wrap;align-items:baseline;column-gap:0.28em"><sc-for list="{{ partsPre }}" as="w" hint-placeholder-count="4"><span>{{ w }}</span></sc-for><dc-import name="SetRef" num="741807" kind="moc" label="bl-741807" hint-size="auto,1em"></dc-import><sc-for list="{{ partsPost }}" as="w" hint-placeholder-count="30"><span>{{ w }}</span></sc-for></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600"><a href="Prototype C - Measurement to Procurement.dc.html" style="border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 8px;text-decoration:none;color:var(--dt-ink)">C-01 · PARTS BY BASIS ↗</a><a href="Prototype P - Procurement.dc.html" style="border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:2px 8px;text-decoration:none;color:var(--dt-ink)">P-01 · BUYING THE GAP ↗</a></div>
+    </section>
+  </main>
+
+  <footer style="margin-top:28px;border-top:1px solid var(--dt-grid-mid);padding-top:12px;display:grid;gap:6px;font-size:11.5px;color:var(--dt-muted);line-height:1.5">
+    <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em">SCHEMA THIS SHEET NEEDS</div>
+    <div style="text-wrap:pretty;max-width:90ch"><code>Set.have_state: owned · approved · planned · idea</code>, <code>Set.build_state: standing · apart · boxed</code>, <code>Set.pieces_available: free · kept</code> — three axes, never fused into one enum. Each carries provenance (who said so, when, how: said · receipt · photo). Build and pieces states exist only while owned; <code>standing</code> implies <code>kept</code>. Only <code>free</code> releases the set's inventory to <code>Earmark</code>. Measurements recorded on a set (M-01) survive taking it apart.</div>
+    <div>Inventory changes are append-only: a state change is a new row with the old one kept and struck, same as measurements.</div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;paper&quot;,&quot;blueprint&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto'|'paper'|'blueprint'&quot;,&quot;section&quot;:&quot;Sheet&quot;},&quot;showConsequences&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sheet&quot;},&quot;hatchCards&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sheet&quot;}}">
+class Component extends DCLogic {
+  HAVE = [
+    { k: 'owned', label: 'In the house', tip: 'We own it. Its pieces are ours to plan with.' },
+    { k: 'approved', label: 'Approved to buy', tip: 'James said yes. Plan on its pieces; do not buy them twice.' },
+    { k: 'planned', label: 'Planned', tip: 'On the list, not yet approved. Counts for nothing on C-01 until it is.' },
+    { k: 'idea', label: 'Just an idea', tip: 'Someone mentioned it. Nothing depends on it.' }
+  ];
+  BUILD = [
+    { k: 'standing', label: 'Built, standing', tip: 'Occupies its footprint. Its pieces are spoken for.' },
+    { k: 'apart', label: 'Taken apart', tip: 'Built once, now back in components. Pieces are free to use elsewhere.' },
+    { k: 'boxed', label: 'In the box, not built', tip: 'Never assembled. Every piece is known exactly from the set inventory.' }
+  ];
+  PIECES = [
+    { k: 'free', label: 'Free for other builds', tip: 'C-01 may offer these pieces to any design that needs them.' },
+    { k: 'kept', label: 'Kept for this set', tip: 'Reserved. Even in pieces, nothing else may plan on them — it goes back together as itself.' }
+  ];
+  SEED = [
+    { id: 'tree', num: '41843', name: 'Family Christmas Tree', have: 'owned', build: 'apart', pieces: 'kept', role: 'The centrepiece the railbed runs around. Rebuilt each season; its 16×16 base is the one fixed obstacle every layout check leans on.',
+      extra: { apart: ' The tree’s measured base (16×16 st · 40 br · r28 overhang, DEC-016) still stands — a measurement outlives the build.', standing: '', boxed: '' },
+      links: [{ label: 'M-01 · ITS MEASUREMENTS ↗', href: 'Prototype M - Measure and Check.dc.html#tree-base' }, { label: 'A-01 · FIT AROUND IT ↗', href: 'Prototype A - Layout Canvas.dc.html#fit' }] },
+    { id: 'train', num: '10361', name: 'Holiday Express Train', have: 'approved', build: null, role: 'Brings the 16-piece circular track (16 × 53400) and the engine. Nothing downstream — track fit, ballast, the siding — can be tested until it is here.',
+      pieces: 'kept', extra: {}, links: [{ label: 'C-01 · TRACK IT BRINGS ↗', href: 'Prototype C - Measurement to Procurement.dc.html' }, { label: 'LEGO LISTING ↗', href: 'https://www.lego.com/en-us/product/holiday-express-train-10361' }] },
+    { id: 'stand', num: '40776', name: 'Hot Chocolate Stand', have: 'owned', build: 'boxed', pieces: 'free', role: 'A small stand for the village. In the house, sealed. Could go up as designed, or lend its pieces to something the boys propose.',
+      extra: { boxed: ' Set facts (year, piece count, image) fill in from BrickLink on import — none are cached yet.' }, links: [{ label: 'F-01 · STICKERS THAT COULD USE IT ↗', href: '../F-01 Workbench Junior.dc.html' }] }
+  ];
+  state = { dark: null, st: Object.fromEntries(this.SEED.map(s => [s.id, { have: s.have, build: s.build, pieces: s.pieces }])), trail: {}, editing: null, note: 'Nothing changed yet. Everything here is as James said it on 09-18.' };
+  componentDidMount() { document.body.classList.toggle('dt-blueprint', this.isDark()); if (window.DTLedger) this._unsub = window.DTLedger.subscribe(() => this.forceUpdate()); }
+  ledgerFor(id) {
+    const L = window.DTLedger; if (!L || id !== 'tree') return null;
+    const f = L.fact('treeBase'), g = L.gate('hub-1'); if (!f && !g) return null;
+    const dims = f ? f.reservedStuds.w + ' × ' + f.reservedStuds.d + ' st of room · ' + f.height.bricks + ' br' + (f.height.plates ? ' + ' + f.height.plates + ' pl' : '') : '';
+    return { f, g, dims, prov: 'CHECKED ON THE TABLE · ' + ((f && f.by) || (g && g.by) || 'jfo').toUpperCase() + ' · TODAY · VIA ' + ((g && g.evidence) || 'I-03').toUpperCase().replace(' (BACKFILLED)', ''),
+      role: 'The centrepiece the railbed runs around. Rebuilt each season. Base measured: ' + dims + ' — the remembered 16 × 16 × 8 is struck on M-01, and Hub #1 is closed.',
+      extraApart: ' Its measured base (' + dims + ', DEC-040/041) stands — a measurement outlives the build.' };
+  }
+  componentDidUpdate() { document.body.classList.toggle('dt-blueprint', this.isDark()); }
+  isDark() { if (this.state.dark !== null) return this.state.dark; if (this.props.theme === 'blueprint') return true; if (this.props.theme === 'paper') return false; return typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches; }
+  means(s, have, build, pieces) {
+    const x = (s.extra || {})[build] || '';
+    const kept = pieces === 'kept';
+    if (have === 'owned') {
+      if (build === 'standing') return 'It holds its spot on the plan and its pieces are spoken for — C-01 will not offer them to any other build.' + x;
+      if (build === 'apart') return (kept
+        ? 'In pieces, but the pieces are not free: C-01 must treat them as spoken for, and A-01 keeps the footprint reserved — it goes back up as itself.'
+        : 'Its pieces are free: C-01 can list them as OWN · SET for other designs, and A-01 keeps its footprint only as a reservation.') + x;
+      if (build === 'boxed') return (kept
+        ? 'Sealed and reserved: every piece is known from the set inventory, but none are offered elsewhere — it goes up as designed.'
+        : 'Every piece is known exactly from the set inventory, and C-01 may offer them as OWN · SET to another design. If you decide it goes up as designed instead, keep them for this set.') + x;
+      return 'In the house. Say whether it is built so the parts list knows if its pieces are free.';
+    }
+    if (have === 'approved') return 'Plan on it. C-01 counts its pieces as “arrive with a set” — nothing to buy twice. Build state starts the day it lands; P-01 records the order.';
+    if (have === 'planned') return 'Counts for nothing yet. C-01 treats every piece as still to buy until James approves it.';
+    return 'Nothing depends on it. It is here so the idea is not lost.';
+  }
+  pick(id, axis, k, label, name) {
+    this.setState(st => {
+      const cur = st.st[id]; if (cur[axis] === k) return null;
+      const next = Object.assign({}, cur, { [axis]: k });
+      if (axis === 'have' && k !== 'owned') next.build = null;
+      if (axis === 'have' && k === 'owned' && !next.build) next.build = 'boxed';
+      const LIST = { have: this.HAVE, build: this.BUILD, pieces: this.PIECES }[axis];
+      const was = (LIST.find(o => o.k === cur[axis]) || { label: '—' }).label;
+      const line = { axis: { have: 'HAVE', build: 'BUILT', pieces: 'PIECES' }[axis], was: '“' + (was || '—') + '”', now: '“' + label + '”', meta: 'jfo · today · said, not checked' };
+      return { st: Object.assign({}, st.st, { [id]: next }), trail: Object.assign({}, st.trail, { [id]: (st.trail[id] || []).concat(line) }), note: name + ': ' + label.toLowerCase() + '. The old state is kept, struck through, below the card.' };
+    });
+  }
+  renderVals() {
+    const dark = this.isDark(), showC = this.props.showConsequences ?? true, st = this.state.st, ed = this.state.editing;
+    const partsPre = 'The MILS quarter-circle frames ('.split(' ');
+    const partsPost = '×4, colours adapted) and the ballast under the rail are bought as loose parts, so they live on the parts list, by basis, not here. Once a design is built from them it appears above as a thing we have.'.split(' ');
+    const sets = this.SEED.map(s => {
+      const c = st[s.id], owned = c.have === 'owned', trail = this.state.trail[s.id] || [];
+      const axis = (key, question, list, cur, locked, lockWhy) => {
+        const editing = ed === s.id + ':' + key;
+        return {
+          question, current: (list.find(o => o.k === cur) || { label: '—' }).label, aria: 'Change: ' + question.toLowerCase(),
+          canChange: !locked, locked: !!locked, lockWhy: lockWhy || '', opacity: locked ? 0.62 : 1, editing,
+          editLabel: editing ? '✕ KEEP IT' : 'CHANGE ▾', editAria: (editing ? 'Close the choices for: ' : 'Change: ') + question.toLowerCase(),
+          toggle: () => this.setState(x => ({ editing: x.editing === s.id + ':' + key ? null : s.id + ':' + key })),
+          opts: list.map(o => { const on = o.k === cur; return { label: o.label, tip: o.tip, on, mark: on ? '●' : '○',
+            stroke: on ? 'var(--dt-ink)' : 'var(--dt-grid-mid)', bg: on ? 'var(--dt-ink)' : 'transparent', fg: on ? 'var(--dt-on-ink)' : 'var(--dt-ink)',
+            pick: () => { this.pick(s.id, key, o.k, o.label, s.name); this.setState({ editing: null }); } }; })
+        };
+      };
+      const axes = [axis('have', 'DO WE HAVE IT?', this.HAVE, c.have)];
+      axes.push(axis('build', 'IS IT BUILT?', this.BUILD, owned ? c.build : null, !owned, 'Applies once it is in the house.'));
+      axes.push(axis('pieces', 'CAN ITS PIECES BE USED ELSEWHERE?', this.PIECES,
+        !owned ? null : c.build === 'standing' ? 'kept' : c.pieces,
+        !owned || c.build === 'standing',
+        !owned ? 'Applies once it is in the house.' : 'It is standing, so its pieces are spoken for.'));
+      const led = this.ledgerFor(s.id);
+      const sx = led ? Object.assign({}, s, { extra: Object.assign({}, s.extra, { apart: led.extraApart }) }) : s;
+      return {
+        axes,
+        id: s.id, hid: 'h-' + s.id, num: s.num, name: s.name, role: led ? led.role : s.role, prov: led ? led.prov : 'SAID BY JAMES · 09-18 · NOT YET CHECKED AGAINST THE SHELF', provColor: led ? 'var(--dt-pass)' : 'var(--dt-prov-deep)', provMark: led ? '■' : '◆',
+        hasGate: !!led, gateText: led ? '■ HUB #1 CLOSED — ' + ((led.g && led.g.summary) || 'base measured') : '',
+        hatch: (this.props.hatchCards ?? true) ? (c.have !== 'owned' ? 'var(--dt-hatch-draft)' : c.build === 'standing' ? 'var(--dt-hatch-ghost)' : c.pieces === 'kept' ? 'var(--dt-hatch-tint)' : 'var(--dt-hatch-cross)') : 'none',
+        means: this.means(sx, c.have, c.build, c.pieces), links: [{ label: 'I-03 · THE WHOLE SET ↗', href: 'Prototype I3 - One Set.dc.html?set=' + s.num + '&from=I-01' }].concat(s.links), hasTrail: trail.length > 0, trail
+      };
+    });
+    const vals = Object.values(st);
+    return {
+      dark, themeLabel: dark ? '☀ PAPER' : '☾ BLUEPRINT', toggleTheme: () => this.setState({ dark: !this.isDark() }),
+      hatchCards: this.props.hatchCards ?? true,
+      showConsequences: showC, sets, note: this.state.note, partsPre, partsPost,
+      nInHouse: vals.filter(v => v.have === 'owned').length, nApproved: vals.filter(v => v.have === 'approved').length,
+      nStanding: vals.filter(v => v.have === 'owned' && v.build === 'standing').length, nFree: vals.filter(v => v.have === 'owned' && v.build && v.build !== 'standing' && v.pieces === 'free').length,
+      nKept: vals.filter(v => v.have === 'owned' && v.build !== 'standing' && v.pieces === 'kept').length
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,3 +1,4 @@
 packages:
   - apps/*
   - packages/*
+  - docs/design/review/DT-DESIGN-R6-addendum/prototype

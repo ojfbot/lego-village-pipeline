@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>One set, everything we hold on it — LEGO Village</title>
+<script>document.documentElement.lang="en"</script>
+<script src="../dt/landing.js"></script>
+<script src="../dt/ledger.js"></script>
+<script src="../dt/overlay.js"></script>
+<script src="./image-slot.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../dt/tokens.css">
+<link rel="stylesheet" href="../dt/responsive.css">
+<style>@media (max-width:900px){.i3-split{grid-template-columns:minmax(0,1fr) !important}.i3-ident{grid-template-columns:minmax(0,1fr) !important}}</style>
+</helmet>
+<div class="dt-responsive-page" style="max-width:1180px;margin:0 auto;padding:28px 28px 48px;font-family:'Libre Franklin',sans-serif">
+  <header role="banner" style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--dt-ink);padding-bottom:10px;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;min-width:0;flex:1 1 320px">
+      <h1 style="font-family:'Spectral',serif;font-size:19px;font-weight:700;font-style:italic;margin:0;text-wrap:pretty">{{ setName }}</h1>
+      <div style="font-family:'Azeret Mono',monospace;font-size:11px;color:var(--dt-muted);letter-spacing:0.08em">I-03 · ONE SET · {{ setNum }} · MOCK FACTS</div>
+    </div>
+    <nav aria-label="Sheet" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <a href="../Hub.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">← HUB</a>
+      <a href="Prototype I - What We Have.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">I-01 ALL SETS</a>
+      <a href="Prototype I2 - Documenting the Boxes.dc.html" style="font-family:'Azeret Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap">I-02 DOCUMENT A BOX</a>
+      <button onClick="{{ toggleTheme }}" aria-pressed="{{ dark }}" style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:6px 12px;cursor:pointer;border-radius:var(--dt-r-btn)">{{ themeLabel }}</button>
+    </nav>
+  </header>
+
+  <div role="group" aria-label="Which set" style="margin-top:12px;display:flex;gap:7px;flex-wrap:wrap;align-items:center">
+    <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--dt-muted)">SET</span>
+    <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+      <button onClick="{{ t.pick }}" aria-pressed="{{ t.on }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;border:1.5px {{ t.border }} {{ t.stroke }};border-radius:var(--dt-r-pill);padding:6px 13px;cursor:pointer;background:{{ t.bg }};color:{{ t.fg }};min-height:34px">{{ t.label }}</button>
+    </sc-for>
+  </div>
+
+  <div style="margin-top:14px;font-size:13.5px;line-height:1.6;max-width:76ch;text-wrap:pretty">Everything we hold on this one set, in one place: the facts we fetched, what state it's in, every measurement, every photo, and every time someone has <strong>handled it</strong>. Handling it is a record too — when you take it off the shelf for any reason, this page walks you through writing down what you found while you have it in your hands.</div>
+
+  <section class="i3-ident" aria-labelledby="h-ident" style="margin-top:16px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:16px 22px;background-color:var(--dt-sheet);background-image:{{ identHatch }};border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:18px 20px">
+    <div style="display:grid;gap:8px;align-content:start">
+      <div style="width:100%;aspect-ratio:1;background:var(--dt-bg);border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);overflow:hidden"><image-slot id="{{ slotId }}" shape="rounded" radius="3" fit="contain" placeholder="Set image — drop the BrickLink box art here"></image-slot></div>
+      <div style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted);line-height:1.5">{{ imageNote }}</div>
+    </div>
+    <div style="display:grid;gap:12px;align-content:start;min-width:0">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline">
+        <h2 id="h-ident" style="font-family:'Spectral',serif;font-size:22px;font-weight:600;margin:0;line-height:1.2"><dc-import name="SetRef" num="{{ setNum }}" kind="set" label="{{ setName }}" hint-size="auto,1em"></dc-import></h2>
+        <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-prov-deep);letter-spacing:0.06em">◆ {{ factsProv }}</span>
+      </div>
+      <dl style="margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:8px 18px">
+        <sc-for list="{{ facts }}" as="f" hint-placeholder-count="5">
+          <div style="display:grid;gap:2px;min-width:0"><dt style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)">{{ f.k }}</dt><dd style="margin:0;font-size:13.5px;font-weight:600;color:{{ f.color }};text-wrap:pretty">{{ f.v }}</dd></div>
+        </sc-for>
+      </dl>
+      <div style="font-size:12.5px;color:var(--dt-muted);line-height:1.5;text-wrap:pretty;max-width:80ch">{{ role }}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:8px 18px;border-top:1px dashed var(--dt-grid-mid);padding-top:10px">
+        <sc-for list="{{ axes }}" as="a" hint-placeholder-count="3">
+          <div style="display:grid;gap:3px"><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)">{{ a.q }}</span><span style="font-family:'Spectral',serif;font-size:15px;font-weight:600;line-height:1.25;opacity:{{ a.opacity }}">{{ a.v }}</span><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;color:var(--dt-muted)">{{ a.prov }}</span></div>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600">
+        <a href="{{ i01Href }}" style="border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:3px 8px;text-decoration:none;color:var(--dt-ink)">I-01 · CHANGE ITS STATE ↗</a>
+        <a href="{{ blHref }}" target="_blank" rel="noopener" style="border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:3px 8px;text-decoration:none;color:var(--dt-ink)">BRICKLINK ↗</a>
+        <a href="{{ rbHref }}" target="_blank" rel="noopener" style="border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:3px 8px;text-decoration:none;color:var(--dt-ink)">REBRICKABLE ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="i3-split" style="margin-top:16px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px;align-items:start">
+    <div style="display:grid;gap:16px;min-width:0">
+      <section id="touch" aria-labelledby="h-touch" style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1.5px solid {{ touchStroke }};border-radius:var(--dt-r-card);box-shadow:var(--dt-shadow);padding:16px 18px;display:grid;gap:14px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap">
+          <h2 id="h-touch" style="font-family:'Spectral',serif;font-size:16.5px;font-weight:600;margin:0">{{ touchTitle }}</h2>
+          <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:{{ touchTagColor }}">{{ touchTag }}</span>
+        </div>
+        <sc-if value="{{ touchIdle }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:12.5px;color:var(--dt-muted);line-height:1.5;text-wrap:pretty">{{ idleBlurb }}</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button onClick="{{ startTouch }}" style="font-family:'Libre Franklin';font-size:13px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;border-radius:var(--dt-r-pill);padding:10px 18px;min-height:44px;cursor:pointer;box-shadow:var(--dt-btn-shadow)">I have it in my hands →</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ touchOpen }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;gap:5px;border:1.5px dashed var(--dt-accent);background:var(--dt-bg);border-radius:var(--dt-r-fillet);padding:10px 12px">
+            <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-accent-deep)">WHY YOU HAVE IT OUT</span>
+            <span style="font-size:13px;line-height:1.45;text-wrap:pretty">{{ reasonText }}</span>
+            <span style="font-size:11.5px;color:var(--dt-muted);line-height:1.45;text-wrap:pretty">{{ reasonHint }}</span>
+          </div>
+
+          <div style="display:grid;gap:8px">
+            <div style="display:flex;gap:10px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;width:22px;height:22px;border-radius:50%;background:var(--dt-ink);color:var(--dt-on-ink);display:grid;place-items:center;flex:none">1</span><span style="font-size:13.5px;font-weight:600">Where is it kept?</span><span style="font-size:11.5px;color:var(--dt-muted)">so the next touch starts by walking to the right shelf</span></div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;padding-left:32px">
+              <sc-for list="{{ places }}" as="p" hint-placeholder-count="4"><button onClick="{{ p.pick }}" aria-pressed="{{ p.on }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;border:1.5px {{ p.border }} {{ p.stroke }};border-radius:var(--dt-r-pill);padding:7px 14px;min-height:38px;cursor:pointer;background:{{ p.bg }};color:{{ p.fg }}">{{ p.label }}</button></sc-for>
+              <input type="text" value="{{ placeFree }}" onChange="{{ setPlaceFree }}" placeholder="or type where…" aria-label="Where the set is kept" style="font-family:'Libre Franklin';font-size:12.5px;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-pill);padding:6px 12px;min-height:38px;box-sizing:border-box;width:190px">
+            </div>
+          </div>
+
+          <div style="display:grid;gap:8px">
+            <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;width:22px;height:22px;border-radius:50%;background:var(--dt-ink);color:var(--dt-on-ink);display:grid;place-items:center;flex:none">2</span><span style="font-size:13.5px;font-weight:600">Unpack it — how does it sit right now?</span><span style="font-size:11.5px;color:var(--dt-muted)">a photo before you move anything is the honest record</span></div>
+            <div style="display:grid;gap:8px;padding-left:32px">
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,88px),1fr));gap:8px">
+                <sc-for list="{{ sitsPhotos }}" as="ph" hint-placeholder-count="0">
+                  <div style="position:relative;aspect-ratio:1;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);overflow:hidden;background-color:var(--dt-grid-mid);background-size:cover;background-position:center;background-image:url({{ ph.url }})" role="img" aria-label="{{ ph.name }}">
+                    <button onClick="{{ ph.drop }}" aria-label="{{ ph.dropAria }}" style="position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:var(--dt-sheet);color:var(--dt-ink);border:1px solid var(--dt-ink);font-family:'Azeret Mono',monospace;font-size:11px;cursor:pointer;display:grid;place-items:center">✕</button>
+                  </div>
+                </sc-for>
+                <label style="position:relative;aspect-ratio:1;display:grid;place-items:center;text-align:center;gap:4px;font-family:'Libre Franklin';font-size:12px;font-weight:600;color:var(--dt-ink);border:1.5px dashed var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-bg);cursor:pointer;padding:6px">{{ sitsLabel }}
+                  <input type="file" accept="image/*" capture="environment" multiple="{{ true }}" onChange="{{ pickSits }}" aria-label="Photograph how the set sits right now" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer">
+                </label>
+              </div>
+              <sc-if value="{{ hasComponents }}" hint-placeholder-val="{{ true }}">
+                <div style="display:grid;gap:6px">
+                  <div style="display:flex;gap:8px;align-items:baseline;flex-wrap:wrap"><span style="font-size:12.5px">Which parts of it are still together?</span><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;letter-spacing:0.08em;color:var(--dt-prov-deep)">◇ LIST IS MY GUESS FROM THE INSTRUCTIONS — CORRECT IT</span></div>
+                  <div style="display:grid;gap:4px">
+                    <sc-for list="{{ components }}" as="c" hint-placeholder-count="5">
+                      <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;border:1px dashed var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:5px 8px 5px 10px">
+                        <span style="font-size:12.5px;min-width:0;text-wrap:pretty">{{ c.name }} <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">{{ c.hint }}</span></span>
+                        <div role="radiogroup" aria-label="{{ c.aria }}" style="display:flex;gap:4px">
+                          <sc-for list="{{ c.opts }}" as="o" hint-placeholder-count="3"><button role="radio" aria-checked="{{ o.on }}" onClick="{{ o.pick }}" title="{{ o.tip }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;border:1.5px solid {{ o.stroke }};border-radius:var(--dt-r-pill);padding:0 10px;min-height:34px;cursor:pointer;background:{{ o.bg }};color:{{ o.fg }};white-space:nowrap">{{ o.label }}</button></sc-for>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+
+          <sc-if value="{{ hasMeasure }}" hint-placeholder-val="{{ true }}">
+            <div style="display:grid;gap:8px">
+              <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;width:22px;height:22px;border-radius:50%;background:var(--dt-accent);color:var(--dt-on-ink);display:grid;place-items:center;flex:none">3</span><span style="font-size:13.5px;font-weight:600">{{ measureTitle }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-prov-deep)">{{ measureWas }}</span></div>
+              <div style="display:grid;gap:10px;padding-left:32px">
+                <div style="font-size:12px;color:var(--dt-muted);line-height:1.5;text-wrap:pretty">{{ measureHow }}</div>
+                <div style="display:grid;gap:4px">
+                  <div style="font-size:12.5px;font-weight:600;line-height:1.4">Room it needs <span style="font-weight:400;color:var(--dt-muted)">— out to whatever sticks out furthest</span></div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,110px),1fr));gap:8px">
+                  <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted);min-width:0">ACROSS · STUDS<input type="number" step="1" min="1" value="{{ mRW }}" onChange="{{ setRW }}" aria-label="Reserved width in studs" style="font-family:'Azeret Mono',monospace;font-size:17px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:9px 10px;min-height:44px;width:100%;box-sizing:border-box"></label>
+                  <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted);min-width:0">FRONT TO BACK · STUDS<input type="number" step="1" min="1" value="{{ mRD }}" onChange="{{ setRD }}" aria-label="Reserved depth in studs" style="font-family:'Azeret Mono',monospace;font-size:17px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:9px 10px;min-height:44px;width:100%;box-sizing:border-box"></label>
+                </div>
+                <dc-import name="HeightField" subject="the base" bricks="{{ mH }}" plates="{{ mHP }}" on-bricks="{{ setH }}" on-plates="{{ setHP }}" hint-size="100%,120px"></dc-import>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,110px),1fr));gap:8px">
+                  <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted);min-width:0">MEASURED WITH<select value="{{ mTool }}" onChange="{{ setTool }}" style="font-family:'Libre Franklin';font-size:12.5px;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:9px 9px;min-height:44px;width:100%;box-sizing:border-box"><option value="studs">Counted studs / bricks</option><option value="tape">Tape measure</option><option value="calipers">Calipers</option><option value="photo">Photo with overlay</option></select></label>
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                  <sc-for list="{{ measPhotos }}" as="ph" hint-placeholder-count="0">
+                    <div style="display:flex;align-items:center;gap:8px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-bg);padding:5px 7px;min-width:0">
+                      <div role="img" aria-label="Thumbnail" style="width:26px;height:26px;border-radius:3px;flex:none;background-color:var(--dt-grid-mid);background-size:cover;background-position:center;background-image:url({{ ph.url }})"></div>
+                      <span style="font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px">{{ ph.name }}</span>
+                      <button onClick="{{ ph.drop }}" aria-label="{{ ph.dropAria }}" style="font-family:'Azeret Mono',monospace;font-size:11px;background:transparent;border:0;color:var(--dt-muted);cursor:pointer;padding:0 2px">✕</button>
+                    </div>
+                  </sc-for>
+                  <label style="position:relative;display:flex;align-items:center;font-family:'Libre Franklin';font-size:12px;font-weight:600;color:var(--dt-ink);border:1.5px dashed var(--dt-ink);border-radius:var(--dt-r-fillet);padding:8px 12px;min-height:38px;box-sizing:border-box;cursor:pointer">{{ measPickLabel }}<input type="file" accept="image/*" capture="environment" multiple="{{ true }}" onChange="{{ pickMeas }}" aria-label="Photo of the tape or the counted studs" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer"></label>
+                </div>
+                <div style="font-size:12px;color:var(--dt-accent-deep);line-height:1.5;text-wrap:pretty">{{ measureSays }}</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <div style="display:grid;gap:8px">
+            <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;width:22px;height:22px;border-radius:50%;background:var(--dt-ink);color:var(--dt-on-ink);display:grid;place-items:center;flex:none">{{ noticeStep }}</span><span style="font-size:13.5px;font-weight:600">Anything else you noticed?</span><span style="font-size:11.5px;color:var(--dt-muted)">optional — a missing piece, a cracked part, a loose bag</span></div>
+            <div style="display:grid;gap:6px;padding-left:32px">
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <sc-for list="{{ notices }}" as="n" hint-placeholder-count="4"><button onClick="{{ n.pick }}" aria-pressed="{{ n.on }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;border:1.5px {{ n.border }} {{ n.stroke }};border-radius:var(--dt-r-pill);padding:6px 13px;min-height:36px;cursor:pointer;background:{{ n.bg }};color:{{ n.fg }}">{{ n.label }}</button></sc-for>
+              </div>
+              <textarea value="{{ notes }}" onChange="{{ setNotes }}" rows="2" placeholder="in your words — e.g. the star is in the ornaments bag, not on the top tier" aria-label="Anything else you noticed" style="font-family:'Libre Franklin';font-size:12.5px;padding:8px 10px;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background:var(--dt-bg);color:var(--dt-ink);resize:vertical;width:100%;box-sizing:border-box"></textarea>
+            </div>
+          </div>
+
+          <div role="status" aria-live="polite" style="border:1.5px dashed var(--dt-accent);background:var(--dt-bg);border-radius:var(--dt-r-fillet);padding:11px 13px;display:grid;gap:9px">
+            <span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.08em;color:var(--dt-accent-deep)">◇ BEFORE IT'S RECORDED — WHAT I HEARD</span>
+            <div style="display:grid;gap:4px;font-size:12.5px;line-height:1.5">
+              <sc-for list="{{ restate }}" as="r" hint-placeholder-count="5"><div style="display:flex;gap:8px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:{{ r.color }};white-space:nowrap;min-width:84px">{{ r.tag }}</span><span style="text-wrap:pretty">{{ r.text }}</span></div></sc-for>
+            </div>
+            <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap;border-top:1px dashed var(--dt-grid-mid);padding-top:9px">
+              <label style="display:grid;gap:5px;font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">SIGN IT<input type="text" value="{{ sig }}" onChange="{{ setSig }}" placeholder="jfo" maxlength="5" aria-label="Your initials — signs this touch" style="font-family:'Azeret Mono',monospace;font-size:14px;font-weight:600;background:var(--dt-bg);color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);padding:8px 10px;min-height:44px;width:84px;box-sizing:border-box"></label>
+              <button onClick="{{ commit }}" disabled="{{ notReady }}" title="{{ commitTitle }}" style="font-family:'Libre Franklin';font-size:13px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;border-radius:var(--dt-r-pill);padding:10px 18px;min-height:44px;cursor:{{ commitCursor }};opacity:{{ commitOpacity }};box-shadow:var(--dt-btn-shadow)">Record this touch</button>
+              <button onClick="{{ cancelTouch }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-pill);padding:9px 15px;min-height:44px;cursor:pointer">Put it back, record nothing</button>
+              <span style="font-size:11px;color:var(--dt-muted);text-wrap:pretty;flex:1 1 200px">{{ missing }}</span>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ touchDone }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;gap:8px;border:1.5px solid var(--dt-pass);background:var(--dt-pass-bg);border-radius:var(--dt-r-fillet);padding:11px 13px">
+            <span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.08em;color:var(--dt-pass)">■ RECORDED · {{ doneStamp }}</span>
+            <div style="font-size:12.5px;line-height:1.5;text-wrap:pretty">{{ doneText }}</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600">
+              <sc-for list="{{ ripples }}" as="l" hint-placeholder-count="3"><a href="{{ l.href }}" style="border:1px dashed var(--dt-muted);border-radius:var(--dt-r-fillet);padding:3px 8px;text-decoration:none;color:var(--dt-ink)">{{ l.label }}</a></sc-for>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><a href="../Hub.dc.html" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border-radius:var(--dt-r-pill);padding:9px 16px;text-decoration:none;box-shadow:var(--dt-btn-shadow)">← Back to the Hub</a><button onClick="{{ replay }}" style="font-family:'Libre Franklin';font-size:12.5px;font-weight:600;background:transparent;color:var(--dt-accent-deep);border:1.5px dashed var(--dt-accent);border-radius:var(--dt-r-pill);padding:8px 15px;cursor:pointer">{{ replayLabel }}</button></div>
+            <div style="font-size:10.5px;color:var(--dt-muted);line-height:1.4;text-wrap:pretty">Replaying is a demo control only — it reopens this flow as if unsolved so you can test or present it again. It never edits or removes what is already recorded; a replay just adds the next touch.</div>
+          </div>
+        </sc-if>
+        <div aria-live="polite" style="font-size:11.5px;color:var(--dt-muted);min-height:15px;line-height:1.45;text-wrap:pretty">{{ note }}</div>
+      </section>
+
+    </div>
+
+    <div style="display:grid;gap:16px;min-width:0">
+      <section aria-labelledby="h-meas" style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px;display:grid;gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h2 id="h-meas" style="font-family:'Spectral',serif;font-size:15.5px;font-weight:600;margin:0">Its measurements</h2><a href="{{ m01Href }}" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;text-decoration:none">M-01 · MEASURE AND CHECK ↗</a></div>
+        <div style="font-size:11.5px;color:var(--dt-muted);line-height:1.5;text-wrap:pretty">Numbers the plan leans on, with how we know each. A measurement outlives taking the set apart.</div>
+        <sc-if value="{{ noMeasures }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:var(--dt-muted)">Nothing measured on this set yet. Its footprint comes from the set inventory until someone puts a tape on it.</div></sc-if>
+        <div style="display:grid;gap:5px">
+          <sc-for list="{{ measures }}" as="m" hint-placeholder-count="4">
+            <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:baseline;border-bottom:1px dashed var(--dt-grid-mid);padding:6px 0;animation:{{ m.anim }}">
+              <span style="display:grid;gap:2px;min-width:0"><span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:{{ m.color }}">{{ m.badge }}</span><span style="font-size:12.5px;font-weight:600;line-height:1.3">{{ m.name }}</span></span>
+              <span style="display:grid;gap:2px;justify-items:end;text-align:right"><span style="font-family:'Azeret Mono',monospace;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap">{{ m.value }}</span><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;color:var(--dt-muted);text-wrap:pretty;max-width:170px">{{ m.meta }}</span></span>
+              <sc-if value="{{ m.hasWas }}" hint-placeholder-val="{{ false }}"><span style="grid-column:1 / -1;font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted);text-decoration:line-through">{{ m.was }}</span></sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section aria-labelledby="h-photos" style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px;display:grid;gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h2 id="h-photos" style="font-family:'Spectral',serif;font-size:15.5px;font-weight:600;margin:0">Photos of it</h2><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">{{ photoCount }}</span></div>
+        <div style="font-size:11.5px;color:var(--dt-muted);line-height:1.5;text-wrap:pretty">Every photo says when it was taken, by whom, and which touch it belongs to. The box art is the reference; these are the truth.</div>
+        <sc-if value="{{ noPhotos }}" hint-placeholder-val="{{ false }}"><div style="border:1.5px dashed var(--dt-unres);border-radius:var(--dt-r-fillet);padding:12px;font-size:12px;color:var(--dt-muted);text-wrap:pretty">No photos yet — this set exists here only as words. The first touch fixes that.</div></sc-if>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,120px),1fr));gap:10px">
+          <sc-for list="{{ photos }}" as="p" hint-placeholder-count="0">
+            <figure style="margin:0;display:grid;gap:4px">
+              <div role="img" aria-label="{{ p.caption }}" style="aspect-ratio:1;border:1px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background-color:var(--dt-grid-mid);background-size:cover;background-position:center;background-image:url({{ p.url }})"></div>
+              <figcaption style="display:grid;gap:1px"><span style="font-size:11.5px;line-height:1.35;text-wrap:pretty">{{ p.caption }}</span><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;color:var(--dt-muted)">{{ p.meta }}</span></figcaption>
+            </figure>
+          </sc-for>
+        </div>
+      </section>
+
+      <sc-if value="{{ hasComponents }}" hint-placeholder-val="{{ true }}">
+        <section aria-labelledby="h-comp" style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px;display:grid;gap:10px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h2 id="h-comp" style="font-family:'Spectral',serif;font-size:15.5px;font-weight:600;margin:0">What state its parts are in</h2><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:{{ compProvColor }}">{{ compProv }}</span></div>
+          <div style="font-size:11.5px;color:var(--dt-muted);line-height:1.5;text-wrap:pretty">"Taken apart" is one word for many states. This is which sub-assemblies are still built, so a rebuild knows where to start and a fit check knows the base is real.</div>
+          <div style="display:grid;gap:4px">
+            <sc-for list="{{ compRows }}" as="c" hint-placeholder-count="5"><div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;border-bottom:1px dashed var(--dt-grid-mid);padding:5px 0;font-size:12.5px"><span style="text-wrap:pretty">{{ c.name }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:{{ c.color }};white-space:nowrap">{{ c.state }}</span></div></sc-for>
+          </div>
+        </section>
+      </sc-if>
+
+      <section aria-labelledby="h-hist" style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:16px 18px;display:grid;gap:10px">
+        <h2 id="h-hist" style="font-family:'Spectral',serif;font-size:15.5px;font-weight:600;margin:0">Its history with us</h2>
+        <div style="font-size:11.5px;color:var(--dt-muted);line-height:1.5;text-wrap:pretty">Newest first. Nothing is edited — a correction is a new line that points at the old one.</div>
+        <ol style="list-style:none;margin:0;padding:0;display:grid;gap:0">
+          <sc-for list="{{ history }}" as="h" hint-placeholder-count="5">
+            <li style="border-bottom:1px dashed var(--dt-grid-mid);animation:{{ h.anim }}">
+              <button onClick="{{ h.open }}" aria-label="{{ h.openAria }}" style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:0 12px;width:100%;text-align:left;background:transparent;border:0;padding:7px 2px;cursor:pointer;color:var(--dt-ink);font-family:'Libre Franklin',sans-serif" style-hover="background:var(--dt-bg)">
+                <span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);white-space:nowrap;padding-top:2px;min-width:78px">{{ h.when }}</span>
+                <span style="display:grid;gap:3px;min-width:0"><span style="font-size:12.5px;line-height:1.45;text-wrap:pretty">{{ h.text }}</span><span style="display:flex;gap:6px;flex-wrap:wrap;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;letter-spacing:0.06em;color:{{ h.color }};border:1px solid {{ h.color }};border-radius:var(--dt-r-pill);padding:1px 7px;white-space:nowrap">{{ h.kind }}</span><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;color:var(--dt-muted)">{{ h.by }}</span></span></span>
+                <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted);white-space:nowrap;align-self:center">{{ h.openLabel }}</span>
+              </button>
+            </li>
+          </sc-for>
+        </ol>
+      </section>
+    </div>
+  </div>
+
+  <sc-if value="{{ inspectOpen }}" hint-placeholder-val="{{ false }}">
+    <div role="dialog" aria-modal="true" aria-label="{{ inspect.title }}" onClick="{{ closeInspect }}" style="position:fixed;inset:0;background:rgba(20,18,14,0.55);display:grid;place-items:center;padding:24px;z-index:60">
+      <div onClick="{{ stopClick }}" style="background-color:var(--dt-sheet);background-image:var(--dt-hatch-card);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);box-shadow:var(--dt-shadow);width:min(560px,100%);max-height:min(78vh,720px);display:grid;grid-template-rows:auto minmax(0,1fr);overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:14px 18px;border-bottom:1.5px solid var(--dt-ink)">
+          <div style="display:grid;gap:2px;min-width:0">
+            <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--dt-muted)">{{ inspect.kicker }}</span>
+            <span style="font-family:'Spectral',serif;font-size:16px;font-weight:600;line-height:1.3;text-wrap:pretty">{{ inspect.title }}</span>
+          </div>
+          <button onClick="{{ closeInspect }}" aria-label="Close" style="font-family:'Azeret Mono',monospace;font-size:13px;background:transparent;border:1.5px solid var(--dt-ink);border-radius:50%;width:30px;height:30px;cursor:pointer;color:var(--dt-ink);flex:none">✕</button>
+        </div>
+        <div style="overflow:auto;padding:14px 18px 18px;display:grid;gap:12px;align-content:start">
+          <div style="font-size:12.5px;line-height:1.5;text-wrap:pretty">{{ inspect.text }}</div>
+          <sc-for list="{{ inspect.rows }}" as="r" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:96px minmax(0,1fr);gap:4px 12px;align-items:baseline;border-top:1px dashed var(--dt-grid-mid);padding-top:8px">
+              <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">{{ r.label }}</span>
+              <span style="font-size:12.5px;line-height:1.5;text-wrap:pretty">{{ r.value }}</span>
+            </div>
+          </sc-for>
+          <sc-if value="{{ inspect.hasPhotos }}" hint-placeholder-val="{{ false }}">
+            <div style="display:grid;gap:6px;border-top:1px dashed var(--dt-grid-mid);padding-top:8px">
+              <span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">PHOTOS FROM THIS TOUCH</span>
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,96px),1fr));gap:8px">
+                <sc-for list="{{ inspect.photos }}" as="ph" hint-placeholder-count="2">
+                  <figure style="margin:0;display:grid;gap:3px">
+                    <div role="img" aria-label="{{ ph.caption }}" style="aspect-ratio:1;border:1px solid var(--dt-ink);border-radius:var(--dt-r-fillet);background-color:var(--dt-grid-mid);background-size:cover;background-position:center;background-image:url({{ ph.url }})"></div>
+                    <figcaption style="font-family:'Azeret Mono',monospace;font-size:8.5px;color:var(--dt-muted);line-height:1.35">{{ ph.caption }}</figcaption>
+                  </figure>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <div style="font-size:11px;color:var(--dt-muted);line-height:1.45;text-wrap:pretty;border-top:1px dashed var(--dt-grid-mid);padding-top:8px">{{ inspect.footnote }}</div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <footer style="margin-top:26px;border-top:1px solid var(--dt-grid-mid);padding-top:12px;display:grid;gap:6px;font-size:11.5px;color:var(--dt-muted);line-height:1.5">
+    <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;letter-spacing:0.1em">SCHEMA THIS SHEET NEEDS</div>
+    <div style="text-wrap:pretty;max-width:96ch">The reason travels in the link (<code>?set=&amp;why=&amp;from=&amp;task=</code>) and is recorded on the touch, so the inventory log says <em>why</em> the set was handled, not just that it was. A <code>Touch { set, reason: task_ref | why_code | 'documenting', by, started_at, ended_at, location, photos[], component_states[], measurements[], notices[], notes }</code> is one session of handling the physical set; it is the parent of everything captured while it was in hand. Existing sheets keep their own records — <code>Measurement</code> (M-01) and the <code>Set</code> axes (I-01) are written <em>through</em> a touch, each carrying <code>touch_ref</code> as its evidence, so "how do we know the base is 16 wide" answers "James had it out on 09-18, here are the photos". Also: <code>Set.location</code> (with provenance), <code>Set.components[] { name, source: instructions | operator, state: together | apart | missing }</code>, <code>Photo { subject, touch_ref, taken_at, by, caption }</code>, and <code>SetFacts { source: bricklink, fetched_at, year, pieces, theme, image }</code> as a cached reference distinct from what we observe.</div>
+    <div>I-02 is how a set gets <em>into</em> I-01 (photo → read → confirm). This page is what one set looks like once it is there, and the touch is how its record grows without a separate form for each fact. Facts here are mocks; the tree's DEC-016 numbers are real.</div>
+    <div><strong>Canonical vs. demo, on purpose.</strong> Every recorded touch is saved to this browser (append-only, keyed by set) and survives a page reload, a forced error, or clicking "Replay this touch (demo)" — replay only reopens the capture flow to run it again; it never edits or deletes a prior touch. In production this canon lives in the database behind <code>Touch</code>, not in the browser — this is a prototype stand-in for durable storage, chosen so dogfooding the tree unpack today keeps its data through however many demo resets this session needs.</div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;paper&quot;,&quot;blueprint&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto'|'paper'|'blueprint'&quot;,&quot;section&quot;:&quot;Sheet&quot;},&quot;set&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;41843&quot;,&quot;10361&quot;,&quot;40776&quot;],&quot;default&quot;:&quot;41843&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Sheet&quot;},&quot;showComponents&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sheet&quot;}}">
+class Component extends DCLogic {
+  SETS = {
+    '41843': { name: 'Family Christmas Tree', facts: [['YEAR', '2023'], ['PIECES', '1,006'], ['THEME', 'Seasonal'], ['CACHED', 'BrickLink · 09-17']], factsProv: 'FACTS FROM BRICKLINK · CACHED 09-17', role: 'The centrepiece the railbed runs around. Rebuilt each season; its 16×16 base is the one fixed obstacle every layout check leans on.',
+      have: 'In the house', build: 'Taken apart into components', pieces: 'Kept for this set', stateProv: 'said by James · 09-18',
+      components: [['Base and stand', '8 br tall · the fit check needs this one'], ['Trunk core', 'Technic column the tiers slide onto'], ['Lower branch tier', 'the widest — sets the r28 overhang'], ['Upper branch tier', ''], ['Star and ornaments', 'small bag']],
+      measures: [
+        { id: 'base', name: 'Base — room it needs, height', value: '16 × 16 st × 8 br', status: 'remembered', meta: 'from memory · James · 09-17 · A-01, C-01, F-01 lean on it', was: '' },
+        { id: 'h', name: 'Height to the star', value: '40 br', status: 'measured', meta: 'counted courses · James · 09-17 · 960 LDU', was: '' },
+        { id: 'over', name: 'Branch overhang radius', value: 'r28 st', status: 'measured', meta: 'tape · James · 09-17 · 560 LDU', was: '' },
+        { id: 'clear', name: 'Clear height under lowest branches', value: '10 br', status: 'measured', meta: 'tape · James · 09-17 · 240 LDU', was: '' }
+      ],
+      history: [
+        { when: '09-18', text: 'Taken apart into components; pieces kept for the set — it goes back up as itself.', kind: 'SAID', by: 'James · I-01', detail: { reason: 'Setting the inventory axes for dogfooding', from: 'I-01', task: 'DEC-038 · DEC-039', place: '—', signed: 'jfo', notes: 'have: in the house · built: taken apart · pieces: kept for this set. Keeping the pieces back is deliberate and rare — every held set is one the parts list must buy around.', provenance: 'said by James · not yet checked against the shelf', photoNames: [], photoCount: 0 } },
+        { when: '09-17 15:56', text: 'Height, overhang and clear height measured on the built tree; base written down from memory (DEC-016).', kind: 'MEASURED', by: 'James · M-01', detail: { reason: 'First real numbers for the fit checks', from: 'M-01', task: 'DEC-016', place: 'the living room table', tool: 'counted courses and tape', signed: 'James', measured: '40 br to the star · r28 st overhang · 10 br clear under the branches', ldu: '960 · 560 · 240 LDU', supersedes: '', notes: 'The base was never put under a tape — 16 × 16 × 8 went down from memory, which is why Hub #1 asks for it.', provenance: 'measured for three of four numbers; the base is remembered', photoNames: [], photoCount: 0 } },
+        { when: '2024-12', text: 'Stood in the village through the season. Second year up.', kind: 'SAID', by: 'James', detail: { reason: 'Recalled, not recorded at the time', from: 'conversation · 09-17', task: '—', place: 'the village, that season', signed: 'James', notes: 'Nothing was measured or photographed that year.', provenance: 'said · never checked against anything', photoNames: [], photoCount: 0 } },
+        { when: '2023-12', text: 'Bought and built the week it came out.', kind: 'SAID', by: 'James', detail: { reason: 'Recalled, not recorded at the time', from: 'conversation · 09-17', task: '—', place: 'the living room, that year', signed: 'James', notes: 'The first Christmas it went up. No photos were taken of the build.', photoNames: [], photoCount: 0, provenance: 'said · never checked against anything' } }
+      ],
+      photos: [], task: { id: 'tree', text: 'Hub · #1 — Measure the Christmas tree’s base. Three sheets are waiting on the base being real, not remembered.', hint: 'Since you have it out anyway: a photo of how it sits, and which parts are still together, cost nothing extra and are the first record of this set beyond words.' } },
+    '10361': { name: 'Holiday Express Train', facts: [['YEAR', '2025'], ['PIECES', '956'], ['PRICE', '$129.99 at LEGO'], ['TRACK', '16 × R40 curves = one circle']], factsProv: 'FACTS FROM BRICKLINK · CACHED 09-17', role: 'Brings the 16-piece circular track and the engine. Nothing downstream can be tested until it is here.',
+      have: 'Approved to buy — not ordered', build: '—', pieces: '—', stateProv: 'said by James · 09-18', components: null, measures: [],
+      history: [{ when: '09-18', text: 'Approved to buy. Not yet ordered — Hub #2.', kind: 'SAID', by: 'James · I-01', detail: { reason: 'Approving the purchase so the plan can count on its track', from: 'I-01', task: 'hub-2', place: '—', signed: 'jfo', notes: 'C-01 counts its 16 × 53400 curves as arriving with a set — nothing to buy twice. Build state starts the day it lands.', provenance: 'said by James · no receipt yet', photoNames: [], photoCount: 0 } }, { when: '09-17 22:30', text: 'Corrected: the train is 10361, not 10254 (DEC-037).', kind: 'CORRECTED', by: 'James' }], photos: [], task: null, notInHouse: true },
+    '40776': { name: 'Hot Chocolate Stand', facts: [['YEAR', '—'], ['PIECES', '—'], ['THEME', '—'], ['CACHED', 'not yet']], factsProv: 'NO FACTS CACHED · FILLS IN ON IMPORT', role: 'A small stand for the village. In the house, sealed. Could go up as designed, or lend its pieces to something the boys propose.',
+      have: 'In the house', build: 'In the box, not built', pieces: 'Free for other builds', stateProv: 'said by James · 09-18', components: null, measures: [],
+      history: [{ when: '09-18', text: 'In the house, in the box, pieces free.', kind: 'SAID', by: 'James · I-01', detail: { reason: 'Setting the inventory axes for dogfooding', from: 'I-01', task: 'DEC-038 · DEC-039', place: '—', signed: 'jfo', notes: 'Sealed, so every piece is known exactly from the set inventory — C-01 may offer them to another design, or it goes up as designed.', provenance: 'said by James · set facts not yet cached from BrickLink', photoNames: [], photoCount: 0 } }], photos: [], task: null }
+  };
+  PLACES = ['Hall cupboard, top shelf', 'Under the stairs', 'Garage shelves', 'Loft'];
+  NOTICES = ['Nothing missing that I saw', 'A piece is missing', 'Something is cracked or worn', 'Bags still sealed'];
+  TOOLW = { studs: 'counted studs', tape: 'a tape measure', calipers: 'calipers', photo: 'a photo with overlay' };
+  CANON_KEY = 'dtI03Canon';
+  loadCanon() { try { return JSON.parse(localStorage.getItem(this.CANON_KEY) || '{}'); } catch (e) { return {}; } }
+  saveCanon(canon) { try { localStorage.setItem(this.CANON_KEY, JSON.stringify(canon)); } catch (e) {} }
+  setCanon(num, patch) {
+    this.setState(st => {
+      const canon = Object.assign({}, st.canon);
+      canon[num] = Object.assign({ touchCount: 0, extraHistory: [], measOverride: {}, compRecorded: null }, canon[num], patch);
+      this.saveCanon(canon);
+      return { canon };
+    });
+  }
+  state = { dark: null, set: null, touch: null, place: null, placeFree: '', sits: [], comp: {}, inbound: null, RW: '', RD: '', W: '', D: '', H: '', HP: '', tool: 'studs', measPhotos: [], notice: null, notes: '', sig: '', canon: {}, extraPhotos: {}, demoReplay: {}, inspect: null, note: '' };
+  componentDidMount() {
+    document.body.classList.toggle('dt-blueprint', this.isDark());
+    const q = new URLSearchParams(location.search), h = (location.hash || '').replace('#', '');
+    const set = q.get('set') || (this.SETS[h] ? h : null) || this.props.set || '41843';
+    const canon = this.loadCanon();
+    const already = ((canon[set] || {}).touchCount || 0) > 0;
+    const REASONS = {
+      'measure-base': { short: 'measuring the base', text: 'Measuring the base — the reason you have it out.', asks: 'the base measured' },
+      'rebuild': { short: 'rebuilding it', text: 'Rebuilding it.', asks: 'what went back together' },
+      'move': { short: 'moving it', text: 'Moving it somewhere else.', asks: 'where it lives now' },
+      'check': { short: 'checking on it', text: 'Checking on it — nothing specific asked for.', asks: 'anything you noticed' },
+      'documenting': { short: 'documenting it', text: 'Documenting it while it is out.', asks: 'where it lives, how it sits' }
+    };
+    const why = q.get('why') || '', fromSheet = q.get('from') || '', taskRef = q.get('task') || '', label = q.get('label') || '';
+    const inbound = (why || taskRef || label) ? {
+      key: why, from: fromSheet, taskRef,
+      text: (label ? decodeURIComponent(label) : (REASONS[why] || {}).text) || 'Handling it — reason came across as “' + (why || taskRef) + '”.',
+      short: (REASONS[why] || {}).short || (label ? decodeURIComponent(label) : why || taskRef),
+      asks: (REASONS[why] || {}).asks || 'what you did'
+    } : null;
+    const openTouch = !!inbound || h === 'touch' || q.get('touch') === '1' || (!!this.SETS[set].task && !already);
+    this.setState({ set, canon, inbound, touch: openTouch ? 'open' : null, note: inbound ? 'Touch open — ' + inbound.short + (fromSheet ? ', sent from ' + fromSheet : '') + '. The reason is recorded with it.' : openTouch ? 'A touch is open because Hub #1 asks for this set. Nothing is recorded until you sign.' : already ? 'This set already has a recorded touch — carried over from before. Nothing here can be lost by resetting a demo.' : '' });
+  }
+  componentDidUpdate() { document.body.classList.toggle('dt-blueprint', this.isDark()); }
+  isDark() { if (this.state.dark !== null) return this.state.dark; if (this.props.theme === 'blueprint') return true; if (this.props.theme === 'paper') return false; return typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches; }
+  pulse(key, val) { this._p = this._p || {}; this._t = this._t || {}; const v = JSON.stringify(val), now = Date.now(); if (key in this._p && this._p[key] !== v) this._t[key] = now; this._p[key] = v; return (now - (this._t[key] || 0) < 900) ? 'dtChangeA .8s ease-out' : 'none'; }
+  chip(on, accent) { return { on, border: on ? 'solid' : 'dashed', stroke: on ? 'var(--dt-ink)' : 'var(--dt-grid-mid)', bg: on ? 'var(--dt-ink)' : 'transparent', fg: on ? 'var(--dt-on-ink)' : 'var(--dt-ink)' }; }
+  files(e, key) { const fs = Array.from(e.target.files || []); if (!fs.length) return; const add = fs.map(f => ({ name: f.name, url: URL.createObjectURL(f) })); e.target.value = ''; this.setState(st => ({ [key]: st[key].concat(add), note: add.length + ' photo' + (add.length > 1 ? 's' : '') + ' attached. Photos never leave this tab in the prototype.' })); }
+  renderVals() {
+    const s = this.state, num = s.set || '41843', S = this.SETS[num], dark = this.isDark(), showComp = this.props.showComponents ?? true;
+    const isTree = num === '41843', hasComponents = showComp && !!S.components, hasMeasure = isTree;
+    const canonAll = s.canon, canon = canonAll[num] || { touchCount: 0, extraHistory: [], measOverride: {}, compRecorded: null };
+    const replaying = !!s.demoReplay[num], hasTouch = canon.touchCount > 0 && !replaying;
+    const tabs = Object.keys(this.SETS).map(k => Object.assign({ label: this.SETS[k].name, pick: () => { const c = (canonAll[k] || {}).touchCount > 0; this.setState({ set: k, touch: this.SETS[k].task && !c ? 'open' : null, note: '' }); } }, this.chip(k === num)));
+    const place = s.placeFree.trim() || s.place || '';
+    const compState = Object.assign({ 'Base and stand': 'together', 'Trunk core': 'apart', 'Lower branch tier': 'apart', 'Upper branch tier': 'apart', 'Star and ornaments': 'apart' }, s.comp);
+    const RW = Number(s.RW), RD = Number(s.RD), H = Number(s.H), HP = s.HP === '' ? 0 : Number(s.HP);
+    const dims = RW > 0 && RD > 0 && H >= 0 && HP >= 0 && HP <= 2 && (H > 0 || HP > 0);
+    const tallText = H + ' brick' + (H === 1 ? '' : 's') + (HP ? ' and ' + HP + ' plate' + (HP === 1 ? '' : 's') : '');
+    const dimText = RW + ' × ' + RD + ' studs of room, ' + tallText + ' tall';
+    const changed = dims && !(RW === 16 && RD === 16 && H === 8 && HP === 0);
+    const sig = s.sig.trim().toLowerCase();
+    const together = Object.keys(compState).filter(k => compState[k] === 'together'), apart = Object.keys(compState).filter(k => compState[k] === 'apart'), missing = Object.keys(compState).filter(k => compState[k] === 'missing');
+    const restate = [];
+    restate.push({ tag: place ? '■ WHERE' : '○ WHERE', color: place ? 'var(--dt-pass)' : 'var(--dt-unres-ink)', text: place ? 'It lives: ' + place + '.' : 'Where it is kept — pick or type one.' });
+    restate.push({ tag: s.sits.length ? '■ SITS' : '○ SITS', color: s.sits.length ? 'var(--dt-pass)' : 'var(--dt-unres-ink)', text: (s.sits.length ? s.sits.length + ' photo' + (s.sits.length > 1 ? 's' : '') + ' of how it sits' : 'No photo of how it sits yet') + (hasComponents ? ' · still together: ' + (together.join(', ') || 'nothing') + ' · apart: ' + (apart.join(', ') || 'nothing') + (missing.length ? ' · not found: ' + missing.join(', ') : '') : '') + '.' });
+    if (hasMeasure) restate.push({ tag: dims ? '■ MEASURED' : '○ MEASURED', color: dims ? 'var(--dt-pass)' : 'var(--dt-unres-ink)', text: dims ? 'Base ' + dimText + ', ' + this.TOOLW[s.tool] + (s.measPhotos.length ? ', ' + s.measPhotos.length + ' photo' + (s.measPhotos.length > 1 ? 's' : '') : '') + ' → measured, not remembered. A-01, C-01 and F-01 re-run against it' + (changed ? '; the remembered 16 × 16 × 8 stays on record, struck.' : '.') : 'Width, depth and height of the base — the fit check needs all three.' });
+    restate.push({ tag: '■ NOTICED', color: s.notice || s.notes.trim() ? 'var(--dt-pass)' : 'var(--dt-muted)', text: [s.notice, s.notes.trim() ? '“' + s.notes.trim() + '”' : ''].filter(Boolean).join(' · ') || 'Nothing else noted.' });
+    restate.push({ tag: '■ STAYS', color: 'var(--dt-muted)', text: 'Set state unchanged: ' + S.have.toLowerCase() + ' · ' + S.build.toLowerCase() + ' · ' + S.pieces.toLowerCase() + '. Change those on I-01 if the shelf disagrees.' });
+    const ready = !!sig && !!place && (!hasMeasure || dims);
+    const missingBits = [!place ? 'where it is kept' : null, hasMeasure && !dims ? 'the room it needs and how tall it is' : null, !sig ? 'your initials' : null].filter(Boolean);
+    const done = hasTouch ? { stamp: 'touch #' + canon.touchCount, text: (canon.extraHistory[0] || {}).text || 'Recorded.' } : null;
+    const touchN = canon.touchCount + 1;
+    const commit = () => { if (!ready) return; const stamp = 'today · ' + sig; const hist = [{ when: 'today', text: 'Touch #' + touchN + (s.inbound ? ' — ' + s.inbound.short + (s.inbound.from ? ', from ' + s.inbound.from : '') : (S.task && touchN === 1 ? ' for Hub #1' : ' (demo replay)')) + ' at ' + place + '. ' + s.sits.length + ' photo' + (s.sits.length === 1 ? '' : 's') + ' of how it sits' + (hasComponents ? '; still together: ' + (together.join(', ') || 'nothing') : '') + (hasMeasure && dims ? '; base measured ' + dimText + ' by ' + this.TOOLW[s.tool] : '') + (s.notice ? '; ' + s.notice.toLowerCase() : '') + (s.notes.trim() ? '; “' + s.notes.trim() + '”' : '') + '.', kind: 'TOUCH', by: sig + ' · I-03', detail: {
+        touchN, reason: s.inbound ? s.inbound.text : (S.task && touchN === 1 ? 'Hub #1 — measure the base' : 'Documenting it while it was out'),
+        from: s.inbound ? (s.inbound.from || '—') : '—', task: s.inbound ? (s.inbound.taskRef || '—') : (S.task && touchN === 1 ? 'hub-1' : '—'),
+        place, tool: this.TOOLW[s.tool], signed: sig,
+        measured: hasMeasure && dims ? dimText : '', ldu: hasMeasure && dims ? (RW * 20) + ' × ' + (RD * 20) + ' × ' + (H * 24 + HP * 8) + ' LDU' : '',
+        supersedes: hasMeasure && dims ? ((canon.measOverride && canon.measOverride.base && canon.measOverride.base.value) || '16 × 16 st × 8 br · from memory · James · 09-17') : '',
+        components: hasComponents ? ['together: ' + (together.join(', ') || 'nothing'), 'apart: ' + (apart.join(', ') || 'nothing'), 'not found: ' + (missing.join(', ') || 'nothing')].join(' · ') : '',
+        notice: s.notice || '', notes: s.notes.trim(), photoNames: s.sits.map(x => x.name).concat(s.measPhotos.map(x => x.name)), photoCount: s.sits.length + s.measPhotos.length
+      } }];
+      const photos = s.sits.map((p, i) => ({ url: p.url, caption: 'How it sat, before anything moved' + (s.sits.length > 1 ? ' (' + (i + 1) + ')' : ''), meta: 'today · ' + sig + ' · touch #' + touchN })).concat(s.measPhotos.map(p => ({ url: p.url, caption: 'The base, measured', meta: 'today · ' + sig + ' · touch #' + touchN })));
+      if (hasMeasure && dims && window.DTLedger) {
+        const L = window.DTLedger, ldu = { w: RW * 20, d: RD * 20, h: H * 24 + HP * 8 };
+        L.setFact('treeBase', { reservedStuds: { w: RW, d: RD }, height: { bricks: H, plates: HP }, ldu, tool: this.TOOLW[s.tool], by: sig, touch: touchN, photos: s.measPhotos.length, summary: 'Tree 41843 base: ' + dimText + ' · ' + this.TOOLW[s.tool] + ' · ' + sig });
+        L.close('hub-1', { by: sig, evidence: 'I-03 touch #' + touchN, summary: 'Tree base measured — ' + dimText, reason: s.inbound ? s.inbound.text : 'Hub #1' });
+      }
+      this.setCanon(num, {
+        touchCount: touchN,
+        extraHistory: hist.concat(canon.extraHistory || []),
+        measOverride: hasMeasure && dims ? Object.assign({}, canon.measOverride, { base: { value: RW + ' × ' + RD + ' st room · ' + H + ' br' + (HP ? ' + ' + HP + ' pl' : ''), status: 'measured', meta: this.TOOLW[s.tool] + ' · ' + sig + ' · today · ' + (RW * 20) + ' × ' + (RD * 20) + ' × ' + (H * 24 + HP * 8) + ' LDU' + (s.measPhotos.length ? ' · ▣ ' + s.measPhotos.length : ''), was: (canon.measOverride && canon.measOverride.base && canon.measOverride.base.value) || '16 × 16 st × 8 br · from memory · James · 09-17' } }) : canon.measOverride,
+        compRecorded: hasComponents ? { by: sig, states: compState } : canon.compRecorded
+      });
+      this.setState(st => ({ touch: null, demoReplay: Object.assign({}, st.demoReplay, { [num]: false }),
+        extraPhotos: Object.assign({}, st.extraPhotos, { [num]: photos.concat(st.extraPhotos[num] || []) }),
+        sits: [], measPhotos: [], RW: '', RD: '', W: '', D: '', H: '', HP: '', notice: null, notes: '', sig: '', note: '■ Recorded as touch #' + touchN + '.' + (hasMeasure && dims ? ' Hub #1 closes; A-01 and the stand’s fit check unblock. The Drafting Table shows it as done.' : '') + ' Nothing earlier is overwritten.' })); };
+    const replay = () => this.setState(st => ({ demoReplay: Object.assign({}, st.demoReplay, { [num]: true }), note: 'Demo replay — the touch flow is open again as if unsolved. Every touch already recorded (' + canon.touchCount + ' so far) stays on record below; this run adds touch #' + touchN + ' when you sign it.' }));
+    const measures = S.measures.map(m => { const o = canon.measOverride[m.id] || {}, st = o.status || m.status; const B = { measured: ['■ MEASURED', 'var(--dt-pass)'], remembered: ['◇ FROM MEMORY', 'var(--dt-prov-deep)'] }[st]; return { name: m.name, value: o.value || m.value, meta: o.meta || m.meta, badge: B[0], color: B[1], hasWas: !!o.was, was: o.was || '', anim: this.pulse('m:' + num + m.id, o.value) }; });
+    const KC = { SAID: 'var(--dt-prov-deep)', MEASURED: 'var(--dt-pass)', TOUCH: 'var(--dt-accent-deep)', CORRECTED: 'var(--dt-block-deep)' };
+    const history = (canon.extraHistory || []).concat(S.history).map((h, i) => Object.assign({}, h, {
+      color: KC[h.kind] || 'var(--dt-muted)', anim: this.pulse('h:' + num + i, h.text),
+      openLabel: h.detail ? 'INSPECT →' : 'OPEN →', openAria: 'Inspect what was captured: ' + h.text,
+      open: () => this.setState({ inspect: { num, i } })
+    }));
+    const photos = (s.extraPhotos[num] || []).concat(S.photos);
+    const rec = canon.compRecorded;
+    const insp = s.inspect && s.inspect.num === num ? history[s.inspect.i] : null;
+    const tn = insp && !insp.detail && insp.kind === 'TOUCH' ? Number((/Touch #(\d+)/.exec(insp.text) || [])[1]) : null;
+    const derived = tn ? (() => {
+      // Read this touch's own sentence — never the set's current record, which later touches may have changed.
+      const txt = insp.text;
+      const at = /\bat ([^.]+)\./.exec(txt), why = /Touch #\d+ — ([^,.]+)/.exec(txt), frm = /, from ([^.]+?) at /.exec(txt);
+      const tog = /still together: ([^;.]+)/.exec(txt), meas = /base measured (.+?) by ([^;.]+)/.exec(txt), photos = /(\d+) photos? of how it sits/.exec(txt);
+      const quote = /“([^”]+)”/.exec(txt);
+      return {
+        touchN: tn, reason: why ? why[1] : (/for Hub #1/.test(txt) ? 'Hub #1 — measure the base' : 'Documenting it while it was out'),
+        from: frm ? frm[1] : '—', task: /Hub #1/.test(txt) ? 'hub-1' : '—',
+        place: at ? at[1] : '—', tool: meas ? meas[2] : '—', signed: (insp.by || '').split(' · ')[0],
+        measured: meas ? meas[1] : '', ldu: '', supersedes: '',
+        components: tog ? 'still together: ' + tog[1] : '',
+        notice: '', notes: quote ? quote[1] : '', photoNames: [], photoCount: photos ? Number(photos[1]) : 0,
+        partial: true
+      };
+    })() : null;
+    const D = (insp && insp.detail) || derived;
+    const rows = [];
+    if (D) {
+      rows.push({ label: 'WHY', value: D.reason });
+      if (D.from && D.from !== '—') rows.push({ label: 'SENT FROM', value: D.from + (D.task && D.task !== '—' ? ' · ' + D.task : '') });
+      if (D.place && D.place !== '—') rows.push({ label: 'WHERE', value: D.place });
+      if (D.measured) { rows.push({ label: 'MEASURED', value: D.measured + (D.tool && D.tool !== '—' ? ' · ' + D.tool : '') }); if (D.ldu) rows.push({ label: 'STORED AS', value: D.ldu }); if (D.supersedes) rows.push({ label: 'SUPERSEDED', value: D.supersedes }); }
+      if (D.components) rows.push({ label: 'COMPONENTS', value: D.components });
+      if (D.notice) rows.push({ label: 'NOTICED', value: D.notice });
+      if (D.notes) rows.push({ label: 'IN WORDS', value: '“' + D.notes + '”' });
+      if (D.provenance) rows.push({ label: 'HOW WE KNOW', value: D.provenance });
+      rows.push({ label: 'PHOTOS', value: D.photoNames && D.photoNames.length ? D.photoNames.join(', ') : D.photoCount ? D.photoCount + ' taken — thumbnails below if they survived this session' : 'none attached' });
+      rows.push({ label: 'SIGNED', value: (D.signed || '—') + ' · ' + insp.when });
+    } else if (insp) {
+      rows.push({ label: 'KIND', value: insp.kind });
+      rows.push({ label: 'BY', value: insp.by });
+      rows.push({ label: 'WHEN', value: insp.when });
+    }
+    const inspPhotos = D ? photos.filter(ph => (ph.meta || '').indexOf('touch #' + D.touchN) >= 0) : [];
+    const inspView = insp ? {
+      kicker: D && D.touchN ? 'TOUCH #' + D.touchN + ' · EVERYTHING CAPTURED' : insp.kind + ' · WHAT WE HOLD',
+      title: D && D.touchN ? 'Touch #' + D.touchN + ' — ' + D.reason : insp.kind.charAt(0) + insp.kind.slice(1).toLowerCase() + ' · ' + insp.when,
+      text: insp.text, rows, hasPhotos: inspPhotos.length > 0, photos: inspPhotos,
+      footnote: D && D.partial ? 'Recorded before per-field capture: these rows are read back from this touch’s own line, so they match it exactly — nothing here comes from later touches.' : D ? 'Recorded append-only. Nothing here can be edited — a correction is a new touch that points at this one.' : 'This line is all that is on record for this entry — it was written before touches captured their own state.'
+    } : { kicker: '', title: '', text: '', rows: [], hasPhotos: false, photos: [], footnote: '' };
+    const compRows = (S.components || []).map(c => { const stt = rec ? rec.states[c[0]] : null; return { name: c[0], state: stt ? { together: '■ STILL TOGETHER', apart: '○ APART', missing: '▲ NOT FOUND' }[stt] : '○ UNKNOWN', color: stt === 'together' ? 'var(--dt-pass)' : stt === 'missing' ? 'var(--dt-block-deep)' : 'var(--dt-unres-ink)' }; });
+    return {
+      dark, themeLabel: dark ? '☀ PAPER' : '☾ BLUEPRINT', toggleTheme: () => this.setState({ dark: !this.isDark() }),
+      tabs, setName: S.name, setNum: num, slotId: 'setref-' + num, imageNote: 'Box art is the BrickLink reference, cached at import. It is not a photo of ours.', identHatch: S.notInHouse ? 'var(--dt-hatch-draft)' : 'var(--dt-hatch-ghost)',
+      facts: S.facts.map(f => ({ k: f[0], v: f[1], color: f[1] === '—' ? 'var(--dt-muted)' : 'var(--dt-ink)' })), factsProv: S.factsProv, role: S.role,
+      axes: [{ q: 'DO WE HAVE IT?', v: S.have, prov: S.stateProv, opacity: 1 }, { q: 'IS IT BUILT?', v: S.build, prov: S.build === '—' ? 'applies once it is in the house' : S.stateProv, opacity: S.build === '—' ? 0.6 : 1 }, { q: 'CAN ITS PIECES BE USED ELSEWHERE?', v: S.pieces, prov: S.pieces === '—' ? 'applies once it is in the house' : S.stateProv, opacity: S.pieces === '—' ? 0.6 : 1 }],
+      i01Href: 'Prototype I - What We Have.dc.html#' + { '41843': 'tree', '10361': 'train', '40776': 'stand' }[num], blHref: 'https://www.bricklink.com/v2/catalog/catalogitem.page?S=' + num + '-1', rbHref: 'https://rebrickable.com/sets/' + num + '-1/', m01Href: 'Prototype M - Measure and Check.dc.html' + (isTree ? '#tree-base' : ''),
+      touchIdle: s.touch !== 'open' && !hasTouch, touchOpen: s.touch === 'open', touchDone: s.touch !== 'open' && hasTouch,
+      touchTitle: s.touch === 'open' ? (replaying ? 'Demo replay — write it down again' : 'You have it out — write down what you find') : hasTouch ? 'Last time it was handled' : 'Taking it off the shelf?', touchTag: s.touch === 'open' ? (replaying ? 'DEMO REPLAY · NOT YET RECORDED' : 'TOUCH OPEN · NOT YET RECORDED') : hasTouch ? 'TOUCH #' + canon.touchCount + ' · RECORDED' : 'NO TOUCH OPEN', touchTagColor: s.touch === 'open' ? 'var(--dt-accent-deep)' : hasTouch ? 'var(--dt-pass)' : 'var(--dt-muted)', touchStroke: s.touch === 'open' ? 'var(--dt-accent)' : 'var(--dt-ink)',
+      idleBlurb: S.notInHouse ? 'Not in the house yet — there is nothing to handle. When the parcel lands, the first touch is unboxing it.' : 'Whenever you handle it — to rebuild, move, or check something — open a touch first. It asks for the few things a photo cannot tell and records them as one signed event.',
+      startTouch: () => this.setState({ touch: 'open', note: 'Touch open. Nothing is recorded until you sign.' }),
+      reasonText: s.inbound ? s.inbound.text : replaying ? 'Demo replay of Hub #1 — the earlier ' + canon.touchCount + ' touch' + (canon.touchCount === 1 ? '' : 'es') + ' on this set stay exactly as recorded; this run adds a new one.' : S.task && !hasTouch ? S.task.text : 'No open task — just documenting it while it is out.', reasonHint: s.inbound ? (s.inbound.from ? 'Sent here from ' + s.inbound.from + (s.inbound.taskRef ? ' · ' + s.inbound.taskRef : '') + '. ' : '') + 'This reason goes on the touch and into the inventory log — it asks for ' + s.inbound.asks + '.' : S.task ? S.task.hint : 'Every touch still records where it lives, how it sits and anything you noticed.',
+      places: this.PLACES.map(p => Object.assign({ label: p, pick: () => this.setState({ place: p, placeFree: '' }) }, this.chip(s.place === p && !s.placeFree.trim()))), placeFree: s.placeFree, setPlaceFree: e => this.setState({ placeFree: e.target.value }),
+      sitsPhotos: s.sits.map((p, i) => ({ url: p.url, name: p.name, dropAria: 'Remove ' + p.name, drop: () => this.setState(st => ({ sits: st.sits.filter((_, j) => j !== i) })) })), sitsLabel: s.sits.length ? '＋ Another angle' : '▢ Photograph it as it sits', pickSits: e => this.files(e, 'sits'),
+      hasComponents, components: (S.components || []).map(c => ({ name: c[0], hint: c[1], aria: 'State of ' + c[0], opts: [['together', 'TOGETHER', 'Still built as one piece'], ['apart', 'APART', 'In loose pieces or bags'], ['missing', 'NOT FOUND', 'Should be here and is not']].map(o => { const on = compState[c[0]] === o[0]; return { label: o[1], tip: o[2], on, stroke: on ? 'var(--dt-ink)' : 'var(--dt-grid-mid)', bg: on ? 'var(--dt-ink)' : 'transparent', fg: on ? 'var(--dt-on-ink)' : 'var(--dt-ink)', pick: () => this.setState(st => ({ comp: Object.assign({}, st.comp, { [c[0]]: o[0] }) })) }; }) })),
+      hasMeasure, measureTitle: 'Measure the base — the thing Hub #1 asked for', measureWas: '◇ ON RECORD: 16 × 16 st × 8 br · FROM MEMORY', measureHow: 'The base is still together, so count studs across and front to back — out to whatever sticks out furthest, decoration or knobs included, not just the solid block. Then count bricks up its side, plus any plates left over on top. If you use a tape: mm ÷ 8 for studs, mm ÷ 9.6 for bricks, mm ÷ 3.2 for plates. A photo with a known plate or beam laid alongside is the proof.',
+      mRW: s.RW, mRD: s.RD, mW: s.W, mD: s.D, mH: s.H, mHP: s.HP,
+      setRW: e => this.setState({ RW: e.target.value }), setRD: e => this.setState({ RD: e.target.value }), setW: e => this.setState({ W: e.target.value }), setD: e => this.setState({ D: e.target.value }), setH: e => this.setState({ H: e.target.value }), setHP: e => this.setState({ HP: e.target.value }), mTool: s.tool, setTool: e => this.setState({ tool: e.target.value }),
+      measPhotos: s.measPhotos.map((p, i) => ({ url: p.url, name: p.name, dropAria: 'Remove ' + p.name, drop: () => this.setState(st => ({ measPhotos: st.measPhotos.filter((_, j) => j !== i) })) })), measPickLabel: s.measPhotos.length ? '＋ Another proof photo' : '▢ Photo of the tape / studs', pickMeas: e => this.files(e, 'measPhotos'),
+      measureSays: !dims ? 'The room it needs and the height together, so the fit check never gets part of the answer. Plates must be 0, 1 or 2.' : changed ? dimText + ' — different from memory. The remembered value stays on record, struck; A-01, C-01 and F-01 are marked stale.' : dimText + ' — memory was right. It becomes measured, and the sheets stop hedging.',
+      noticeStep: hasMeasure ? '4' : '3', notices: this.NOTICES.map(n => Object.assign({ label: n, pick: () => this.setState(st => ({ notice: st.notice === n ? null : n })) }, this.chip(s.notice === n))), notes: s.notes, setNotes: e => this.setState({ notes: e.target.value }),
+      restate, sig: s.sig, setSig: e => this.setState({ sig: e.target.value }), notReady: !ready, commitCursor: ready ? 'pointer' : 'not-allowed', commitOpacity: ready ? 1 : 0.45, commitTitle: ready ? 'Record it under ' + sig : 'Still needed: ' + missingBits.join(', '), missing: ready ? 'Signed by whoever had it in their hands — that is the authority.' : 'Still needed: ' + missingBits.join(' · ') + '.', commit,
+      cancelTouch: () => this.setState({ touch: null, sits: [], measPhotos: [], RW: '', RD: '', W: '', D: '', H: '', HP: '', notice: null, notes: '', note: 'Nothing recorded. The Hub item stays open.' }),
+      doneStamp: done ? done.stamp : '', doneText: done ? done.text : '', canReplay: hasTouch, replay, replayLabel: '↺ Replay this touch (demo) — keeps everything recorded', ripples: [{ label: 'HUB · #1 CLOSES ↗', href: '../Hub.dc.html' }, { label: 'M-01 · THE MEASUREMENT ↗', href: 'Prototype M - Measure and Check.dc.html#tree-base' }, { label: 'A-01 · FIT RE-RUNS ↗', href: 'Prototype A - Layout Canvas.dc.html#fit' }],
+      note: s.note,
+      measures, noMeasures: measures.length === 0, photos, noPhotos: photos.length === 0, photoCount: photos.length ? photos.length + ' PHOTO' + (photos.length > 1 ? 'S' : '') : 'NONE YET',
+      compRows, compProv: rec ? '■ SEEN BY ' + rec.by.toUpperCase() + ' · TODAY' : '○ NOT YET LOOKED AT', compProvColor: rec ? 'var(--dt-pass)' : 'var(--dt-unres-ink)',
+      history,
+      inspectOpen: !!insp, inspect: inspView, closeInspect: () => this.setState({ inspect: null }), stopClick: e => e.stopPropagation()
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "artifact": "DT-DESIGN R6 supplemental review addendum",
+  "path": "docs/design/review/DT-DESIGN-R6-addendum",
+  "date": "2026-10-12",
+  "base_r6_commit": "defff46251f3e98c44ba3a2f3ddada768e9328a0",
+  "tree_digest_spec": "design-package-import/v1 x-tree-digest-spec",
+  "tree_sha256": "a47c4ecd9c98188b0a47158366928a0602a2c08c904818351a826567f316cafa",
+  "bytes": 69987656,
+  "file_count": 104,
+  "manifest_sha256": "630b5d63dc7e9d0038068c350a830f31a41d33771b47d621cc88e3097b22a496",
+  "excluded_local_artifacts": [
+    "node_modules",
+    "dist",
+    "__pycache__"
+  ],
+  "status": "Review receipt, not an instruments registration"
+}

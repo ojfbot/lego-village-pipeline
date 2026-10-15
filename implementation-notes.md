@@ -194,3 +194,12 @@
   failing CI gate; the Hub candidate needs a working gate without changing that design cut.
   Added an app-owned token override and checked all effective text tokens at the same 4.5:1
   threshold. The original source defect remains recorded in H-01 R1.
+- 2026-10-12 (DT-DESIGN R6 review intake): the plan assumed the same standalone review posture
+  as R4; the territory is an R6 overlay on unavailable R5 that answers a brief currently present
+  only on unmerged PR #45. Kept the review branch on protected `main`, preserved the received R6
+  bytes unchanged, and recorded the missing parents and brief branch in the draft PR instead of
+  stacking review authority on either open branch.
+
+- R6 addendum packaging assumed the reviewed prototype could run from its local dependency link. Added it as a pnpm workspace member with a frozen lockfile and included both model assets and Blender revisions. Offline installation lacked the Three tarball, so verified with a normal locked install. The received R6 overlay stays unchanged.
+
+- Claude pickup assumed branch discovery and PR review access. Its connector inspected only PR #45 by branch name and missed PR #46. Added root pickup instructions and a JSON locator on R6, a pointer on the older branch, and a source/compiled-preview ZIP for upload-based access.

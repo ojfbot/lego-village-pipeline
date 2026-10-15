@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="dt/tokens.css">
+<link rel="stylesheet" href="dt/responsive.css">
+<style>body{margin:0;background:var(--dt-bg);color:var(--dt-ink);font-family:'Libre Franklin',sans-serif}a{color:var(--dt-accent-deep)}a:hover{color:var(--dt-accent)}</style>
+</helmet>
+<section id="turn-1" style="padding:48px 56px 80px;display:grid;gap:36px;max-width:3200px">
+  <header style="display:grid;gap:14px;max-width:920px">
+    <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.1em;color:var(--dt-muted)">TURN 1 · HOW EACH KIND OF SHEET SAYS WHAT IT IS · ALL 15 SHEETS + HUB</div>
+    <h1 style="font-family:'Spectral',serif;font-size:40px;font-weight:600;line-height:1.1;margin:0">Every sheet opens the same way, so only the letter in the code tells them apart.</h1>
+    <p style="font-size:15px;line-height:1.55;margin:0;text-wrap:pretty">Today every page opens with a serif title, a mono code line, <span style="font-family:'Azeret Mono',monospace;font-size:12px">← HUB</span> and a paragraph, all in the same 1180–1320px column. You only learn which kind of page you're on by reading. Two things have to come first. One is a census: there are <b>ten kinds</b>, and each has its own verb. The other is a constraint: <b>color is already taken.</b> Evidence states own every hue (pass, provisional, blocked, info, unresolved), and the axes have to stay separate. So the kind of sheet can't be carried by color. It has to be carried by form: a mark, a word, a silhouette, a position.</p>
+  </header>
+
+  <div style="display:grid;gap:12px">
+    <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.1em;color:var(--dt-muted)">THE CENSUS · TEN KINDS, ONE VERB EACH</div>
+    <div style="display:grid;grid-template-columns:repeat(5,minmax(0,250px));gap:10px">
+      <sc-for list="{{ census }}" as="k" hint-placeholder-count="10">
+        <div style="background:var(--dt-sheet);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-card);padding:12px 14px;display:grid;gap:6px;align-content:start">
+          <div style="display:flex;gap:9px;align-items:center">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="{{ k.glyph }}"></path></svg>
+            <span style="font-family:'Spectral',serif;font-size:17px;font-weight:600">{{ k.verb }}</span>
+          </div>
+          <div style="font-size:12.5px;line-height:1.4">{{ k.kind }}</div>
+          <div style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);line-height:1.5">{{ k.sheets }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div id="0" style="display:grid;gap:12px">
+    <div style="display:flex;gap:10px;align-items:baseline"><span style="font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);padding:3px 8px;border-radius:var(--dt-r-fillet)">NOW</span><span style="font-family:'Spectral',serif;font-size:20px;font-weight:600">Four different kinds, one silhouette</span></div>
+    <div style="display:grid;grid-template-columns:repeat(4,300px);gap:14px">
+      <sc-for list="{{ samples }}" as="s" hint-placeholder-count="4">
+        <div style="background:var(--dt-sheet);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-card);padding:16px;display:grid;gap:6px;height:150px;align-content:start;overflow:hidden">
+          <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600;line-height:1.2">{{ s.title }}</div>
+          <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">{{ s.code }} · {{ s.oldKicker }} · ← HUB</div>
+          <div style="font-size:11.5px;line-height:1.45;color:var(--dt-muted)">{{ s.oldLede }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+
+    <article id="1a" style="width:620px;display:grid;gap:14px;background:var(--dt-bg);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);padding:22px">
+      <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);padding:3px 8px;border-radius:var(--dt-r-fillet)">1a</span><span style="font-family:'Spectral',serif;font-size:24px;font-weight:600">The nameplate</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">RAMS · RAND</span></div>
+      <p style="margin:0;font-size:13px;line-height:1.5;text-wrap:pretty">Braun puts the model plate in the same place on every device. Rand's point was that a mark identifies, and its meaning comes from use. So: one fixed plate, top-left of every sheet, holding a mark and a plain noun. The same mark shows up on Hub cards, CrossRef chips, links and the tab icon, so you know where a link goes before you click it.</p>
+      <sc-for list="{{ samples }}" as="s" hint-placeholder-count="4">
+        <div style="background:var(--dt-sheet);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-card);padding:14px 16px;display:grid;gap:8px">
+          <div style="display:flex;gap:10px;align-items:center">
+            <div style="width:34px;height:34px;flex:none;border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-fillet);display:grid;place-items:center"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="{{ s.glyph }}"></path></svg></div>
+            <div style="display:grid;gap:1px"><span style="font-family:'Libre Franklin';font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase">{{ s.kind }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">{{ s.code }} · ← HUB</span></div>
+          </div>
+          <div style="font-family:'Spectral',serif;font-size:19px;font-weight:600;line-height:1.2">{{ s.title }}</div>
+        </div>
+      </sc-for>
+      <div style="display:grid;gap:6px;font-size:12.5px;line-height:1.45;border-top:1px dashed var(--dt-grid-mid);padding-top:12px"><div><b>Reads as:</b> calm and consistent, and it works at chip size.</div><div><b>Risk:</b> the plate is identical on every sheet, so it takes repetition before the marks mean anything. A first visit still needs the word.</div></div>
+    </article>
+
+    <article id="1b" style="width:620px;max-width:100%;box-sizing:border-box;display:grid;gap:14px;background:var(--dt-bg);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);padding:22px">
+      <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);padding:3px 8px;border-radius:var(--dt-r-fillet)">1b</span><span style="font-family:'Spectral',serif;font-size:24px;font-weight:600">The verb is the headline</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">LOIS</span></div>
+      <p style="margin:0;font-size:13px;line-height:1.5;text-wrap:pretty">Lois: the word comes first, and it should land in a nanosecond. The first thing you read is what you do here, set in huge type. The sheet's name drops to a subtitle. This is the one loud element per page (your "quiet machine with one shout"), and everything below it stays calm.</p>
+      <sc-for list="{{ samples1b }}" as="s" hint-placeholder-count="4">
+        <div ref="{{ s.ref }}" style="background:var(--dt-sheet);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-card);padding:16px 18px;display:flex;justify-content:space-between;align-items:baseline;gap:16px">
+          <div style="font-family:'Spectral',serif;font-size:30px;line-height:1.4;white-space:nowrap;overflow:hidden;min-width:0"><span style="font-weight:700">{{ s.verbShown }}</span> <span style="font-weight:500;color:var(--dt-muted)">{{ s.objShown }}</span></div>
+          <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted);flex:none;white-space:nowrap">{{ s.code }} · ← HUB</div>
+        </div>
+      </sc-for>
+      <div style="display:grid;gap:6px;font-size:12.5px;line-height:1.45;border-top:1px dashed var(--dt-grid-mid);padding-top:12px"><div><b>Reads as:</b> instant, and it teaches. You know your job before you know the sheet's name.</div><div><b>Risk:</b> when a sheet has two jobs (C-01 both plans and approves), it has to pick one verb. And sixteen shouting pages turn into noise unless everything under the verb is kept quiet.</div></div>
+    </article>
+
+    <article id="1c" style="width:620px;display:grid;gap:14px;background:var(--dt-bg);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);padding:22px">
+      <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);padding:3px 8px;border-radius:var(--dt-r-fillet)">1c</span><span style="font-family:'Spectral',serif;font-size:24px;font-weight:600">The plan is the identity</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">KOOLHAAS · OMA PROGRAM DIAGRAM</span></div>
+      <p style="margin:0;font-size:13px;line-height:1.5;text-wrap:pretty">Koolhaas: the diagram is the argument, and form follows program. Each kind gets its own page skeleton, so you can recognize it blurred, before you read a word. A workspace fills the screen. A question sits in a narrow column. A register is a ruled table. An approval narrows like a funnel toward the initials. A small program diagram at the top shows the zones and where you are.</p>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+        <sc-for list="{{ samples }}" as="s" hint-placeholder-count="4">
+          <div style="background:var(--dt-sheet);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-card);padding:12px;display:grid;gap:8px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-family:'Spectral',serif;font-size:15px;font-weight:600;line-height:1.2">{{ s.kind }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted)">{{ s.code }}</span></div>
+            <div style="display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(5,26px);gap:3px;background-image:var(--dt-hatch-ghost);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);padding:4px">
+              <sc-for list="{{ s.plan }}" as="z" hint-placeholder-count="3">
+                <div style="grid-area:{{ z.area }};background:{{ z.bg }};color:{{ z.fg }};border:1.5px solid var(--dt-ink);border-radius:2px;font-family:'Azeret Mono',monospace;font-size:8.5px;letter-spacing:0.04em;padding:3px 4px;overflow:hidden;text-transform:uppercase">{{ z.label }}</div>
+              </sc-for>
+            </div>
+            <div style="font-size:11.5px;line-height:1.4;color:var(--dt-muted)">{{ s.planNote }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:grid;gap:6px;font-size:12.5px;line-height:1.45;border-top:1px dashed var(--dt-grid-mid);padding-top:12px"><div><b>Reads as:</b> the strongest recognition. The shape of the sheet is the label. It's also honest, because the layout really does follow the job.</div><div><b>Risk:</b> it's the most work. Every sheet would be re-skeletoned to one of ten templates, and hybrid sheets (R-01, F-01) need a rule about which template wins.</div></div>
+    </article>
+
+    <article id="1d" style="width:620px;display:grid;gap:14px;background:var(--dt-bg);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);padding:22px">
+      <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);padding:3px 8px;border-radius:var(--dt-r-fillet)">1d</span><span style="font-family:'Spectral',serif;font-size:24px;font-weight:600">The drawing set</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">SACHS · CONSTRUCTION DOCUMENTS</span></div>
+      <p style="margin:0;font-size:13px;line-height:1.5;text-wrap:pretty">This is already a Drafting Table, and architecture's document set solved this long ago. Each sheet type has a real-world form: plan, schedule, RFI, submittal, purchase order, receiving report, transmittal. The sheet identifies itself in a <b>title block</b>, right-aligned, with the plain-word name first and the trade name second. The title block's fields change with the kind (scale for a plan, "for approval" for a submittal). In Sachs's terms, you show the construction honestly, but loudly.</p>
+      <sc-for list="{{ samples }}" as="s" hint-placeholder-count="4">
+        <div style="background:var(--dt-sheet);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-card);padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:14px;align-items:start">
+          <div style="display:grid;gap:5px"><div style="font-family:'Spectral',serif;font-size:19px;font-weight:600;line-height:1.2">{{ s.title }}</div><div style="font-size:11.5px;line-height:1.45;color:var(--dt-muted)">{{ s.lede }}</div></div>
+          <div style="border:1.5px solid var(--dt-ink);border-radius:2px;display:grid;font-size:10.5px">
+            <div style="padding:5px 8px;border-bottom:1px solid var(--dt-ink);display:grid;gap:1px"><span style="font-weight:600;font-size:12px">{{ s.kind }}</span><span style="font-family:'Azeret Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--dt-muted)">{{ s.trade }}</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr">
+              <div style="padding:4px 8px;border-right:1px solid var(--dt-ink);display:grid"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;color:var(--dt-muted)">{{ s.tbKey }}</span><span>{{ s.tbVal }}</span></div>
+              <div style="padding:4px 8px;display:grid"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;color:var(--dt-muted)">SHEET</span><span style="font-family:'Azeret Mono',monospace;font-weight:600">{{ s.code }}</span></div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+      <div style="display:grid;gap:6px;font-size:12.5px;line-height:1.45;border-top:1px dashed var(--dt-grid-mid);padding-top:12px"><div><b>Reads as:</b> it belongs to this system. The metaphor is already the brand, so the identity is earned, not added.</div><div><b>Risk:</b> the trade names are jargon (RFI, submittal) and have to stay second. Also, a title block is something you scan, not something that jumps out.</div></div>
+    </article>
+
+    <article id="1e" style="width:620px;display:grid;gap:14px;background:var(--dt-bg);border:1.5px solid var(--dt-ink);border-radius:var(--dt-r-card);padding:22px">
+      <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap"><span style="font-family:'Azeret Mono',monospace;font-size:12px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);padding:3px 8px;border-radius:var(--dt-r-fillet)">1e</span><span style="font-family:'Spectral',serif;font-size:24px;font-weight:600">The threshold</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted)">PETER CARL · PRAXIS</span></div>
+      <p style="margin:0;font-size:13px;line-height:1.5;text-wrap:pretty">Carl: a place is known by the action it hosts and the moment it hosts it in (ethos, kairos). A page is a room you enter partway through the work. So every sheet opens with a three-part threshold: where you came from, what this room is for, and what will have changed when you leave. The kind of sheet shows up as the kind of act and what it commits you to. This is your "frictionless teacher" principle in its purest form.</p>
+      <sc-for list="{{ samples }}" as="s" hint-placeholder-count="4">
+        <div style="background:var(--dt-sheet);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-card);padding:14px 16px;display:grid;gap:10px">
+          <div style="font-family:'Azeret Mono',monospace;font-size:9.5px;color:var(--dt-muted)">{{ s.code }} · {{ s.title }}</div>
+          <div style="display:grid;grid-template-columns:minmax(0,0.8fr) minmax(0,1.4fr) minmax(0,0.9fr);gap:0;border:1px solid var(--dt-ink);border-radius:2px">
+            <div style="padding:8px 10px;display:grid;gap:3px;align-content:start;border-right:1px dashed var(--dt-grid-mid)"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;letter-spacing:0.08em;color:var(--dt-muted)">YOU CAME FROM</span><span style="font-size:11.5px;line-height:1.35">{{ s.came }}</span></div>
+            <div style="padding:8px 12px;display:grid;gap:3px;align-content:start;background:var(--dt-bg)"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;letter-spacing:0.08em;color:var(--dt-muted)">HERE YOU</span><span style="font-family:'Spectral',serif;font-size:16px;font-weight:600;line-height:1.25">{{ s.hereYou }}</span></div>
+            <div style="padding:8px 10px;display:grid;gap:3px;align-content:start;border-left:1px dashed var(--dt-grid-mid)"><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;letter-spacing:0.08em;color:var(--dt-muted)">WHEN YOU LEAVE</span><span style="font-size:11.5px;line-height:1.35">{{ s.after }}</span></div>
+          </div>
+        </div>
+      </sc-for>
+      <div style="display:grid;gap:6px;font-size:12.5px;line-height:1.45;border-top:1px dashed var(--dt-grid-mid);padding-top:12px"><div><b>Reads as:</b> it orients you and explains the consequences, so it's the best at teaching.</div><div><b>Risk:</b> it's prose, and you have to read it. Every strip has the same shape, so the kind of sheet comes through in the words, not at a glance.</div></div>
+    </article>
+  </div>
+
+  <aside style="max-width:920px;display:grid;gap:10px;background:var(--dt-sheet);border:1.5px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:20px 24px">
+    <div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:0.1em;color:var(--dt-muted)">MY READ · DON'T BLEND, LAYER (YOUR "NEVER BLEND AT THE SOURCE")</div>
+    <p style="margin:0;font-size:14px;line-height:1.55;text-wrap:pretty">Each one solves a different moment. <a href="#1c">1c</a> works <b>before reading</b>: the silhouette. <a href="#1b">1b</a> works in the <b>first second</b>: the verb. <a href="#1e">1e</a> works in the <b>first ten seconds</b>: the consequence. <a href="#1a">1a</a> works <b>away from the page</b>: the mark on links, chips and Hub. A layered stack would be: skeleton from 1c, verb as the one shout from 1b, threshold strip under it from 1e, and the mark from 1a everywhere else. <a href="#1d">1d</a> becomes the footer, where the sheet number and trade name stay available without leading.</p>
+  </aside>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;blueprint&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Theme&quot;}}">
+class Component extends DCLogic {
+  state = { fit: {} };
+  refs1b = {};
+  ref1b(code) { return this.refs1b[code] || (this.refs1b[code] = React.createRef()); }
+  componentDidMount() {
+    this.theme();
+    this.ro = new ResizeObserver(() => this.fit());
+    Object.values(this.refs1b).forEach(r => r.current && this.ro.observe(r.current));
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => this.fit());
+  }
+  componentWillUnmount() { this.ro && this.ro.disconnect(); }
+  componentDidUpdate() { this.theme(); }
+  fit() {
+    const c = this._c || (this._c = document.createElement('canvas').getContext('2d'));
+    const w = (font, t) => { c.font = font; return c.measureText(t).width; };
+    const next = {};
+    this.variants().forEach(v => {
+      const el = this.refs1b[v.code] && this.refs1b[v.code].current; if (!el) return;
+      const label = el.lastElementChild ? el.lastElementChild.getBoundingClientRect().width : 90;
+      const cs = getComputedStyle(el);
+      const avail = el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - label - 16 - 2;
+      const vw = w("700 30px Spectral", v.verb), sp = w("500 30px Spectral", ' ');
+      let pick = v.objs.length;
+      for (let i = 0; i < v.objs.length; i++) { if (vw + sp + w("500 30px Spectral", v.objs[i]) <= avail) { pick = i; break; } }
+      next[v.code] = pick;
+    });
+    if (JSON.stringify(next) !== JSON.stringify(this.state.fit)) this.setState({ fit: next });
+  }
+  variants() {
+    return [
+      { code: 'A-01', verb: 'Arrange', objs: ['the sections around the tree.', 'the sections.'] },
+      { code: 'B-01', verb: 'Answer', objs: ['one question about a curve.', 'one question.'] },
+      { code: 'I-01', verb: 'Look up', objs: ['any set: have it, built, free to use.', 'any set.'] },
+      { code: 'C-01', verb: 'Approve', objs: ['what to buy for the railbed.', 'the parts list.'] }
+    ];
+  }
+  theme() { document.body.classList.toggle('dt-blueprint', !!this.props.blueprint); }
+  renderVals() {
+    const G = {
+      front: 'M3 9.5l7-6 7 6V17H3z', work: 'M3 3h14v14H3zM10 3v14M3 10h14', ask: 'M10 3a7 7 0 1 1-4.6 12.3L3 17l1.1-3.3A7 7 0 0 1 10 3z',
+      reg: 'M3 4.5h14M3 8.5h14M3 12.5h14M3 16.5h14', dossier: 'M4 2.5h12v15H4zM7 6h6v5H7z', intake: 'M10 2v9M6.5 7.5L10 11l3.5-3.5M3 12v5h14v-5',
+      approve: 'M7.5 3h5v5l3.5 3v3h-12v-3l3.5-3zM3 17h14', order: 'M3 5h14v3.5a1.5 1.5 0 0 0 0 3V15H3v-3.5a1.5 1.5 0 0 0 0-3z',
+      map: 'M2 15l5-9 5 6 6-9', record: 'M3 5h5l2 2h7v9H3z'
+    };
+    const ink = 'var(--dt-ink)', on = 'var(--dt-on-ink)', sheet = 'var(--dt-sheet)', bg = 'var(--dt-bg)';
+    const z = (area, label, hot) => ({ area, label, bg: hot ? ink : sheet, fg: hot ? on : ink });
+    const census = [
+      { verb: 'See today', kind: 'Front page: the three things next', sheets: 'HUB', glyph: G.front },
+      { verb: 'Arrange', kind: 'A table you work on', sheets: 'A-01 · V-02 · F-01', glyph: G.work },
+      { verb: 'Answer', kind: 'A question for you', sheets: 'B-01', glyph: G.ask },
+      { verb: 'Look up', kind: 'A list of one kind of thing', sheets: 'I-01 · M-01 · T-01', glyph: G.reg },
+      { verb: 'Look closely', kind: 'Everything on one thing', sheets: 'I-03', glyph: G.dossier },
+      { verb: 'Confirm', kind: 'The AI read it; you check it', sheets: 'R-01 · I-02 · V-01', glyph: G.intake },
+      { verb: 'Approve', kind: 'A list to sign off', sheets: 'C-01 (gate)', glyph: G.approve },
+      { verb: 'Buy', kind: 'Spending real money', sheets: 'P-01', glyph: G.order },
+      { verb: 'Find your way', kind: 'How it all connects', sheets: 'J-01', glyph: G.map },
+      { verb: 'Hand over', kind: 'What was settled, packed up', sheets: 'H-01', glyph: G.record }
+    ];
+    const samples = [
+      { code: 'A-01', title: 'Layout Canvas', kind: 'A table you work on', trade: 'PLAN', glyph: G.work, verb: 'Arrange', verbObj: 'the sections around the tree.',
+        oldKicker: 'SLICE A · SYNTHETIC QUADRANTS · MOCK', oldLede: 'Scene, foundation, transport, landscape. Plan / 3D. Branches overhang to here · 10 bricks clear below…',
+        lede: 'Move sections; the fit checks re-run as you go.', tbKey: 'SCALE', tbVal: '1 stud = 8 mm',
+        came: 'Hub, task 2: “does the ring fit?”', hereYou: 'Move sections until the checks clear.', after: 'A saved layout branch C-01 can plan from.',
+        plan: [z('1 / 1 / 2 / 7', 'tools'), z('2 / 1 / 6 / 6', 'the table — you work here', true), z('2 / 6 / 6 / 7', 'checks')], planNote: 'Full bleed. The field is the page.' },
+      { code: 'B-01', title: 'When the AI isn’t sure', kind: 'A question for you', trade: 'RFI · REQUEST FOR INFO', glyph: G.ask, verb: 'Answer', verbObj: 'one question about a curve.',
+        oldKicker: 'SLICE B · REFERENCE bl-741807 · MOCK', oldLede: 'The AI hit an ambiguous phrase while reading a builder’s page. It shows its work, asks once…',
+        lede: 'One phrase, two readings. Your answer becomes the record.', tbKey: 'ASKED BY', tbVal: 'AI · reading bl-741807',
+        came: 'C-01 parts list, paused on this.', hereYou: 'Pick the reading you mean, or say it in your own words.', after: 'C-01 resumes with your answer, signed.',
+        plan: [z('1 / 2 / 2 / 6', 'the phrase'), z('2 / 2 / 4 / 4', 'reading 1'), z('2 / 4 / 4 / 6', 'reading 2'), z('4 / 2 / 6 / 6', 'your answer', true)], planNote: 'Narrow column. One thing at a time.' },
+      { code: 'I-01', title: 'What we have', kind: 'A list of every set', trade: 'SCHEDULE', glyph: G.reg, verb: 'Look up', verbObj: 'any set: have it, built, free to use.',
+        oldKicker: 'SETS · CANONICAL FOR DOGFOODING', oldLede: 'Every set the village can draw on. Three facts per set, kept apart on purpose…',
+        lede: 'Every set, three facts each. Tap a fact to change it.', tbKey: 'ROWS', tbVal: '28 sets',
+        came: 'Hub.', hereYou: 'Find a set and change one of its three facts.', after: 'Plans that use the set re-check themselves.',
+        plan: [z('1 / 1 / 2 / 7', 'columns: have · built · free'), z('2 / 1 / 3 / 7', 'row', true), z('3 / 1 / 4 / 7', 'row'), z('4 / 1 / 5 / 7', 'row'), z('5 / 1 / 6 / 7', 'row')], planNote: 'Ruled spine. Rows, all the same shape.' },
+      { code: 'C-01', title: 'The railbed parts list', kind: 'A list to sign off', trade: 'SUBMITTAL · FOR APPROVAL', glyph: G.approve, verb: 'Approve', verbObj: 'what to buy for the railbed.',
+        oldKicker: 'SLICE C · SHEET C-01 · ONE FACET', oldLede: 'One plan sheet: the page a builder sees for one thing they’ve set out to build. It turns a design…',
+        lede: 'What the train brings, what to buy. Initial it and it goes to buying.', tbKey: 'FOR', tbVal: 'Approval · @jfo',
+        came: 'A-01, layout saved.', hereYou: 'Settle each open finding, then initial the list.', after: 'P-01 can spend money on exactly this list.',
+        plan: [z('1 / 1 / 2 / 7', 'evidence it rests on'), z('2 / 1 / 4 / 6', 'the list'), z('4 / 2 / 5 / 6', 'open findings'), z('5 / 3 / 6 / 5', 'initials', true)], planNote: 'Funnel. It narrows to your initials.' }
+    ];
+    const samples1b = this.variants().map(v => {
+      const i = this.state.fit[v.code] ?? 0, obj = v.objs[i];
+      return { code: v.code, ref: this.ref1b(v.code), verbShown: obj ? v.verb : v.verb + '.', objShown: obj || '' };
+    });
+    return { census, samples, samples1b };
+  }
+}
+</script>
+</body>
+</html>

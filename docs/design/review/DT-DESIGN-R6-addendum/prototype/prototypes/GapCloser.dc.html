@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../dt/tokens.css">
+<link rel="stylesheet" href="../dt/responsive.css">
+</helmet>
+<div style="position:relative;display:inline-block;max-width:100%">
+  <button ref="{{ anchorRef }}" onClick="{{ toggle }}" aria-expanded="{{ open }}" aria-haspopup="dialog" aria-label="{{ anchorAria }}" style="display:inline-flex;align-items:center;gap:7px;font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:0.04em;color:{{ anchorFg }};background:{{ anchorBg }};border:1.5px {{ anchorBorder }} {{ anchorStroke }};padding:4px 9px;border-radius:var(--dt-r-fillet);cursor:pointer;white-space:nowrap;animation:{{ anchorAnim }}">
+    <span aria-hidden="true">{{ anchorMark }}</span><span>{{ anchorLabel }}</span>
+  </button>
+  <sc-if value="{{ open }}" hint-placeholder-val="{{ false }}">
+    <div ref="{{ panelRef }}" role="dialog" aria-modal="{{ false }}" aria-labelledby="{{ titleId }}" tabindex="-1" onKeyDown="{{ panelKey }}" style="position:fixed;z-index:400;top:0;left:0;width:440px;box-sizing:border-box;overflow:auto;background:var(--dt-sheet);color:var(--dt-ink);border:1.5px solid var(--dt-ink);box-shadow:var(--dt-shadow);border-radius:var(--dt-r-card);padding:14px 16px 12px;display:grid;gap:10px;font-family:'Libre Franklin',sans-serif;text-align:left">
+      <div style="display:flex;align-items:baseline;gap:10px">
+        <div style="display:grid;gap:2px;min-width:0;flex:1">
+          <span id="{{ titleId }}" style="font-family:'Spectral',serif;font-size:15px;font-weight:600;line-height:1.2">Close the gaps on <em>{{ subjectText }}</em></span>
+          <span style="font-size:11.5px;color:var(--dt-muted);line-height:1.45;text-wrap:pretty">{{ lede }}</span>
+        </div>
+        <button onClick="{{ close }}" aria-label="Close" style="font-family:'Azeret Mono',monospace;font-size:12px;background:transparent;color:var(--dt-muted);border:1px solid var(--dt-grid-mid);border-radius:var(--dt-r-fillet);width:26px;height:26px;cursor:pointer;flex:none">✕</button>
+      </div>
+      <ol style="list-style:none;margin:0;padding:0;display:grid;gap:6px">
+        <sc-for list="{{ rows }}" as="g" hint-placeholder-count="5">
+          <li style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 10px;align-items:start;border:1px {{ g.border }} {{ g.stroke }};border-radius:var(--dt-r-fillet);padding:8px 10px;background:{{ g.bg }};opacity:{{ g.opacity }}">
+            <span aria-hidden="true" style="font-family:'Azeret Mono',monospace;font-size:10px;color:var(--dt-muted);padding-top:2px">{{ g.n }}</span>
+            <span style="display:grid;gap:3px;min-width:0">
+              <span style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;line-height:1.3"><span style="font-size:12.5px;font-weight:600">{{ g.label }}</span><span style="font-family:'Azeret Mono',monospace;font-size:8.5px;font-weight:600;color:{{ g.strikeColor }};border:1px solid {{ g.strikeColor }};padding:0 5px;border-radius:var(--dt-r-fillet)">{{ g.strike }}</span></span>
+              <span style="font-size:11px;color:var(--dt-muted);line-height:1.45;text-wrap:pretty">{{ g.how }}</span>
+              <span style="font-family:'Azeret Mono',monospace;font-size:9px;color:var(--dt-muted);line-height:1.5">RUNS ON {{ g.runner }} · GIVES US {{ g.produces }}{{ g.after }}</span>
+              <sc-if value="{{ g.hasNote }}" hint-placeholder-val="{{ false }}"><span aria-live="polite" style="font-family:'Azeret Mono',monospace;font-size:9.5px;font-weight:600;color:{{ g.noteColor }};line-height:1.5">{{ g.note }}</span></sc-if>
+            </span>
+            <span style="display:grid;gap:4px;justify-items:end">
+              <span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;color:{{ g.statusColor }};white-space:nowrap">{{ g.status }}</span>
+              <sc-if value="{{ g.canAct }}" hint-placeholder-val="{{ true }}">
+                <span style="display:flex;gap:4px">
+                  <button onClick="{{ g.queue }}" aria-label="{{ g.queueAria }}" style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;background:transparent;color:var(--dt-accent-deep);border:1px dashed var(--dt-accent);padding:2px 7px;border-radius:var(--dt-r-btn);cursor:pointer;white-space:nowrap">QUEUE</button>
+                  <button onClick="{{ g.manual }}" aria-label="{{ g.manualAria }}" style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;background:transparent;color:var(--dt-muted);border:1px dashed var(--dt-unres);padding:2px 7px;border-radius:var(--dt-r-btn);cursor:pointer;white-space:nowrap">BY HAND</button>
+                </span>
+              </sc-if>
+            </span>
+          </li>
+        </sc-for>
+      </ol>
+      <sc-if value="{{ hasPending }}" hint-placeholder-val="{{ false }}">
+        <div role="status" aria-live="assertive" style="border:1.5px dashed var(--dt-accent);background:var(--dt-bg);border-radius:var(--dt-r-fillet);padding:9px 11px;display:grid;gap:8px">
+          <span style="font-family:'Azeret Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.08em;color:var(--dt-accent-deep)">◇ BEFORE ANYTHING RUNS</span>
+          <span style="font-size:12.5px;line-height:1.5;text-wrap:pretty">{{ restatement }}</span>
+          <span style="display:flex;gap:8px;flex-wrap:wrap">
+            <button ref="{{ confirmRef }}" onClick="{{ confirm }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:7px 13px;cursor:pointer;box-shadow:var(--dt-btn-shadow);border-radius:var(--dt-r-btn)">Yes, run it</button>
+            <button onClick="{{ cancelPending }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:transparent;color:var(--dt-ink);border:1.5px solid var(--dt-ink);padding:7px 13px;cursor:pointer;border-radius:var(--dt-r-btn)">Not yet</button>
+          </span>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noPending }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <sc-if value="{{ canQueueAll }}" hint-placeholder-val="{{ true }}"><button ref="{{ firstRef }}" onClick="{{ queueAll }}" style="font-family:'Libre Franklin';font-size:12px;font-weight:600;background:var(--dt-ink);color:var(--dt-on-ink);border:none;padding:7px 13px;cursor:pointer;box-shadow:var(--dt-btn-shadow);border-radius:var(--dt-r-btn)">Queue all, in order</button></sc-if>
+          <span aria-live="polite" style="font-size:11px;color:var(--dt-muted);line-height:1.45;text-wrap:pretty;flex:1;min-width:160px">{{ footer }}</span>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;520px&quot;,&quot;height&quot;:&quot;560px&quot;},&quot;subject&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;double ballast&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Gap closer&quot;},&quot;gaps&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{id:string,label:string,strike:string,how:string,runner:string,produces:string,after?:string[],mins?:number}&gt;&quot;,&quot;section&quot;:&quot;Gap closer&quot;},&quot;onStatus&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;(status: Record&lt;string,'open'|'queued'|'running'|'done'|'manual'&gt;, changedId: string, changedTo: string) =&gt; void&quot;,&quot;section&quot;:&quot;Gap closer&quot;}}">
+class Component extends DCLogic {
+  state = { open: false, status: {}, note: {}, pending: null, evidence: {} };
+  anchorRef = React.createRef(); panelRef = React.createRef(); firstRef = React.createRef(); confirmRef = React.createRef();
+  _timers = []; _uid = 'gc' + Math.random().toString(36).slice(2, 7);
+  DEFAULT_GAPS = [
+    { id: 'model', label: 'Model it', strike: '○ NOT MODELED', how: 'Build the double-ballast railbed as a real model so every later check has something to measure.', runner: 'BLENDER · agent', produces: 'a model file + hash', mins: 20 },
+    { id: 'validate', label: 'Check the geometry', strike: '○ CAN’T RUN YET', how: 'Railhead stays flush with the module top; ballast does not break MILS edges.', runner: 'GEOMETRY CHECK · deterministic', produces: 'a pass/fail report with numbers', after: ['model'], mins: 2 },
+    { id: 'studio', label: 'Bring it into Studio', strike: '○ NO PARTS LIST', how: 'Import the model so it turns into bricks we can count.', runner: 'STUDIO · agent', produces: 'an .io file + parts inventory', after: ['model'], mins: 10 },
+    { id: 'parts', label: 'Research the parts', strike: '○ NO PRICES', how: 'Every new row gets a basis, colour choice and a low–high price range across lots.', runner: 'RESEARCH · agent (BrickLink)', produces: 'part rows with basis + price ranges', after: ['studio'], mins: 15 },
+    { id: 'fit', label: 'Prove it fits on MILS', strike: '○ FIT UNPROVEN', how: 'Fit check of the ballasted railbed on the four modules, next to the built tree.', runner: 'FIT CHECK · Studio', produces: 'a fitment record with evidence', after: ['validate', 'studio'], mins: 5 }
+  ];
+  gaps() { const g = this.props.gaps; return Array.isArray(g) && g.length ? g : this.DEFAULT_GAPS; }
+  componentWillUnmount() { this._timers.forEach(clearTimeout); }
+  place() {
+    const a = this.anchorRef.current, p = this.panelRef.current; if (!a || !p) return;
+    const r = a.getBoundingClientRect(), W = Math.min(440, innerWidth - 24), below = innerHeight - r.bottom - 12, above = r.top - 12;
+    const openUp = below < 320 && above > below;
+    const left = Math.max(12, Math.min(r.left, innerWidth - W - 12));
+    p.style.left = left + 'px'; p.style.width = W + 'px';
+    if (openUp) { p.style.bottom = (innerHeight - r.top + 8) + 'px'; p.style.top = 'auto'; p.style.maxHeight = (above - 8) + 'px'; }
+    else { p.style.top = (r.bottom + 8) + 'px'; p.style.bottom = 'auto'; p.style.maxHeight = (below - 8) + 'px'; }
+  }
+  componentDidUpdate(_, prev) { prev = prev || {};
+    if (this.state.open) this.place();
+    if (this.state.open && !prev.open) { this._onScroll = () => this.place(); addEventListener('scroll', this._onScroll, true); addEventListener('resize', this._onScroll); }
+    if (!this.state.open && prev.open) { removeEventListener('scroll', this._onScroll, true); removeEventListener('resize', this._onScroll); }
+    if (this.state.open && !prev.open) { const el = (this.firstRef.current || this.panelRef.current); if (el) el.focus(); }
+    if (!this.state.open && prev.open && this.anchorRef.current) this.anchorRef.current.focus();
+    if (this.state.pending && !prev.pending && this.confirmRef.current) this.confirmRef.current.focus();
+  }
+  setStatus(id, status, note, color) {
+    this.setState(s => ({ status: Object.assign({}, s.status, { [id]: status }), note: Object.assign({}, s.note, { [id]: note ? { text: note, color } : null }) }), () => {
+      const cb = this.props.onStatus; if (typeof cb === 'function') cb(Object.assign({}, this.state.status), id, status);
+    });
+  }
+  run(ids) {
+    const gaps = this.gaps(); let t = 0;
+    ids.forEach(id => {
+      const g = gaps.find(x => x.id === id); if (!g) return;
+      this.setStatus(id, 'queued', 'Queued · waits for ' + ((g.after || []).filter(a => ids.includes(a) || this.state.status[a] !== 'done').map(a => (gaps.find(x => x.id === a) || {}).label).filter(Boolean).join(', ') || 'nothing'), 'var(--dt-info-deep)');
+      t += 900; this._timers.push(setTimeout(() => this.setStatus(id, 'running', 'Running on ' + g.runner.split(' · ')[0] + '…', 'var(--dt-accent-deep)'), t));
+      t += 1400 + (g.mins || 5) * 60; this._timers.push(setTimeout(() => this.setStatus(id, 'done', 'Evidence attached · ' + g.produces + ' · sha ' + Math.random().toString(16).slice(2, 8), 'var(--dt-pass)'), t));
+    });
+  }
+  renderVals() {
+    const s = this.state, gaps = this.gaps(), st = s.status;
+    const subject = this.props.subject ?? 'double ballast';
+    const open = gaps.filter(g => !st[g.id] || st[g.id] === 'open');
+    const running = gaps.filter(g => st[g.id] === 'queued' || st[g.id] === 'running'), done = gaps.filter(g => st[g.id] === 'done'), manual = gaps.filter(g => st[g.id] === 'manual');
+    const allDone = done.length + manual.length === gaps.length;
+    const pendingIds = s.pending || [];
+    const rows = gaps.map((g, i) => {
+      const status = st[g.id] || 'open', blockedBy = (g.after || []).filter(a => st[a] !== 'done' && st[a] !== 'manual');
+      const S = { open: ['○ OPEN', 'var(--dt-unres-ink)'], queued: ['◇ QUEUED', 'var(--dt-info-deep)'], running: ['◌ RUNNING', 'var(--dt-accent-deep)'], done: ['■ CLOSED', 'var(--dt-pass)'], manual: ['✎ BY HAND', 'var(--dt-prov-deep)'] }[status];
+      const inPending = pendingIds.includes(g.id), note = s.note[g.id];
+      return {
+        n: String(i + 1).padStart(2, '0'), label: g.label, strike: status === 'done' ? '■ ' + g.strike.replace(/^[○◇] /, '').replace(/^NOT |^NO |^CAN’T RUN YET$|^FIT UNPROVEN$|^NO PRICES$/, m => ({ 'NOT ': '', 'NO ': '', 'CAN’T RUN YET': 'RAN', 'FIT UNPROVEN': 'FIT PROVEN', 'NO PRICES': 'PRICED' })[m] ?? '') : g.strike,
+        strikeColor: status === 'done' ? 'var(--dt-pass)' : 'var(--dt-unres-ink)',
+        how: g.how, runner: g.runner, produces: g.produces, after: (g.after && g.after.length) ? ' · AFTER ' + g.after.map(a => String(gaps.findIndex(x => x.id === a) + 1).padStart(2, '0')).join(', ') : '',
+        status: S[0], statusColor: S[1], canAct: status === 'open' && !inPending,
+        border: inPending ? 'solid' : 'dashed', stroke: inPending ? 'var(--dt-accent)' : status === 'done' ? 'var(--dt-pass)' : 'var(--dt-grid-mid)', bg: inPending ? 'var(--dt-bg)' : 'transparent', opacity: status === 'done' ? 0.85 : 1,
+        hasNote: !!note, note: note ? note.text : '', noteColor: note ? note.color : 'var(--dt-muted)',
+        queue: () => this.setState(p => ({ pending: [...new Set([...(p.pending || []), ...blockedBy.filter(b => !st[b] || st[b] === 'open'), g.id])] })),
+        queueAria: 'Queue “' + g.label + '”' + (blockedBy.length ? ' and what it waits for' : ''),
+        manual: () => this.setStatus(g.id, 'manual', 'You’ll do this yourself — record what you did and attach the file when it exists. Honest provenance beats a guess.', 'var(--dt-prov-deep)'),
+        manualAria: 'I will do “' + g.label + '” by hand'
+      };
+    });
+    const order = pendingIds.slice().sort((a, b) => gaps.findIndex(x => x.id === a) - gaps.findIndex(x => x.id === b));
+    const mins = order.reduce((n, id) => n + ((gaps.find(x => x.id === id) || {}).mins || 5), 0);
+    const restatement = order.length ? 'I’ll queue ' + order.length + ' job' + (order.length > 1 ? 's' : '') + ' in this order: ' + order.map(id => (gaps.find(x => x.id === id) || {}).label).join(' → ') + '. Each result lands on this option as evidence with its method and a hash; about ' + mins + ' minutes if the runners are free. Nothing gets chosen for you — ' + subject + ' stays an option until you pick it.' : '';
+    const anchorLabel = allDone ? 'GAPS CLOSED' : running.length ? running.length + ' RUNNING · ' + open.length + ' OPEN' : open.length + (open.length === 1 ? ' STRIKE' : ' STRIKES') + ' · CLOSE THEM';
+    const anchorMark = allDone ? '■' : running.length ? '◌' : '◇';
+    const anchorStroke = allDone ? 'var(--dt-pass)' : running.length ? 'var(--dt-accent)' : 'var(--dt-prov)';
+    return {
+      anchorRef: this.anchorRef, panelRef: this.panelRef, firstRef: this.firstRef, confirmRef: this.confirmRef, titleId: this._uid + '-t',
+      open: s.open, subjectText: subject,
+      toggle: (e) => { e.stopPropagation(); this.setState(p => ({ open: !p.open })); }, close: () => this.setState({ open: false }),
+      panelKey: (e) => { if (e.key === 'Escape') { e.stopPropagation(); this.setState({ open: false }); } },
+      anchorLabel, anchorMark, anchorStroke, anchorBorder: allDone ? 'solid' : 'dashed', anchorAria: anchorLabel.toLowerCase() + ' on ' + subject + ' — opens the work list',
+      anchorFg: s.open ? 'var(--dt-on-ink)' : (allDone ? 'var(--dt-pass)' : running.length ? 'var(--dt-accent-deep)' : 'var(--dt-prov-deep)'), anchorBg: s.open ? 'var(--dt-ink)' : 'transparent', anchorAnim: 'none',
+      lede: allDone ? 'Every strike against this option now has evidence behind it. Pick it or not — with numbers.' : 'Each strike below is real work someone has to do. Queue it for an agent, or say you’ll do it by hand. Results come back as evidence on this option, never as a decision.',
+      rows, hasPending: order.length > 0, noPending: order.length === 0, restatement,
+      confirm: () => { const ids = order; this.setState({ pending: null }); this.run(ids); },
+      cancelPending: () => this.setState({ pending: null }),
+      canQueueAll: open.length > 0, queueAll: () => this.setState({ pending: open.map(g => g.id) }),
+      footer: allDone ? 'Closed ' + done.length + ' by agents' + (manual.length ? ', ' + manual.length + ' by hand' : '') + '.' : running.length ? running.length + ' running — you can leave; this chip keeps the count and the option updates itself.' : manual.length ? manual.length + ' marked by hand; ' + open.length + ' still open.' : 'Order matters: a model has to exist before anything can measure it.'
+    };
+  }
+}
+</script>
+</body>
+</html>

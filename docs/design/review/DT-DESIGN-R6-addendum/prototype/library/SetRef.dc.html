@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,700&family=Libre+Franklin:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../dt/tokens.css">
+<link rel="stylesheet" href="../dt/responsive.css">
+<script src="../dt/overlay.js"></script>
+<script src="./image-slot.js"></script>
+</helmet>
+<span style="display:inline-block;white-space:nowrap">
+  <a ref="{{ anchorRef }}" href="{{ blHref }}" target="_blank" rel="noopener" onMouseEnter="{{ show }}" onMouseLeave="{{ hideSoon }}" onFocus="{{ show }}" onBlur="{{ hideSoon }}" onKeyDown="{{ key }}" aria-describedby="{{ descId }}" style="color:inherit;font:inherit;text-decoration:none;border-bottom:1px dotted var(--dt-accent);cursor:help">{{ label }}</a>
+</span>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;420px&quot;,&quot;height&quot;:&quot;260px&quot;},&quot;num&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;41843&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;SetRef&quot;},&quot;kind&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;set&quot;,&quot;moc&quot;,&quot;part&quot;],&quot;default&quot;:&quot;set&quot;,&quot;tsType&quot;:&quot;'set'|'moc'|'part'&quot;,&quot;section&quot;:&quot;SetRef&quot;},&quot;label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Tree 41843&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;SetRef&quot;},&quot;name&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;facts&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { phase: 'closed' }; // closed | opening | open | closing
+  anchorRef = React.createRef(); panelRef = React.createRef(); _uid = 'sr' + Math.random().toString(36).slice(2, 7);
+  KNOWN = {
+    '41843': { kind: 'set', name: 'Family Christmas Tree', facts: '2023 · 1,006 pieces. Base 16×16 st · 40 br tall · branches overhang r28 st (measured 09-17).', have: 'In the house', build: 'Taken apart into components; measurements stand', pieces: 'Kept for this set — it goes back up as itself' },
+    '10361': { kind: 'set', name: 'Holiday Express Train', facts: '2025 · 956 pieces · $129.99 at LEGO · 16-piece circular track (R40) = one circle. Track earmarked for the railbed.', have: 'Approved to buy — not yet ordered', build: '—' },
+    '40776': { kind: 'set', name: 'Hot Chocolate Stand', facts: 'Set facts fill in from BrickLink on import — none cached yet.', have: 'In the house', build: 'In the box, not built', pieces: 'Free for other builds' },
+    '741807': { kind: 'moc', name: 'MILS quarter circle R40', facts: 'Studio MOC (idModel 741807) · Technic frame + track attachment · ×4 to carry the circle · colours adapted to the winter palette. Creator credited verbatim on import; rights: acquire · inspect · transform — not redistribute.' },
+    '53400': { kind: 'part', name: 'Train track curved R40', facts: '22.5° per curve · 16 per circle. In inventory via 10361.' }
+  };
+  ov() { if (!this._ov) this._ov = window.dtOverlay.attach(this, { anchor: () => this.anchorRef.current, render: () => this.card(this.renderVals()), width: 300 }); return this._ov; }
+  componentDidUpdate() { if (this._ov) { this._ov.paint(); this._ov.place(); } }
+  componentWillUnmount() { if (this._ov) this._ov.destroy(); this.setState = () => {}; }
+  card(v) {
+    const h = React.createElement, mono = "'Azeret Mono',monospace";
+    return h('span', { ref: this.panelRef, role: 'tooltip', id: v.descId, onMouseEnter: v.show, onMouseLeave: v.hideSoon, style: { position: 'fixed', top: 0, left: 0, width: 300, boxSizing: 'border-box', display: 'grid', gridTemplateColumns: '96px minmax(0,1fr)', gap: '8px 12px', background: 'var(--dt-sheet)', color: 'var(--dt-ink)', border: '1.5px solid var(--dt-ink)', boxShadow: 'var(--dt-shadow)', borderRadius: 'var(--dt-r-card)', padding: 12, fontFamily: "'Libre Franklin',sans-serif", textAlign: 'left', fontWeight: 400, fontSize: 12, lineHeight: 1.45, whiteSpace: 'normal', ...window.dtOverlay.style(v.isOpen) } },
+      h('span', { style: { display: 'block', width: 96, height: 96, background: 'var(--dt-bg)', border: '1px dashed var(--dt-grid-mid)', borderRadius: 3, overflow: 'hidden' } }, h('image-slot', { id: v.slotId, shape: 'rounded', radius: '3', fit: 'contain', placeholder: 'Set image' })),
+      h('span', { style: { display: 'grid', gap: 3, minWidth: 0, alignContent: 'start' } },
+        h('span', { style: { fontFamily: mono, fontSize: 9, letterSpacing: '0.1em', color: 'var(--dt-muted)' } }, v.kindText + ' · ' + v.num),
+        h('span', { style: { fontFamily: "'Spectral',serif", fontSize: 14, fontWeight: 600, lineHeight: 1.2 } }, v.nameText),
+        h('span', { style: { color: 'var(--dt-muted)', fontSize: 11, lineHeight: 1.45 } }, v.factsText),
+        v.haveText ? h('span', { style: { fontFamily: mono, fontSize: 9, lineHeight: 1.5, color: 'var(--dt-ink)', display: 'grid', gap: 1 } }, h('span', null, 'HAVE · ' + v.haveText), h('span', null, 'BUILT · ' + v.buildText), v.piecesText ? h('span', null, 'PIECES · ' + v.piecesText) : null) : null,
+        h('span', { style: { display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 2, fontFamily: mono, fontSize: 9.5, fontWeight: 600 } }, h('a', { href: v.blHref, target: '_blank', rel: 'noopener' }, v.blLabel), v.rbHref ? h('a', { href: v.rbHref, target: '_blank', rel: 'noopener' }, 'Rebrickable ↗') : null, v.snapHref ? h('a', { href: v.snapHref }, 'Our snapshot ↗') : null)),
+      h('span', { style: { gridColumn: '1 / -1', fontFamily: mono, fontSize: 9, color: 'var(--dt-muted)', borderTop: '1px dashed var(--dt-grid-mid)', paddingTop: 6, lineHeight: 1.5 } }, v.footText));
+  }
+  renderVals() {
+    const num = String(this.props.num ?? '41843'), k = this.KNOWN[num] || {}, kind = this.props.kind ?? k.kind ?? 'set', ph = this.state.phase;
+    const bl = kind === 'part' ? 'https://www.bricklink.com/v2/catalog/catalogitem.page?P=' + num : kind === 'moc' ? 'https://www.bricklink.com/v3/studio/design.page?idModel=' + num : 'https://www.bricklink.com/v2/catalog/catalogitem.page?S=' + num + '-1';
+    const rb = kind === 'part' ? 'https://rebrickable.com/parts/' + num + '/' : kind === 'moc' ? '' : 'https://rebrickable.com/sets/' + num + '-1/';
+    const v = {
+      anchorRef: this.anchorRef, descId: this._uid, slotId: 'setref-' + num,
+      label: this.props.label ?? ((k.name || 'Set') + ' ' + num), num, kindText: { set: 'LEGO SET', moc: 'BRICKLINK STUDIO MOC', part: 'PART' }[kind] || kind.toUpperCase(),
+      nameText: this.props.name ?? k.name ?? 'Unknown ' + kind, factsText: this.props.facts ?? k.facts ?? 'No reference cached yet — the BrickLink fetch fills this in.',
+      haveText: k.have || '', buildText: k.build || '', piecesText: k.pieces || '', blHref: bl, rbHref: rb, blLabel: kind === 'moc' ? 'BrickLink Studio ↗' : 'BrickLink ↗', snapHref: kind === 'moc' ? 'Prototype B - When the AI Isnt Sure.dc.html' : '',
+      isOpen: ph === 'open',
+      show: () => this.ov().open(), hideSoon: () => this.ov().close(false),
+      key: (e) => { if (e.key === 'Escape') this.ov().close(true); },
+      footText: kind === 'moc' ? 'Stable source: BrickLink Studio gallery, design.page?idModel=' + num + ' · snapshot + hash kept at import (B-01) · parts from the .io inventory' : 'Reference from BrickLink (catalog + price guide), not LEGO.com · image cached at import · ' + (kind === 'set' ? 'inventory pulled per element ID' : 'geometry from the model file')
+    };
+    // the card is painted into a body-level layer (see paint()) so no sheet stacking context can cover it
+    this._v = v;
+    return v;
+  }
+}
+</script>
+</body>
+</html>

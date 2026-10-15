@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-12",
+  "node": "v24.11.1",
+  "pnpm": "9.15.4",
+  "platform": "Darwin arm64",
+  "install": {
+    "command": "pnpm --filter house-world-r6-addendum install --frozen-lockfile --ignore-scripts",
+    "passed": true,
+    "local_visualization_dependency_link": false
+  },
+  "build": {
+    "command": "pnpm --filter house-world-r6-addendum build",
+    "passed": true,
+    "chapter_gate": "six approved lines, 5/7/5 + 5/7/5"
+  },
+  "served_build": {
+    "port": 4201,
+    "full_glb_loaded": true,
+    "finder_enter_opened_layout_canvas": true,
+    "real_iframe_heading": "Layout Canvas",
+    "console_errors_and_warnings": [],
+    "screenshot": "repository-build-dashboard.jpg"
+  },
+  "warnings": [
+    "Legacy non-module scripts are served through the static copy step.",
+    "Three bundle remains large; build success is not performance evidence."
+  ]
+}
