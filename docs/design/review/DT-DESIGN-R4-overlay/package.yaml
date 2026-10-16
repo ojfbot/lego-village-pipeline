@@ -1,0 +1,124 @@
+# package.yaml — designer manifest, at the archive root. Schema: design-package/v1
+# Canonical schema: tools/schemas/design-package.v1.schema.json (ojfbot/lego-village-pipeline).
+# Authored by Claude Design. R4 is an OVERLAY on R3 (which overlays R2 rev-b): unpack R2 rev-b, then R3, then this. Authoring kit version 1.0.
+manifest_schema: design-package/v1
+design_package: DT-DESIGN
+revision: R4
+cut_state: as-exported
+cut: "2026-10-10"
+manifest_origin: designer
+path_base: "."
+
+governing_brief: HANDOFF-LEGO-PIPE-014-R0
+answers: []
+
+supersedes:
+  design_package: DT-DESIGN
+  revision: R3
+  cut_state: as-exported
+  archive_sha256: e21975a4f61333aad22bb1993d38c0833430daede85db0865d0299bd75c15183
+  note: "R4 adds one sheet (R-01, two variants), two studies (X-01 typology-identity board, W-00 workbench frame), one token pair (--dt-plate/--dt-on-plate), five proposed decisions and two standing notes. No ledger row changed; decisions.last_id stays DEC-043 until the operator accepts the proposals in decisions-proposed.md."
+
+maturity: prototype
+tier_coverage: tier-1
+mock_math: true
+
+index: handoff/index.json
+sheets:
+  - {id: Hub, title: "The Drafting Table — sheet index & decision log"}
+  - {id: D-00, title: "Drafting Table specimen (direction)"}
+  - {id: D-01, title: "Design library & token grammar"}
+  - {id: A-01, title: "Layout Canvas"}
+  - {id: B-01, title: "When the AI isn’t sure"}
+  - {id: C-01, title: "Railbed: what the train brings, what to buy"}
+  - {id: I-01, title: "What we have, and what shape it's in"}
+  - {id: I-02, title: "Documenting the boxes"}
+  - {id: I-03, title: "One set"}
+  - {id: T-01, title: "The queue"}
+  - {id: P-01, title: "Buying the gap: which shops, in what order"}
+  - {id: F-01, title: "Family Workbench"}
+  - {id: J-01, title: "The thirteen journeys"}
+  - {id: H-01, title: "Handoff — seam · schema · decisions · package"}
+  - {id: M-01, title: "Measure and check"}
+  - {id: V-01, title: "What the instructions already tell us"}
+  - {id: V-02, title: "Replaying the build to get the shape"}
+  - {id: R-01, title: "Bringing things into the house (one-page, and step-by-step variant)"}
+studies:
+  - {id: X-01, title: "Typology identity — how each kind of sheet says what it is (v1 canvas board; v2 single-viewport navigator with Benny)", status: wireframe}
+  - {id: W-00, title: "Workbench frame — header, two sidebars, subgrid card rows, footer ledger, cross-component ripple", status: wireframe}
+
+decisions:
+  ledger: handoff/decisions.md
+  last_id: DEC-043
+  count: 43
+  proposed: decisions-proposed.md
+
+fixtures:
+  set: dt-village-2026-09-19
+  sha256: 30e64ce90099f447fa2b9f0615243ed7d66358c1299121b466c6ac52dc67dc16
+
+notes:
+  - {id: N-01, path: notes/N-01-wireframe-not-implementation.md, title: "X-01 / W-00 are wireframes, not implementation guides"}
+  - {id: N-02, path: notes/N-02-open-tonality-gradients-icons-copy.md, title: "Open: gradients, tonalities, icons, copy"}
+
+known_defects:
+  - id: D-7
+    rule_id: screenshot-fidelity
+    paths: [handoff/screenshots, handoff/screenshots/states]
+    expected_failure: "Sheet screenshots are viewport crops, not full-page captures, and the WebGL canvas in A-01 reads blank in captured frames."
+    evidence: "Design-tool capture limit; carried from R1."
+    status: open
+  - id: D-8
+    rule_id: standalone-relative-runtime
+    paths: [handoff/standalone, handoff/dt]
+    expected_failure: "standalone/*.html load their runtime relatively from ../dt/*; separating them breaks every embedded component."
+    evidence: "Authoring kit rule 2; carried."
+    status: open
+  - id: D-9
+    rule_id: sheet-coverage
+    paths: [prototypes/Prototype I2 - Documenting the Boxes.dc.html, prototypes/Prototype I3 - One Set.dc.html, prototypes/Prototype T - The Queue.dc.html]
+    expected_failure: "I-02, I-03, T-01 declared with no spec and no standalone capture."
+    evidence: "Carried from R2."
+    status: open
+  - id: D-10
+    rule_id: walkthrough-coverage
+    paths: [walkthroughs]
+    expected_failure: "Walkthrough frames are 924×540 crops; drag, WebGL and hover-card flows not driven."
+    evidence: "Carried from R3."
+    status: open
+  - id: D-11
+    rule_id: sheet-coverage
+    paths: [prototypes/Prototype V - Reading the Instructions.dc.html, prototypes/Prototype V2 - Deriving Fitment from the Build.dc.html]
+    expected_failure: "V-01, V-02 declared with a walkthrough but no spec and no standalone capture."
+    evidence: "Carried from R3."
+    status: open
+  - id: D-12
+    rule_id: sheet-coverage
+    paths: [sources/prototypes/Prototype R - Bringing Things In.dc.html, sources/prototypes/Prototype R - Bringing Things In (stepwise).dc.html]
+    expected_failure: "R-01 is a new sheet with a source and a short spec but no standalone capture and no walkthrough at this cut."
+    evidence: "Authored today in a parallel session; this cut was assembled from the sources, not from a driven capture."
+    status: open
+  - id: D-13
+    rule_id: render-scope
+    paths: [sources/Typology Identity v2.dc.html, sources/Workbench Frame.dc.html]
+    expected_failure: "Any state change re-renders the whole board and snapshots the whole document for the shared-element transition, so the full page flashes on every transition. Observed by the operator 2026-10-10."
+    evidence: "Wireframe runtime limitation (one component, one render tree, document-level view transition). See notes/N-01. Production must scope re-renders to the changed component and scope transitions to the moving elements."
+    status: open
+
+debts:
+  - "OW-01: components that live only on sheets are not yet lifted into D-01 §C1 with states + announcements."
+  - "J-01 is still being re-cut to the L0/L1/L2 hierarchy from 014 §3."
+  - "Responsive behaviour is not designed below tablet (Tier 3, K-8); X-01 v2 and W-00 now carry width variants per component, which is the start of that work, not its completion."
+  - "Plate token (--dt-plate/--dt-on-plate) is applied on X-01 v2 only; every other sheet still fills with --dt-ink, which reads as a white block in blueprint."
+
+schema_requests: schema-requests-addendum.md
+authoring_kit_version: "1.0"
+extensions:
+  dt:
+    theme: "Drafting Table — paper/blueprint dual theme"
+    tokens: sources/dt/tokens.css
+    tokens_note: "sources/dt/tokens.css is today's copy of the single source of truth (dt/tokens.css); it adds --dt-plate / --dt-on-plate."
+    pages_index: data/pages-index.json
+    motion_tokens: "Carbon: expressive cubic-bezier(0.4,0.14,0.3,1) for large moves (500–550ms); productive standard cubic-bezier(0.2,0,0.38,0.9) for content fades (120–260ms); entrance cubic-bezier(0,0,0.38,0.9); exit cubic-bezier(0.2,0,1,0.9)."
+    exported_by: "Claude Design"
+    export_note: "Bundled for operator download and repository upload by a code agent; no repository write was performed by the designer."

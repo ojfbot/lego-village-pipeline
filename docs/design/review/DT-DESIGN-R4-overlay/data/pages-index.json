@@ -1,0 +1,253 @@
+{
+  "schema": "dt-pages-index/v0",
+  "generated": "2026-10-10",
+  "source": "Typology Identity v2.dc.html · Benny index()",
+  "note": "Routing index Benny matches against. Keywords are plain words; a real agent replaces this with retrieval over the sheets.",
+  "pages": [
+    {
+      "code": "HUB",
+      "title": "The drafting table",
+      "href": "Hub.dc.html",
+      "why": "The three things next.",
+      "keywords": [
+        "hub",
+        "home",
+        "today",
+        "front",
+        "start",
+        "three"
+      ]
+    },
+    {
+      "code": "A-01",
+      "title": "Layout canvas",
+      "href": "prototypes/Prototype A - Layout Canvas.dc.html",
+      "why": "Arrange sections; does the ring fit?",
+      "keywords": [
+        "layout",
+        "arrange",
+        "fit",
+        "canvas",
+        "table",
+        "tree",
+        "ring",
+        "sections",
+        "studs"
+      ]
+    },
+    {
+      "code": "B-01",
+      "title": "When the AI isn’t sure",
+      "href": "prototypes/Prototype B - When the AI Isnt Sure.dc.html",
+      "why": "One question, your answer becomes the record.",
+      "keywords": [
+        "question",
+        "answer",
+        "ai",
+        "unsure",
+        "ambiguous",
+        "curve",
+        "trail"
+      ]
+    },
+    {
+      "code": "C-01",
+      "title": "The railbed parts list",
+      "href": "prototypes/Prototype C - Measurement to Procurement.dc.html",
+      "why": "Approve what to buy.",
+      "keywords": [
+        "parts",
+        "list",
+        "approve",
+        "railbed",
+        "plan",
+        "gate",
+        "initial",
+        "sign"
+      ]
+    },
+    {
+      "code": "P-01",
+      "title": "Buying the gap",
+      "href": "prototypes/Prototype P - Procurement.dc.html",
+      "why": "Which shops, in what order.",
+      "keywords": [
+        "buy",
+        "shop",
+        "order",
+        "bricklink",
+        "price",
+        "procurement",
+        "money"
+      ]
+    },
+    {
+      "code": "I-01",
+      "title": "What we have",
+      "href": "prototypes/Prototype I - What We Have.dc.html",
+      "why": "Every set: have it, built, free.",
+      "keywords": [
+        "sets",
+        "have",
+        "inventory",
+        "own",
+        "built",
+        "free",
+        "list"
+      ]
+    },
+    {
+      "code": "I-02",
+      "title": "Documenting the boxes",
+      "href": "prototypes/Prototype I2 - Documenting the Boxes.dc.html",
+      "why": "What’s actually in the boxes.",
+      "keywords": [
+        "box",
+        "boxes",
+        "photo",
+        "document",
+        "contents"
+      ]
+    },
+    {
+      "code": "I-03",
+      "title": "One set",
+      "href": "prototypes/Prototype I3 - One Set.dc.html",
+      "why": "Everything we hold on one set.",
+      "keywords": [
+        "one",
+        "set",
+        "dossier",
+        "41843",
+        "everything",
+        "handle"
+      ]
+    },
+    {
+      "code": "M-01",
+      "title": "Measure and check",
+      "href": "prototypes/Prototype M - Measure and Check.dc.html",
+      "why": "The numbers the plan rests on.",
+      "keywords": [
+        "measure",
+        "measurement",
+        "tape",
+        "railhead",
+        "height",
+        "number",
+        "check"
+      ]
+    },
+    {
+      "code": "T-01",
+      "title": "The queue",
+      "href": "prototypes/Prototype T - The Queue.dc.html",
+      "why": "Everything waiting, and what it’s waiting on.",
+      "keywords": [
+        "queue",
+        "waiting",
+        "tasks",
+        "todo",
+        "next",
+        "order"
+      ]
+    },
+    {
+      "code": "R-01",
+      "title": "Bringing things in",
+      "href": "prototypes/Prototype R - Bringing Things In.dc.html",
+      "why": "Receipts and parcels, confirmed.",
+      "keywords": [
+        "receipt",
+        "bring",
+        "in",
+        "parcel",
+        "store",
+        "bought",
+        "confirm",
+        "intake"
+      ]
+    },
+    {
+      "code": "V-01",
+      "title": "Reading the instructions",
+      "href": "prototypes/Prototype V - Reading the Instructions.dc.html",
+      "why": "Numbers the instructions already give.",
+      "keywords": [
+        "instructions",
+        "read",
+        "footprint",
+        "height",
+        "pieces"
+      ]
+    },
+    {
+      "code": "V-02",
+      "title": "Replaying the build",
+      "href": "prototypes/Prototype V2 - Deriving Fitment from the Build.dc.html",
+      "why": "Fitment derived from the build.",
+      "keywords": [
+        "replay",
+        "build",
+        "fitment",
+        "shape",
+        "derive"
+      ]
+    },
+    {
+      "code": "J-01",
+      "title": "The thirteen journeys",
+      "href": "J-01 Journey Map.dc.html",
+      "why": "How it all connects.",
+      "keywords": [
+        "journey",
+        "map",
+        "loop",
+        "connect",
+        "find",
+        "way"
+      ]
+    },
+    {
+      "code": "F-01",
+      "title": "Family workbench",
+      "href": "F-01 Workbench Junior.dc.html",
+      "why": "The same tools for the boys, on a tablet.",
+      "keywords": [
+        "family",
+        "boys",
+        "tablet",
+        "kids",
+        "workbench"
+      ]
+    },
+    {
+      "code": "H-01",
+      "title": "The handoff",
+      "href": "H-01 Handoff.dc.html",
+      "why": "What was settled, packed for agents.",
+      "keywords": [
+        "handoff",
+        "hand",
+        "over",
+        "package",
+        "claude",
+        "code",
+        "settled"
+      ]
+    },
+    {
+      "code": "W-00",
+      "title": "Workbench frame",
+      "href": "Workbench Frame.dc.html",
+      "why": "The frame study: bars, subgrids, the ripple.",
+      "keywords": [
+        "frame",
+        "workbench",
+        "ripple",
+        "sidebar",
+        "subgrid"
+      ]
+    }
+  ]
+}
